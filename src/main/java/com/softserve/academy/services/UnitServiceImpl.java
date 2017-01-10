@@ -1,8 +1,8 @@
 package com.softserve.academy.services;
 
 
+import com.softserve.academy.dao.UnitDAO;
 import com.softserve.academy.dto.Unit;
-import com.softserve.academy.mappers.UnitMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,27 +12,31 @@ import java.util.List;
 public class UnitServiceImpl implements UnitService {
 
     @Autowired
-    private UnitMapper unitMapper;
+    private UnitDAO unitDAOMybatis;
 
     public Unit getUnitById(int id) {
-        Unit unit = unitMapper.getUnitById(id);
+        Unit unit = unitDAOMybatis.getUnitById(id);
         if(unit == null)
-           unit = unitMapper.getUnitById(1);
+           unit = unitDAOMybatis.getUnitById(1);
 
         return unit;
     }
 
     public List<Unit> getAllUnits() {
-       return unitMapper.getAllUnits();
+       return unitDAOMybatis.getAllUnits();
     }
 
     public void addUnit(Unit unit){
         if(unit != null)
-            unitMapper.addUnit(unit);
+            unitDAOMybatis.addUnit(unit);
+    }
+
+    public void updateUnit(Unit unit){
+        unitDAOMybatis.updateUnit(unit);
     }
 
     public void removeUnit(int id){
-        unitMapper.removeUnitById(id);
+        unitDAOMybatis.removeUnitById(id);
     }
 
 }

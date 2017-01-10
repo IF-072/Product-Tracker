@@ -1,10 +1,11 @@
-package com.softserve.academy.services;
+package com.softserve.academy.dao;
+
 
 import com.softserve.academy.dto.Unit;
 
 import java.util.List;
 
-public interface UnitService {
+public interface UnitDAO {
 
     Unit getUnitById(int id);
 
@@ -14,5 +15,5 @@ public interface UnitService {
 
     void updateUnit(Unit unit);
 
-    void removeUnit(int id);
+    void removeUnitById(int id);
 }

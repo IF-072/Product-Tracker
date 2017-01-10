@@ -30,10 +30,7 @@
         <property name="dataSource" ref="dataSource" />
     </bean>
 
-    <!-- Простий маппер для MyBatis -->
-    <bean id="UnitMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
-        <property name="mapperInterface" value="com.softserve.academy.mappers.UnitMapper" />
-        <property name="sqlSessionFactory" ref="sqlSessionFactory" />
-    </bean>
 
+    <!-- Імпортуємо настройки MyBatis -->
+    <import resource="mybatis-context.xml"/>
 </beans>
