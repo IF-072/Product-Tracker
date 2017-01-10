@@ -25,4 +25,14 @@ public class UnitServiceImpl implements UnitService {
     public List<Unit> getAllUnits() {
        return unitMapper.getAllUnits();
     }
+
+    public void addUnit(Unit unit){
+        if(unit != null)
+            unitMapper.addUnit(unit);
+    }
+
+    public void removeUnit(int id){
+        unitMapper.removeUnitById(id);
+    }
+
 }

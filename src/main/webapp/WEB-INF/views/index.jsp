@@ -7,9 +7,10 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf8">
-    <title>${title}</title>
+    <title>Welcome to HomeTracker!</title>
 </head>
 <body>
-${body}
+Available services:
+<a href="/units/">Manage units</a>
 </body>
 </html>
