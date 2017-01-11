@@ -11,8 +11,7 @@
    <annotation-driven />
 
     <!-- Місце, де спрінг шукатиме контроллери і компоненти -->
-    <context:component-scan base-package="com.softserve.academy.controllers"/>
-    <context:component-scan base-package="com.softserve.academy.services"/>
+    <context:component-scan base-package="com.softserve.academy"/>
 
    <!-- маппінг ресурсів -->
    <resources mapping="/resources/**" location="/WEB-INF/resources/" />
