@@ -27,7 +27,7 @@ public class UnitServiceImpl implements UnitService {
     }
 
     public void addUnit(Unit unit){
-        if(unit != null)
+        if((unit != null) && (unit.getName() != ""))
             unitDAOMybatis.addUnit(unit);
     }
 
