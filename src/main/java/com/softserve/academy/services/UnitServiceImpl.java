@@ -31,6 +31,7 @@ public class UnitServiceImpl implements UnitService {
     public void addUnit(Unit unit){
         if((unit != null) && (!unit.getName().equals("")))
             unitDAOImplementation.addUnit(unit);
+
     }
 
     public void updateUnit(Unit unit){
