@@ -2,10 +2,11 @@ package com.softserve.academy.dao;
 
 import com.softserve.academy.dto.Unit;
 import org.apache.ibatis.annotations.*;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-@Mapper
+@Component(value = "UnitDaoMybatis")
 public interface UnitDAOMybatis extends UnitDAO{
 
     @Select("SELECT * FROM unit WHERE id = #{id}")
