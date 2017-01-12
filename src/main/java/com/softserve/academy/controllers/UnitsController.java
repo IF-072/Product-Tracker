@@ -2,6 +2,7 @@ package com.softserve.academy.controllers;
 
 import com.softserve.academy.dto.Unit;
 import com.softserve.academy.services.UnitService;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 @Controller
 @RequestMapping("/units")
 public class UnitsController {
+    private static final Logger LOG = Logger.getLogger(UnitsController.class);
 
     @Autowired
     private UnitService unitService;
