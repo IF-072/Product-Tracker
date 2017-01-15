@@ -11,6 +11,4 @@
 # Maven
 log/
 target/
-
-# app properties
-src/main/resources/application.properties
+/RESTserver/src/main/resources/application.properties
