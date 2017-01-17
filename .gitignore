@@ -11,6 +11,3 @@
 # Maven
 log/
 target/
-
-# app properties
-src/main/resources/application.properties
