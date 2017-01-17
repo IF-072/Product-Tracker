@@ -1,6 +1,6 @@
-package com.softserve.if072.restservice.controllers;
+package com.softserve.if072.restservice.controller;
 
-import com.softserve.if072.common.dto.Unit;
+import com.softserve.if072.common.model.Unit;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;

@@ -1,4 +1,4 @@
-package com.softserve.if072.common.dto;
+package com.softserve.if072.common.model;
 
 
 public class Unit {
@@ -31,5 +31,11 @@ public class Unit {
         this.name = name;
     }
 
-
+    @Override
+    public String toString() {
+        return "Unit{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                '}';
+    }
 }

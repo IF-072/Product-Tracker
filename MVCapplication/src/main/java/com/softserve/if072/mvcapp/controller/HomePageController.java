@@ -1,4 +1,4 @@
-package com.softserve.if072.mvcapp.controllers;
+package com.softserve.if072.mvcapp.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
