@@ -105,9 +105,10 @@
     <build>
         <pluginManagement>
             <plugins>
-                <!--Include "clean lifecycle" during the initialize phase of default lifecycle of the project-->
-                 <!--To skeep auto-clean use key –Dclean.skip=true-->
                 <plugin>
+                    <!--Include "clean lifecycle" during the initialize phase-->
+                    <!--of default lifecycle of the project.-->
+                    <!--To skeep auto-clean use key –Dclean.skip=true-->
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-clean-plugin</artifactId>
                     <version>3.0.0</version>
