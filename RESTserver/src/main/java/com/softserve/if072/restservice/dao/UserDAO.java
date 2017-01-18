@@ -29,6 +29,6 @@ public interface UserDAO extends DAO<User> {
     void update(User user);
 
     @Override
-    @Delete("DELETE FROM user WHERE id = #{id}")
+    @Update("UPDATE user SET is_enabled = 0 WHERE id = #{id}")
     void delete(int id);
 }
