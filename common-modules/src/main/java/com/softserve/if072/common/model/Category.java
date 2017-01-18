@@ -1,6 +1,7 @@
 package com.softserve.if072.common.model;
 
 public class Category {
+
     private int id;
     private String name;
     private User user;
