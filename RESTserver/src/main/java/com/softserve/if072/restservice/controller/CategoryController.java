@@ -1,7 +1,7 @@
 package com.softserve.if072.restservice.controller;
 
 import com.softserve.if072.common.model.Category;
-import com.softserve.if072.restservice.service.CategoryServiceImpl;
+import com.softserve.if072.restservice.service.impl.CategoryServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;

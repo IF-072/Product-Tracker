@@ -1,8 +1,8 @@
-package com.softserve.if072.restservice.service;
+package com.softserve.if072.restservice.service.impl;
 
 import com.softserve.if072.common.model.Category;
-import com.softserve.if072.restservice.dao.CategoryDAO;
-import com.softserve.if072.restservice.service.core.CategoryService;
+import com.softserve.if072.restservice.dao.mybatisdao.CategoryDAO;
+import com.softserve.if072.restservice.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

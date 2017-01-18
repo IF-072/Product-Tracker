@@ -1,4 +1,4 @@
-package com.softserve.if072.restservice.dao.core;
+package com.softserve.if072.restservice.dao;
 
 import java.util.List;
 
