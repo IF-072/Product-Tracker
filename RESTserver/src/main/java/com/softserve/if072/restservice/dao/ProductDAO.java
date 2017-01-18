@@ -16,7 +16,7 @@ public interface ProductDAO extends DAO<Product> {
     Product getByID(@Param("id") int id);
 
     @Override
-    @Insert("INSERT INTO product (name, description, image_id, user_id, category_id, unit_id)" +
+    @Insert("INSERT INTO product (name, description, image_id, user_id, category_id, unit_id) " +
             "VALUES (#{name}, #{description}, #{image.id}), #{user.id}, #{category.id}, #{unit.id}")
     void insert(Product product);
 
