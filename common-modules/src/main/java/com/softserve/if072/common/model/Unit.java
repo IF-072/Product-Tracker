@@ -6,9 +6,7 @@ public class Unit {
     private int id;
     private String name;
 
-    public Unit() {
-
-    }
+    public Unit() {}
 
     public int getId() {
         return id;
