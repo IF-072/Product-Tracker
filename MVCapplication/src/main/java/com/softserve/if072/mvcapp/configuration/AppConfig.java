@@ -5,7 +5,6 @@ import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatche
 
 import javax.servlet.Filter;
 
-
 public class AppConfig extends AbstractAnnotationConfigDispatcherServletInitializer {
 
     @Override
