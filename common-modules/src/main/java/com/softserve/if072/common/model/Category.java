@@ -6,10 +6,13 @@ public class Category {
     private String name;
     private User user;
 
+    public Category() {}
+
     public Category(int id, String name, User user) {
         this.id = id;
         this.name = name;
         this.user = user;
+
     }
 
     public int getId() {
