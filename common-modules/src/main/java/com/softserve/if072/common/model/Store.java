@@ -11,9 +11,7 @@ public class Store {
 
     public Store() {}
 
-    public Store(int id, String name, String address,
-                 com.softserve.if072.common.model.User user,
-                 boolean isActive) {
+    public Store(int id, String name, String address,User user, boolean isActive) {
         this.id = id;
         this.name = name;
         this.address = address;
