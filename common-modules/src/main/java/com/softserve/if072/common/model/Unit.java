@@ -8,6 +8,11 @@ public class Unit {
 
     public Unit() {}
 
+    public Unit(int id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
     public int getId() {
         return id;
     }
@@ -21,11 +26,6 @@ public class Unit {
     }
 
     public void setName(String name) {
-        this.name = name;
-    }
-
-    public Unit(int id, String name) {
-        this.id = id;
         this.name = name;
     }
 
