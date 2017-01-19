@@ -3,9 +3,11 @@ package com.softserve.if072.restservice.dao.mybatisdao;
 import com.softserve.if072.common.model.Product;
 import com.softserve.if072.restservice.dao.DAO;
 import org.apache.ibatis.annotations.*;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+@Component
 public interface ProductDAO extends DAO<Product> {
     @Override
     @Select("SELECT * FROM product")

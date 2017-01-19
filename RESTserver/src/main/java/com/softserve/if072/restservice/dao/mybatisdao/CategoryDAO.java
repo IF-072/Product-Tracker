@@ -3,6 +3,7 @@ package com.softserve.if072.restservice.dao.mybatisdao;
 import com.softserve.if072.common.model.Category;
 import com.softserve.if072.restservice.dao.DAO;
 import org.apache.ibatis.annotations.*;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
