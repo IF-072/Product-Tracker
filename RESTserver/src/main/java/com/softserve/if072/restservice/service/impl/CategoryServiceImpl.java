@@ -4,11 +4,11 @@ import com.softserve.if072.common.model.Category;
 import com.softserve.if072.restservice.dao.mybatisdao.CategoryDAO;
 import com.softserve.if072.restservice.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Component
+@Service
 public class CategoryServiceImpl implements CategoryService {
 
     @Autowired
