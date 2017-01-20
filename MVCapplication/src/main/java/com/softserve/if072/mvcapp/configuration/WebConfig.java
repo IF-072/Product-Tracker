@@ -4,6 +4,7 @@ package com.softserve.if072.mvcapp.configuration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
@@ -14,7 +15,7 @@ import org.springframework.web.servlet.view.JstlView;
 @Configuration
 @EnableWebMvc
 @ComponentScan("com.softserve.if072.mvcapp")
-public class WebConfig extends WebMvcConfigurerAdapter{
+public class WebConfig extends WebMvcConfigurerAdapter {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
@@ -29,5 +30,13 @@ public class WebConfig extends WebMvcConfigurerAdapter{
         viewResolver.setSuffix(".jsp");
 
         return viewResolver;
+    }
+
+    @Bean
+    public CommonsMultipartResolver multipartResolver() {
+        CommonsMultipartResolver resolver = new CommonsMultipartResolver();
+        resolver.setMaxUploadSizePerFile(1048576);  //1MB
+
+        return resolver;
     }
 }

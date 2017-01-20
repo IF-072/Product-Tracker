@@ -6,17 +6,17 @@ INSERT INTO unit(name) VALUES('л');
 INSERT INTO unit(name) VALUES('кг');
 INSERT INTO unit(name) VALUES('шт');
 
-INSERT INTO category(name, user_id) VALUES('Продовольчі товари', 0);
-INSERT INTO category(name, user_id) VALUES('Техніка', 1);
-INSERT INTO category(name, user_id) VALUES('Електроніка', 2);
-INSERT INTO category(name, user_id) VALUES('Hi-Tech', 3);
+INSERT INTO category(name, user_id) VALUES('Продовольчі товари', NULL);
+INSERT INTO category(name, user_id) VALUES('Техніка', NULL);
+INSERT INTO category(name, user_id) VALUES('Електроніка', NULL);
+INSERT INTO category(name, user_id) VALUES('Hi-Tech', NULL);
 
-INSERT INTO product(name, description, user_id, category_id, unit_id) VALUES('Олія', 'соняшникова, рафінована', 0, 1, 1);
+INSERT INTO product(name, description, user_id, category_id, unit_id) VALUES('Олія', 'соняшникова, рафінована', NULL, 1, 1);
 INSERT INTO product(name, description, user_id, category_id, unit_id) VALUES('Apple MacBook Pro 16', 'остання модель', 1, 2, 3);
 INSERT INTO product(name, description, user_id, category_id, unit_id) VALUES('Sony LCD', 'телевізор з FULL-HD розширенням', 2, 3, 3);
 INSERT INTO product(name, description, user_id, category_id, unit_id) VALUES('Google Glasses', 'розумні окуляри', 3, 4, 3);
 
-INSERT INTO store(name, address, user_id) VALUES('Вопак', 'Галицька, 20', 0);
+INSERT INTO store(name, address, user_id) VALUES('Вопак', 'Галицька, 20', NULL);
 INSERT INTO store(name, address, user_id) VALUES('Ельдорадо', 'Вовчинецька, 40', 1);
 INSERT INTO store(name, address, user_id) VALUES('MOYO', 'Вовчинецька, 40', 2);
 INSERT INTO store(name, address, user_id) VALUES('Rozetka', 'Інтернет', 3);
