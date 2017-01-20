@@ -1,11 +1,8 @@
 package com.softserve.if072.restservice.controller;
 
-<<<<<<< HEAD
-import com.softserve.if072.common.model.*;
 import com.softserve.if072.restservice.dao.mybatisdao.ShoppingListDAO;
-=======
 import com.softserve.if072.common.model.Unit;
->>>>>>> develop
+import com.softserve.if072.restservice.dao.mybatisdao.StorageDAO;
 import com.softserve.if072.restservice.dao.mybatisdao.UnitDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -23,6 +20,9 @@ public class RestTestController {
     @Autowired
     private ShoppingListDAO shoppingListDAO;
 
+    @Autowired
+    private StorageDAO storageDAO;
+
     @RequestMapping(value = "/")
     @ResponseBody
     public List<Unit> getTestUnit(){
@@ -33,6 +33,6 @@ public class RestTestController {
     @RequestMapping(value = "/rdyn")
     @ResponseBody
     public String getTest(){
-        return shoppingListDAO.getByID(1).toString();
+        return shoppingListDAO.getByID(2).toString() + "\n" + storageDAO.getAll().toString();
     }
 }

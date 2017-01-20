@@ -52,7 +52,7 @@ public class ShoppingList {
 
     @Override
     public String toString() {
-        return "Storage{" +
+        return "ShoppingList{" +
                 "user=" + user +
                 ", product=" + product +
                 ", amount=" + amount +

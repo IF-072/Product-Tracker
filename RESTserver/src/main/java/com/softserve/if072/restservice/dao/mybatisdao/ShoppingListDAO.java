@@ -17,8 +17,8 @@ public interface ShoppingListDAO extends DAO<ShoppingList> {
     @Results(value = {
             @Result(property = "id", column = "id"),
             @Result(property = "amount", column = "amount"),
-            @Result(property = "user", column = "user_id", javaType=User.class, one=@One(select="com.softserve.if072.restservice.dao.UserDAO.getByID")),
-            @Result(property = "product", column = "product_id", javaType=Product.class, one=@One(select="com.softserve.if072.restservice.dao.ProductDAO.getByID"))
+            @Result(property = "user", column = "user_id", javaType=User.class, one=@One(select="com.softserve.if072.restservice.dao.mybatisdao.UserDAO.getByID")),
+            @Result(property = "product", column = "product_id", javaType=Product.class, one=@One(select="com.softserve.if072.restservice.dao.mybatisdao.ProductDAO.getByID"))
     })
     public List<ShoppingList> getAll();
 
@@ -27,8 +27,8 @@ public interface ShoppingListDAO extends DAO<ShoppingList> {
     @Results(value = {
             @Result(property = "id", column = "id"),
             @Result(property = "amount", column = "amount"),
-            @Result(property = "user", column = "user_id", javaType=User.class, one=@One(select="com.softserve.if072.restservice.dao.UserDAO.getByID")),
-            @Result(property = "product", column = "product_id", javaType=Product.class, one=@One(select="com.softserve.if072.restservice.dao.ProductDAO.getByID"))
+            @Result(property = "user", column = "user_id", javaType=User.class, one=@One(select="com.softserve.if072.restservice.dao.mybatisdao.UserDAO.getByID")),
+            @Result(property = "product", column = "product_id", javaType=Product.class, one=@One(select="com.softserve.if072.restservice.dao.mybatisdao.ProductDAO.getByID"))
     })
     public ShoppingList getByID(@Param("id") int id);
 
