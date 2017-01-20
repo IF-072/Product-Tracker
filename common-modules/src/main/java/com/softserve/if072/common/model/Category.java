@@ -1,16 +1,17 @@
 package com.softserve.if072.common.model;
 
-
-public class Unit {
+public class Category {
 
     private int id;
     private String name;
+    private User user;
 
-    public Unit() {}
+    public Category() {}
 
-    public Unit(int id, String name) {
+    public Category(int id, String name, User user) {
         this.id = id;
         this.name = name;
+        this.user = user;
     }
 
     public int getId() {
@@ -29,11 +30,20 @@ public class Unit {
         this.name = name;
     }
 
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
     @Override
     public String toString() {
-        return "Unit{" +
+        return "Category{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
+                ", user=" + user +
                 '}';
     }
 }

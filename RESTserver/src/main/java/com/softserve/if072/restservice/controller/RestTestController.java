@@ -1,7 +1,11 @@
 package com.softserve.if072.restservice.controller;
 
+<<<<<<< HEAD
 import com.softserve.if072.common.model.*;
 import com.softserve.if072.restservice.dao.mybatisdao.ShoppingListDAO;
+=======
+import com.softserve.if072.common.model.Unit;
+>>>>>>> develop
 import com.softserve.if072.restservice.dao.mybatisdao.UnitDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
