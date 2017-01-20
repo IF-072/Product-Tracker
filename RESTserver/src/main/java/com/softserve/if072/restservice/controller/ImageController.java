@@ -13,7 +13,7 @@ import java.io.IOException;
 
 @Controller
 @RequestMapping("/image")
-public class ImageController {
+public class  ImageController {
 
     @Autowired
     private ImageService imageService;

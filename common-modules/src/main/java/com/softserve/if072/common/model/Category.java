@@ -8,8 +8,7 @@ public class Category {
 
     public Category() {}
 
-    public Category(int id, String name, User user) {
-        this.id = id;
+    public Category(String name, User user) {
         this.name = name;
         this.user = user;
     }
