@@ -1,9 +1,9 @@
-package com.softserve.if072.restservice.dao;
+package com.softserve.if072.restservice.dao.mybatisdao;
 
 import com.softserve.if072.common.model.Product;
 import com.softserve.if072.common.model.ShoppingList;
 import com.softserve.if072.common.model.User;
-import com.softserve.if072.restservice.dao.core.DAO;
+import com.softserve.if072.restservice.dao.DAO;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;

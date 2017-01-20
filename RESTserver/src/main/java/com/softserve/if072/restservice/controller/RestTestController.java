@@ -1,9 +1,8 @@
 package com.softserve.if072.restservice.controller;
 
 import com.softserve.if072.common.model.*;
-import com.softserve.if072.restservice.dao.ShoppingListDAO;
-import com.softserve.if072.restservice.dao.StorageDAO;
-import com.softserve.if072.restservice.dao.UnitDAO;
+import com.softserve.if072.restservice.dao.mybatisdao.ShoppingListDAO;
+import com.softserve.if072.restservice.dao.mybatisdao.UnitDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
