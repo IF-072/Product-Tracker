@@ -4,6 +4,7 @@ package com.softserve.if072.common.model;
 * This class describes a user entity
 * */
 public class User {
+
     private Long id;
     private String name;
     private String email;
@@ -74,4 +75,5 @@ public class User {
                 ", isEnabled=" + isEnabled +
                 '}';
     }
+
 }

@@ -1,5 +1,6 @@
 package com.softserve.if072.common.model;
 
+
 public class Product {
     private int id;
     private String name;
@@ -100,4 +101,5 @@ public class Product {
                 ", isActive=" + isActive +
                 '}';
     }
+
 }
