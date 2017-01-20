@@ -1,6 +1,6 @@
 package com.softserve.if072.restservice.dao.mybatisdao;
 
-import com.softserve.if072.common.model.Product;
+import com.softserve.if072.common.model.*;
 import com.softserve.if072.restservice.dao.DAO;
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Component;
@@ -11,10 +11,30 @@ import java.util.List;
 public interface ProductDAO extends DAO<Product> {
     @Override
     @Select("SELECT * FROM product")
+    @Results(value = {
+            @Result(property = "id", column = "id"),
+            @Result(property = "name", column = "name"),
+            @Result(property = "description", column = "description"),
+            //@Result(property = "image", column = "image_id", javaType = Image.class, one = @One(select = "com.softserve.if072.restservice.dao.mybatisdao.ImageDAO.getByID")),
+            @Result(property = "user", column = "user_id", javaType = User.class, one = @One(select = "com.softserve.if072.restservice.dao.mybatisdao.UserDAO.getByID")),
+            @Result(property = "category", column = "categiry_id", javaType = Category.class, one = @One(select = "com.softserve.if072.restservice.dao.mybatisdao.CategoryDAO.getByID")),
+            @Result(property = "unit", column = "unit_id", javaType = Unit.class, one = @One(select = "com.softserve.if072.restservice.dao.mybatisdao.UnitDAO.getByID")),
+            @Result(property = "isActive", column = "is_active")
+    })
     List<Product> getAll();
 
     @Override
     @Select("SELECT * FROM product WHERE id = #{id}")
+    @Results(value = {
+            @Result(property = "id", column = "id"),
+            @Result(property = "name", column = "name"),
+            @Result(property = "description", column = "description"),
+            //@Result(property = "image", column = "image_id", javaType = Image.class, one = @One(select = "com.softserve.if072.restservice.dao.mybatisdao.ImageDAO.getByID")),
+            @Result(property = "user", column = "user_id", javaType = User.class, one = @One(select = "com.softserve.if072.restservice.dao.mybatisdao.UserDAO.getByID")),
+            @Result(property = "category", column = "categiry_id", javaType = Category.class, one = @One(select = "com.softserve.if072.restservice.dao.mybatisdao.CategoryDAO.getByID")),
+            @Result(property = "unit", column = "unit_id", javaType = Unit.class, one = @One(select = "com.softserve.if072.restservice.dao.mybatisdao.UnitDAO.getByID")),
+            @Result(property = "isActive", column = "is_active")
+    })
     Product getByID(@Param("id") int id);
 
     @Override
