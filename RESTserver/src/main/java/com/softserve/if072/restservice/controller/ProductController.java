@@ -28,6 +28,7 @@ public class ProductController {
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     @ResponseBody
-    @ResponseStatus(value = HttpStatus.CREATED)
-    public void insert(@RequestBody Product product){productService.insert(product);}
+    @ResponseStatus(value = HttpStatus.OK)
+    public void insert(@RequestBody Product product){
+        productService.insert(product);}
 }
