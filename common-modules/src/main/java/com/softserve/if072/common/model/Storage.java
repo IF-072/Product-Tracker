@@ -1,13 +1,29 @@
 package com.softserve.if072.common.model;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 /**
  * Created by dyndyn on 17.01.2017.
  */
 public class Storage {
     private User user;
-    private Product product;
-    private int amount;
-    private int id;
+    private Map<Product, Integer> products;
+    private List<Integer> ids;
+
+    public Storage(List<StorageSimple> list){
+        if(list != null && list.size() != 0) {
+            user = list.get(0).getUser();
+            products = new HashMap<Product, Integer>();
+            ids = new ArrayList<Integer>();
+            for (StorageSimple simple : list){
+                products.put(simple.getProduct(), simple.getAmount());
+                ids.add(simple.getId());
+            }
+        }
+    }
 
     public User getUser() {
         return user;
@@ -17,46 +33,36 @@ public class Storage {
         this.user = user;
     }
 
-    public Product getProduct() {
-        return product;
+    public Map<Product, Integer> getProducts() {
+        return products;
     }
 
-    public void setProduct(Product product) {
-        this.product = product;
+    public void setProducts(Map<Product, Integer> products) {
+        this.products = products;
     }
 
-    public int getAmount() {
-        return amount;
+    public Integer getAmount(Product product){
+        return products.get(product);
     }
 
-    public void setAmount(int amount) {
-        this.amount = amount;
+    public List<Integer> getIds() {
+        return ids;
     }
 
-    public int getId() {
-        return id;
+    public void setIds(List<Integer> ids) {
+        this.ids = ids;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public Integer getId(int index){
+        return ids.get(index);
     }
-
-    public Storage(User user, Product product, int amount, int id) {
-        this.user = user;
-        this.product = product;
-        this.amount = amount;
-        this.id = id;
-    }
-
-    public Storage(){}
 
     @Override
     public String toString() {
         return "Storage{" +
                 "user=" + user +
-                ", product=" + product +
-                ", amount=" + amount +
-                ", id=" + id +
+                ", products=" + products +
+                ", ids=" + ids +
                 '}';
     }
 }
