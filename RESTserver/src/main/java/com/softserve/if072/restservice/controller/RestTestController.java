@@ -29,6 +29,9 @@ public class RestTestController {
     @Autowired
     private StorageServiceImpl service;
 
+    @Autowired
+    private StoreDAO storeDAO;
+
     @RequestMapping(value = "/")
     @ResponseBody
     public List<Unit> getTestUnit(){

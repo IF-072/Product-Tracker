@@ -4,12 +4,14 @@ import com.softserve.if072.common.model.Store;
 import com.softserve.if072.common.model.User;
 import com.softserve.if072.restservice.dao.DAO;
 import org.apache.ibatis.annotations.*;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+@Component
 public interface StoreDAO extends DAO<Store> {
     @Override
-    @Results({
+    @Results(value = {
             @Result(property = "user", column = "user_id",
                     javaType = User.class, one = @One(select = "com.softserve.if072.restservice.dao.mybatisdao.UserDAO.getByID")),
             @Result(property = "isActive", column = "is_active")
@@ -18,7 +20,7 @@ public interface StoreDAO extends DAO<Store> {
     List<Store> getAll();
 
     @Override
-    @Results({
+    @Results(value = {
             @Result(property = "user", column = "user_id",
                     javaType = User.class, one = @One(select = "com.softserve.if072.restservice.dao.mybatisdao.UserDAO.getByID")),
             @Result(property = "isActive", column = "is_active")
