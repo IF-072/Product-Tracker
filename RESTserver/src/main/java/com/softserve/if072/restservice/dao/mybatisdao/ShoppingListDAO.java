@@ -4,7 +4,15 @@ import com.softserve.if072.common.model.Product;
 import com.softserve.if072.common.model.ShoppingListSimple;
 import com.softserve.if072.common.model.User;
 import com.softserve.if072.restservice.dao.DAO;
-import org.apache.ibatis.annotations.*;
+import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Result;
+import org.apache.ibatis.annotations.Results;
+import org.apache.ibatis.annotations.One;
+import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Options;
+import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.annotations.Delete;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -17,8 +25,10 @@ public interface ShoppingListDAO extends DAO<ShoppingListSimple> {
     @Results(value = {
             @Result(property = "id", column = "id"),
             @Result(property = "amount", column = "amount"),
-            @Result(property = "user", column = "user_id", javaType=User.class, one=@One(select="com.softserve.if072.restservice.dao.mybatisdao.UserDAO.getByID")),
-            @Result(property = "product", column = "product_id", javaType=Product.class, one=@One(select="com.softserve.if072.restservice.dao.mybatisdao.ProductDAO.getByID"))
+            @Result(property = "user", column = "user_id", javaType=User.class,
+                    one=@One(select="com.softserve.if072.restservice.dao.mybatisdao.UserDAO.getByID")),
+            @Result(property = "product", column = "product_id", javaType=Product.class,
+                    one=@One(select="com.softserve.if072.restservice.dao.mybatisdao.ProductDAO.getByID"))
     })
     public List<ShoppingListSimple> getByUserID(int user_id);
 
@@ -27,8 +37,10 @@ public interface ShoppingListDAO extends DAO<ShoppingListSimple> {
     @Results(value = {
             @Result(property = "id", column = "id"),
             @Result(property = "amount", column = "amount"),
-            @Result(property = "user", column = "user_id", javaType=User.class, one=@One(select="com.softserve.if072.restservice.dao.mybatisdao.UserDAO.getByID")),
-            @Result(property = "product", column = "product_id", javaType=Product.class, one=@One(select="com.softserve.if072.restservice.dao.mybatisdao.ProductDAO.getByID"))
+            @Result(property = "user", column = "user_id", javaType=User.class,
+                    one=@One(select="com.softserve.if072.restservice.dao.mybatisdao.UserDAO.getByID")),
+            @Result(property = "product", column = "product_id", javaType=Product.class,
+                    one=@One(select="com.softserve.if072.restservice.dao.mybatisdao.ProductDAO.getByID"))
     })
     public ShoppingListSimple getByID(@Param("id") int id);
 

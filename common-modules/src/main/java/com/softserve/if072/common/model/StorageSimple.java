@@ -9,6 +9,16 @@ public class StorageSimple {
     private int amount;
     private int id;
 
+    public StorageSimple(User user, Product product, int amount, int id) {
+        this.user = user;
+        this.product = product;
+        this.amount = amount;
+        this.id = id;
+    }
+
+    public StorageSimple() {
+    }
+
     public User getUser() {
         return user;
     }
@@ -39,15 +49,5 @@ public class StorageSimple {
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    public StorageSimple(User user, Product product, int amount, int id) {
-        this.user = user;
-        this.product = product;
-        this.amount = amount;
-        this.id = id;
-    }
-
-    public StorageSimple() {
     }
 }

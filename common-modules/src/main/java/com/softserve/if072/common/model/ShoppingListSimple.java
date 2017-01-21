@@ -9,6 +9,15 @@ public class ShoppingListSimple {
     private int amount;
     private int id;
 
+    public ShoppingListSimple(User user, Product product, int amount, int id) {
+        this.user = user;
+        this.product = product;
+        this.amount = amount;
+        this.id = id;
+    }
+
+    public ShoppingListSimple(){}
+
     public User getUser() {
         return user;
     }
@@ -40,15 +49,6 @@ public class ShoppingListSimple {
     public void setId(int id) {
         this.id = id;
     }
-
-    public ShoppingListSimple(User user, Product product, int amount, int id) {
-        this.user = user;
-        this.product = product;
-        this.amount = amount;
-        this.id = id;
-    }
-
-    public ShoppingListSimple(){}
 
     @Override
     public String toString() {
