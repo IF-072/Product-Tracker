@@ -62,6 +62,11 @@ public class Storage {
         return ids.get(index);
     }
 
+    public void add(Product product, Integer amount) {
+        products.put(product, amount);
+        ids.add(0);
+    }
+
     @Override
     public String toString() {
         return "Storage{" +

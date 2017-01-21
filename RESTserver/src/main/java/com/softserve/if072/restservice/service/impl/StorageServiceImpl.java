@@ -26,16 +26,18 @@ public class StorageServiceImpl implements StorageService {
     @Override
     public void insert(Storage storage) {
         int i = 0;
-        for (Product product : storage.getProducts().keySet()){
-            storageDAO.insert(new StorageSimple(storage.getUser(), product, storage.getAmount(product), 0));
+        for (Product product : storage.getProducts().keySet()) {
+            if (storage.getId(i++) == 0)
+                storageDAO.insert(new StorageSimple(storage.getUser(), product, storage.getAmount(product), 0));
         }
     }
 
     @Override
     public void update(Storage storage) {
         int i = 0;
-        for (Product product : storage.getProducts().keySet()){
-            storageDAO.update(new StorageSimple(storage.getUser(), product, storage.getAmount(product), storage.getId(i++)));
+        for (Product product : storage.getProducts().keySet()) {
+            if (storage.getId(i) != 0)
+                storageDAO.update(new StorageSimple(storage.getUser(), product, storage.getAmount(product), storage.getId(i++)));
         }
     }
 

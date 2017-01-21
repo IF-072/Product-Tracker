@@ -13,12 +13,12 @@ public class ShoppingList {
     private Map<Product, Integer> products;
     private List<Integer> ids;
 
-    public ShoppingList(List<ShoppingListSimple> list){
-        if(list != null && list.size() != 0) {
+    public ShoppingList(List<ShoppingListSimple> list) {
+        if (list != null && list.size() != 0) {
             user = list.get(0).getUser();
             products = new HashMap<Product, Integer>();
             ids = new ArrayList<Integer>();
-            for (ShoppingListSimple simple : list){
+            for (ShoppingListSimple simple : list) {
                 products.put(simple.getProduct(), simple.getAmount());
                 ids.add(simple.getId());
             }
@@ -46,7 +46,7 @@ public class ShoppingList {
         this.products = products;
     }
 
-    public Integer getAmount(Product product){
+    public Integer getAmount(Product product) {
         return products.get(product);
     }
 
@@ -58,8 +58,13 @@ public class ShoppingList {
         this.ids = ids;
     }
 
-    public Integer getId(int index){
+    public Integer getId(int index) {
         return ids.get(index);
+    }
+
+    public void add(Product product, Integer amount) {
+        products.put(product, amount);
+        ids.add(0);
     }
 
     @Override

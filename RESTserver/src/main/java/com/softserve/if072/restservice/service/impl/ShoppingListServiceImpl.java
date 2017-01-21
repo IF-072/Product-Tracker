@@ -25,16 +25,18 @@ public class ShoppingListServiceImpl implements ShoppingListService {
     @Override
     public void insert(ShoppingList shoppingList) {
         int i = 0;
-        for (Product product : shoppingList.getProducts().keySet()){
-            shoppingListDAO.insert(new ShoppingListSimple(shoppingList.getUser(), product, shoppingList.getAmount(product), 0));
+        for (Product product : shoppingList.getProducts().keySet()) {
+            if (shoppingList.getId(i++) == 0)
+                shoppingListDAO.insert(new ShoppingListSimple(shoppingList.getUser(), product, shoppingList.getAmount(product), 0));
         }
     }
 
     @Override
     public void update(ShoppingList shoppingList) {
         int i = 0;
-        for (Product product : shoppingList.getProducts().keySet()){
-            shoppingListDAO.insert(new ShoppingListSimple(shoppingList.getUser(), product, shoppingList.getAmount(product), shoppingList.getId(i++)));
+        for (Product product : shoppingList.getProducts().keySet()) {
+            if (shoppingList.getId(i) != 0)
+                shoppingListDAO.insert(new ShoppingListSimple(shoppingList.getUser(), product, shoppingList.getAmount(product), shoppingList.getId(i++)));
         }
     }
 
