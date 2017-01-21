@@ -27,7 +27,7 @@ public class StorageServiceImpl implements StorageService {
     public void insert(Storage storage) {
         int i = 0;
         for (Product product : storage.getProducts().keySet()){
-            storageDAO.insert(new StorageSimple(storage.getUser(), product, storage.getAmount(product), storage.getId(i++)));
+            storageDAO.insert(new StorageSimple(storage.getUser(), product, storage.getAmount(product), 0));
         }
     }
 

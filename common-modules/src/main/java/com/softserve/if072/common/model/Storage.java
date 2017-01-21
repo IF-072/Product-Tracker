@@ -25,6 +25,11 @@ public class Storage {
         }
     }
 
+    public Storage() {
+        products = new HashMap<Product, Integer>();
+        ids = new ArrayList<Integer>();
+    }
+
     public User getUser() {
         return user;
     }
