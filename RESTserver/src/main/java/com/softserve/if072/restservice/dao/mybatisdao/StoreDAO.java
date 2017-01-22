@@ -3,12 +3,17 @@ package com.softserve.if072.restservice.dao.mybatisdao;
 import com.softserve.if072.common.model.Store;
 import com.softserve.if072.common.model.User;
 import com.softserve.if072.restservice.dao.DAO;
-import org.apache.ibatis.annotations.*;
-import org.springframework.stereotype.Component;
-
+import org.apache.ibatis.annotations.One;
+import org.apache.ibatis.annotations.Result;
+import org.apache.ibatis.annotations.Results;
+import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.annotations.Delete;
+import org.springframework.stereotype.Repository;
 import java.util.List;
 
-@Component
+@Repository
 public interface StoreDAO extends DAO<Store> {
     @Override
     @Results(value = {
