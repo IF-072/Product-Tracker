@@ -29,6 +29,15 @@ public class ProductController {
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     @ResponseBody
     @ResponseStatus(value = HttpStatus.OK)
-    public void insert(@RequestBody Product product){
-        productService.insert(product);}
+    public void insert(@RequestBody Product product){productService.insert(product);}
+
+    @RequestMapping(value = "/update", method = RequestMethod.PUT)
+    @ResponseBody
+    @ResponseStatus(value = HttpStatus.OK)
+    public void update(@RequestBody Product product){productService.update(product);}
+
+    @RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE)
+    @ResponseBody
+    @ResponseStatus(value = HttpStatus.OK)
+    public void delete(@PathVariable int id){productService.delete(id);}
 }
