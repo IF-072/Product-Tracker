@@ -1,6 +1,5 @@
 package com.softserve.if072.common.model;
 
-
 public class Product {
     private int id;
     private String name;
@@ -13,8 +12,7 @@ public class Product {
 
     public Product() {}
 
-    public Product(int id, String name, String description, Image image, User user, Category category, Unit unit, boolean isActive) {
-        this.id = id;
+    public Product(String name, String description, Image image, User user, Category category, Unit unit, boolean isActive) {
         this.name = name;
         this.description = description;
         this.image = image;
@@ -80,11 +78,11 @@ public class Product {
         this.unit = unit;
     }
 
-    public boolean isActive() {
+    public boolean getIsActive() {
         return isActive;
     }
 
-    public void setActive(boolean active) {
+    public void setIsActive(boolean active) {
         isActive = active;
     }
 
