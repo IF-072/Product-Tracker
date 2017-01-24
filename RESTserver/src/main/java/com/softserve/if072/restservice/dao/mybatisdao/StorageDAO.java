@@ -1,7 +1,7 @@
 package com.softserve.if072.restservice.dao.mybatisdao;
 
 import com.softserve.if072.common.model.Product;
-import com.softserve.if072.common.model.StorageSimple;
+import com.softserve.if072.common.model.Storage;
 import com.softserve.if072.common.model.User;
 import com.softserve.if072.restservice.dao.DAO;
 import org.apache.ibatis.annotations.Select;
@@ -13,13 +13,15 @@ import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Update;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 /**
  * Created by dyndyn on 17.01.2017.
  */
-public interface StorageDAO extends DAO<StorageSimple> {
+@Repository
+public interface StorageDAO extends DAO<Storage> {
 
     @Select("SELECT * FROM storage WHERE user_id = #{user_id}")
     @Results(value = {
@@ -30,7 +32,7 @@ public interface StorageDAO extends DAO<StorageSimple> {
             @Result(property = "product", column = "product_id", javaType=Product.class,
                     one=@One(select="com.softserve.if072.restservice.dao.mybatisdao.ProductDAO.getByID"))
     })
-    public List<StorageSimple> getByUserID(int user_id);
+    public List<Storage> getByUserID(int user_id);
 
     @Override
     @Select("SELECT * FROM storage WHERE id = #{id}")
@@ -42,16 +44,16 @@ public interface StorageDAO extends DAO<StorageSimple> {
             @Result(property = "product", column = "product_id", javaType=Product.class,
                     one=@One(select="com.softserve.if072.restservice.dao.mybatisdao.ProductDAO.getByID"))
     })
-    public StorageSimple getByID(@Param("id") int id);
+    public Storage getByID(@Param("id") int id);
 
     @Override
     @Insert("INSERT INTO storage (user_id, product_id, amount) VALUES (#{user.id}, #{product.id}, #{amount})")
     @Options(useGeneratedKeys = true)
-    public void insert(StorageSimple storage);
+    public void insert(Storage storage);
 
     @Override
     @Update("UPDATE storage SET user_id=#{user.id}, product_id=#{product.id}, amount=#{amount} WHERE id=#{id}")
-    public void update(StorageSimple storage);
+    public void update(Storage storage);
 
     @Override
     @Delete("DELETE FROM storage WHERE id = #{id}")

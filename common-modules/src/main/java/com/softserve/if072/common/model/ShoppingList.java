@@ -10,25 +10,18 @@ import java.util.Map;
  */
 public class ShoppingList {
     private User user;
-    private Map<Product, Integer> products;
-    private List<Integer> ids;
+    private Product product;
+    private int amount;
+    private int id;
 
-    public ShoppingList(List<ShoppingListSimple> list) {
-        if (list != null && list.size() != 0) {
-            user = list.get(0).getUser();
-            products = new HashMap<Product, Integer>();
-            ids = new ArrayList<Integer>();
-            for (ShoppingListSimple simple : list) {
-                products.put(simple.getProduct(), simple.getAmount());
-                ids.add(simple.getId());
-            }
-        }
+    public ShoppingList(User user, Product product, int amount, int id) {
+        this.user = user;
+        this.product = product;
+        this.amount = amount;
+        this.id = id;
     }
 
-    public ShoppingList() {
-        products = new HashMap<Product, Integer>();
-        ids = new ArrayList<Integer>();
-    }
+    public ShoppingList(){}
 
     public User getUser() {
         return user;
@@ -38,41 +31,37 @@ public class ShoppingList {
         this.user = user;
     }
 
-    public Map<Product, Integer> getProducts() {
-        return products;
+    public Product getProduct() {
+        return product;
     }
 
-    public void setProducts(Map<Product, Integer> products) {
-        this.products = products;
+    public void setProduct(Product product) {
+        this.product = product;
     }
 
-    public Integer getAmount(Product product) {
-        return products.get(product);
+    public int getAmount() {
+        return amount;
     }
 
-    public List<Integer> getIds() {
-        return ids;
+    public void setAmount(int amount) {
+        this.amount = amount;
     }
 
-    public void setIds(List<Integer> ids) {
-        this.ids = ids;
+    public int getId() {
+        return id;
     }
 
-    public Integer getId(int index) {
-        return ids.get(index);
-    }
-
-    public void add(Product product, Integer amount) {
-        products.put(product, amount);
-        ids.add(0);
+    public void setId(int id) {
+        this.id = id;
     }
 
     @Override
     public String toString() {
         return "ShoppingList{" +
                 "user=" + user +
-                ", products=" + products +
-                ", ids=" + ids +
+                ", product=" + product +
+                ", amount=" + amount +
+                ", id=" + id +
                 '}';
     }
 }

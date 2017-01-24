@@ -10,7 +10,9 @@ import java.util.List;
  */
 public interface StorageService {
 
-    Storage getByUserId(int user_id);
+    List<Storage> getByUserId(int user_id);
+
+    Storage getById(int id);
 
     void insert(Storage storage);
 
