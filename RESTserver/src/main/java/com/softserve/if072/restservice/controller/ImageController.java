@@ -19,7 +19,7 @@ public class  ImageController {
     private ImageService imageService;
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    @ResponseBody()
+    @ResponseBody
     public void getImageById(@PathVariable("id") int id, HttpServletResponse response) throws IOException {
         Image image = imageService.getById(id);
         if (image != null) {
