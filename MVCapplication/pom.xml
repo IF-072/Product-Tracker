@@ -78,6 +78,17 @@
             <artifactId>commons-fileupload</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>org.apache.tiles</groupId>
+            <artifactId>tiles-extras</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+        </dependency>
+
+
     </dependencies>
 
 </project>
