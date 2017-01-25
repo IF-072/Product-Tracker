@@ -26,14 +26,21 @@ public class StorageController {
         storageService.delete(id);
     }
 
+    @RequestMapping(value = "/getByUser/{user_id}", method = RequestMethod.GET)
+    @ResponseBody
+    @ResponseStatus(value = HttpStatus.OK)
+    public List<Storage> getByUserId(@PathVariable int user_id){
+        return storageService.getByUserId(user_id);
+    }
+
     @RequestMapping(value = "/get/{id}", method = RequestMethod.GET)
     @ResponseBody
     @ResponseStatus(value = HttpStatus.OK)
-    public Storage getByUserId(@PathVariable int id){
-        return storageService.getByUserId(id);
+    public Storage getById(@PathVariable int id){
+        return storageService.getById(id);
     }
 
-    @RequestMapping(value = "/add", method = RequestMethod.POST)
+    @RequestMapping(value = "/add", method = RequestMethod.POST, headers="Accept=application/json")
     @ResponseStatus(value = HttpStatus.OK)
     public void insert(@RequestBody Storage storage){
         storageService.insert(storage);

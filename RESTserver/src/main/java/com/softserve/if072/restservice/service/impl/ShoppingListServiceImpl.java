@@ -1,8 +1,6 @@
 package com.softserve.if072.restservice.service.impl;
 
-import com.softserve.if072.common.model.Product;
 import com.softserve.if072.common.model.ShoppingList;
-import com.softserve.if072.common.model.ShoppingListSimple;
 import com.softserve.if072.restservice.dao.mybatisdao.ShoppingListDAO;
 import com.softserve.if072.restservice.service.ShoppingListService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,27 +15,24 @@ public class ShoppingListServiceImpl implements ShoppingListService {
     private ShoppingListDAO shoppingListDAO;
 
     @Override
-    public ShoppingList getByUserId(int user_id) {
-        List<ShoppingListSimple> list = shoppingListDAO.getByUserID(user_id);
-        return new ShoppingList(list);
+    public List<ShoppingList> getByUserId(int user_id) {
+        return shoppingListDAO.getByUserID(user_id);
+
+    }
+
+    @Override
+    public ShoppingList getById(int id) {
+        return shoppingListDAO.getByID(id);
     }
 
     @Override
     public void insert(ShoppingList shoppingList) {
-        int i = 0;
-        for (Product product : shoppingList.getProducts().keySet()) {
-            if (shoppingList.getId(i++) == 0)
-                shoppingListDAO.insert(new ShoppingListSimple(shoppingList.getUser(), product, shoppingList.getAmount(product), 0));
-        }
+        shoppingListDAO.insert(shoppingList);
     }
 
     @Override
     public void update(ShoppingList shoppingList) {
-        int i = 0;
-        for (Product product : shoppingList.getProducts().keySet()) {
-            if (shoppingList.getId(i) != 0)
-                shoppingListDAO.insert(new ShoppingListSimple(shoppingList.getUser(), product, shoppingList.getAmount(product), shoppingList.getId(i++)));
-        }
+        shoppingListDAO.update(shoppingList);
     }
 
     @Override

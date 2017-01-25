@@ -1,8 +1,6 @@
 package com.softserve.if072.restservice.service.impl;
 
-import com.softserve.if072.common.model.Product;
 import com.softserve.if072.common.model.Storage;
-import com.softserve.if072.common.model.StorageSimple;
 import com.softserve.if072.restservice.dao.mybatisdao.StorageDAO;
 import com.softserve.if072.restservice.service.StorageService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,27 +16,22 @@ public class StorageServiceImpl implements StorageService {
     @Autowired
     private StorageDAO storageDAO;
 
-    public Storage getByUserId(int user_id) {
-        List<StorageSimple> list = storageDAO.getByUserID(user_id);
-        return new Storage(list);
+    public List<Storage> getByUserId(int user_id) {
+        return storageDAO.getByUserID(user_id);
+    }
+
+    public Storage getById(int id) {
+        return storageDAO.getByID(id);
     }
 
     @Override
     public void insert(Storage storage) {
-        int i = 0;
-        for (Product product : storage.getProducts().keySet()) {
-            if (storage.getId(i++) == 0)
-                storageDAO.insert(new StorageSimple(storage.getUser(), product, storage.getAmount(product), 0));
-        }
+        storageDAO.insert(storage);
     }
 
     @Override
     public void update(Storage storage) {
-        int i = 0;
-        for (Product product : storage.getProducts().keySet()) {
-            if (storage.getId(i) != 0)
-                storageDAO.update(new StorageSimple(storage.getUser(), product, storage.getAmount(product), storage.getId(i++)));
-        }
+        storageDAO.update(storage);
     }
 
     @Override
