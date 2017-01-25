@@ -1,22 +1,31 @@
 package com.softserve.if072.common.model;
 
+import java.util.List;
 
+/**
+ * This Store class contains information about current store and
+ * about products that user can buy in current store
+ *
+ * @author Nazar Vynnyk
+ */
 public class Store {
 
     private int id;
     private String name;
     private String address;
-    private User User;
+    private User user;
     private boolean isActive;
+    private List<Product> products;
 
     public Store() {}
 
-    public Store(int id, String name, String address,User user, boolean isActive) {
+    public Store(int id, String name, String address, User user, boolean isActive, List<Product> products) {
         this.id = id;
         this.name = name;
         this.address = address;
-        User = user;
+        this.user = user;
         this.isActive = isActive;
+        this.products = products;
     }
 
     public int getId() {
@@ -43,13 +52,9 @@ public class Store {
         this.address = address;
     }
 
-    public com.softserve.if072.common.model.User getUser() {
-        return User;
-    }
+    public User getUser() {return this.user; }
 
-    public void setUser(com.softserve.if072.common.model.User user) {
-        User = user;
-    }
+    public void setUser(User user) {this.user = user;}
 
     public boolean isActive() {
         return isActive;
@@ -59,14 +64,23 @@ public class Store {
         isActive = active;
     }
 
+    public List<Product> getProducts() {
+        return products;
+    }
+
+    public void setProducts(List<Product> products) {
+        this.products = products;
+    }
+
     @Override
     public String toString() {
         return "Store{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", address='" + address + '\'' +
-                ", User=" + User +
+                ", user=" + user +
                 ", isActive=" + isActive +
+                ", products=" + products.toString() +
                 '}';
     }
 }
