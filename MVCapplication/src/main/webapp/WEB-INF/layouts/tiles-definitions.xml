@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE tiles-definitions PUBLIC
+        "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN"
+        "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+<tiles-definitions>
+
+    <definition name="defaultTemplate" template="/WEB-INF/layouts/main.jsp">
+        <put-attribute name="header" value="/WEB-INF/layouts/header.jsp"/>
+        <put-attribute name="footer" value="/WEB-INF/layouts/footer.jsp"/>
+        <put-list-attribute name="stylesheets">
+            <add-attribute value="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+        </put-list-attribute>
+        <put-list-attribute name="javascripts">
+            <add-attribute value="https://code.jquery.com/jquery-3.1.1.slim.min.js"/>
+            <add-attribute value="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"/>
+        </put-list-attribute>
+    </definition>
+
+    <definition name="index" extends="defaultTemplate">
+        <put-attribute name="title" value="Index Page Title"/>
+        <put-attribute name="content" value="/WEB-INF/views/index.jsp"/>
+    </definition>
+
+    <definition name="uploadImage" extends="defaultTemplate">
+        <put-attribute name="title" value="Image Upload Service"/>
+        <put-attribute name="content" value="/WEB-INF/views/uploadImage.jsp"/>
+    </definition>
+
+    <definition name="getImage" extends="defaultTemplate">
+        <put-attribute name="title" value="Get Image Service"/>
+        <put-attribute name="content" value="/WEB-INF/views/getImage.jsp"/>
+    </definition>
+
+</tiles-definitions>
