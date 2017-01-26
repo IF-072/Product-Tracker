@@ -1,5 +1,6 @@
 package com.softserve.if072.restservice.service;
 
+import com.softserve.if072.common.model.Product;
 import com.softserve.if072.common.model.Store;
 import com.softserve.if072.restservice.dao.mybatisdao.StoreDAO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,6 +54,16 @@ public class StoreService {
             storeDAO.delete(id);
         } else {
             throw new RuntimeException("Store not found");
+        }
+    }
+
+    @Transactional
+    public List<Product> getProductsByStoreId(int storeId){
+        List<Product> products = storeDAO.getProductsByStoreId(storeId);
+        if (!products.isEmpty()){
+            return products;
+        } else {
+            throw new RuntimeException("Products not found");
         }
     }
 }

@@ -1,5 +1,6 @@
 package com.softserve.if072.restservice.controller;
 
+import com.softserve.if072.common.model.Product;
 import com.softserve.if072.common.model.Store;
 import com.softserve.if072.restservice.service.StoreService;
 
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -67,14 +69,13 @@ public class StoreController {
         }
     }
 
-   @PostMapping("/add")
-   @ResponseBody
-   @ResponseStatus(HttpStatus.CREATED)
-   public Store addStore(@RequestBody Store store) {
+  // @PostMapping("/add")
+  @RequestMapping(value = "/add", method = RequestMethod.POST, headers="Accept=application/json")
+  @ResponseStatus(value = HttpStatus.CREATED)
+   public void addStore(@RequestBody Store store) {
        storeService.addStore(store);
        LOGGER.info("New Store was created");
-       return store;
-   }
+  }
 
     @PutMapping("/")
     @ResponseStatus(value = HttpStatus.OK)
@@ -92,7 +93,7 @@ public class StoreController {
     }
 
     @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void deleteStore(@PathVariable int id, HttpServletResponse response) throws IOException {
         try {
             storeService.deleteStore(id);
@@ -102,5 +103,30 @@ public class StoreController {
             LOGGER.error("Store with id " + id + " was not found: " + e);
         }
     }
+
+    /**
+     * This method shows all products that sell at the current store
+     *
+     * @param id current store_id
+     * @param response
+     * @return list of products that sell at the current store
+     * @throws IOException if current store hasn't any product we inform user
+     */
+
+    @GetMapping("/{id}/products")
+    @ResponseBody
+    @ResponseStatus(value = HttpStatus.OK)
+    public List<Product> getAllProducts(@PathVariable int id, HttpServletResponse response) throws IOException {
+        try {
+            List<Product> products = storeService.getProductsByStoreId(id);
+            LOGGER.info("All Products were found");
+            return products;
+        } catch (RuntimeException e) {
+            response.sendError(HttpServletResponse.SC_NOT_FOUND);
+            LOGGER.error("Products were not found: " + e);
+            return null;
+        }
+    }
+
 
 }
