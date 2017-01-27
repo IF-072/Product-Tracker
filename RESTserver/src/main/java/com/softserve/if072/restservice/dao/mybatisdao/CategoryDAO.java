@@ -7,10 +7,14 @@ import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
+/**
+ * The interface contains SQL-queries for manipulating categories data
+ */
+
 public interface CategoryDAO extends DAO<Category> {
 
     @Override
-    @Select("SELECT id, name, user_id FROM category")
+    @Select("SELECT * FROM category")
     @Results({
             @Result(property = "id", column = "id"),
             @Result(property = "name", column = "name"),
@@ -39,5 +43,5 @@ public interface CategoryDAO extends DAO<Category> {
 
     @Override
     @Delete("DELETE FROM category WHERE id = #{id}")
-    void delete(int id);
+    void delete(@Param("id") int id);
 }

@@ -1,5 +1,11 @@
 package com.softserve.if072.common.model;
 
+/**
+ * The class contains information about product's category
+ *
+ * @author Pavlo Bendus
+ */
+
 public class Category {
 
     private int id;
