@@ -2,6 +2,7 @@ package com.softserve.if072.restservice.controller;
 
 import com.softserve.if072.common.model.Product;
 import com.softserve.if072.common.model.Store;
+import com.softserve.if072.restservice.Exception.DataSourceException;
 import com.softserve.if072.restservice.service.StoreService;
 
 import org.apache.logging.log4j.LogManager;
@@ -52,7 +53,7 @@ public class StoreController {
             List<Store> stores = storeService.getAllStores();
             LOGGER.info("All Stores were found");
             return stores;
-        } catch (RuntimeException e) {
+        } catch (DataSourceException e) {
             response.sendError(HttpServletResponse.SC_NOT_FOUND);
             LOGGER.error("Stores were not found", e);
             return null;
@@ -67,7 +68,7 @@ public class StoreController {
             Store store = storeService.getStoreByID(id);
             LOGGER.info(String.format("Store with id %d was retrieved", id));
             return store;
-        } catch (RuntimeException e) {
+        } catch (DataSourceException e) {
             response.sendError(HttpServletResponse.SC_NOT_FOUND);
             LOGGER.error(String.format(storeNotFound, id), e);
             return null;
@@ -90,7 +91,7 @@ public class StoreController {
             LOGGER.info(String.format("Store with id %d was updated", id));
             store = storeService.getStoreByID(store.getId());
             return store;
-        } catch (RuntimeException e) {
+        } catch (DataSourceException e) {
             response.sendError(HttpServletResponse.SC_NOT_FOUND);
             LOGGER.error(String.format(storeNotFound, id), e);
             return null;
@@ -103,7 +104,7 @@ public class StoreController {
         try {
             storeService.deleteStore(id);
             LOGGER.info(String.format("Store with id %d was deleted", id));
-        } catch (RuntimeException e) {
+        } catch (DataSourceException e) {
             response.sendError(HttpServletResponse.SC_NOT_FOUND);
             LOGGER.error(String.format(storeNotFound, id), e);
         }
@@ -126,7 +127,7 @@ public class StoreController {
             List<Product> products = storeService.getProductsByStoreId(id);
             LOGGER.info("All Products were found");
             return products;
-        } catch (RuntimeException e) {
+        } catch (DataSourceException e) {
             response.sendError(HttpServletResponse.SC_NOT_FOUND);
             LOGGER.error("Products were not found", e);
             return null;
