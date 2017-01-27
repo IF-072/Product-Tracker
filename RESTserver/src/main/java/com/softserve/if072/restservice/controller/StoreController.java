@@ -83,6 +83,7 @@ public class StoreController {
   }
 
    @PutMapping("/")
+   @ResponseBody
    @ResponseStatus(value = HttpStatus.OK)
    public Store updateStore(@RequestBody Store store, HttpServletResponse response) throws IOException{
        int id = store.getId();
