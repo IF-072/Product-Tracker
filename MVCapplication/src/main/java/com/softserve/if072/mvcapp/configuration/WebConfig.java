@@ -17,10 +17,10 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         //registry.addResourceHandler("/resources/**").addResourceLocations("/resources/");
-        registry.addResourceHandler("/css/**").addResourceLocations("/resources/css/");
-        registry.addResourceHandler("/js/**").addResourceLocations("/resources/js/");
-        registry.addResourceHandler("/fonts/**").addResourceLocations("/resources/fonts/");
-        registry.addResourceHandler("/img/**").addResourceLocations("/resources/img/");
+        registry.addResourceHandler("/css/**").addResourceLocations("WEB-INF/resources/css/");
+        registry.addResourceHandler("/js/**").addResourceLocations("WEB-INF/resources/js/");
+        registry.addResourceHandler("/fonts/**").addResourceLocations("WEB-INF/resources/fonts/");
+        registry.addResourceHandler("/img/**").addResourceLocations("WEB-INF/resources/img/");
     }
 
     @Bean

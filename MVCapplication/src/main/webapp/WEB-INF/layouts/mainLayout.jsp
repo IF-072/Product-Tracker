@@ -21,8 +21,10 @@
 </head>
 <body>
     <tiles:insertAttribute name="header" />
-    <tiles:insertAttribute name="left-sidebar" />
     <tiles:insertAttribute name="body" />
+
+    </div>
+    </div>
 
     <c:forEach var="js" items="${javascripts}">
         <script src="<c:url value="${js}"/>"></script>

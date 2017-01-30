@@ -7,24 +7,23 @@
     <definition name="mainLayout" template="/WEB-INF/layouts/mainLayout.jsp">
         <put-attribute name="title" value="" />
         <put-attribute name="header" value="/WEB-INF/templates/header.jsp" />
-        <put-attribute name="left-sidebar" value="/WEB-INF/templates/leftSidebar.jsp" />
         <put-attribute name="body" value="" />
 
         <put-list-attribute name="stylesheets">
             <add-attribute value="/css/bootstrap.css" />
-            <add-attribute value="/css/sb-admin-2.css" />
-            <add-attribute value="/css/font-awesome.css" />
             <add-attribute value="/css/metisMenu.css" />
+            <add-attribute value="/css/sb-admin-2.css" />
             <add-attribute value="/css/morris.css" />
+            <add-attribute value="/css/font-awesome.css" />
         </put-list-attribute>
 
         <put-list-attribute name="javascripts">
-            <add-attribute value="/js/bootstrap.js" />
             <add-attribute value="/js/jquery.js" />
+            <add-attribute value="/js/bootstrap.js" />
             <add-attribute value="/js/metisMenu.js" />
+            <add-attribute value="/js/raphael.js" />
             <add-attribute value="/js/morris.js" />
             <add-attribute value="/js/morris-data.js" />
-            <add-attribute value="/js/raphael.js" />
             <add-attribute value="/js/sb-admin-2.js" />
         </put-list-attribute>
     </definition>
