@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE tiles-definitions PUBLIC
+        "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN"
+        "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+
+<tiles-definitions>
+    <definition name="mainLayout" template="/WEB-INF/layout/mainLayout.jsp  ">
+        <put-attribute name="title" value="" />
+        <put-attribute name="header" value="/WEB-INF/templates/header.jsp" />
+        <put-attribute name="left-sidebar" value="/WEB-INF/templates/leftSidebar.jsp" />
+        <put-attribute name="body" value="" />
+
+        <put-list-attribute name="stylesheets">
+            <add-attribute value="/resources/css/sb-admin-2.css" />
+        </put-list-attribute>
+
+        <put-list-attribute name="javascripts">
+            <add-attribute value="" />
+        </put-list-attribute>
+    </definition>
+
+    <definition name="home" extends="mainLayout">
+        <put-attribute name="title" value="Product Tracker Project" />
+        <put-attribute name="body" value="/WEB-INF/views/home.jsp" />
+    </definition>
+</tiles-definitions>
