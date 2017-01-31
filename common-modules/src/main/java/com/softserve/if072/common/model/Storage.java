@@ -1,10 +1,5 @@
 package com.softserve.if072.common.model;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 /**
  * Created by dyndyn on 17.01.2017.
  */
