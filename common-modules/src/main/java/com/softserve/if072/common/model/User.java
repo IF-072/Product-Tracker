@@ -1,26 +1,35 @@
 package com.softserve.if072.common.model;
 
-/*
-* This class describes a user entity
-* */
+import java.util.List;
+
+/**
+ * This class stores information about user.
+ *
+ * @author Oleh Pochernin
+ */
 public class User {
 
-    private Long id;
+    private int id;
     private String name;
     private String email;
     private String password;
-    private String token;
     private boolean isEnabled;
+    private List<Store> stores;
+    private List<Product> products;
+    private List<Cart> carts;
+    private List<Category> categories;
+    private List<ShoppingList> shoppingLists;
+    private List<Storage> storages;
 
     public User() {
         /*NOP*/
     }
 
-    public Long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -48,20 +57,60 @@ public class User {
         this.password = password;
     }
 
-    public String getToken() {
-        return token;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
-    }
-
     public boolean isEnabled() {
         return isEnabled;
     }
 
     public void setEnabled(boolean enabled) {
         isEnabled = enabled;
+    }
+
+    public List<Store> getStores() {
+        return stores;
+    }
+
+    public void setStores(List<Store> stores) {
+        this.stores = stores;
+    }
+
+    public List<Product> getProducts() {
+        return products;
+    }
+
+    public void setProducts(List<Product> products) {
+        this.products = products;
+    }
+
+    public List<Cart> getCarts() {
+        return carts;
+    }
+
+    public void setCarts(List<Cart> carts) {
+        this.carts = carts;
+    }
+
+    public List<Category> getCategories() {
+        return categories;
+    }
+
+    public void setCategories(List<Category> categories) {
+        this.categories = categories;
+    }
+
+    public List<ShoppingList> getShoppingLists() {
+        return shoppingLists;
+    }
+
+    public void setShoppingLists(List<ShoppingList> shoppingLists) {
+        this.shoppingLists = shoppingLists;
+    }
+
+    public List<Storage> getStorages() {
+        return storages;
+    }
+
+    public void setStorages(List<Storage> storages) {
+        this.storages = storages;
     }
 
     @Override
@@ -71,9 +120,13 @@ public class User {
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
-                ", token='" + token + '\'' +
                 ", isEnabled=" + isEnabled +
+                ", stores=" + stores +
+                ", products=" + products +
+                ", carts=" + carts +
+                ", categories=" + categories +
+                ", shoppingLists=" + shoppingLists +
+                ", storages=" + storages +
                 '}';
     }
-
 }
