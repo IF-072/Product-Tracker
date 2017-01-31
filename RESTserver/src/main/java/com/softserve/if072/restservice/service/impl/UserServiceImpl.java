@@ -36,6 +36,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void delete(int id) {
-        userDAO.delete(id);
+        userDAO.deleteById(id);
     }
 }

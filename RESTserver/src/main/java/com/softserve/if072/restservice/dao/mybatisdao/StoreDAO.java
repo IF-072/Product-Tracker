@@ -55,7 +55,7 @@ public interface StoreDAO extends DAO<Store> {
 
     @Override
     @Delete("DELETE FROM store WHERE id = #{id}")
-    void delete(int id);
+    void deleteById(int id);
 
     @Select("SELECT id, name, description, image_id, user_id, category_id, unit_id, is_active FROM product  JOIN " +
             "stores_products ON product.id = stores_products.product_id WHERE store_id = #{storeid}")

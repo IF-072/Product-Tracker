@@ -46,7 +46,7 @@ public class StorageController {
             LOGGER.info(String.format("Storage with id %d was deleted", id));
         } catch (DataSourceException e) {
             response.sendError(HttpServletResponse.SC_NOT_FOUND);
-            LOGGER.error(String.format("Cannot delete Storage with id %d", id), e);
+            LOGGER.error(String.format("Cannot deleteById Storage with id %d", id), e);
         }
     }
 

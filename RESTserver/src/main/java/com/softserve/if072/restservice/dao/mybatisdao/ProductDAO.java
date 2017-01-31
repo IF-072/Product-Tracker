@@ -51,5 +51,5 @@ public interface ProductDAO extends DAO<Product> {
 
     @Override
     @Update("UPDATE product SET is_active = 0 WHERE id = #{id}")
-    void delete(int id);
+    void deleteById(int id);
 }

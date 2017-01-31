@@ -18,7 +18,7 @@ public interface CategoryDAO extends DAO<Category> {
     @Results({
             @Result(property = "id", column = "id"),
             @Result(property = "name", column = "name"),
-            @Result(property = "user", column = "user_id", javaType = User.class, one = @One(select = "com.softserve.if072.restservice.dao.mybatisdao.UserDAO.getAll"))
+            @Result(property = "user", column = "user_id", javaType = User.class, one = @One(select = "com.softserve.if072.restservice.dao.mybatisdao.UserDAO.findAllUsers"))
     })
     List<Category> getAll();
 
@@ -43,5 +43,5 @@ public interface CategoryDAO extends DAO<Category> {
 
     @Override
     @Delete("DELETE FROM category WHERE id = #{id}")
-    void delete(@Param("id") int id);
+    void deleteById(@Param("id") int id);
 }
