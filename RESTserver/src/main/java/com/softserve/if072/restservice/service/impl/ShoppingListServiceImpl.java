@@ -49,7 +49,7 @@ public class ShoppingListServiceImpl implements ShoppingListService {
     public void delete(int id) throws DataSourceException {
         ShoppingList shoppingList = shoppingListDAO.getByID(id);
         if (shoppingList != null){
-            shoppingListDAO.delete(id);
+            shoppingListDAO.deleteById(id);
         } else {
             throw new DataSourceException(String.format("ShoppingList with id %d was not found", id));
         }

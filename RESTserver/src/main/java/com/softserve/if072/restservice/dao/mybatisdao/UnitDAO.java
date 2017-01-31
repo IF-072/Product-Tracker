@@ -27,5 +27,5 @@ public interface UnitDAO extends DAO<Unit> {
 
     @Override
     @Delete("DELETE FROM unit WHERE id = #{id}")
-    void delete(@Param("id") int id);
+    void deleteById(@Param("id") int id);
 }

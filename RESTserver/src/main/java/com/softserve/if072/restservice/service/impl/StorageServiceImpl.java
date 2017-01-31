@@ -49,7 +49,7 @@ public class StorageServiceImpl implements StorageService {
     public void delete(int id) throws DataSourceException {
         Storage storage = storageDAO.getByID(id);
         if (storage != null){
-            storageDAO.delete(id);
+            storageDAO.deleteById(id);
         } else {
             throw new DataSourceException(String.format("Storage with id %d was not found", id));
         }

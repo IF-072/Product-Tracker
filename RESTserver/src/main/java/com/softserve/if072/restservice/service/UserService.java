@@ -1,9 +1,6 @@
 package com.softserve.if072.restservice.service;
 
 import com.softserve.if072.common.model.User;
-import com.softserve.if072.restservice.dao.mybatisdao.UserDAO;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 

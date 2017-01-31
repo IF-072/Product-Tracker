@@ -36,6 +36,6 @@ public class ImageServiceImpl implements ImageService {
 
     @Override
     public void delete(int id) {
-        imageDAO.delete(id);
+        imageDAO.deleteById(id);
     }
 }
