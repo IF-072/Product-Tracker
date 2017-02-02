@@ -22,6 +22,9 @@ public class UserController {
     @Autowired
     UserService userService;
 
+    /**
+     * Allows to obtain all users.
+     */
     @RequestMapping(value = "/user/", method = RequestMethod.GET)
     public ResponseEntity<List<User>> getAllUsers() {
         List<User> users = userService.getAll();
@@ -30,23 +33,22 @@ public class UserController {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
 
-        return new ResponseEntity<List<User>>(HttpStatus.OK);
+        return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
+    /**
+     * Allows to obtain user by id.
+     *
+     * @param id user's id
+     */
     @RequestMapping(value = "/user/{id}", method = RequestMethod.GET)
-    public ResponseEntity<User> getUser(@PathVariable("id") int id) {
+    public ResponseEntity<User> getUserById(@PathVariable("id") int id) {
         LOG.debug("Fetching User with id " + id);
         User user = userService.getById(id);
         if (user == null) {
             LOG.warn("User with id " + id + " not found");
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<User>(user, HttpStatus.OK);
-    }
-
-    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    @ResponseStatus(HttpStatus.OK)
-    public User getById(@PathVariable int id) {
-        return userService.getById(id);
+        return new ResponseEntity<>(user, HttpStatus.OK);
     }
 }
