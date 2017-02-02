@@ -1,8 +1,8 @@
 -- -----------------------------------------------------
 -- Fill in role table
 -- -----------------------------------------------------
-INSERT INTO role(name) VALUES('simple_user');
-INSERT INTO role(name) VALUES('premium_user');
+INSERT INTO role(name) VALUES('ROLE_SIMPLE');
+INSERT INTO role(name) VALUES('ROLE_PREMIUM');
 
 
 -- -----------------------------------------------------
