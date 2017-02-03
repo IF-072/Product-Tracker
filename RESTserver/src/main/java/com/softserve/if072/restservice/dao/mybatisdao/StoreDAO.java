@@ -31,7 +31,7 @@ public interface StoreDAO extends DAO<Store> {
             @Result(property = "user", column = "user_id",
                     javaType = User.class,
                     one = @One(select = "com.softserve.if072.restservice.dao.mybatisdao.UserDAO.getByID")),
-            @Result(property = "isActive", column = "is_active")
+            @Result(property = "isEnable", column = "is_active")
     })
     List<Store> getAll();
 
@@ -41,16 +41,16 @@ public interface StoreDAO extends DAO<Store> {
             @Result(property = "user", column = "user_id",
                     javaType = User.class,
                     one = @One(select = "com.softserve.if072.restservice.dao.mybatisdao.UserDAO.getByID")),
-            @Result(property = "isActive", column = "is_active")
+            @Result(property = "isEnable", column = "is_active")
     })
     Store getByID(int id);
 
     @Override
-    @Insert("INSERT into store(name, address, user_id, is_active) VALUES(#{name}, #{address}, #{user.id}, #{isActive}))")
+    @Insert("INSERT into store(name, address, user_id, is_active) VALUES(#{name}, #{address}, #{user.id}, #{isEnable}))")
     void insert(Store store);
 
     @Override
-    @Update("UPDATE store SET name = #{name}, address = #{address}, is_active = #{isActive} WHERE id = #{id}")
+    @Update("UPDATE store SET name = #{name}, address = #{address}, is_active = #{isEnable} WHERE id = #{id}")
     void update(Store store);
 
     @Override
@@ -67,7 +67,7 @@ public interface StoreDAO extends DAO<Store> {
             @Result(property = "user", column = "user_id", javaType = User.class, one = @One(select = "com.softserve.if072.restservice.dao.mybatisdao.UserDAO.getByID")),
             @Result(property = "category", column = "category_id", javaType = Category.class, one = @One(select = "com.softserve.if072.restservice.dao.mybatisdao.CategoryDAO.getByID")),
             @Result(property = "unit", column = "unit_id", javaType = Unit.class, one = @One(select = "com.softserve.if072.restservice.dao.mybatisdao.UnitDAO.getByID")),
-            @Result(property = "isActive", column = "is_active")
+            @Result(property = "isEnable", column = "is_active")
     })
     List<Product> getProductsByStoreId(int storeId);
 
