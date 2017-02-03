@@ -58,7 +58,7 @@ public class StoreService {
     public void deleteStore(int id) throws DataSourceException {
         Store store = storeDAO.getByID(id);
         if (store != null){
-            storeDAO.delete(id);
+            storeDAO.deleteById(id);
         } else {
             throw new DataSourceException(String.format(storeNotFound, id));
         }
