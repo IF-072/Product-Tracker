@@ -13,11 +13,9 @@ public interface StorageService {
 
     List<Storage> getByUserId(int user_id) throws DataSourceException;
 
-    Storage getById(int id) throws DataSourceException ;
-
     void insert(Storage storage);
 
     void update(Storage storage) throws DataSourceException ;
 
-    void delete(int id) throws DataSourceException ;
+    void delete(Storage storage) throws DataSourceException ;
 }

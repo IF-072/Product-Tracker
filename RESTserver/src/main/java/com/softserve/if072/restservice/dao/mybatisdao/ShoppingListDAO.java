@@ -12,7 +12,6 @@ import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Update;
 import org.apache.ibatis.annotations.Delete;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -25,7 +24,6 @@ public interface ShoppingListDAO extends DAO<ShoppingList> {
 
     @Select("SELECT * FROM shopping_list WHERE user_id = #{user_id}")
     @Results(value = {
-            @Result(property = "id", column = "id"),
             @Result(property = "amount", column = "amount"),
             @Result(property = "user", column = "user_id", javaType=User.class,
                     one=@One(select="com.softserve.if072.restservice.dao.mybatisdao.UserDAO.getByID")),
@@ -35,28 +33,15 @@ public interface ShoppingListDAO extends DAO<ShoppingList> {
     public List<ShoppingList> getByUserID(int user_id);
 
     @Override
-    @Select("SELECT * FROM shopping_list WHERE id = #{id}")
-    @Results(value = {
-            @Result(property = "id", column = "id"),
-            @Result(property = "amount", column = "amount"),
-            @Result(property = "user", column = "user_id", javaType=User.class,
-                    one=@One(select="com.softserve.if072.restservice.dao.mybatisdao.UserDAO.getByID")),
-            @Result(property = "product", column = "product_id", javaType=Product.class,
-                    one=@One(select="com.softserve.if072.restservice.dao.mybatisdao.ProductDAO.getByID"))
-    })
-    public ShoppingList getByID(@Param("id") int id);
-
-    @Override
     @Insert("INSERT INTO shopping_list (user_id, product_id, amount) VALUES (#{user.id}, #{product.id}, #{amount})")
     @Options(useGeneratedKeys = true)
     public void insert(ShoppingList shoppingList);
 
     @Override
-    @Update("UPDATE shopping_list SET user_id=#{user.id}, product_id=#{product.id}, amount=#{amount} WHERE id=#{id}")
+    @Update("UPDATE shopping_list SET amount=#{amount} WHERE user_id=#{user.id}, product_id=#{product.id}")
     public void update(ShoppingList shoppingList);
 
-    @Override
-    @Delete("DELETE FROM shopping_list WHERE id = #{id}")
-    public void delete(int id) ;
+    @Delete("DELETE FROM shopping_list WHERE user_id=#{user.id}, product_id=#{product.id}")
+    public void delete(ShoppingList shoppingList) ;
 }
 

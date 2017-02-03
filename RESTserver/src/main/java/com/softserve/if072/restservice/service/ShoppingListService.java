@@ -11,11 +11,9 @@ import java.util.List;
 public interface ShoppingListService {
     List<ShoppingList> getByUserId(int user_id) throws DataSourceException;
 
-    ShoppingList getById(int id) throws DataSourceException;
-
     void insert(ShoppingList shoppingList);
 
     void update(ShoppingList shoppingList) throws DataSourceException;
 
-    void delete(int id) throws DataSourceException;
+    void delete(ShoppingList shoppingList) throws DataSourceException;
 }

@@ -12,26 +12,20 @@ import java.util.List;
  * Created by dyndyn on 21.01.2017.
  */
 public class ShoppingListServiceImpl implements ShoppingListService {
-    @Autowired
     private ShoppingListDAO shoppingListDAO;
+
+    @Autowired
+    public ShoppingListServiceImpl(ShoppingListDAO shoppingListDAO) {
+        this.shoppingListDAO = shoppingListDAO;
+    }
 
     @Override
     public List<ShoppingList> getByUserId(int user_id) throws DataSourceException {
         List<ShoppingList> list = shoppingListDAO.getByUserID(user_id);
-        if (list != null && !list.isEmpty()){
+        if (list != null && !list.isEmpty()) {
             return list;
         } else {
             throw new DataSourceException("ShoppingList not found");
-        }
-    }
-
-    @Override
-    public ShoppingList getById(int id) throws DataSourceException {
-        ShoppingList shoppingList = shoppingListDAO.getByID(id);
-        if (shoppingList != null){
-            return shoppingList;
-        } else {
-            throw new DataSourceException(String.format("ShoppingList with id %d was not found", id));
         }
     }
 
@@ -46,12 +40,11 @@ public class ShoppingListServiceImpl implements ShoppingListService {
     }
 
     @Override
-    public void delete(int id) throws DataSourceException {
-        ShoppingList shoppingList = shoppingListDAO.getByID(id);
-        if (shoppingList != null){
-            shoppingListDAO.delete(id);
+    public void delete(ShoppingList shoppingList) throws DataSourceException {
+        if (shoppingList != null) {
+            shoppingListDAO.delete(shoppingList);
         } else {
-            throw new DataSourceException(String.format("ShoppingList with id %d was not found", id));
+            throw new DataSourceException("ShoppingList was not found");
         }
     }
 }

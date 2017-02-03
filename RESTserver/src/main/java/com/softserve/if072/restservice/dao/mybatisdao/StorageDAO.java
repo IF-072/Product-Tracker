@@ -25,7 +25,7 @@ public interface StorageDAO extends DAO<Storage> {
 
     @Select("SELECT * FROM storage WHERE user_id = #{user_id}")
     @Results(value = {
-            @Result(property = "id", column = "id"),
+            @Result(property = "endDate", column = "end_date"),
             @Result(property = "amount", column = "amount"),
             @Result(property = "user", column = "user_id", javaType=User.class,
                     one=@One(select="com.softserve.if072.restservice.dao.mybatisdao.UserDAO.getByID")),
@@ -35,27 +35,14 @@ public interface StorageDAO extends DAO<Storage> {
     public List<Storage> getByUserID(int user_id);
 
     @Override
-    @Select("SELECT * FROM storage WHERE id = #{id}")
-    @Results(value = {
-            @Result(property = "id", column = "id"),
-            @Result(property = "amount", column = "amount"),
-            @Result(property = "user", column = "user_id", javaType=User.class,
-                    one=@One(select="com.softserve.if072.restservice.dao.mybatisdao.UserDAO.getByID")),
-            @Result(property = "product", column = "product_id", javaType=Product.class,
-                    one=@One(select="com.softserve.if072.restservice.dao.mybatisdao.ProductDAO.getByID"))
-    })
-    public Storage getByID(@Param("id") int id);
-
-    @Override
-    @Insert("INSERT INTO storage (user_id, product_id, amount) VALUES (#{user.id}, #{product.id}, #{amount})")
+    @Insert("INSERT INTO storage (user_id, product_id, amount, end_date) VALUES (#{user.id}, #{product.id}, #{amount}, #{endDate})")
     @Options(useGeneratedKeys = true)
     public void insert(Storage storage);
 
     @Override
-    @Update("UPDATE storage SET user_id=#{user.id}, product_id=#{product.id}, amount=#{amount} WHERE id=#{id}")
+    @Update("UPDATE storage SET end_date=#{endDate}, amount=#{amount} WHERE user_id=#{user.id}, product_id=#{product.id}")
     public void update(Storage storage);
 
-    @Override
-    @Delete("DELETE FROM storage WHERE id = #{id}")
-    public void delete(int id) ;
+    @Delete("DELETE FROM storage WHERE user_id=#{user.id}, product_id=#{product.id}")
+    public void delete(Storage storage) ;
 }

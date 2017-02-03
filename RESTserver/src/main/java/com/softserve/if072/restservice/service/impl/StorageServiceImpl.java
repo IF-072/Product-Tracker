@@ -14,8 +14,12 @@ import java.util.List;
  */
 @Service
 public class StorageServiceImpl implements StorageService {
-    @Autowired
     private StorageDAO storageDAO;
+
+    @Autowired
+    public StorageServiceImpl(StorageDAO storageDAO) {
+        this.storageDAO = storageDAO;
+    }
 
     public List<Storage> getByUserId(int user_id) throws DataSourceException {
         List<Storage> list = storageDAO.getByUserID(user_id);
@@ -23,15 +27,6 @@ public class StorageServiceImpl implements StorageService {
             return list;
         } else {
             throw new DataSourceException("Storages not found");
-        }
-    }
-
-    public Storage getById(int id) throws DataSourceException {
-        Storage storage = storageDAO.getByID(id);
-        if (storage != null){
-            return storage;
-        } else {
-            throw new DataSourceException(String.format("Storage with id %d was not found", id));
         }
     }
 
@@ -46,12 +41,11 @@ public class StorageServiceImpl implements StorageService {
     }
 
     @Override
-    public void delete(int id) throws DataSourceException {
-        Storage storage = storageDAO.getByID(id);
+    public void delete(Storage storage) throws DataSourceException {
         if (storage != null){
-            storageDAO.delete(id);
+            storageDAO.delete(storage);
         } else {
-            throw new DataSourceException(String.format("Storage with id %d was not found", id));
+            throw new DataSourceException("Storage was not found");
         }
     }
 }
