@@ -63,9 +63,6 @@ public interface StoreDAO extends DAO<Store> {
     @Select("SELECT id, name, description, image_id, user_id, category_id, unit_id, is_enabled FROM product  JOIN " +
             "stores_products ON product.id = stores_products.product_id WHERE store_id = #{storeId}")
     @Results(value = {
-            @Result(property = "id", column = "id"),
-            @Result(property = "name", column = "name"),
-            @Result(property = "description", column = "description"),
             @Result(property = "image", column = "image_id", javaType = Image.class,
                     one = @One(select = "com.softserve.if072.restservice.dao.mybatisdao.ImageDAO.getByID")),
             @Result(property = "user", column = "user_id", javaType = User.class,
@@ -97,8 +94,8 @@ public interface StoreDAO extends DAO<Store> {
     })
     Product getProductFromStoreById(int storeId, int productId);
 
-    @Delete("DELETE FROM stores_products WHERE store_id = #{id} and product_id = #{id}")
-    void deleteProductFromStoreById (int storeId, int productId);
+    @Delete("DELETE FROM stores_products WHERE store_id = #{storeId} and product_id = #{productId}")
+    void deleteProductFromStoreById (int storeId, Integer productId);
 
     @Insert("INSERT into stores_products(store_id, product_id) VALUES(#{store.id}, #{product.id})")
     void addProductToStore(Store store, Product product);

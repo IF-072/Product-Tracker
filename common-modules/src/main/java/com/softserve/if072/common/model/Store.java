@@ -16,6 +16,20 @@ public class Store {
     private User user;
     private boolean isEnabled;
     private List<Product> products;
+    private String latitute;
+    private String longtitude;
+
+    public Store(int id, String name, String address, User user, boolean isEnabled, List<Product> products, String
+            latitute, String longtitude) {
+        this.id = id;
+        this.name = name;
+        this.address = address;
+        this.user = user;
+        this.isEnabled = isEnabled;
+        this.products = products;
+        this.latitute = latitute;
+        this.longtitude = longtitude;
+    }
 
     public Store() {}
 
@@ -72,6 +86,22 @@ public class Store {
         this.products = products;
     }
 
+    public String getLatitute() {
+        return latitute;
+    }
+
+    public void setLatitute(String latitute) {
+        this.latitute = latitute;
+    }
+
+    public String getLongtitude() {
+        return longtitude;
+    }
+
+    public void setLongtitude(String longtitude) {
+        this.longtitude = longtitude;
+    }
+
     @Override
     public String toString() {
         return "Store{" +
@@ -80,7 +110,9 @@ public class Store {
                 ", address='" + address + '\'' +
                 ", user=" + user +
                 ", isEnabled=" + isEnabled +
-                ", products=" + products.toString() +
+                ", products=" + products +
+                ", latitute='" + latitute + '\'' +
+                ", longtitude='" + longtitude + '\'' +
                 '}';
     }
 }

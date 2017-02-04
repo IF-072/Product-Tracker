@@ -8,18 +8,18 @@ public class Product {
     private User user;
     private Category category;
     private Unit unit;
-    private boolean isActive;
+    private boolean isEnabled;
 
     public Product() {}
 
-    public Product(String name, String description, Image image, User user, Category category, Unit unit, boolean isActive) {
+    public Product(String name, String description, Image image, User user, Category category, Unit unit, boolean isEnabled) {
         this.name = name;
         this.description = description;
         this.image = image;
         this.user = user;
         this.category = category;
         this.unit = unit;
-        this.isActive = isActive;
+        this.isEnabled = isEnabled;
     }
 
     public int getId() {
@@ -78,13 +78,9 @@ public class Product {
         this.unit = unit;
     }
 
-    public boolean getIsActive() {
-        return isActive;
-    }
+    public boolean isEnabled() { return isEnabled; }
 
-    public void setIsActive(boolean active) {
-        isActive = active;
-    }
+    public void setEnabled(boolean enabled) { isEnabled = enabled; }
 
     @Override
     public String toString() {
@@ -96,7 +92,7 @@ public class Product {
                 ", user=" + user +
                 ", category=" + category +
                 ", unit=" + unit +
-                ", isEnabled=" + isActive +
+                ", isEnabled=" + isEnabled +
                 '}';
     }
 

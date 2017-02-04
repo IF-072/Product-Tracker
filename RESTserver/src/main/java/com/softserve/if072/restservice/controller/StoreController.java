@@ -114,18 +114,18 @@ public class StoreController {
     /**
      * This method shows all products that sell at the current store
      *
-     * @param id current store_id
+     * @param storeId current store_id
      * @param response list of products
      * @return list of products that sell at the current store
      * @throws IOException if current store hasn't any product we inform user
      */
 
-   @GetMapping("/{id}/products")
+   @GetMapping("/{storeId}/products")
    @ResponseBody
    @ResponseStatus(value = HttpStatus.OK)
-   public List<Product> getAllProductsFromStore(@PathVariable int id, HttpServletResponse response) {
+   public List<Product> getAllProductsFromStore(@PathVariable int storeId, HttpServletResponse response) {
         try {
-            List<Product> products = storeService.getProductsByStoreId(id);
+            List<Product> products = storeService.getProductsByStoreId(storeId);
             LOGGER.info("All Products were found");
             return products;
         } catch (DataNotFoundException e) {
@@ -138,7 +138,8 @@ public class StoreController {
     @GetMapping("/{storeId}/products/{productId}")
     @ResponseBody
     @ResponseStatus(value = HttpStatus.OK)
-    public Product getProductFromStore(@PathVariable int storeId, int productId, HttpServletResponse response) {
+    public Product getProductFromStore(@PathVariable int storeId, @PathVariable int productId, HttpServletResponse
+            response) {
         try {
             Product product = storeService.getProductFromStoreById(storeId, productId);
             LOGGER.info("All Products were found");
@@ -152,7 +153,7 @@ public class StoreController {
 
     @DeleteMapping("/{storeId}/products/{productId}")
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
-    public void deleteProductFromStore(@PathVariable int storeId, int productId, HttpServletResponse response) {
+    public void deleteProductFromStore(@PathVariable int storeId, Integer productId, HttpServletResponse response) {
         try {
             storeService.deleteProductFromStoreById (storeId, productId);
             LOGGER.info(String.format("Product %d from Store %d was deleted", productId, storeId));
