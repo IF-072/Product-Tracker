@@ -26,49 +26,81 @@ import java.util.List;
 public interface StoreDAO extends DAO<Store> {
 
     @Override
-    @Select("SELECT id, name, address, user_id, is_active FROM store")
+    @Select("SELECT id, name, address, user_id, is_enabled FROM store")
     @Results(value = {
-            @Result(property = "user", column = "user_id",
-                    javaType = User.class,
+            @Result(property = "user", column = "user_id", javaType = User.class,
                     one = @One(select = "com.softserve.if072.restservice.dao.mybatisdao.UserDAO.getByID")),
-            @Result(property = "isActive", column = "is_active")
+            @Result(property = "isEnabled", column = "is_enabled")
     })
     List<Store> getAll();
 
+    @Select("SELECT id, name, address, is_enabled FROM store WHERE user_id = #{userId}")
+    @Results({@Result(property = "isEnabled", column = "is_enabled")})
+    List<Store> getAllByUser(int userId);
+
     @Override
-    @Select("SELECT id, name, address, user_id, is_active FROM store WHERE id = #{id}")
+    @Select("SELECT id, name, address, user_id, is_enabled FROM store WHERE id = #{id}")
     @Results(value = {
-            @Result(property = "user", column = "user_id",
-                    javaType = User.class,
+            @Result(property = "user", column = "user_id", javaType = User.class,
                     one = @One(select = "com.softserve.if072.restservice.dao.mybatisdao.UserDAO.getByID")),
-            @Result(property = "isActive", column = "is_active")
+            @Result(property = "isEnabled", column = "is_enabled")
     })
     Store getByID(int id);
 
     @Override
-    @Insert("INSERT into store(name, address, user_id, is_active) VALUES(#{name}, #{address}, #{user.id}, #{isActive}))")
+    @Insert("INSERT into store(name, address, user_id, is_enabled) VALUES(#{name}, #{address}, #{user.id}, " +
+            "#{isEnabled}))")
     void insert(Store store);
 
     @Override
-    @Update("UPDATE store SET name = #{name}, address = #{address}, is_active = #{isActive} WHERE id = #{id}")
+    @Update("UPDATE store SET name = #{name}, address = #{address}, is_enabled = #{isEnabled} WHERE id = #{id}")
     void update(Store store);
 
     @Override
     @Delete("DELETE FROM store WHERE id = #{id}")
     void deleteById(int id);
 
-    @Select("SELECT id, name, description, image_id, user_id, category_id, unit_id, is_active FROM product  JOIN " +
-            "stores_products ON product.id = stores_products.product_id WHERE store_id = #{storeid}")
+    @Select("SELECT id, name, description, image_id, user_id, category_id, unit_id, is_enabled FROM product  JOIN " +
+            "stores_products ON product.id = stores_products.product_id WHERE store_id = #{storeId}")
     @Results(value = {
             @Result(property = "id", column = "id"),
             @Result(property = "name", column = "name"),
             @Result(property = "description", column = "description"),
-            @Result(property = "image", column = "image_id", javaType = Image.class, one = @One(select = "com.softserve.if072.restservice.dao.mybatisdao.ImageDAO.getByID")),
-            @Result(property = "user", column = "user_id", javaType = User.class, one = @One(select = "com.softserve.if072.restservice.dao.mybatisdao.UserDAO.getByID")),
-            @Result(property = "category", column = "category_id", javaType = Category.class, one = @One(select = "com.softserve.if072.restservice.dao.mybatisdao.CategoryDAO.getByID")),
-            @Result(property = "unit", column = "unit_id", javaType = Unit.class, one = @One(select = "com.softserve.if072.restservice.dao.mybatisdao.UnitDAO.getByID")),
-            @Result(property = "isActive", column = "is_active")
+            @Result(property = "image", column = "image_id", javaType = Image.class,
+                    one = @One(select = "com.softserve.if072.restservice.dao.mybatisdao.ImageDAO.getByID")),
+            @Result(property = "user", column = "user_id", javaType = User.class,
+                    one = @One(select = "com.softserve.if072.restservice.dao.mybatisdao.UserDAO.getByID")),
+            @Result(property = "category", column = "category_id", javaType = Category.class,
+                    one = @One(select = "com.softserve.if072.restservice.dao.mybatisdao.CategoryDAO.getByID")),
+            @Result(property = "unit", column = "unit_id", javaType = Unit.class,
+                    one = @One(select = "com.softserve.if072.restservice.dao.mybatisdao.UnitDAO.getByID")),
+            @Result(property = "isEnabled", column = "is_enabled")
     })
     List<Product> getProductsByStoreId(int storeId);
+
+    @Select("SELECT id, name, description, image_id, user_id, category_id, unit_id, is_enabled FROM product  JOIN " +
+            "stores_products ON product.id = stores_products.product_id WHERE store_id = #{storeId} and product_id " +
+            "=#{productId}")
+    @Results(value = {
+            @Result(property = "id", column = "id"),
+            @Result(property = "name", column = "name"),
+            @Result(property = "description", column = "description"),
+            @Result(property = "image", column = "image_id", javaType = Image.class,
+                    one = @One(select = "com.softserve.if072.restservice.dao.mybatisdao.ImageDAO.getByID")),
+            @Result(property = "user", column = "user_id", javaType = User.class,
+                    one = @One(select = "com.softserve.if072.restservice.dao.mybatisdao.UserDAO.getByID")),
+            @Result(property = "category", column = "category_id", javaType = Category.class,
+                    one = @One(select = "com.softserve.if072.restservice.dao.mybatisdao.CategoryDAO.getByID")),
+            @Result(property = "unit", column = "unit_id", javaType = Unit.class,
+                    one = @One(select = "com.softserve.if072.restservice.dao.mybatisdao.UnitDAO.getByID")),
+            @Result(property = "isEnabled", column = "is_enabled")
+    })
+    Product getProductFromStoreById(int storeId, int productId);
+
+    @Delete("DELETE FROM stores_products WHERE store_id = #{id} and product_id = #{id}")
+    void deleteProductFromStoreById (int storeId, int productId);
+
+    @Insert("INSERT into stores_products(store_id, product_id) VALUES(#{store.id}, #{product.id})")
+    void addProductToStore(Store store, Product product);
 
 }

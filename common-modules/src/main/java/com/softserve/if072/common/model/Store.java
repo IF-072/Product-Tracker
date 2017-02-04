@@ -14,17 +14,17 @@ public class Store {
     private String name;
     private String address;
     private User user;
-    private boolean isActive;
+    private boolean isEnabled;
     private List<Product> products;
 
     public Store() {}
 
-    public Store(int id, String name, String address, User user, boolean isActive, List<Product> products) {
+    public Store(int id, String name, String address, User user, boolean isEnabled, List<Product> products) {
         this.id = id;
         this.name = name;
         this.address = address;
         this.user = user;
-        this.isActive = isActive;
+        this.isEnabled = isEnabled;
         this.products = products;
     }
 
@@ -56,12 +56,12 @@ public class Store {
 
     public void setUser(User user) {this.user = user;}
 
-    public boolean isActive() {
-        return isActive;
+    public boolean isEnabled() {
+        return isEnabled;
     }
 
-    public void setActive(boolean active) {
-        isActive = active;
+    public void setEnabled(boolean enabled) {
+        isEnabled = enabled;
     }
 
     public List<Product> getProducts() {
@@ -79,7 +79,7 @@ public class Store {
                 ", name='" + name + '\'' +
                 ", address='" + address + '\'' +
                 ", user=" + user +
-                ", isActive=" + isActive +
+                ", isEnabled=" + isEnabled +
                 ", products=" + products.toString() +
                 '}';
     }
