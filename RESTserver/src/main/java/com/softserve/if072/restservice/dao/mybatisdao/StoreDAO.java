@@ -48,11 +48,12 @@ public interface StoreDAO extends DAO<Store> {
     Store getByID(int id);
 
     @Override
-    @Insert("INSERT into store(name, address, user_id, is_active) VALUES(#{name}, #{address}, #{user.id}, #{isEnabled}))")
+    @Insert("INSERT into store(name, address, user_id, is_enabled) VALUES(#{name}, #{address}, #{user.id}, " +
+            "#{isEnabled}))")
     void insert(Store store);
 
     @Override
-    @Update("UPDATE store SET name = #{name}, address = #{address}, is_active = #{isEnabled} WHERE id = #{id}")
+    @Update("UPDATE store SET name = #{name}, address = #{address}, is_enabled = #{isEnabled} WHERE id = #{id}")
     void update(Store store);
 
     @Override
