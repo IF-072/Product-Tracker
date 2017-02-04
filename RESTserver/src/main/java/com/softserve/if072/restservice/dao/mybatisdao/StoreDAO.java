@@ -48,6 +48,7 @@ public interface StoreDAO extends DAO<Store> {
     Store getByID(int id);
 
     @Override
+
     @Insert("INSERT into store(name, address, user_id, is_enabled) VALUES(#{name}, #{address}, #{user.id}, " +
             "#{isEnabled}))")
     void insert(Store store);
@@ -59,6 +60,7 @@ public interface StoreDAO extends DAO<Store> {
     @Override
     @Delete("DELETE FROM store WHERE id = #{id}")
     void deleteById(int id);
+
 
     @Select("SELECT id, name, description, image_id, user_id, category_id, unit_id, is_enabled FROM product  JOIN " +
             "stores_products ON product.id = stores_products.product_id WHERE store_id = #{storeId}")

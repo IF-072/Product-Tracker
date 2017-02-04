@@ -1,5 +1,9 @@
 package com.softserve.if072.common.model;
 
+
+import org.hibernate.validator.constraints.NotEmpty;
+
+import javax.validation.constraints.Size;
 import java.util.List;
 
 /**
@@ -11,8 +15,15 @@ public class User {
 
     private int id;
     private String name;
+
+    @NotEmpty(message = "Enter your email")
+    @Size(max = 64, message = "Email must be no longer than 64 characters")
     private String email;
+
+    @NotEmpty(message = "Enter the password")
+    @Size(min = 4, max = 64, message = "Password must be between 4 and 64 characters")
     private String password;
+
     private boolean isEnabled;
     private List<Store> stores;
     private List<Product> products;
@@ -20,6 +31,7 @@ public class User {
     private List<Category> categories;
     private List<ShoppingList> shoppingLists;
     private List<Storage> storages;
+    private Role role;
 
     public User() {
         /*NOP*/
@@ -113,6 +125,10 @@ public class User {
         this.storages = storages;
     }
 
+    public Role getRole() { return role; }
+
+    public void setRole(Role role) { this.role = role; }
+
     @Override
     public String toString() {
         return "User{" +
@@ -127,6 +143,7 @@ public class User {
                 ", categories=" + categories +
                 ", shoppingLists=" + shoppingLists +
                 ", storages=" + storages +
+                ", role=" + role +
                 '}';
     }
 }

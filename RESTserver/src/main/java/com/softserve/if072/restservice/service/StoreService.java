@@ -2,6 +2,7 @@ package com.softserve.if072.restservice.service;
 
 import com.softserve.if072.common.model.Product;
 import com.softserve.if072.common.model.Store;
+
 import com.softserve.if072.restservice.exception.DataNotFoundException;
 import com.softserve.if072.restservice.dao.mybatisdao.StoreDAO;
 import org.springframework.beans.factory.annotation.Autowired;

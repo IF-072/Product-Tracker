@@ -4,6 +4,7 @@ import com.softserve.if072.common.model.ShoppingList;
 import com.softserve.if072.restservice.dao.mybatisdao.ShoppingListDAO;
 import com.softserve.if072.restservice.exception.DataNotFoundException;
 import com.softserve.if072.restservice.service.ShoppingListService;
+import org.apache.ibatis.datasource.DataSourceException;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
