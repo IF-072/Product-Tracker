@@ -96,7 +96,7 @@ public class Product {
                 ", user=" + user +
                 ", category=" + category +
                 ", unit=" + unit +
-                ", isEnable=" + isActive +
+                ", isEnabled=" + isActive +
                 '}';
     }
 

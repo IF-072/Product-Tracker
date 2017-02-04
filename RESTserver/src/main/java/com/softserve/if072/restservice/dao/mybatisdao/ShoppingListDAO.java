@@ -57,6 +57,6 @@ public interface ShoppingListDAO extends DAO<ShoppingList> {
 
     @Override
     @Delete("DELETE FROM shopping_list WHERE id = #{id}")
-    public void delete(int id) ;
+    public void deleteById(int id) ;
 }
 

@@ -27,13 +27,13 @@ public class StoreService {
     }
 
     @Transactional
-    public List<Store> getAllStores() throws DataNotFoundException {
-        List<Store> stores = storeDAO.getAll();
-        if (!stores.isEmpty()){
+    public List<Store> getAllStores(int userId) throws DataNotFoundException {
+        List<Store> stores = storeDAO.getAllByUser(userId);
+      if (!stores.isEmpty()){
             return stores;
         } else {
             throw new DataNotFoundException("Stores not found");
-        }
+      }
     }
 
     @Transactional
@@ -58,7 +58,7 @@ public class StoreService {
     public void deleteStore(int id) throws DataNotFoundException {
         Store store = storeDAO.getByID(id);
         if (store != null){
-            storeDAO.delete(id);
+            storeDAO.deleteById(id);
         } else {
             throw new DataNotFoundException(String.format(storeNotFound, id));
         }
@@ -73,5 +73,29 @@ public class StoreService {
             throw new DataNotFoundException("Products not found");
         }
     }
+
+    @Transactional
+    public void deleteProductFromStoreById(int storeId, int productId) throws DataNotFoundException {
+        Product product = storeDAO.getProductFromStoreById(storeId, productId);
+        if (product != null){
+            storeDAO.deleteProductFromStoreById (storeId, productId);
+        } else {
+            throw new DataNotFoundException(String.format("Product %d from Store %d not found", productId, storeId));
+        }
+    }
+
+    @Transactional
+   public void addProductToStore(Store store, Product product){storeDAO.addProductToStore(store, product); }
+
+    @Transactional
+    public Product getProductFromStoreById(int storeId, int productId) throws DataNotFoundException {
+        Product product = storeDAO.getProductFromStoreById(storeId, productId);
+        if (product != null){
+            return product;
+        } else {
+            throw new DataNotFoundException(String.format("Product %d from Store %d not found", productId, storeId));
+        }
+    }
+
 }
 

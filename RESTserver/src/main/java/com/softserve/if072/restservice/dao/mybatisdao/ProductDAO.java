@@ -20,7 +20,7 @@ public interface ProductDAO extends DAO<Product> {
             @Result(property = "user", column = "user_id", javaType = User.class, one = @One(select = "com.softserve.if072.restservice.dao.mybatisdao.UserDAO.getByID")),
             @Result(property = "category", column = "category_id", javaType = Category.class, one = @One(select = "com.softserve.if072.restservice.dao.mybatisdao.CategoryDAO.getByID")),
             @Result(property = "unit", column = "unit_id", javaType = Unit.class, one = @One(select = "com.softserve.if072.restservice.dao.mybatisdao.UnitDAO.getByID")),
-            @Result(property = "isEnable", column = "is_active")
+            @Result(property = "isEnabled", column = "is_active")
     })
     List<Product> getAll();
 
@@ -34,13 +34,13 @@ public interface ProductDAO extends DAO<Product> {
             @Result(property = "user", column = "user_id", javaType = User.class, one = @One(select = "com.softserve.if072.restservice.dao.mybatisdao.UserDAO.getByID")),
             @Result(property = "category", column = "category_id", javaType = Category.class, one = @One(select = "com.softserve.if072.restservice.dao.mybatisdao.CategoryDAO.getByID")),
             @Result(property = "unit", column = "unit_id", javaType = Unit.class, one = @One(select = "com.softserve.if072.restservice.dao.mybatisdao.UnitDAO.getByID")),
-            @Result(property = "isEnable", column = "is_active")
+            @Result(property = "isEnabled", column = "is_active")
     })
     Product getByID(@Param("id") int id);
 
     @Override
     @Insert("INSERT INTO product (name, description, image_id, user_id, category_id, unit_id, is_active) " +
-            "VALUES (#{name}, #{description}, #{image.id}, #{user.id}, #{category.id}, #{unit.id}, #{isEnable})")
+            "VALUES (#{name}, #{description}, #{image.id}, #{user.id}, #{category.id}, #{unit.id}, #{isEnabled})")
     @Options(useGeneratedKeys = true)
     void insert(Product product);
 
@@ -51,5 +51,5 @@ public interface ProductDAO extends DAO<Product> {
 
     @Override
     @Update("UPDATE product SET is_active = 0 WHERE id = #{id}")
-    void delete(int id);
+    void deleteById(int id);
 }
