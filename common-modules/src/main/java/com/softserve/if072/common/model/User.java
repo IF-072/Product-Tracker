@@ -16,12 +16,12 @@ public class User {
     private int id;
     private String name;
 
-    @NotEmpty(message = "Enter your email")
-    @Size(max = 64, message = "Email must be no longer than 64 characters")
+    @NotEmpty(message = "{error.email.notnull}")
+    @Size(min = 5, max = 64, message = "{error.email.size}")
     private String email;
 
-    @NotEmpty(message = "Enter the password")
-    @Size(min = 4, max = 64, message = "Password must be between 4 and 64 characters")
+    @NotEmpty(message = "{error.password.notnull}")
+    @Size(min = 4, max = 64, message = "{error.password.size}")
     private String password;
 
     private boolean isEnabled;
@@ -125,9 +125,13 @@ public class User {
         this.storages = storages;
     }
 
-    public Role getRole() { return role; }
+    public Role getRole() {
+        return role;
+    }
 
-    public void setRole(Role role) { this.role = role; }
+    public void setRole(Role role) {
+        this.role = role;
+    }
 
     @Override
     public String toString() {

@@ -48,10 +48,11 @@ public class LoginController {
     }
 
     @RequestMapping(value = "", method = RequestMethod.POST)
-    public String postLoginPage(@Valid @ModelAttribute("loginForm") User user,
+    public String postLoginPage(@Valid @ModelAttribute("loginForm") User user, BindingResult result,
                                 @RequestParam(value = "remember", required = false) boolean rememberMe,
-                                BindingResult result, Model model, HttpServletResponse httpServletResponse) {
+                                Model model, HttpServletResponse httpServletResponse) {
         if (result.hasErrors()) {
+            model.addAttribute("errorMessages", result.getFieldErrors());
             return "login";
         }
         String url = new String(REST_SERVICE_URL + "/login/");
@@ -73,7 +74,7 @@ public class LoginController {
                 return "redirect:home";
             }
         } catch (HttpClientErrorException e) {
-            model.addAttribute("errormsg", "Invalid e-mail or password");
+            model.addAttribute("loginError", "Invalid e-mail or password");
             return "login";
         }
 

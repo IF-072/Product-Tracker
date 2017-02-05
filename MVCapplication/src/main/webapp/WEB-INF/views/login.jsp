@@ -14,18 +14,25 @@
                 <div class="panel-body">
                     <form:form role="form" method="POST" modelAttribute="loginForm">
                         <fieldset>
-                            <c:if test="${not empty errormsg}">
+                            <c:if test="${not empty loginError}">
                                 <div class="alert alert-danger">
-                                    <c:out value="${errormsg}" />
+                                    <span class="glyphicon glyphicon-minus-sign" aria-hidden="true"></span>
+                                    <c:out value="${loginError}" />
+                                </div>
+                            </c:if>
+                            <c:if test="${not empty errorMessages}">
+                                <div class="alert alert-danger">
+                                    <c:forEach items="${errorMessages}" var="errorItem">
+                                        <p><span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                                        ${errorItem.getDefaultMessage()}</p>
+                                    </c:forEach>
                                 </div>
                             </c:if>
                             <div class="form-group">
                                 <form:input path="email" class="form-control" placeholder="E-mail" type="email" />
-                                <form:errors path="email" cssClass="bg-danger"/>
                             </div>
                             <div class="form-group">
                                 <form:input path="password" class="form-control" placeholder="Password" name="password" type="password" value=""/>
-                                <form:errors path="password" cssClass="bg-danger"/>
                             </div>
                             <div class="checkbox">
                                 <label>
