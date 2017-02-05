@@ -36,6 +36,22 @@ public interface ProductDAO extends DAO<Product> {
     })
     List<Product> getAll();
 
+    @Select("SELECT id, name, description, image_id, user_id, category_id, unit_id, is_enabled FROM product WHERE user_id = #{userId}")
+    @Results(value = {
+            @Result(property = "image", column = "image_id", javaType = Image.class,
+                    one = @One(select = "com.softserve.if072.restservice.dao.mybatisdao.ImageDAO.getByID")),
+            @Result(property = "user", column = "user_id", javaType = User.class,
+                    one = @One(select = "com.softserve.if072.restservice.dao.mybatisdao.UserDAO.getByID")),
+            @Result(property = "category", column = "category_id", javaType = Category.class,
+                    one = @One(select = "com.softserve.if072.restservice.dao.mybatisdao.CategoryDAO.getByID")),
+            @Result(property = "unit", column = "unit_id", javaType = Unit.class,
+                    one = @One(select = "com.softserve.if072.restservice.dao.mybatisdao.UnitDAO.getByID")),
+            @Result(property = "isEnabled", column = "is_enabled"),
+            @Result(property = "stores", column = "id", javaType = List.class,
+                    many = @Many(select = "com.softserve.if072.restservice.dao.mybatisdao.ProductDAO.getStoresByProductId"))
+    })
+    List<Product> getAllByUserId(int userId);
+
     @Override
     @Select("SELECT id, name, description, image_id, user_id, category_id, unit_id, is_enabled FROM product WHERE id = #{id}")
     @Results(value = {
@@ -52,7 +68,7 @@ public interface ProductDAO extends DAO<Product> {
                     one = @One(select = "com.softserve.if072.restservice.dao.mybatisdao.UnitDAO.getByID")),
             @Result(property = "isEnabled", column = "is_enabled"),
             @Result(property = "stores", column = "id", javaType = List.class,
-                    many = @Many(select = "com.softserve.if072.restservice.dao.mybatisdao.StoreDAO.getStoresByProductID"))
+                    many = @Many(select = "com.softserve.if072.restservice.dao.mybatisdao.ProductDAO.getStoresByProductId"))
     })
     Product getByID(@Param("id") int id);
 
@@ -86,6 +102,16 @@ public interface ProductDAO extends DAO<Product> {
             @Result(property = "isEnabled", column = "is_enabled")
     })
     public List<Product> getProductsByStoreId(int storeId);
+
+    @Select("SELECT store.id, store.name, address, store.user_id, latitute, longtitude, store.is_enabled " +
+            "FROM stores_products JOIN store ON store_id = store.id JOIN product ON " +
+            "product_id = product.id WHERE product.id = #{productId}")
+    @Results(value = {
+            @Result(property = "user", column = "user_id", javaType = User.class,
+                    one = @One(select = "com.softserve.if072.restservice.dao.mybatisdao.UserDAO.getByID")),
+            @Result(property = "isEnabled", column = "is_enabled")
+    })
+    public List<Store> getStoresByProductId(int productId);
 
     @Delete("DELETE FROM stores_products WHERE store_id = #{storeId} and product_id = #{productId}")
     void deleteStoreFromProductById (int storeId, int productId);

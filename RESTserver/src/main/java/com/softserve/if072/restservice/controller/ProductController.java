@@ -1,43 +1,118 @@
 package com.softserve.if072.restservice.controller;
 
 import com.softserve.if072.common.model.Product;
-import com.softserve.if072.restservice.service.impl.ProductServiceImpl;
+import com.softserve.if072.common.model.Store;
+import com.softserve.if072.restservice.exception.DataNotFoundException;
+import com.softserve.if072.restservice.service.ProductService;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
-@Controller
+/**
+ * The class contains methods to add, read and delete products from database using REST Service
+ *
+ * @author Vitaliy Malisevych
+ */
+
+@RestController
 @RequestMapping(value = "/product")
+@PropertySource(value = {"classpath:message.properties"})
 public class ProductController {
 
+    public static final Logger LOGGER =  LogManager.getLogger(ProductController.class);
+    private ProductService productService;
+
     @Autowired
-    private ProductServiceImpl productService;
+    ProductController(ProductService productService) {
+        this.productService = productService;
+    }
 
-    @RequestMapping(value = "/all", method = RequestMethod.GET)
+    @Value("${product.notFound}")
+    private String productNotFound;
+
+    @GetMapping(value = "/user/{userId}")
     @ResponseBody
     @ResponseStatus(value = HttpStatus.OK)
-    public List<Product> getAll(){return productService.getAll();}
+    public List<Product> getAllProductsByUserId(@PathVariable int userId, HttpServletResponse response) {
+        try {
+            List<Product> products = productService.getAllProducts(userId);
+            LOGGER.info("All products were found");
+            return products;
+        } catch (DataNotFoundException e) {
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            LOGGER.error("Products were not found", e);
+            return null;
+        }
+    }
 
-    @RequestMapping(value = "/get/{id}", method = RequestMethod.GET)
+    @GetMapping(value = "/{id}")
     @ResponseBody
     @ResponseStatus(value = HttpStatus.OK)
-    public Product getById(@PathVariable int id){return productService.getById(id);}
+    public Product getProductById(@PathVariable int id, HttpServletResponse response) {
+        try {
+            Product product = productService.getProductById(id);
+            LOGGER.info(String.format("Product with id %d was retrieved", id));
+            return product;
+        } catch (DataNotFoundException e) {
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            LOGGER.error(String.format(productNotFound, id), e);
+            return null;
+        }
+    }
 
-    @RequestMapping(value = "/add", method = RequestMethod.POST)
+    @PostMapping(value = "/")
+    @ResponseStatus(value = HttpStatus.CREATED)
+    public void addProduct(@RequestBody Product product) {
+        productService.addProduct(product);
+        LOGGER.info("New product was created");
+    }
+
+    @PutMapping(value = "/")
+    @ResponseStatus(value = HttpStatus.OK)
+    public void update(@RequestBody Product product, HttpServletResponse response) {
+        int id = product.getId();
+        try {
+            productService.updateProduct(product);
+            LOGGER.info(String.format("Product with id %d was updated", id));
+        } catch (DataNotFoundException e) {
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            LOGGER.error(String.format("Cannot update Product with id %d", id), e);
+        }
+    }
+
+    @DeleteMapping(value = "/{id}")
+    @ResponseStatus(value = HttpStatus.OK)
+    public void delete(@PathVariable int id, HttpServletResponse response) {
+        try {
+            productService.deleteProduct(id);
+            LOGGER.info(String.format("Product with id %d was deleted", id));
+        } catch (DataNotFoundException e) {
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            LOGGER.error(String.format(productNotFound, id), e);
+        }
+    }
+
+    @GetMapping("/{id}/stores")
     @ResponseBody
     @ResponseStatus(value = HttpStatus.OK)
-    public void insert(@RequestBody Product product){productService.insert(product);}
+    public List<Store> getAllStoresFromProduct(@PathVariable int id, HttpServletResponse response) {
+        try {
+            List<Store> stores = productService.getStoresByProductId(id);
+            LOGGER.info("All Stores were found");
+            return stores;
+        } catch (DataNotFoundException e) {
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            LOGGER.error("Stores were not found", e);
+            return null;
+        }
+    }
 
-    @RequestMapping(value = "/update", method = RequestMethod.PUT)
-    @ResponseBody
-    @ResponseStatus(value = HttpStatus.OK)
-    public void update(@RequestBody Product product){productService.update(product);}
-
-    @RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE)
-    @ResponseBody
-    @ResponseStatus(value = HttpStatus.OK)
-    public void delete(@PathVariable int id){productService.delete(id);}
 }
