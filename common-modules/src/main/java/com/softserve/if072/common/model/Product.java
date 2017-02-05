@@ -117,8 +117,7 @@ public class Product {
                 ", category=" + category +
                 ", unit=" + unit +
                 ", isEnabled=" + isEnabled +
-                ", stores=" + stores +
-                '}';
+                ", stores=" + stores + '}';
     }
 
 }

@@ -1,8 +1,7 @@
 package com.softserve.if072.restservice.service;
 
-
 import com.softserve.if072.common.model.Storage;
-import com.softserve.if072.restservice.Exception.DataSourceException;
+import com.softserve.if072.restservice.exception.DataNotFoundException;
 
 import java.util.List;
 
@@ -11,13 +10,13 @@ import java.util.List;
  */
 public interface StorageService {
 
-    List<Storage> getByUserId(int user_id) throws DataSourceException;
+    List<Storage> getByUserId(int user_id) throws DataNotFoundException;
 
-    Storage getById(int id) throws DataSourceException ;
+    Storage getById(int id) throws DataNotFoundException ;
 
     void insert(Storage storage);
 
-    void update(Storage storage) throws DataSourceException ;
+    void update(Storage storage) throws DataNotFoundException ;
 
-    void delete(int id) throws DataSourceException ;
+    void delete(int id) throws DataNotFoundException;
 }

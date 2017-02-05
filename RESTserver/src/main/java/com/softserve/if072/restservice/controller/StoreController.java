@@ -2,7 +2,7 @@ package com.softserve.if072.restservice.controller;
 
 import com.softserve.if072.common.model.Product;
 import com.softserve.if072.common.model.Store;
-import com.softserve.if072.restservice.Exception.DataSourceException;
+import com.softserve.if072.restservice.exception.DataNotFoundException;
 import com.softserve.if072.restservice.service.StoreService;
 
 import org.apache.logging.log4j.LogManager;
@@ -45,16 +45,16 @@ public class StoreController {
     @Value("${store.notFound}")
     private String storeNotFound;
 
-    @GetMapping
+    @GetMapping ("/user/{userId}")
     @ResponseBody
     @ResponseStatus(value = HttpStatus.OK)
-    public List<Store> getAllStores(HttpServletResponse response) throws IOException {
+    public List<Store> getAllStoresByUserId(@PathVariable int userId, HttpServletResponse response) {
         try {
-            List<Store> stores = storeService.getAllStores();
+            List<Store> stores = storeService.getAllStores(userId);
             LOGGER.info("All Stores were found");
             return stores;
-        } catch (DataSourceException e) {
-            response.sendError(HttpServletResponse.SC_NOT_FOUND);
+        } catch (DataNotFoundException e) {
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             LOGGER.error("Stores were not found", e);
             return null;
         }
@@ -63,19 +63,19 @@ public class StoreController {
     @GetMapping("/{id}")
     @ResponseBody
     @ResponseStatus(value = HttpStatus.OK)
-        public Store getStoreByID(@PathVariable int id, HttpServletResponse response) throws IOException {
+        public Store getStoreByID(@PathVariable int id, HttpServletResponse response) {
         try {
             Store store = storeService.getStoreByID(id);
             LOGGER.info(String.format("Store with id %d was retrieved", id));
             return store;
-        } catch (DataSourceException e) {
-            response.sendError(HttpServletResponse.SC_NOT_FOUND);
+        } catch (DataNotFoundException e) {
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             LOGGER.error(String.format(storeNotFound, id), e);
             return null;
         }
     }
 
-   @PostMapping("/add")
+   @PostMapping("/")
    @ResponseStatus(value = HttpStatus.CREATED)
    public void addStore(@RequestBody Store store) {
        storeService.addStore(store);
@@ -85,15 +85,15 @@ public class StoreController {
    @PutMapping("/")
    @ResponseBody
    @ResponseStatus(value = HttpStatus.OK)
-   public Store updateStore(@RequestBody Store store, HttpServletResponse response) throws IOException{
+   public Store updateStore(@RequestBody Store store, HttpServletResponse response) {
        int id = store.getId();
        try {
             storeService.updateStore(store);
             LOGGER.info(String.format("Store with id %d was updated", id));
             store = storeService.getStoreByID(store.getId());
             return store;
-        } catch (DataSourceException e) {
-            response.sendError(HttpServletResponse.SC_NOT_FOUND);
+        } catch (DataNotFoundException e) {
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             LOGGER.error(String.format(storeNotFound, id), e);
             return null;
         }
@@ -101,12 +101,12 @@ public class StoreController {
 
    @DeleteMapping("/{id}")
    @ResponseStatus(value = HttpStatus.NO_CONTENT)
-   public void deleteStore(@PathVariable int id, HttpServletResponse response) throws IOException {
+   public void deleteStore(@PathVariable int id, HttpServletResponse response) {
         try {
             storeService.deleteStore(id);
             LOGGER.info(String.format("Store with id %d was deleted", id));
-        } catch (DataSourceException e) {
-            response.sendError(HttpServletResponse.SC_NOT_FOUND);
+        } catch (DataNotFoundException e) {
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             LOGGER.error(String.format(storeNotFound, id), e);
         }
     }
@@ -123,16 +123,50 @@ public class StoreController {
    @GetMapping("/{id}/products")
    @ResponseBody
    @ResponseStatus(value = HttpStatus.OK)
-   public List<Product> getAllProducts(@PathVariable int id, HttpServletResponse response) throws IOException {
+   public List<Product> getAllProductsFromStore(@PathVariable int id, HttpServletResponse response) {
         try {
             List<Product> products = storeService.getProductsByStoreId(id);
             LOGGER.info("All Products were found");
             return products;
-        } catch (DataSourceException e) {
-            response.sendError(HttpServletResponse.SC_NOT_FOUND);
+        } catch (DataNotFoundException e) {
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             LOGGER.error("Products were not found", e);
             return null;
         }
    }
+
+    @GetMapping("/{storeId}/products/{productId}")
+    @ResponseBody
+    @ResponseStatus(value = HttpStatus.OK)
+    public Product getProductFromStore(@PathVariable int storeId, int productId, HttpServletResponse response) {
+        try {
+            Product product = storeService.getProductFromStoreById(storeId, productId);
+            LOGGER.info("All Products were found");
+            return product;
+        } catch (DataNotFoundException e) {
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            LOGGER.error((String.format("Product %d from Store %d not found", productId, storeId)), e);
+            return null;
+        }
+    }
+
+    @DeleteMapping("/{storeId}/products/{productId}")
+    @ResponseStatus(value = HttpStatus.NO_CONTENT)
+    public void deleteProductFromStore(@PathVariable int storeId, int productId, HttpServletResponse response) {
+        try {
+            storeService.deleteProductFromStoreById (storeId, productId);
+            LOGGER.info(String.format("Product %d from Store %d was deleted", productId, storeId));
+        } catch (DataNotFoundException e) {
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            LOGGER.error((String.format("Product %d from Store %d not found", productId, storeId)), e);
+        }
+    }
+
+    @PostMapping("/products/")
+    @ResponseStatus(value = HttpStatus.CREATED)
+    public void addProductToStore(@RequestBody Store store, Product product) {
+        storeService.addProductToStore(store, product);
+        LOGGER.info(String.format("Product %d was added to Store %d", product.getId(), store.getId()));
+    }
 
 }
