@@ -32,4 +32,9 @@
         <put-attribute name="title" value="Product Tracker Project" />
         <put-attribute name="body" value="/WEB-INF/views/home.jsp" />
     </definition>
+
+    <definition name="storage" extends="mainLayout">
+        <put-attribute name="title" value="Product Tracker Project" />
+        <put-attribute name="body" value="/WEB-INF/views/storage.jsp" />
+    </definition>
 </tiles-definitions>
