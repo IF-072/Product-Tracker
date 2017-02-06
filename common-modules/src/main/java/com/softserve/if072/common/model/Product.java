@@ -1,5 +1,14 @@
 package com.softserve.if072.common.model;
 
+import java.util.List;
+
+/**
+ * The class contains information about current product and
+ * about the stores where this product is available for purchase
+ *
+ * @author Vitaliy Malisevych
+ */
+
 public class Product {
     private int id;
     private String name;
@@ -9,10 +18,12 @@ public class Product {
     private Category category;
     private Unit unit;
     private boolean isEnabled;
+    private List<Store> stores;
 
     public Product() {}
 
-    public Product(String name, String description, Image image, User user, Category category, Unit unit, boolean isEnabled) {
+    public Product(int id, String name, String description, Image image, User user, Category category, Unit unit, boolean isEnabled, List<Store> stores) {
+        this.id = id;
         this.name = name;
         this.description = description;
         this.image = image;
@@ -20,6 +31,7 @@ public class Product {
         this.category = category;
         this.unit = unit;
         this.isEnabled = isEnabled;
+        this.stores = stores;
     }
 
     public int getId() {
@@ -78,9 +90,21 @@ public class Product {
         this.unit = unit;
     }
 
-    public boolean isEnabled() { return isEnabled; }
+    public boolean isEnabled() {
+        return isEnabled;
+    }
 
-    public void setEnabled(boolean enabled) { isEnabled = enabled; }
+    public void setEnabled(boolean enabled) {
+        isEnabled = enabled;
+    }
+
+    public List<Store> getStores() {
+        return stores;
+    }
+
+    public void setStores(List<Store> stores) {
+        this.stores = stores;
+    }
 
     @Override
     public String toString() {
@@ -93,7 +117,7 @@ public class Product {
                 ", category=" + category +
                 ", unit=" + unit +
                 ", isEnabled=" + isEnabled +
-                '}';
+                ", stores=" + stores + '}';
     }
 
 }
