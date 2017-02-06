@@ -28,6 +28,7 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private static final String SECURED_URL_PATTERN = "security.securedURLPattern";
+    private static final String TOKEN_HEADER_NAME = "security.tokenHeaderName";
 
     @Autowired
     private Environment environment;
@@ -64,7 +65,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     public AbstractAuthenticationProcessingFilter customAuthenticationProcessingFilter() {
-        CustomAuthenticationProcessingFilter filter = new CustomAuthenticationProcessingFilter(environment.getProperty(SECURED_URL_PATTERN));
+        CustomAuthenticationProcessingFilter filter =
+                new CustomAuthenticationProcessingFilter(environment.getProperty(SECURED_URL_PATTERN),
+                        environment.getProperty(TOKEN_HEADER_NAME));
         filter.setAuthenticationManager(customRESTAuthenticationManager);
         filter.setAuthenticationSuccessHandler(getAuthenticationSuccessHandler());
         filter.setAuthenticationFailureHandler(getAuthenticationFailureHandler());

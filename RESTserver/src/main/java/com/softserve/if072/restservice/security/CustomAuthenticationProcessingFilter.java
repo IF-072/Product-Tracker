@@ -6,7 +6,6 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 
 import javax.servlet.ServletException;
@@ -18,25 +17,27 @@ public class CustomAuthenticationProcessingFilter extends AbstractAuthentication
 
     private static final Logger LOGGER = LogManager.getLogger(CustomAuthenticationProcessingFilter.class);
 
-    public CustomAuthenticationProcessingFilter(String processingURL) {
+    private String tokenHeaderName;
+
+    public CustomAuthenticationProcessingFilter(String processingURL, String tokenHeaderName) {
         super(processingURL);
+        this.tokenHeaderName = tokenHeaderName;
     }
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
             throws AuthenticationException, IOException, ServletException {
-        String token = request.getHeader("X-Token");
+        String token = request.getHeader(tokenHeaderName);
 
         if(token == null){
             throw new BadCredentialsException("Token not found");
         }
 
-        // Create our Authentication based on received token and let Spring know about it
+        // Create our Authentication instance based on received token and register it in SecurityContext
         Authentication auth = new CustomAuthenticationToken(token);
-        SecurityContextHolder.getContext().setAuthentication(auth);
 
+        //Perform a full authentication by our custom authentication manager
         Authentication authentication = getAuthenticationManager().authenticate(auth);
-        authentication.setAuthenticated(false);
         return authentication;
     }
 }

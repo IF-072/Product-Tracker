@@ -2,8 +2,8 @@ package com.softserve.if072.restservice.security;
 
 
 import com.softserve.if072.common.model.User;
+import com.softserve.if072.restservice.security.authentication.AuthenticatedUserProxy;
 import com.softserve.if072.restservice.security.authentication.CustomAuthenticationToken;
-import com.softserve.if072.restservice.security.authentication.UserAuthenticationProxy;
 import com.softserve.if072.restservice.service.TokenService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -36,7 +36,12 @@ public class CustomRESTAuthenticationManager implements AuthenticationManager {
 
         CustomAuthenticationToken authenticationToken = (CustomAuthenticationToken) authentication;
 
-        if (authenticationToken == null || !tokenService.isValid(authenticationToken)) {
+        if (authenticationToken == null) {
+            throw new BadCredentialsException("Token required to perform authentication");
+        }
+
+        tokenService.validate(authenticationToken);
+        if(!authenticationToken.isValid()){
             throw new BadCredentialsException("Token is not valid");
         }
 
@@ -47,7 +52,7 @@ public class CustomRESTAuthenticationManager implements AuthenticationManager {
 
         List<GrantedAuthority> authorities = new ArrayList<>();
         authorities.add(user.getRole());
-        UserAuthenticationProxy authenticatedUser = new UserAuthenticationProxy(user, true, authorities);
+        Authentication authenticatedUser = new AuthenticatedUserProxy(user, true, authorities);
 
         return authenticatedUser;
     }

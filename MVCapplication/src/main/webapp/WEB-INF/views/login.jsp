@@ -39,7 +39,6 @@
                                     <input name="remember" type="checkbox" value="true">Remember Me
                                 </label>
                             </div>
-                            <!-- Change this to a button or input when using this as a form -->
                             <input type="submit" class="btn btn-lg btn-success btn-block" value="Login"/>
                         </fieldset>
                     </form:form>

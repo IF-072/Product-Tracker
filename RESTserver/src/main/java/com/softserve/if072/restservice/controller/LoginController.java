@@ -25,7 +25,6 @@ public class LoginController {
     @ResponseBody
     @ResponseStatus(value = HttpStatus.OK)
     public ResponseEntity<?> getAuthenticationToken(@RequestParam String login, @RequestParam String password, HttpServletResponse response) {
-        //TODO add validation for both the login and password
         try {
             User user = userDAO.getByUsername(login);
             if (user == null) {
@@ -34,7 +33,7 @@ public class LoginController {
             if (user.getPassword().equals(password) == false) {
                 throw new BadCredentialsException("Wrong password");
             }
-            return new ResponseEntity<>(tokenService.generateTokenFor(login, password), HttpStatus.OK);
+            return new ResponseEntity<>(tokenService.generateTokenFor(login), HttpStatus.OK);
         } catch (BadCredentialsException ex) {
             return new ResponseEntity<>(ex.getMessage(), HttpStatus.UNAUTHORIZED);
         }

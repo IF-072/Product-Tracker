@@ -6,17 +6,17 @@ import org.springframework.security.core.GrantedAuthority;
 
 import java.util.Collection;
 
-public class UserAuthenticationProxy implements Authentication {
+public class AuthenticatedUserProxy implements Authentication {
 
     private User user;
     private boolean isAuthenticated;
     private Collection<? extends GrantedAuthority> authorities;
 
-    public UserAuthenticationProxy(User user) {
+    public AuthenticatedUserProxy(User user) {
         this.user = user;
     }
 
-    public UserAuthenticationProxy(User user, boolean isAuthenticated, Collection<? extends GrantedAuthority> authorities) {
+    public AuthenticatedUserProxy(User user, boolean isAuthenticated, Collection<? extends GrantedAuthority> authorities) {
         this.user = user;
         this.isAuthenticated = isAuthenticated;
         this.authorities = authorities;

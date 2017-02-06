@@ -49,38 +49,40 @@ public class TokenService {
         }
     }
 
-    public boolean isValid(CustomAuthenticationToken token) {
+    public void validate(CustomAuthenticationToken token) {
         String[] tokenParts = decodeToken(token.getToken());
-        if (tokenParts == null || tokenParts.length != 3) {
-            return false;
+        if (tokenParts != null) {
+            token.setUserName(tokenParts[0]);
+
+            try {
+                token.setExpirateinDate(Long.parseLong(tokenParts[1]));
+            } catch (NumberFormatException e) {
+                LOGGER.warn("Can't parse token expiration data. Date format is incorrect");
+                return;
+            }
+
+            if (new DateTime(token.getExpirateinDate()).isBeforeNow()) {
+                LOGGER.info("Token's validity time expired, new token must be generated");
+                return;
+            }
+
+            token.setConfirmationKey(tokenParts[2]);
+            String expectedKey = buildTokenConfirmationKey(token.getUserName(), token.getExpirateinDate());
+            if (!expectedKey.equals(token.getConfirmationKey())) {
+                LOGGER.warn("Received key does not match the expected one: " + token.getConfirmationKey() + " <> " + expectedKey);
+                return;
+            }
+
+            //if there is no errors, set token as valid
+            token.setValid(true);
         }
-
-        String username = tokenParts[0];
-        long expirationDate = Long.parseLong(tokenParts[1]);
-        String confirmationKey = tokenParts[2];
-        String expectedKey = buildTokenConfirmationKey(username, expirationDate);
-
-        if (new DateTime(expirationDate).isBeforeNow()) {
-            return false;
-        }
-
-        if (!expectedKey.equals(confirmationKey)) {
-            LOGGER.warn("received key does not math the expected one: " + confirmationKey + " <> " + expectedKey);
-            return false;
-        }
-
-        return true;
     }
 
     public User getUserByToken(CustomAuthenticationToken token) {
-        String[] decodedToken = decodeToken(token.getToken());
-        String username = decodedToken[0];
-        User user = userDAO.getByUsername(username);
-
-        return user;
+        return userDAO.getByUsername(token.getUserName());
     }
 
-    public String generateTokenFor(String username, String password) {
+    public String generateTokenFor(String username) {
         long expirationDate = DateTime.now().plusSeconds(TOKEN_VALIDITY_TIME).getMillis();
         String tokenString = buildToken(username, expirationDate);
         return new String(Base64.encodeBase64(tokenString.getBytes()));
@@ -92,10 +94,17 @@ public class TokenService {
         }
 
         String token = new String(Base64.decodeBase64(tokenString));
-        if (!token.contains(TOKEN_DELIMITER)) {
+        String[] tokenParts = token.split(TOKEN_DELIMITER);
+        if (tokenParts.length != 3) {
             return null;
         }
-        return token.split(TOKEN_DELIMITER);
+
+        for (String tokenPart : tokenParts) {
+            if (tokenPart.length() == 0)
+                return null;
+        }
+
+        return tokenParts;
     }
 
     private String buildToken(String username, long expirationDate) {
@@ -115,9 +124,7 @@ public class TokenService {
         StringBuilder tokenBuilder = new StringBuilder();
         String token = tokenBuilder
                 .append(username)
-                .append(TOKEN_DELIMITER)
                 .append(expirationDate)
-                .append(TOKEN_DELIMITER)
                 .append(SECURITY_KEY)
                 .toString();
 
