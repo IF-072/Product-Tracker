@@ -8,6 +8,7 @@ import com.softserve.if072.common.model.Unit;
 import com.softserve.if072.common.model.User;
 import com.softserve.if072.restservice.dao.DAO;
 import org.apache.ibatis.annotations.One;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Result;
 import org.apache.ibatis.annotations.Results;
 import org.apache.ibatis.annotations.Select;
@@ -20,6 +21,8 @@ import java.util.List;
 
 /**
  * Contains MyBatis methods for working with Store DB
+ *
+ * @author Nazar Vynnyk
  */
 
 @Repository
@@ -92,10 +95,10 @@ public interface StoreDAO extends DAO<Store> {
                     one = @One(select = "com.softserve.if072.restservice.dao.mybatisdao.UnitDAO.getByID")),
             @Result(property = "isEnabled", column = "is_enabled")
     })
-    Product getProductFromStoreById(int storeId, int productId);
+    Product getProductFromStoreById(@Param ("storeId") Integer storeId, @Param ("productId")Integer productId);
 
     @Delete("DELETE FROM stores_products WHERE store_id = #{storeId} and product_id = #{productId}")
-    void deleteProductFromStoreById (int storeId, Integer productId);
+    void deleteProductFromStoreById (@Param ("storeId") Integer storeId, @Param ("productId")Integer productId);
 
     @Insert("INSERT into stores_products(store_id, product_id) VALUES(#{store.id}, #{product.id})")
     void addProductToStore(Store store, Product product);

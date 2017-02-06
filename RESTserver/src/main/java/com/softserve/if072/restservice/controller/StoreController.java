@@ -2,9 +2,11 @@ package com.softserve.if072.restservice.controller;
 
 import com.softserve.if072.common.model.Product;
 import com.softserve.if072.common.model.Store;
+
 import com.softserve.if072.restservice.exception.DataNotFoundException;
 import com.softserve.if072.restservice.service.StoreService;
 
+import org.apache.ibatis.annotations.Param;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,11 +25,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
+
 import java.util.List;
 
 /**
  * Serve requests used for working with Store model
+ *
+ * @author Nazar Vynnyk
  */
 
 @RestController
@@ -117,7 +121,6 @@ public class StoreController {
      * @param storeId current store_id
      * @param response list of products
      * @return list of products that sell at the current store
-     * @throws IOException if current store hasn't any product we inform user
      */
 
    @GetMapping("/{storeId}/products")
@@ -138,8 +141,8 @@ public class StoreController {
     @GetMapping("/{storeId}/products/{productId}")
     @ResponseBody
     @ResponseStatus(value = HttpStatus.OK)
-    public Product getProductFromStore(@PathVariable int storeId, @PathVariable int productId, HttpServletResponse
-            response) {
+    public Product getProductFromStore(@PathVariable("storeId") Integer storeId, @PathVariable ("productId") Integer productId,
+                                       HttpServletResponse response) {
         try {
             Product product = storeService.getProductFromStoreById(storeId, productId);
             LOGGER.info("All Products were found");
@@ -153,7 +156,8 @@ public class StoreController {
 
     @DeleteMapping("/{storeId}/products/{productId}")
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
-    public void deleteProductFromStore(@PathVariable int storeId, Integer productId, HttpServletResponse response) {
+    public void deleteProductFromStore(@PathVariable("storeId") Integer storeId, @PathVariable ("productId") Integer
+            productId, HttpServletResponse response) {
         try {
             storeService.deleteProductFromStoreById (storeId, productId);
             LOGGER.info(String.format("Product %d from Store %d was deleted", productId, storeId));
