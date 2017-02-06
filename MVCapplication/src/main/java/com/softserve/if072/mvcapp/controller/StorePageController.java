@@ -17,6 +17,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ *  The class contains methods that handle the http requests from the stores`s page
+ *
  * @author Nazar Vynnyk
  */
 
@@ -28,7 +30,7 @@ public class StorePageController {
     @GetMapping("/user/{userId}")
     public String getAllStoresByUserId(@PathVariable("userId") int userId, Model model) {
 
-        final String uri = "http://localhost:8080/server/stores/user/{userId}";
+        final String uri = "http://localhost:8080/rest/stores/user/{userId}";
         Map<String, Integer> param = new HashMap<String, Integer>();
         param.put("userId", userId);
 
