@@ -112,7 +112,7 @@
                     <a href="home" class="active"><i class="fa fa-home fa-fw"></i> Home</a>
                 </li>
                 <li>
-                    <a href="#" class="active"><i class="fa fa-list-alt fa-fw"></i> My Products</a>
+                    <a href="product" class="active"><i class="fa fa-list-alt fa-fw"></i> My Products</a>
                 </li>
                 <li>
                     <a href="#" class="active"><i class="fa fa-globe fa-fw"></i> My Stores</a>
