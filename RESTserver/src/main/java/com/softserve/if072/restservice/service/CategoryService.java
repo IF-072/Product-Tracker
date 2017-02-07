@@ -1,19 +1,33 @@
 package com.softserve.if072.restservice.service;
 
 import com.softserve.if072.common.model.Category;
+import com.softserve.if072.restservice.dao.mybatisdao.CategoryDAO;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-public interface CategoryService {
+@Service
+public class CategoryService {
 
-    List<Category> getAll();
+    private CategoryDAO categoryDAO;
 
-    Category getById(int id);
+    public List<Category> getAll() {
+        return categoryDAO.getAll();
+    }
 
-    void insert(Category category);
+    public Category getById(int id) {
+        return categoryDAO.getByID(id);
+    }
 
-    void update(Category category);
+    public void insert(Category category) {
+        categoryDAO.insert(category);
+    }
 
-    void delete(int id);
+    public void update(Category category) {
+        categoryDAO.update(category);
+    }
+
+    public void delete(int id) {
+        categoryDAO.deleteById(id);
+    }
 }
