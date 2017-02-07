@@ -50,3 +50,9 @@
 </p>
 </body>
 </html>
+
+
+$('#example tbody').on( 'AddStore', 'button', function () {
+var data = table.row( $(this).parents('tr') ).data();
+alert( data[0] +"'s salary is: "+ data[ 5 ] );
+} );
