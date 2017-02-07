@@ -207,7 +207,7 @@ CREATE TABLE IF NOT EXISTS `store` (
   `user_id` INT(11) NULL DEFAULT NULL,
   `is_enabled` TINYINT(1) NOT NULL DEFAULT '1',
   `latitude` VARCHAR(45) NULL DEFAULT NULL,
-  `longtitude` VARCHAR(45) NULL DEFAULT NULL,
+  `longitude` VARCHAR(45) NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   CONSTRAINT `store_userID_fk`
     FOREIGN KEY (`user_id`)
