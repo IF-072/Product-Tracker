@@ -1,8 +1,17 @@
 package com.softserve.if072.restservice.dao.mybatisdao;
 
+import com.softserve.if072.common.model.Role;
 import com.softserve.if072.common.model.User;
 import com.softserve.if072.restservice.dao.DAO;
-import org.apache.ibatis.annotations.*;
+import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Many;
+import org.apache.ibatis.annotations.One;
+import org.apache.ibatis.annotations.Options;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Result;
+import org.apache.ibatis.annotations.Results;
+import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 
@@ -12,10 +21,11 @@ import java.util.List;
  * @author Oleh Pochernin
  */
 public interface UserDAO extends DAO<User> {
-    String SELECT_ALL = "SELECT id, name, email, password, is_enabled FROM user";
-    String SELECT_BY_ID = "SELECT id, name, email, password, is_enabled FROM user WHERE id = #{id}";
-    String INSERT = "INSERT INTO user (name, email, password, is_enabled) VALUES (#{name}, #{email}, #{password}, #{isEnabled})";
-    String UPDATE = "UPDATE user SET name = #{name}, email = #{email}, password = #{password}, isEnabled = #{isEnabled} WHERE id=#{id}";
+    String SELECT_ALL = "SELECT id, name, email, password, role_id, is_enabled FROM user";
+    String SELECT_BY_ID = "SELECT id, name, email, password, role_id, is_enabled FROM user WHERE id = #{id}";
+    String SELECT_BY_USERNAME = "SELECT id, name, email, password, role_id, is_enabled FROM user WHERE email = #{username}";
+    String INSERT = "INSERT INTO user (name, email, password, role_id, is_enabled) VALUES (#{name}, #{email}, #{password}, #{role.id}, #{isEnabled})";
+    String UPDATE = "UPDATE user SET name = #{name}, email = #{email}, password = #{password}, role_id = #{role.id}, isEnabled = #{isEnabled} WHERE id=#{id}";
     String DELETE = "UPDATE user SET is_enabled = 0 WHERE id = #{id}";
 
     /**
@@ -30,6 +40,7 @@ public interface UserDAO extends DAO<User> {
             @Result(property = "name", column = "name"),
             @Result(property = "email", column = "email"),
             @Result(property = "password", column = "password"),
+            @Result(property = "role", column = "role_id", javaType = Role.class, one = @One(select = "com.softserve.if072.restservice.dao.mybatisdao.RoleDAO.getByID")),
             @Result(property = "isEnabled", column = "is_enabled"),
             @Result(property = "stores", column = "id", javaType = List.class,
                     many = @Many(select = "com.softserve.if072.restservice.dao.mybatisdao.StorageDAO.getByUserID")),
@@ -59,6 +70,7 @@ public interface UserDAO extends DAO<User> {
             @Result(property = "name", column = "name"),
             @Result(property = "email", column = "email"),
             @Result(property = "password", column = "password"),
+            @Result(property = "role", column = "role_id", javaType = Role.class, one = @One(select = "com.softserve.if072.restservice.dao.mybatisdao.RoleDAO.getByID")),
             @Result(property = "isEnabled", column = "is_enabled"),
     })
     User getByID(int id);
@@ -90,4 +102,21 @@ public interface UserDAO extends DAO<User> {
     @Override
     @Update(DELETE)
     void deleteById(int id);
+
+    /**
+     * Returns one user from the database with specified username.
+     *
+     * @param username unique user's
+     * @return user with a specified username
+     */
+    @Select(SELECT_BY_USERNAME)
+    @Results(value = {
+            @Result(property = "id", column = "id"),
+            @Result(property = "name", column = "name"),
+            @Result(property = "email", column = "email"),
+            @Result(property = "password", column = "password"),
+            @Result(property = "role", column = "role_id", javaType = Role.class, one = @One(select = "com.softserve.if072.restservice.dao.mybatisdao.RoleDAO.getByID")),
+            @Result(property = "isEnabled", column = "is_enabled"),
+    })
+    User getByUsername(@Param("username") String username);
 }
