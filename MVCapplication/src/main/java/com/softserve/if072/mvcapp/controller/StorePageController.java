@@ -4,11 +4,8 @@ import com.softserve.if072.common.model.Store;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Arrays;
@@ -26,8 +23,7 @@ import java.util.Map;
 @RequestMapping("/stores")
 public class StorePageController {
 
-
-    @GetMapping("/user/{userId}")
+    @GetMapping("/{userId}")
     public String getAllStoresByUserId(@PathVariable("userId") int userId, Model model) {
 
         final String uri = "http://localhost:8080/rest/stores/user/{userId}";
@@ -48,21 +44,5 @@ public class StorePageController {
         model.addAttribute("store", new Store());
         return "addStore";
     }
-
-
-
-
-
-//    @PostMapping("/")
-//    public String addStore(@ModelAttribute("Store") Store store) {
-//
-//        final String uri = "http://localhost:8080/server/stores/";
-//
-//        RestTemplate restTemplate = new RestTemplate();
-//        restTemplate.postForObject(uri, store, Store.class);
-//
-//        return "redirect:/stores/user/{userId}";
-//
-//    }
 
 }

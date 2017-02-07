@@ -9,23 +9,44 @@
     <title>UserStores</title>
 </head>
 <body>
-<a href="<c:url value="../"/>">Stores</a> | <a href="<c:url value="../addStore"/>">Add new Store</a> | <a href="<c:url
-value="allStores"/>">Show All Stores</a>
-<br/><br/>
-<table border="1">
-    <tr>
-        <th>name</th>
-        <th>address</th>
-        <th colspan="2">Edit / Delete</th>
-    </tr>
-    <c:forEach items="${stores}" var="store">
-        <tr>
-            <td><c:out value="${store.name}"/></td>
-            <td><c:out value="${store.address}"/></td>
-            <%--<td><a href="<c:url value="editStore?id=${user.id}"/>">Edit</a></td>--%>
-            <%--<td><a href="<c:url value="deleteStore?id=${user.id}"/>">Delete</a></td>--%>
-        </tr>
-    </c:forEach>
-</table>
+
+<div class="col-lg-12">
+    <h1 class="page-header">Stores</h1>
+</div>
+
+
+<div class="col-lg-12">
+    <div class="panel panel-default">
+
+        <!-- /.panel-heading -->
+
+        <div class="panel-body">
+            <table width="100%" class="table table-striped table-bordered table-hover" id="dataTables-example">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Address</th>
+                    <th>Products at store</th>
+                    <th colspan="2">Edit </th>
+                    <th colspan="2">/ Delete</th>
+                </tr>
+                </thead>
+                <tbody>
+                <c:forEach items="${stores}" var="store">
+                <tr class="gradeA">
+                        <td><c:out value="${store.name}"/></td>
+                        <td><c:out value="${store.address}"/></td>
+                    <td>
+                        <button type="button" class="btn btn-outline btn-link"
+                                href="<c:url value="../product"/>">products</button>
+                    </td>
+                </tr>
+                </c:forEach>
+        </div>
+    </div>
+</div>
+<p>
+    <button type="button" class="btn btn-outline btn-primary">AddStore</button>
+</p>
 </body>
 </html>

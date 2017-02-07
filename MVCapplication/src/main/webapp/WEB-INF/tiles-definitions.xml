@@ -48,11 +48,6 @@
         <put-attribute name="body" value="/WEB-INF/views/product.jsp" />
     </definition>
 
-    <definition name="addStore" extends="mainLayout">
-        <put-attribute name="title" value="Product Tracker Project" />
-        <put-attribute name="body" value="/WEB-INF/views/addStore.jsp" />
-    </definition>
-
     <definition name="allStores" extends="mainLayout">
         <put-attribute name="title" value="Product Tracker Project" />
         <put-attribute name="body" value="/WEB-INF/views/allStores.jsp" />
