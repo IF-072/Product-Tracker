@@ -12,20 +12,30 @@
         <put-list-attribute name="stylesheets">
             <add-attribute value="/css/bootstrap.css" />
             <add-attribute value="/css/metisMenu.css" />
+            <add-attribute value="/css/dataTables.bootstrap.css" />
+            <add-attribute value="/css/dataTables.responsive.css" />
             <add-attribute value="/css/sb-admin-2.css" />
             <add-attribute value="/css/morris.css" />
             <add-attribute value="/css/font-awesome.css" />
+
+
         </put-list-attribute>
 
         <put-list-attribute name="javascripts">
             <add-attribute value="/js/jquery.js" />
             <add-attribute value="/js/bootstrap.js" />
             <add-attribute value="/js/metisMenu.js" />
+            <add-attribute value="/js/jquery.dataTables.js" />
+            <add-attribute value="/js/dataTables.bootstrap.js" />
+            <add-attribute value="/js/dataTables.responsive.js" />
+            <add-attribute value="/js/sb-admin-2.js" />
             <add-attribute value="/js/raphael.js" />
             <add-attribute value="/js/morris.js" />
             <add-attribute value="/js/morris-data.js" />
-            <add-attribute value="/js/sb-admin-2.js" />
+
+
         </put-list-attribute>
+
     </definition>
 
     <definition name="home" extends="mainLayout">
@@ -38,4 +48,16 @@
         <put-attribute name="title" value="Please Log In to continue" />
         <put-attribute name="body" value="/WEB-INF/views/login.jsp" />
     </definition>
+
+    <definition name="product" extends="mainLayout">
+        <put-attribute name="title" value="Product Tracker Project" />
+        <put-attribute name="body" value="/WEB-INF/views/product.jsp" />
+    </definition>
+
+    <definition name="allStores" extends="mainLayout">
+        <put-attribute name="title" value="Product Tracker Project" />
+        <put-attribute name="body" value="/WEB-INF/views/allStores.jsp" />
+    </definition>
+
 </tiles-definitions>
+

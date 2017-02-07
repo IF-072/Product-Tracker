@@ -30,5 +30,13 @@
         <script src="<c:url value="${js}"/>"></script>
     </c:forEach>
 
+    <script>
+        $(document).ready(function() {
+            $('#dataTables-example').DataTable({
+                responsive: true
+            });
+        });
+    </script>
+
 </body>
 </html>
