@@ -31,7 +31,7 @@ import javax.validation.Valid;
 public class LoginController {
 
     private static final Logger LOGGER = LogManager.getLogger(LoginController.class);
-    private String REST_SERVICE_URL;
+    private final String REST_SERVICE_URL;
 
     private Environment environment;
 

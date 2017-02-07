@@ -4,7 +4,6 @@ import com.softserve.if072.common.model.User;
 import com.softserve.if072.restservice.dao.mybatisdao.UserDAO;
 import com.softserve.if072.restservice.security.authentication.CustomAuthenticationToken;
 import org.apache.commons.codec.binary.Base64;
-import org.apache.commons.codec.binary.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.joda.time.DateTime;
@@ -16,6 +15,9 @@ import org.springframework.stereotype.Service;
 import javax.xml.bind.annotation.adapters.HexBinaryAdapter;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+
+import static org.apache.commons.codec.binary.StringUtils.getBytesUtf8;
+import static org.apache.commons.lang3.StringUtils.isBlank;
 
 @Service
 @PropertySource(value = {"classpath:security.properties"})
@@ -89,7 +91,7 @@ public class TokenService {
     }
 
     private String[] decodeToken(String tokenString) {
-        if (tokenString == null || tokenString.equals("") || !Base64.isBase64(tokenString)) {
+        if (isBlank(tokenString) || !Base64.isBase64(tokenString)) {
             return null;
         }
 
@@ -128,6 +130,6 @@ public class TokenService {
                 .append(SECURITY_KEY)
                 .toString();
 
-        return hexBinaryAdapter.marshal(messageDigest.digest(StringUtils.getBytesUtf8(token)));
+        return hexBinaryAdapter.marshal(messageDigest.digest(getBytesUtf8(token)));
     }
 }

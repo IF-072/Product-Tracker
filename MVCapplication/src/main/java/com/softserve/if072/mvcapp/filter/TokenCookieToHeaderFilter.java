@@ -25,7 +25,7 @@ public class TokenCookieToHeaderFilter extends OncePerRequestFilter {
         Cookie[] cookies = request.getCookies();
         if (cookies != null) {
             for (Cookie cookie : request.getCookies()) {
-                if (cookie.getName().equals(TOKEN_HEADER_NAME)) {
+                if (TOKEN_HEADER_NAME.equals(cookie.getName())) {
                     filterChain.doFilter(new AddTokenHeaderWrapper(request, cookie.getName(), cookie.getValue()), response);
                     return;
                 }
@@ -47,8 +47,10 @@ public class TokenCookieToHeaderFilter extends OncePerRequestFilter {
 
         @Override
         public String getHeader(String name) {
-            if (name.equals(headerName))
+            if (name.equals(headerName)) {
                 return headerValue;
+            }
+
             return super.getHeader(name);
         }
 

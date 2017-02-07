@@ -16,7 +16,8 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
     private static final Logger LOGGER = LogManager.getLogger(CustomAuthenticationSuccessHandler.class);
 
     @Override
-    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
+    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
+                                        Authentication authentication) throws IOException, ServletException {
         LOGGER.info("Successful authenticated: " + authentication.getPrincipal());
         request.getRequestDispatcher(request.getServletPath()).forward(request, response);
     }
