@@ -14,17 +14,31 @@ public class Store {
     private String name;
     private String address;
     private User user;
-    private boolean isActive;
+    private boolean isEnabled;
     private List<Product> products;
+    private String latitude;
+    private String longitude;
 
-    public Store() {}
-
-    public Store(int id, String name, String address, User user, boolean isActive, List<Product> products) {
+    public Store(int id, String name, String address, User user, boolean isEnabled, List<Product> products, String
+            latitude, String longitude) {
         this.id = id;
         this.name = name;
         this.address = address;
         this.user = user;
-        this.isActive = isActive;
+        this.isEnabled = isEnabled;
+        this.products = products;
+        this.latitude = latitude;
+        this.longitude = longitude;
+    }
+
+    public Store() {}
+
+    public Store(int id, String name, String address, User user, boolean isEnabled, List<Product> products) {
+        this.id = id;
+        this.name = name;
+        this.address = address;
+        this.user = user;
+        this.isEnabled = isEnabled;
         this.products = products;
     }
 
@@ -56,12 +70,10 @@ public class Store {
 
     public void setUser(User user) {this.user = user;}
 
-    public boolean isActive() {
-        return isActive;
-    }
+    public boolean isEnabled() { return isEnabled; }
 
-    public void setActive(boolean active) {
-        isActive = active;
+    public void setEnabled(boolean enabled) {
+        isEnabled = enabled;
     }
 
     public List<Product> getProducts() {
@@ -72,6 +84,22 @@ public class Store {
         this.products = products;
     }
 
+    public String getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(String latitude) {
+        this.latitude = latitude;
+    }
+
+    public String getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(String longitude) {
+        this.longitude = longitude;
+    }
+
     @Override
     public String toString() {
         return "Store{" +
@@ -79,8 +107,10 @@ public class Store {
                 ", name='" + name + '\'' +
                 ", address='" + address + '\'' +
                 ", user=" + user +
-                ", isActive=" + isActive +
-                ", products=" + products.toString() +
+                ", isEnabled=" + isEnabled +
+                ", products=" + products +
+                ", latitude='" + latitude + '\'' +
+                ", longitude='" + longitude + '\'' +
                 '}';
     }
 }
