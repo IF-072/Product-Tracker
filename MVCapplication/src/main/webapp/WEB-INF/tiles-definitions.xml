@@ -17,8 +17,6 @@
             <add-attribute value="/css/sb-admin-2.css" />
             <add-attribute value="/css/morris.css" />
             <add-attribute value="/css/font-awesome.css" />
-
-
         </put-list-attribute>
 
         <put-list-attribute name="javascripts">
@@ -32,10 +30,7 @@
             <add-attribute value="/js/raphael.js" />
             <add-attribute value="/js/morris.js" />
             <add-attribute value="/js/morris-data.js" />
-
-
         </put-list-attribute>
-
     </definition>
 
     <definition name="home" extends="mainLayout">
@@ -47,6 +42,10 @@
         <put-attribute name="header" value="" />
         <put-attribute name="title" value="Please Log In to continue" />
         <put-attribute name="body" value="/WEB-INF/views/login.jsp" />
+    </definition>
+
+    <definition name="profile" extends="mainLayout">
+        <put-attribute name="body" value="/WEB-INF/views/profile.jsp" />
     </definition>
 
     <definition name="product" extends="mainLayout">
