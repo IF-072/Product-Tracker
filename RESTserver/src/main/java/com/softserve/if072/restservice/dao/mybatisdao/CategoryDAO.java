@@ -13,14 +13,13 @@ import java.util.List;
 
 public interface CategoryDAO extends DAO<Category> {
 
-    @Override
     @Select("SELECT * FROM category")
     @Results({
             @Result(property = "id", column = "id"),
             @Result(property = "name", column = "name"),
             @Result(property = "user", column = "user_id", javaType = User.class, one = @One(select = "com.softserve.if072.restservice.dao.mybatisdao.UserDAO.findAllUsers"))
     })
-    List<Category> getAll();
+    List<Category> getByUserID(int userID);
 
     @Override
     @Select("SELECT * FROM category WHERE id = #{id}")
