@@ -8,13 +8,11 @@ public class ShoppingList {
     private User user;
     private Product product;
     private int amount;
-    private int id;
 
-    public ShoppingList(User user, Product product, int amount, int id) {
+    public ShoppingList(User user, Product product, int amount) {
         this.user = user;
         this.product = product;
         this.amount = amount;
-        this.id = id;
     }
 
     public ShoppingList(){}
@@ -43,21 +41,12 @@ public class ShoppingList {
         this.amount = amount;
     }
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
     @Override
     public String toString() {
         return "ShoppingList{" +
                 "user=" + user +
                 ", product=" + product +
                 ", amount=" + amount +
-                ", id=" + id +
                 '}';
     }
 }
