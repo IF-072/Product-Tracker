@@ -117,7 +117,7 @@
                         Products</a>
                 </li>
                 <li>
-                    <a href="<c:url value="../stores/1"/>" class="active"><i class="fa fa-globe fa-fw"></i> My
+                    <a href="<c:url value="../stores/"/>" class="active"><i class="fa fa-globe fa-fw"></i> My
                         Stores</a>
                 </li>
                 <li>

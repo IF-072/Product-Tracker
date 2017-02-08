@@ -1,14 +1,15 @@
 package com.softserve.if072.mvcapp.controller;
 
 import com.softserve.if072.common.model.Store;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.Arrays;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,25 +22,29 @@ import java.util.Map;
 
 @Controller
 @RequestMapping("/stores")
+@PropertySource(value = {"classpath:application.properties"})
 public class StorePageController {
 
-    @GetMapping("/{userId}")
-    public String getAllStoresByUserId(@PathVariable("userId") int userId, Model model) {
+    @Value("${application.restStoreURL}")
+    private String storeUrl;
 
-        final String uri = "http://localhost:8080/rest/stores/user/{userId}";
+    @GetMapping("/")
+    public String getAllStoresByUserId(Model model) {
+
+        int userId =1;
+
+        final String uri = new String(storeUrl + "user/{userId}");
         Map<String, Integer> param = new HashMap<String, Integer>();
         param.put("userId", userId);
 
         RestTemplate restTemplate = new RestTemplate();
-
-        Store[] result = restTemplate.getForObject(uri, Store[].class, param);
-        List<Store> stores = Arrays.asList(result);
+        List<Store> stores = restTemplate.getForObject(uri, List.class, param);
 
         model.addAttribute("stores", stores);
         return "allStores";
     }
 
-    @GetMapping("/")
+    @GetMapping("/add")
     public String addStore (Model model){
         model.addAttribute("store", new Store());
         return "addStore";
