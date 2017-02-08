@@ -38,10 +38,10 @@ public interface ShoppingListDAO extends DAO<ShoppingList> {
     public void insert(ShoppingList shoppingList);
 
     @Override
-    @Update("UPDATE shopping_list SET amount=#{amount} WHERE user_id=#{user.id}, product_id=#{product.id}")
+    @Update("UPDATE shopping_list SET amount=#{amount} WHERE user_id=#{user.id} AND product_id=#{product.id}")
     public void update(ShoppingList shoppingList);
 
-    @Delete("DELETE FROM shopping_list WHERE user_id=#{user.id}, product_id=#{product.id}")
+    @Delete("DELETE FROM shopping_list WHERE user_id=#{user.id} AND product_id=#{product.id}")
     public void delete(ShoppingList shoppingList) ;
 }
 

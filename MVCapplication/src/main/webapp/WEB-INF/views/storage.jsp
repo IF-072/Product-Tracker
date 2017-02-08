@@ -1,4 +1,4 @@
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <div class="panel panel-default">
     <div class="panel-heading">
         Storage
@@ -23,7 +23,8 @@
                         <td>${storage.product.name}</td>
                         <td>${storage.endDate}</td>
                         <td>${storage.amount}</td>
-                        <td onclick="minus(${storage});"><p class="fa fa-minus"></p></td>
+                        <td onclick="minus(${storage.user.id}, ${storage.product.id}, ${storage.amount}, ${loop.count});">
+                            <p class="fa fa-minus"></p></td>
                     </tr>
                 </c:forEach>
                 </tbody>
@@ -35,14 +36,24 @@
 </div>
 
 <script type="text/javascript" language="JavaScript">
-    function minus(storage) {
-        storage.amount--;
+    function minus(userId, productId, amount, index) {
+        amount--;
         $.ajax({
-            method: "PUT",
-            dataType: 'json',
-            data: storage,
-            success: function(msg) {
-                console.log( "Data Saved: " + msg );
+            url: "http://localhost:8080/client/storage/update",
+            method: "GET",
+            data: {
+                userId: userId,
+                productId: productId,
+                amount: amount
+            },
+            success: function () {
+//                console.log( "Data Saved" );
+                var tr = Document.getElementsByTagName("tr");
+                tr[index].getElementsByTagName("td")[3] = amount;
+                console.log(tr);
+            },
+            error: function(returnval) {
+                console.log(returnval + " failure");
             }
         });
     }
