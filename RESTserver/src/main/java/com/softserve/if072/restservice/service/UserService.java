@@ -7,14 +7,29 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-public interface UserService {
-    List<User> getAll();
+@Service
+public class UserService {
 
-    User getById(int id);
+    @Autowired
+    private UserDAO userDAO;
 
-    void insert(User user);
+    public List<User> getAll() {
+        return userDAO.getAll();
+    }
 
-    void update(User user);
+    public User getById(int id) {
+        return userDAO.getByID(id);
+    }
 
-    void delete(int id);
+    public void insert(User user) {
+        userDAO.insert(user);
+    }
+
+    public void update(User user) {
+        userDAO.update(user);
+    }
+
+    public void delete(int id) {
+        userDAO.deleteById(id);
+    }
 }

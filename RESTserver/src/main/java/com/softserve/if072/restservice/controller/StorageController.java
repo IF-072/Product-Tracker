@@ -5,7 +5,7 @@ package com.softserve.if072.restservice.controller;
  */
 
 import com.softserve.if072.common.model.Storage;
-import com.softserve.if072.restservice.Exception.DataSourceException;
+import com.softserve.if072.restservice.exception.DataNotFoundException;
 import com.softserve.if072.restservice.service.StorageService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -14,16 +14,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -34,32 +33,32 @@ public class StorageController {
     private StorageService storageService;
 
     @Autowired
-    public StorageController(StorageService storeService){
-        this.storageService = storeService;
+    public StorageController(StorageService storageService){
+        this.storageService = storageService;
     }
 
     @DeleteMapping(value = "/{id}")
     @ResponseStatus(value = HttpStatus.OK)
-    public void delete(@PathVariable int id, HttpServletResponse response) throws IOException {
+    public void delete(@PathVariable int id, HttpServletResponse response) {
         try {
             storageService.delete(id);
             LOGGER.info(String.format("Storage with id %d was deleted", id));
-        } catch (DataSourceException e) {
-            response.sendError(HttpServletResponse.SC_NOT_FOUND);
-            LOGGER.error(String.format("Cannot delete Storage with id %d", id), e);
+        } catch (DataNotFoundException e) {
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            LOGGER.error(String.format("Cannot deleteById Storage with id %d", id), e);
         }
     }
 
     @GetMapping(value = "/getByUser/{user_id}")
     @ResponseBody
     @ResponseStatus(value = HttpStatus.OK)
-    public List<Storage> getByUserId(@PathVariable int user_id, HttpServletResponse response) throws IOException {
+    public List<Storage> getByUserId(@PathVariable int user_id, HttpServletResponse response) {
         try {
             List<Storage> stores = storageService.getByUserId(user_id);
             LOGGER.info("All Storages were found");
             return stores;
-        } catch (DataSourceException e) {
-            response.sendError(HttpServletResponse.SC_NOT_FOUND);
+        } catch (DataNotFoundException e) {
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             LOGGER.error("Storages were not found", e);
             return null;
         }
@@ -68,13 +67,13 @@ public class StorageController {
     @GetMapping(value = "/{id}")
     @ResponseBody
     @ResponseStatus(value = HttpStatus.OK)
-    public Storage getById(@PathVariable int id, HttpServletResponse response) throws IOException {
+    public Storage getById(@PathVariable int id, HttpServletResponse response) {
         try {
             Storage store = storageService.getById(id);
             LOGGER.info(String.format("Storage with id %d was retrieved", id));
             return store;
-        } catch (DataSourceException e) {
-            response.sendError(HttpServletResponse.SC_NOT_FOUND);
+        } catch (DataNotFoundException e) {
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             LOGGER.error(String.format("Storage with id %d was not found", id), e);
             return null;
         }
@@ -89,13 +88,13 @@ public class StorageController {
 
     @PutMapping(value = "/")
     @ResponseStatus(value = HttpStatus.OK)
-    public void update(@RequestBody Storage storage, HttpServletResponse response) throws IOException {
+    public void update(@RequestBody Storage storage, HttpServletResponse response) {
         int id = storage.getId();
         try {
             storageService.update(storage);
             LOGGER.info(String.format("Store with id %d was updated", id));
-        } catch (DataSourceException e) {
-            response.sendError(HttpServletResponse.SC_NOT_FOUND);
+        } catch (DataNotFoundException e) {
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             LOGGER.error(String.format("Cannot update Storage with id %d", id), e);
         }
     }

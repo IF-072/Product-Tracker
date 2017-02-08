@@ -57,5 +57,5 @@ public interface StorageDAO extends DAO<Storage> {
 
     @Override
     @Delete("DELETE FROM storage WHERE id = #{id}")
-    public void delete(int id) ;
+    public void deleteById(int id) ;
 }
