@@ -3,7 +3,6 @@
     <div class="panel-heading">
         Storage
     </div>
-    <!-- /.panel-heading -->
     <div class="panel-body">
         <div class="table-responsive">
             <table class="table table-striped">
@@ -30,9 +29,7 @@
                 </tbody>
             </table>
         </div>
-        <!-- /.table-responsive -->
     </div>
-    <!-- /.panel-body -->
 </div>
 
 <script type="text/javascript" language="JavaScript">

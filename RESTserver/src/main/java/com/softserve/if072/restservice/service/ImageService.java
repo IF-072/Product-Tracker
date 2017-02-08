@@ -2,17 +2,35 @@ package com.softserve.if072.restservice.service;
 
 
 import com.softserve.if072.common.model.Image;
+import com.softserve.if072.restservice.dao.mybatisdao.ImageDAO;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-public interface ImageService {
-    List<Image> getAll();
+@Service
+public class ImageService {
 
-    Image getById(int id);
+    @Autowired
+    private ImageDAO imageDAO;
 
-    void insert(Image product);
+    public List<Image> getAll() {
+        return imageDAO.getAll();
+    }
 
-    void update(Image product);
+    public Image getById(int id) {
+        return imageDAO.getByID(id);
+    }
 
-    void delete(int id);
+    public void insert(Image image) {
+        imageDAO.insert(image);
+    }
+
+    public void update(Image image) {
+        imageDAO.update(image);
+    }
+
+    public void delete(int id) {
+        imageDAO.deleteById(id);
+    }
 }

@@ -1,11 +1,16 @@
 package com.softserve.if072.restservice.controller;
 
 import com.softserve.if072.common.model.Category;
-import com.softserve.if072.restservice.service.impl.CategoryServiceImpl;
+import com.softserve.if072.restservice.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 import java.util.List;
 
@@ -14,7 +19,7 @@ import java.util.List;
 public class CategoryController {
 
     @Autowired
-    private CategoryServiceImpl categoryService;
+    private CategoryService categoryService;
 
     @RequestMapping(value = "/all", method = RequestMethod.GET)
     @ResponseBody
