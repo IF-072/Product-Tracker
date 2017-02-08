@@ -40,9 +40,12 @@ public interface StorageDAO extends DAO<Storage> {
     public void insert(Storage storage);
 
     @Override
-    @Update("UPDATE storage SET end_date=#{endDate}, amount=#{amount} WHERE user_id=#{user.id}, product_id=#{product.id}")
+    @Update("UPDATE storage SET end_date=#{endDate}, amount=#{amount} WHERE user_id=#{user.id} AND product_id=#{product.id}")
     public void update(Storage storage);
 
-    @Delete("DELETE FROM storage WHERE user_id=#{user.id}, product_id=#{product.id}")
+    @Update("UPDATE storage SET amount=#{amount} WHERE user_id=#{user.id} AND product_id=#{product.id}")
+    public void updateAmount(Storage storage);
+
+    @Delete("DELETE FROM storage WHERE user_id=#{user.id} AND product_id=#{product.id}")
     public void delete(Storage storage) ;
 }

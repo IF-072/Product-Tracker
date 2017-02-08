@@ -66,7 +66,7 @@ public class StorageController {
     }
 
     @PostMapping(value = "/")
-    @ResponseStatus(value = HttpStatus.OK)
+    @ResponseStatus(value = HttpStatus.CREATED)
     public void insert(@RequestBody Storage storage){
         storageService.insert(storage);
         LOGGER.info("New Storage was created");
@@ -77,10 +77,10 @@ public class StorageController {
     public void update(@RequestBody Storage storage, HttpServletResponse response) throws IOException {
         try {
             storageService.update(storage);
-            LOGGER.info("Store with id %d was updated");
+            LOGGER.info("Store was updated");
         } catch (DataSourceException e) {
             response.sendError(HttpServletResponse.SC_NOT_FOUND);
-            LOGGER.error("Cannot update Storage with id %d", e);
+            LOGGER.error("Cannot update Storage", e);
         }
     }
 }

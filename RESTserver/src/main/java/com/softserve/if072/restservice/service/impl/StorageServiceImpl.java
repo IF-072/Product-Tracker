@@ -23,7 +23,7 @@ public class StorageServiceImpl implements StorageService {
 
     public List<Storage> getByUserId(int user_id) throws DataSourceException {
         List<Storage> list = storageDAO.getByUserID(user_id);
-        if (list != null && !list.isEmpty()){
+        if (list != null && !list.isEmpty()) {
             return list;
         } else {
             throw new DataSourceException("Storages not found");
@@ -31,18 +31,22 @@ public class StorageServiceImpl implements StorageService {
     }
 
     @Override
-    public void insert(Storage storage){
+    public void insert(Storage storage) {
         storageDAO.insert(storage);
     }
 
     @Override
     public void update(Storage storage) throws DataSourceException {
-        storageDAO.update(storage);
+        if (storage.getEndDate() != null) {
+            storageDAO.update(storage);
+        } else {
+            storageDAO.updateAmount(storage);
+        }
     }
 
     @Override
     public void delete(Storage storage) throws DataSourceException {
-        if (storage != null){
+        if (storage != null) {
             storageDAO.delete(storage);
         } else {
             throw new DataSourceException("Storage was not found");
