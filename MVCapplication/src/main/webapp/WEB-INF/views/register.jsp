@@ -17,6 +17,22 @@
                     <form:form role="form" method="POST" modelAttribute="registrationForm" class="form-horizontal">
                         <fieldset>
 
+                            <!-- Error messages-->
+                            <c:if test="${not empty errorMessage}">
+                                <div class="alert alert-danger">
+                                    <span class="glyphicon glyphicon-minus-sign" aria-hidden="true"></span>
+                                        ${errorMessage}
+                                </div>
+                            </c:if>
+                            <c:if test="${not empty validationErrors}">
+                                <div class="alert alert-danger">
+                                    <c:forEach items="${validationErrors}" var="errorItem">
+                                        <p><span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                                                ${errorItem.getDefaultMessage()}</p>
+                                    </c:forEach>
+                                </div>
+                            </c:if>
+
                             <!-- Text input-->
                             <div class="form-group">
                                 <form:label path="email" cssClass="col-md-4 control-label">Your Email</form:label>

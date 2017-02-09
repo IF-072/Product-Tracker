@@ -35,7 +35,7 @@ public class LogoutController {
         cookie.setMaxAge(0);
         response.addCookie(cookie);
 
-        redirectAttributes.addFlashAttribute("informationMessage", "You must be logged in to view this page");
+        redirectAttributes.addFlashAttribute("informationMessage", "You have been successfully logged out");
         return "redirect:login";
     }
 }

@@ -2,11 +2,13 @@ package com.softserve.if072.mvcapp.controller;
 
 import com.softserve.if072.common.model.Role;
 import com.softserve.if072.common.model.User;
+import com.softserve.if072.mvcapp.dto.UserRegistrationForm;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,8 +18,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -48,58 +50,63 @@ public class RegistrationController {
            ResponseEntity<Role[]> responseEntity = template.getForEntity(url, Role[].class);
            Role[] roles = responseEntity.getBody();
            for(Role role : roles)
-               rolesMap.put(role.getId(), role.getAuthority());
+               rolesMap.put(role.getId(), role.getDescription());
         }  catch (HttpClientErrorException e) {
             LOGGER.error("Can't retrieve roles from REST-service ", e);
-            rolesMap.put(2, "ROLE_PREMIUM");
         }
 
         model.addAttribute("roleMap", rolesMap);
-        model.addAttribute("registrationForm", new User());
+        model.addAttribute("registrationForm", new UserRegistrationForm());
 
         return "register";
     }
 
     @RequestMapping(value = "", method = RequestMethod.POST)
+    public String postRegisterPage(@Valid @ModelAttribute("registrationForm") UserRegistrationForm registrationForm,
+                                   BindingResult result, RedirectAttributes redirectAttributes) {
+        if (result.hasErrors()) {
+            redirectAttributes.addFlashAttribute("validationErrors", result.getFieldErrors());
+            return "redirect:register";
+        }
 
-    public String postRegisterPage(@Valid @ModelAttribute("registrationForm") User user, BindingResult result,
-                                   Model model, HttpServletResponse httpServletResponse) {
-        LOGGER.warn(user);
+        Role role = getRoleByID(registrationForm.getRoleId());
+        if(role == null) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Please select correct account type");
+            return "redirect:register";
+        }
 
-        return "redirect:register";
+        User user = new User();
+        user.setEmail(registrationForm.getEmail());
+        user.setName(registrationForm.getName());
+        user.setPassword(registrationForm.getPassword());
+        user.setRole(role);
+        user.setEnabled(true);
+
+        String url = new String(REST_SERVICE_URL + "/register/");
+        RestTemplate template = new RestTemplate();
+        try {
+            ResponseEntity<String> responseEntity = template.postForEntity(url, user, String.class);
+            if (responseEntity.getStatusCode().equals(HttpStatus.OK)){
+                redirectAttributes.addFlashAttribute("successMessage", "Your account was successfully created");
+                return "redirect:login";
+            }
+        }  catch (HttpClientErrorException e) {
+            if(e.getStatusCode().equals(HttpStatus.UNPROCESSABLE_ENTITY)){
+                redirectAttributes.addFlashAttribute("errorMessage", "User with such email already exists");
+            } else {
+                redirectAttributes.addFlashAttribute("errorMessage", "Something went wrong... Please try one more time");
+            }
+            return "redirect:register";
+        }
+
+       return "redirect:register";
     }
 
-//    @RequestMapping(value = "", method = RequestMethod.POST)
-//    public String postLoginPage(@Valid @ModelAttribute("loginForm") User user, BindingResult result,
-//                                @RequestParam(value = "remember", required = false) boolean rememberMe,
-//                                Model model, HttpServletResponse httpServletResponse) {
-//        if (result.hasErrors()) {
-//            model.addAttribute("errorMessages", result.getFieldErrors());
-//            return "login";
-//        }
-//        String url = new String(REST_SERVICE_URL + "/login/");
-//        RestTemplate template = new RestTemplate();
-//        MultiValueMap<String, String> params = new LinkedMultiValueMap<String, String>();
-//        params.set("login", user.getEmail());
-//        params.set("password", user.getPassword());
-//        try {
-//            ResponseEntity<String> response = template.postForEntity(url, params, String.class);
-//            String responseBody = response.getBody();
-//            HttpStatus statusCode = response.getStatusCode();
-//
-//            if (statusCode.equals(HttpStatus.OK) && responseBody != null && !responseBody.isEmpty()) {
-//                Cookie cookie = new Cookie("X-Token", responseBody);
-//                if (rememberMe) {
-//                    cookie.setMaxAge(999999);
-//                }
-//                httpServletResponse.addCookie(cookie);
-//                return "redirect:home";
-//            }
-//        } catch (HttpClientErrorException e) {
-//            model.addAttribute("loginError", "Invalid e-mail or password");
-//            return "login";
-//        }
-//
-//        return "redirect:login";
-//    }
+    private Role getRoleByID(int roleId) {
+        String url = new String(REST_SERVICE_URL + "/roles/"+roleId);
+        RestTemplate template = new RestTemplate();
+        ResponseEntity<Role> responseEntity = template.getForEntity(url, Role.class);
+        return responseEntity.getBody();
+    }
+
 }

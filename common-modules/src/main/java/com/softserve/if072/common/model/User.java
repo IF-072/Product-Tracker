@@ -1,9 +1,6 @@
 package com.softserve.if072.common.model;
 
 
-import org.hibernate.validator.constraints.NotEmpty;
-
-import javax.validation.constraints.Size;
 import java.util.List;
 
 /**
@@ -15,15 +12,8 @@ public class User {
 
     private int id;
     private String name;
-
-    @NotEmpty(message = "{error.email.notnull}")
-    @Size(min = 5, max = 64, message = "{error.email.size}")
     private String email;
-
-    @NotEmpty(message = "{error.password.notnull}")
-    @Size(min = 4, max = 64, message = "{error.password.size}")
     private String password;
-
     private boolean isEnabled;
     private List<Store> stores;
     private List<Product> products;

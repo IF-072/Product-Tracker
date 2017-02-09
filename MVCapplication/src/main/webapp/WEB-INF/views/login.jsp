@@ -14,6 +14,12 @@
                 <div class="panel-body">
                     <form:form role="form" method="POST" modelAttribute="loginForm">
                         <fieldset>
+                            <c:if test="${not empty successMessage}">
+                                <div class="alert alert-success">
+                                    <span class="glyphicon glyphicon-ok-sign" aria-hidden="true"></span>
+                                        ${successMessage}
+                                </div>
+                            </c:if>
                             <c:if test="${not empty informationMessage}">
                                 <div class="alert alert-warning">
                                     <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
@@ -48,6 +54,7 @@
                             <input type="submit" class="btn btn-lg btn-success btn-block" value="Login"/>
                         </fieldset>
                     </form:form>
+                    <div style="margin-top:8px;"><a href="<c:url value="../register"/>">Create an account</a></div>
                 </div>
             </div>
         </div>

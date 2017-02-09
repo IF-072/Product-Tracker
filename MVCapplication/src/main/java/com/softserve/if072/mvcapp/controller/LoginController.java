@@ -1,6 +1,6 @@
 package com.softserve.if072.mvcapp.controller;
 
-import com.softserve.if072.common.model.User;
+import com.softserve.if072.mvcapp.dto.UserLoginForm;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,12 +45,12 @@ public class LoginController {
 
     @RequestMapping(value = "", method = RequestMethod.GET)
     public String getLoginPage(HttpServletRequest httpServletRequest, Model model) {
-        model.addAttribute("loginForm", new User());
+        model.addAttribute("loginForm", new UserLoginForm());
         return "login";
     }
 
     @RequestMapping(value = "", method = RequestMethod.POST)
-    public String postLoginPage(@Valid @ModelAttribute("loginForm") User user, BindingResult result,
+    public String postLoginPage(@Valid @ModelAttribute("loginForm") UserLoginForm loginForm, BindingResult result,
                                 @RequestParam(value = "remember", required = false) boolean rememberMe,
                                 Model model, HttpServletResponse httpServletResponse) {
         if (result.hasErrors()) {
@@ -60,8 +60,8 @@ public class LoginController {
         String url = new String(REST_SERVICE_URL + "/login/");
         RestTemplate template = new RestTemplate();
         MultiValueMap<String, String> params = new LinkedMultiValueMap<String, String>();
-        params.set("login", user.getEmail());
-        params.set("password", user.getPassword());
+        params.set("login", loginForm.getEmail());
+        params.set("password", loginForm.getPassword());
         try {
             ResponseEntity<String> response = template.postForEntity(url, params, String.class);
             String responseBody = response.getBody();
