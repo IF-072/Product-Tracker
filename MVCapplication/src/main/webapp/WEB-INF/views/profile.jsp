@@ -12,15 +12,15 @@
                         <tbody>
                         <tr>
                             <td>id</td>
-                            <td>1</td>
+                            <td>${user.id}</td>
                         </tr>
                         <tr>
                             <td>name</td>
-                            <td>name</td>
+                            <td>${user.name}</td>
                         </tr>
                         <tr>
                             <td>email</td>
-                            <td>email</td>
+                            <td>${user.email}</td>
                         </tr>
                         </tbody>
                     </table>
