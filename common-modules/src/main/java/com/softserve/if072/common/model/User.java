@@ -1,6 +1,5 @@
 package com.softserve.if072.common.model;
 
-
 import java.util.List;
 
 /**

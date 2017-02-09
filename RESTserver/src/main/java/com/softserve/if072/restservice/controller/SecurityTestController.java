@@ -1,9 +1,7 @@
 package com.softserve.if072.restservice.controller;
 
 import com.softserve.if072.common.model.User;
-import com.softserve.if072.restservice.dao.mybatisdao.UnitDAO;
 import com.softserve.if072.restservice.security.authentication.AuthenticatedUserProxy;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -13,9 +11,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 @RequestMapping(value = "/api")
 public class SecurityTestController {
-
-    @Autowired
-    private UnitDAO unitDAO;
 
     @RequestMapping(value = "/security/user/current")
     @ResponseBody

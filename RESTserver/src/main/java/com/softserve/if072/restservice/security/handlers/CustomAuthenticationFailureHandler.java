@@ -15,7 +15,8 @@ public class CustomAuthenticationFailureHandler implements AuthenticationFailure
     private static final Logger LOGGER = LogManager.getLogger(CustomAuthenticationFailureHandler.class);
 
     @Override
-    public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException e) throws IOException, ServletException {
+    public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
+                                        AuthenticationException e) throws IOException, ServletException {
         LOGGER.warn("AUTHENTICATION FAILURE FROM " + request.getRemoteAddr() + ":  " + e.getMessage());
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
     }

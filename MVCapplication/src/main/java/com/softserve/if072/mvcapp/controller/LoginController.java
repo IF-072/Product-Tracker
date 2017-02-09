@@ -34,6 +34,7 @@ public class LoginController {
     private final String REST_SERVICE_URL;
     private final String AUTHENTICATION_COOKIE_NAME;
 
+
     private Environment environment;
 
     @Autowired
