@@ -32,6 +32,16 @@ public interface ShoppingListDAO extends DAO<ShoppingList> {
     })
     public List<ShoppingList> getByUserID(int user_id);
 
+    @Select("SELECT * FROM shopping_list WHERE user_id=#{user.id} AND product_id=#{product.id}")
+    @Results(value = {
+            @Result(property = "amount", column = "amount"),
+            @Result(property = "user", column = "user_id", javaType=User.class,
+                    one=@One(select="com.softserve.if072.restservice.dao.mybatisdao.UserDAO.getByID")),
+            @Result(property = "product", column = "product_id", javaType=Product.class,
+                    one=@One(select="com.softserve.if072.restservice.dao.mybatisdao.ProductDAO.getByID"))
+    })
+    public ShoppingList getByClass(ShoppingList shoppingList);
+
     @Override
     @Insert("INSERT INTO shopping_list (user_id, product_id, amount) VALUES (#{user.id}, #{product.id}, #{amount})")
     @Options(useGeneratedKeys = true)

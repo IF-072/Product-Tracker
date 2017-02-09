@@ -124,6 +124,10 @@
                     <a href="#" class="active"><i class="fa fa-archive fa-fw"></i> Shopping List</a>
                 </li>
                 <li>
+                    <a href="<c:url value="../storage/"/>" class="active"><i class="fa fa-archive fa-fw"></i> My
+                        Storage</a>
+                </li>
+                <li>
                     <p><button type="button" class="btn btn-outline btn-primary">Go shopping</button> </p>
                 </li>
                 <%--<li>--%>
