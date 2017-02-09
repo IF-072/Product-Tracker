@@ -22,12 +22,9 @@ import java.util.List;
 public class CategoryService {
 
     private CategoryDAO categoryDAO;
-        return categoryDAO.getAll();
-    }
 
     @Value("${category.notFound}")
     private String categoryNotFound;
-    }
 
     @Autowired
     public CategoryService(CategoryDAO categoryDAO) {

@@ -1,22 +1,22 @@
 package com.softserve.if072.restservice.service;
 
-
 import com.softserve.if072.common.model.Storage;
-import com.softserve.if072.restservice.dao.mybatisdao.StorageDAO;
 import com.softserve.if072.restservice.exception.DataNotFoundException;
+import com.softserve.if072.restservice.dao.mybatisdao.StorageDAO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/**
+ * Created by dyndyn on 21.01.2017.
+ */
 @Service
-public class StorageService {
 public class StorageService{
     private StorageDAO storageDAO;
 
     @Autowired
-    private StorageDAO storageDAO;
+    public StorageService(StorageDAO storageDAO) {
         this.storageDAO = storageDAO;
     }
 
@@ -29,33 +29,23 @@ public class StorageService{
         }
     }
 
-    public Storage getById(int id) throws DataNotFoundException {
-        Storage storage = storageDAO.getByID(id);
-        if (storage != null) {
-            return storage;
-        } else {
-            throw new DataNotFoundException(String.format("Storage with id %d was not found", id));
-        }
-    }
-
     public void insert(Storage storage) {
         storageDAO.insert(storage);
     }
+
+    public void update(Storage storage) throws DataNotFoundException {
+        if (storage.getEndDate() != null) {
+            storageDAO.update(storage);
         } else {
             storageDAO.updateAmount(storage);
         }
     }
 
-    public void update(Storage storage) throws DataNotFoundException {
-        storageDAO.update(storage);
-    }
-
-    public void delete(int id) throws DataNotFoundException {
-        Storage storage = storageDAO.getByID(id);
+    public void delete(Storage storage) throws DataNotFoundException {
         if (storage != null) {
-            storageDAO.deleteById(id);
+            storageDAO.delete(storage);
         } else {
-            throw new DataNotFoundException(String.format("Storage with id %d was not found", id));
+            throw new DataNotFoundException("Storage was not found");
         }
     }
 }
