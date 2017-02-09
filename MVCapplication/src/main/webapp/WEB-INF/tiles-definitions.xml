@@ -53,6 +53,12 @@
         <put-attribute name="body" value="/WEB-INF/views/login.jsp" />
     </definition>
 
+    <definition name="register" extends="mainLayout">
+        <put-attribute name="header" value="" />
+        <put-attribute name="title" value="Sign Up" />
+        <put-attribute name="body" value="/WEB-INF/views/register.jsp" />
+    </definition>
+
     <definition name="product" extends="mainLayout">
         <put-attribute name="title" value="Product Tracker Project" />
         <put-attribute name="body" value="/WEB-INF/views/product.jsp" />

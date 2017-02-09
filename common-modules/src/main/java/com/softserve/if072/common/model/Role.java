@@ -6,6 +6,7 @@ public class Role implements GrantedAuthority {
 
     private int id;
     private String authority;
+    private String description;
 
     public Role() { }
 
@@ -28,6 +29,14 @@ public class Role implements GrantedAuthority {
     @Override
     public String getAuthority() {
         return authority;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     @Override
