@@ -34,11 +34,11 @@
                 <tbody>
                 <c:forEach items="${stores}" var="store">
                 <tr class="gradeA">
-                        <td><c:out value="${store.name}"/></td>
-                        <td><c:out value="${store.address}"/></td>
+                        <td><"${store.name}"/></td>
+                        <td><"${store.address}"/></td>
                     <td>
                         <button type="button" class="btn btn-outline btn-link"
-                                href="<c:url value="../product"/>">products</button>
+                                onclick="<c:url value="../product"/>">products</button>
                     </td>
                 </tr>
                 </c:forEach>
@@ -46,8 +46,10 @@
     </div>
 </div>
 <p>
-    <button type="button" class="btn btn-outline btn-primary">AddStore</button>
+    <button type="button" class="btn btn-outline btn-primary" id="button1">AddStore</button>
 </p>
+
+
 </body>
 </html>
 

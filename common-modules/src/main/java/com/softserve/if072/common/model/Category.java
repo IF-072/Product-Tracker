@@ -11,12 +11,14 @@ public class Category {
     private int id;
     private String name;
     private User user;
+    private boolean isEnabled;
 
     public Category() {}
 
-    public Category(String name, User user) {
+    public Category(String name, User user, boolean isEnabled) {
         this.name = name;
         this.user = user;
+        this.isEnabled = isEnabled;
     }
 
     public int getId() {
@@ -43,12 +45,21 @@ public class Category {
         this.user = user;
     }
 
+    public boolean isEnabled() {
+        return isEnabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        isEnabled = enabled;
+    }
+
     @Override
     public String toString() {
         return "Category{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", user=" + user +
+                ", isEnabled=" + isEnabled +
                 '}';
     }
 }

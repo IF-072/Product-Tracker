@@ -6,7 +6,6 @@ import com.softserve.if072.common.model.Store;
 import com.softserve.if072.restservice.exception.DataNotFoundException;
 import com.softserve.if072.restservice.service.StoreService;
 
-import org.apache.ibatis.annotations.Param;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,12 +15,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
@@ -141,7 +140,7 @@ public class StoreController {
     @GetMapping("/{storeId}/products/{productId}")
     @ResponseBody
     @ResponseStatus(value = HttpStatus.OK)
-    public Product getProductFromStore(@PathVariable("storeId") Integer storeId, @PathVariable ("productId") Integer productId,
+    public Product getProductFromStore(@PathVariable Integer storeId, @PathVariable  Integer productId,
                                        HttpServletResponse response) {
         try {
             Product product = storeService.getProductFromStoreById(storeId, productId);
@@ -156,7 +155,7 @@ public class StoreController {
 
     @DeleteMapping("/{storeId}/products/{productId}")
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
-    public void deleteProductFromStore(@PathVariable("storeId") Integer storeId, @PathVariable ("productId") Integer
+    public void deleteProductFromStore(@PathVariable Integer storeId, @PathVariable Integer
             productId, HttpServletResponse response) {
         try {
             storeService.deleteProductFromStoreById (storeId, productId);

@@ -43,6 +43,16 @@
         <put-attribute name="body" value="/WEB-INF/views/home.jsp" />
     </definition>
 
+    <definition name="storage" extends="mainLayout">
+        <put-attribute name="title" value="Product Tracker Project" />
+        <put-attribute name="body" value="/WEB-INF/views/storage.jsp" />
+    </definition>
+    <definition name="login" extends="mainLayout">
+        <put-attribute name="header" value="" />
+        <put-attribute name="title" value="Please Log In to continue" />
+        <put-attribute name="body" value="/WEB-INF/views/login.jsp" />
+    </definition>
+
     <definition name="product" extends="mainLayout">
         <put-attribute name="title" value="Product Tracker Project" />
         <put-attribute name="body" value="/WEB-INF/views/product.jsp" />
@@ -54,8 +64,3 @@
     </definition>
 
 </tiles-definitions>
-
-
-
-
-

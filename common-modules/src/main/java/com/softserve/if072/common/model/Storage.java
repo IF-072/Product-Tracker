@@ -1,5 +1,7 @@
 package com.softserve.if072.common.model;
 
+import java.sql.Date;
+
 /**
  * Created by dyndyn on 17.01.2017.
  */
@@ -7,13 +9,13 @@ public class Storage {
     private User user;
     private Product product;
     private int amount;
-    private int id;
+    private Date endDate;
 
-    public Storage(User user, Product product, int amount, int id) {
+    public Storage(User user, Product product, int amount, Date endDate) {
         this.user = user;
         this.product = product;
         this.amount = amount;
-        this.id = id;
+        this.endDate = endDate;
     }
 
     public Storage() {
@@ -43,12 +45,12 @@ public class Storage {
         this.amount = amount;
     }
 
-    public int getId() {
-        return id;
+    public Date getEndDate() {
+        return endDate;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
     }
 
     @Override
@@ -57,7 +59,7 @@ public class Storage {
                 "user=" + user +
                 ", product=" + product +
                 ", amount=" + amount +
-                ", id=" + id +
+                ", endDate=" + endDate +
                 '}';
     }
 }
