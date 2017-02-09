@@ -8,6 +8,7 @@ import com.softserve.if072.common.model.Unit;
 import com.softserve.if072.common.model.User;
 import com.softserve.if072.restservice.dao.DAO;
 import org.apache.ibatis.annotations.One;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Result;
 import org.apache.ibatis.annotations.Results;
 import org.apache.ibatis.annotations.Select;
@@ -20,6 +21,8 @@ import java.util.List;
 
 /**
  * Contains MyBatis methods for working with Store DB
+ *
+ * @author Nazar Vynnyk
  */
 
 @Repository
@@ -48,6 +51,7 @@ public interface StoreDAO extends DAO<Store> {
     Store getByID(int id);
 
     @Override
+
     @Insert("INSERT into store(name, address, user_id, is_enabled) VALUES(#{name}, #{address}, #{user.id}, " +
             "#{isEnabled}))")
     void insert(Store store);
@@ -60,12 +64,10 @@ public interface StoreDAO extends DAO<Store> {
     @Delete("DELETE FROM store WHERE id = #{id}")
     void deleteById(int id);
 
+
     @Select("SELECT id, name, description, image_id, user_id, category_id, unit_id, is_enabled FROM product  JOIN " +
             "stores_products ON product.id = stores_products.product_id WHERE store_id = #{storeId}")
     @Results(value = {
-            @Result(property = "id", column = "id"),
-            @Result(property = "name", column = "name"),
-            @Result(property = "description", column = "description"),
             @Result(property = "image", column = "image_id", javaType = Image.class,
                     one = @One(select = "com.softserve.if072.restservice.dao.mybatisdao.ImageDAO.getByID")),
             @Result(property = "user", column = "user_id", javaType = User.class,
@@ -95,10 +97,10 @@ public interface StoreDAO extends DAO<Store> {
                     one = @One(select = "com.softserve.if072.restservice.dao.mybatisdao.UnitDAO.getByID")),
             @Result(property = "isEnabled", column = "is_enabled")
     })
-    Product getProductFromStoreById(int storeId, int productId);
+    Product getProductFromStoreById(@Param ("storeId") Integer storeId, @Param ("productId")Integer productId);
 
-    @Delete("DELETE FROM stores_products WHERE store_id = #{id} and product_id = #{id}")
-    void deleteProductFromStoreById (int storeId, int productId);
+    @Delete("DELETE FROM stores_products WHERE store_id = #{storeId} and product_id = #{productId}")
+    void deleteProductFromStoreById (@Param ("storeId") Integer storeId, @Param ("productId")Integer productId);
 
     @Insert("INSERT into stores_products(store_id, product_id) VALUES(#{store.id}, #{product.id})")
     void addProductToStore(Store store, Product product);

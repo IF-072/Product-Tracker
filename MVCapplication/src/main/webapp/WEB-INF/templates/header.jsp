@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <div id="wrapper">
 
 <!-- Navigation -->
@@ -109,16 +110,26 @@
                     <!-- /input-group -->
                 </li>
                 <li>
-                    <a href="home" class="active"><i class="fa fa-home fa-fw"></i> Home</a>
+                    <a href="<c:url value="../home"/>" class="active"><i class="fa fa-home fa-fw"></i> Home</a>
                 </li>
                 <li>
+<<<<<<< HEAD
                     <a href="product/" class="active"><i class="fa fa-list-alt fa-fw"></i> My Products</a>
+=======
+                    <a href="<c:url value="../product"/>" class="active"><i class="fa fa-list-alt fa-fw"></i> My
+                        Products</a>
+>>>>>>> develop
                 </li>
                 <li>
-                    <a href="#" class="active"><i class="fa fa-globe fa-fw"></i> My Stores</a>
+                    <a href="<c:url value="../stores/"/>" class="active"><i class="fa fa-globe fa-fw"></i> My
+                        Stores</a>
                 </li>
                 <li>
                     <a href="#" class="active"><i class="fa fa-archive fa-fw"></i> Shopping List</a>
+                </li>
+                <li>
+                    <a href="<c:url value="../storage/"/>" class="active"><i class="fa fa-archive fa-fw"></i> My
+                        Storage</a>
                 </li>
                 <li>
                     <p><button type="button" class="btn btn-outline btn-primary">Go shopping</button> </p>

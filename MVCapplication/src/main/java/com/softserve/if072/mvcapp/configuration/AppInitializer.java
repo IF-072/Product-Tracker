@@ -1,14 +1,15 @@
-package com.softserve.if072.restservice.configuration;
+package com.softserve.if072.mvcapp.configuration;
 
+import com.softserve.if072.mvcapp.filter.TokenCookieToHeaderFilter;
 import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 import javax.servlet.Filter;
 
-public class AppConfig extends AbstractAnnotationConfigDispatcherServletInitializer {
+public class AppInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
 
     @Override
     protected Class<?>[] getRootConfigClasses() {
-        return new Class[]{DataSourceConfig.class};
+        return new Class<?>[] {TilesConfig.class};
     }
 
     @Override
@@ -25,8 +26,8 @@ public class AppConfig extends AbstractAnnotationConfigDispatcherServletInitiali
     protected Filter[] getServletFilters() {
         CharacterEncodingFilter characterEncodingFilter = new CharacterEncodingFilter();
         characterEncodingFilter.setEncoding("UTF-8");
-        return new Filter[] { characterEncodingFilter};
+        TokenCookieToHeaderFilter tokenCookieToHeaderFilter = new TokenCookieToHeaderFilter();
+        return new Filter[] { characterEncodingFilter, tokenCookieToHeaderFilter};
     }
-
 }
 

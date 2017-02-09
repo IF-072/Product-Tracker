@@ -36,6 +36,7 @@
             <add-attribute value="/js/enableTables.js" />
 
         </put-list-attribute>
+
     </definition>
 
     <definition name="home" extends="mainLayout">
@@ -43,8 +44,24 @@
         <put-attribute name="body" value="/WEB-INF/views/home.jsp" />
     </definition>
 
+    <definition name="storage" extends="mainLayout">
+        <put-attribute name="title" value="Product Tracker Project" />
+        <put-attribute name="body" value="/WEB-INF/views/storage.jsp" />
+    </definition>
+    <definition name="login" extends="mainLayout">
+        <put-attribute name="header" value="" />
+        <put-attribute name="title" value="Please Log In to continue" />
+        <put-attribute name="body" value="/WEB-INF/views/login.jsp" />
+    </definition>
+
     <definition name="product" extends="mainLayout">
         <put-attribute name="title" value="Product Tracker Project" />
         <put-attribute name="body" value="/WEB-INF/views/product.jsp" />
     </definition>
+
+    <definition name="allStores" extends="mainLayout">
+        <put-attribute name="title" value="Product Tracker Project" />
+        <put-attribute name="body" value="/WEB-INF/views/allStores.jsp" />
+    </definition>
+
 </tiles-definitions>
