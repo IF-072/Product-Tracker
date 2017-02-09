@@ -31,7 +31,8 @@ import javax.validation.Valid;
 public class LoginController {
 
     private static final Logger LOGGER = LogManager.getLogger(LoginController.class);
-    private String REST_SERVICE_URL;
+    private final String REST_SERVICE_URL;
+    private final String AUTHENTICATION_COOKIE_NAME;
 
     private Environment environment;
 
@@ -39,6 +40,7 @@ public class LoginController {
     public LoginController(Environment environment) {
         this.environment = environment;
         this.REST_SERVICE_URL = environment.getProperty("application.restServiceURL");
+        this.AUTHENTICATION_COOKIE_NAME = environment.getProperty("application.authenticationCookieName");
     }
 
     @RequestMapping(value = "", method = RequestMethod.GET)
@@ -66,7 +68,7 @@ public class LoginController {
             HttpStatus statusCode = response.getStatusCode();
 
             if (statusCode.equals(HttpStatus.OK) && responseBody != null && !responseBody.isEmpty()) {
-                Cookie cookie = new Cookie("X-Token", responseBody);
+                Cookie cookie = new Cookie(AUTHENTICATION_COOKIE_NAME, responseBody);
                 if (rememberMe) {
                     cookie.setMaxAge(999999);
                 }

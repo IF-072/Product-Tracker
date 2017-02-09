@@ -14,10 +14,16 @@
                 <div class="panel-body">
                     <form:form role="form" method="POST" modelAttribute="loginForm">
                         <fieldset>
+                            <c:if test="${not empty informationMessage}">
+                                <div class="alert alert-warning">
+                                    <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                                   ${informationMessage}
+                                </div>
+                            </c:if>
                             <c:if test="${not empty loginError}">
                                 <div class="alert alert-danger">
                                     <span class="glyphicon glyphicon-minus-sign" aria-hidden="true"></span>
-                                    <c:out value="${loginError}" />
+                                   ${loginError}
                                 </div>
                             </c:if>
                             <c:if test="${not empty errorMessages}">
