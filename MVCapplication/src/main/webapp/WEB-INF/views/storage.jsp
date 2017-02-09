@@ -12,7 +12,8 @@
                     <th>Product</th>
                     <th>End date</th>
                     <th>Amount</th>
-                    <th></th>
+                    <th>Used</th>
+                    <th>Add to sopping list</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -22,8 +23,10 @@
                         <td>${storage.product.name}</td>
                         <td>${storage.endDate}</td>
                         <td>${storage.amount}</td>
-                        <td onclick="minus(${storage.user.id}, ${storage.product.id}, ${storage.amount}, ${loop.count});">
+                        <td onclick="minus(${storage.user.id}, ${storage.product.id}, ${loop.count});">
                             <p class="fa fa-minus"></p></td>
+                        <td onclick="addToShoppingList(${storage.user.id}, ${storage.product.id});">
+                            <p class="fa fa-check"></p></td>
                     </tr>
                 </c:forEach>
                 </tbody>
@@ -33,11 +36,13 @@
 </div>
 
 <script type="text/javascript" language="JavaScript">
-    function minus(userId, productId, amount, index) {
+    function minus(userId, productId, index) {
+        var tr = document.getElementsByTagName("tr");
+        var amount = tr[index].children[3].innerHTML;
         amount--;
-        if (amount >= 0) {
+        if (amount > 0) {
             $.ajax({
-                url: "http://localhost:8080/client/storage/update",
+                url: "http://localhost:8080/storage/update",
                 method: "POST",
                 data: {
                     userId: userId,
@@ -45,7 +50,6 @@
                     amount: amount
                 },
                 success: function () {
-                    var tr = document.getElementsByTagName("tr");
                     tr[index].children[3].innerHTML = amount;
                 },
                 error: function (jqXHR, exception) {
@@ -54,5 +58,23 @@
                 }
             });
         }
+    }
+
+    function addToShoppingList(userId, productId) {
+        $.ajax({
+            url: "http://localhost:8080/storage/addToSL",
+            method: "POST",
+            data: {
+                userId: userId,
+                productId: productId,
+            },
+            success: function () {
+            },
+            error: function (jqXHR, exception) {
+                console.log(jqXHR);
+                console.log(exception);
+            }
+        });
+
     }
 </script>

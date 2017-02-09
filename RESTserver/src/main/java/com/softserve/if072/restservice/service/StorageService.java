@@ -1,5 +1,6 @@
 package com.softserve.if072.restservice.service;
 
+import com.softserve.if072.common.model.ShoppingList;
 import com.softserve.if072.common.model.Storage;
 import com.softserve.if072.restservice.exception.DataNotFoundException;
 import com.softserve.if072.restservice.dao.mybatisdao.StorageDAO;
@@ -14,10 +15,12 @@ import java.util.List;
 @Service
 public class StorageService{
     private StorageDAO storageDAO;
+    private ShoppingListService shoppingListService;
 
     @Autowired
-    public StorageService(StorageDAO storageDAO) {
+    public StorageService(StorageDAO storageDAO, ShoppingListService shoppingListService) {
         this.storageDAO = storageDAO;
+        this.shoppingListService = shoppingListService;
     }
 
     public List<Storage> getByUserId(int user_id) throws DataNotFoundException {
@@ -34,10 +37,17 @@ public class StorageService{
     }
 
     public void update(Storage storage) throws DataNotFoundException {
+        if(storage.getAmount() < 0){
+            throw new DataNotFoundException("illegal arguments!");
+        }
+
         if (storage.getEndDate() != null) {
             storageDAO.update(storage);
         } else {
             storageDAO.updateAmount(storage);
+        }
+        if (storage.getAmount() <= 1){
+            shoppingListService.insert(new ShoppingList(storage.getUser(), storage.getProduct(), 1));
         }
     }
 
