@@ -2,12 +2,6 @@
  * Created by Vitaliy Malisevych on 06.02.2017.
  */
 
-$(document).ready(function() {
-    $('#dataTables-example').DataTable({
-        responsive: true
-    });
-});
-
 var table = $('#productData').DataTable();
 
 $('#dialogAdd').dialog({autoOpen:false, buttons:{
