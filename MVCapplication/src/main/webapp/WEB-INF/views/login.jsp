@@ -17,7 +17,7 @@
                             <c:if test="${not empty loginError}">
                                 <div class="alert alert-danger">
                                     <span class="glyphicon glyphicon-minus-sign" aria-hidden="true"></span>
-                                    <c:out value="${loginError}" />
+                                    ${loginError}
                                 </div>
                             </c:if>
                             <c:if test="${not empty errorMessages}">

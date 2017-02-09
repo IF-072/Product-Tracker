@@ -140,7 +140,7 @@ public class StoreController {
     @GetMapping("/{storeId}/products/{productId}")
     @ResponseBody
     @ResponseStatus(value = HttpStatus.OK)
-    public Product getProductFromStore(@PathVariable("storeId") Integer storeId, @PathVariable ("productId") Integer productId,
+    public Product getProductFromStore(@PathVariable Integer storeId, @PathVariable  Integer productId,
                                        HttpServletResponse response) {
         try {
             Product product = storeService.getProductFromStoreById(storeId, productId);
@@ -155,7 +155,7 @@ public class StoreController {
 
     @DeleteMapping("/{storeId}/products/{productId}")
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
-    public void deleteProductFromStore(@PathVariable("storeId") Integer storeId, @PathVariable ("productId") Integer
+    public void deleteProductFromStore(@PathVariable Integer storeId, @PathVariable Integer
             productId, HttpServletResponse response) {
         try {
             storeService.deleteProductFromStoreById (storeId, productId);

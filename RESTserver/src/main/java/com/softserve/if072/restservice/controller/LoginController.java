@@ -7,7 +7,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -30,7 +35,7 @@ public class LoginController {
             if (user == null) {
                 throw new BadCredentialsException("Invalid login");
             }
-            if (user.getPassword().equals(password) == false) {
+            if (!user.getPassword().equals(password)) {
                 throw new BadCredentialsException("Wrong password");
             }
             return new ResponseEntity<>(tokenService.generateTokenFor(login), HttpStatus.OK);

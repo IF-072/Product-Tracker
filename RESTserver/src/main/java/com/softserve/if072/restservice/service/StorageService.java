@@ -6,14 +6,19 @@ import com.softserve.if072.restservice.dao.mybatisdao.StorageDAO;
 import com.softserve.if072.restservice.exception.DataNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 public class StorageService {
+public class StorageService{
+    private StorageDAO storageDAO;
 
     @Autowired
     private StorageDAO storageDAO;
+        this.storageDAO = storageDAO;
+    }
 
     public List<Storage> getByUserId(int user_id) throws DataNotFoundException {
         List<Storage> list = storageDAO.getByUserID(user_id);
@@ -35,6 +40,10 @@ public class StorageService {
 
     public void insert(Storage storage) {
         storageDAO.insert(storage);
+    }
+        } else {
+            storageDAO.updateAmount(storage);
+        }
     }
 
     public void update(Storage storage) throws DataNotFoundException {
