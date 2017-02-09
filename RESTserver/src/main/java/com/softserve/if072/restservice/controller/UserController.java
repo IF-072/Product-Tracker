@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -20,6 +21,7 @@ import java.util.List;
  * @author Oleh Pochernin
  */
 @RestController
+@RequestMapping("api/user")
 public class UserController {
     private static final Logger LOG = LogManager.getLogger(UserController.class);
 
@@ -29,7 +31,7 @@ public class UserController {
     /**
      * Allows to obtain all users.
      */
-    @RequestMapping(value = "/user/", method = RequestMethod.GET)
+    @RequestMapping(value = "/", method = RequestMethod.GET)
     public ResponseEntity<List<User>> getAllUsers() {
         List<User> users = userService.getAll();
 
@@ -45,7 +47,7 @@ public class UserController {
      *
      * @param id user's id
      */
-    @RequestMapping(value = "/user/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public ResponseEntity<User> getUserById(@PathVariable("id") int id) {
         LOG.debug("Fetching User with id " + id);
         User user = userService.getById(id);

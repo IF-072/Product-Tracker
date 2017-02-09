@@ -16,7 +16,7 @@ import org.apache.ibatis.annotations.Update;
 import java.util.List;
 
 /**
- * This class allows to get user model from a database.
+ * This class allows to get a user model from a database.
  *
  * @author Oleh Pochernin
  */
@@ -45,15 +45,15 @@ public interface UserDAO extends DAO<User> {
             @Result(property = "stores", column = "id", javaType = List.class,
                     many = @Many(select = "com.softserve.if072.restservice.dao.mybatisdao.StorageDAO.getByUserID")),
             @Result(property = "products", column = "id", javaType = List.class,
-                    many = @Many(select = "com.softserve.if072.restservice.dao.mybatisdao.ProductDAO.getByUserID")),
+                    many = @Many(select = "com.softserve.if072.restservice.dao.mybatisdao.ProductDAO.getAllByUserId")),
             @Result(property = "carts", column = "id", javaType = List.class,
-                    many = @Many(select = "com.softserve.if072.restservice.dao.mybatisdao.CartDAO.getByUserID")),
-            @Result(property = "categories", column = "id", javaType = List.class,
-                    many = @Many(select = "com.softserve.if072.restservice.dao.mybatisdao.CategoryDAO.getByUserID")),
+                    many = @Many(select = "com.softserve.if072.restservice.mapper.CartMapper.getByUserID")),
+//            @Result(property = "categories", column = "id", javaType = List.class,
+//                    many = @Many(select = "com.softserve.if072.restservice.dao.mybatisdao.CategoryDAO.getByUserID")),
             @Result(property = "shoppingLists", column = "id", javaType = List.class,
                     many = @Many(select = "com.softserve.if072.restservice.dao.mybatisdao.ShoppingListDAO.getByUserID")),
             @Result(property = "storages", column = "id", javaType = List.class,
-                    many = @Many(select = "com.softserve.if072.restservice.dao.mybatisdao.StorageDAO.getByUserID")),
+                    many = @Many(select = "com.softserve.if072.restservice.dao.mybatisdao.StorageDAO.getByUserID"))
     })
     List<User> getAll();
 

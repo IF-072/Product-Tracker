@@ -4,12 +4,12 @@ import com.softserve.if072.common.model.ShoppingList;
 import com.softserve.if072.restservice.dao.mybatisdao.ShoppingListDAO;
 import com.softserve.if072.restservice.exception.DataNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-/**
- * Created by dyndyn on 21.01.2017.
- */
+@Service
+public class ShoppingListService {
 public class ShoppingListService{
     private ShoppingListDAO shoppingListDAO;
 
@@ -30,6 +30,11 @@ public class ShoppingListService{
     public void insert(ShoppingList shoppingList) {
         shoppingListDAO.insert(shoppingList);
     }
+            return shoppingList;
+        } else {
+            throw new DataNotFoundException(String.format("ShoppingList with id %d was not found", id));
+        }
+    }
 
     public void update(ShoppingList shoppingList) throws DataNotFoundException {
         shoppingListDAO.update(shoppingList);
@@ -40,6 +45,11 @@ public class ShoppingListService{
             shoppingListDAO.delete(shoppingList);
         } else {
             throw new DataNotFoundException("ShoppingList was not found");
+        }
+    }
+            shoppingListDAO.deleteById(id);
+        } else {
+            throw new DataNotFoundException(String.format("ShoppingList with id %d was not found", id));
         }
     }
 }
