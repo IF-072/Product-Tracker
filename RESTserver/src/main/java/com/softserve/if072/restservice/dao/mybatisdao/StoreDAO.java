@@ -61,7 +61,7 @@ public interface StoreDAO extends DAO<Store> {
     void update(Store store);
 
     @Override
-    @Delete("DELETE FROM store WHERE id = #{id}")
+    @Delete("UPDATE store SET is_enabled = 0 WHERE id = #{id}")
     void deleteById(int id);
 
 

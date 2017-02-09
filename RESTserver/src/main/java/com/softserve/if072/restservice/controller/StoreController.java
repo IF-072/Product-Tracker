@@ -35,7 +35,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/stores")
-@PropertySource(value = {"classpath:message.properties"})
 public class StoreController {
     public static final Logger LOGGER =  LogManager.getLogger(StoreController.class);
     private StoreService storeService;
@@ -44,9 +43,6 @@ public class StoreController {
     public StoreController(StoreService storeService){
         this.storeService = storeService;
     }
-
-    @Value("${store.notFound}")
-    private String storeNotFound;
 
     @GetMapping ("/user/{userId}")
     @ResponseBody
@@ -58,7 +54,7 @@ public class StoreController {
             return stores;
         } catch (DataNotFoundException e) {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-            LOGGER.error("Stores were not found", e);
+            LOGGER.error(e.getMessage());
             return null;
         }
     }
@@ -73,7 +69,7 @@ public class StoreController {
             return store;
         } catch (DataNotFoundException e) {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-            LOGGER.error(String.format(storeNotFound, id), e);
+            LOGGER.error(e.getMessage());
             return null;
         }
     }
@@ -97,7 +93,7 @@ public class StoreController {
             return store;
         } catch (DataNotFoundException e) {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-            LOGGER.error(String.format(storeNotFound, id), e);
+            LOGGER.error(String.format("Cannot update Store %d", id), e);
             return null;
         }
     }
@@ -110,7 +106,7 @@ public class StoreController {
             LOGGER.info(String.format("Store with id %d was deleted", id));
         } catch (DataNotFoundException e) {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-            LOGGER.error(String.format(storeNotFound, id), e);
+            LOGGER.error(e.getMessage());
         }
     }
 
@@ -132,7 +128,7 @@ public class StoreController {
             return products;
         } catch (DataNotFoundException e) {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-            LOGGER.error("Products were not found", e);
+            LOGGER.error(e.getMessage());
             return null;
         }
    }
@@ -148,7 +144,7 @@ public class StoreController {
             return product;
         } catch (DataNotFoundException e) {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-            LOGGER.error((String.format("Product %d from Store %d not found", productId, storeId)), e);
+            LOGGER.error(e.getMessage());
             return null;
         }
     }
@@ -162,7 +158,7 @@ public class StoreController {
             LOGGER.info(String.format("Product %d from Store %d was deleted", productId, storeId));
         } catch (DataNotFoundException e) {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-            LOGGER.error((String.format("Product %d from Store %d not found", productId, storeId)), e);
+            LOGGER.error(e.getMessage());
         }
     }
 

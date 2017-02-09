@@ -50,11 +50,43 @@
 </p>
 
 
+<%--<input type="button" value="Click Me" id="button1" />--%>
+<%--<script type="text/javascript">--%>
+<%--$('document').ready(function () {--%>
+<%--$('#button1').click(function () {--%>
+<%--alert('jQuery Tutorial');--%>
+<%--});--%>
+<%--});--%>
+<%--</script>--%>
+
+
+<script type="text/javascript">
+    window.onload = function ()
+    {
+        // For all modern browsers
+        if (document.addEventListener)
+        {
+            document.getElementById('button1')
+                    .addEventListener('click', clickHandler, false);
+        }
+        else
+        // For Internet Explorer < 9
+        {
+            document.getElementById('button1')
+                    .attachEvent('onclick', clickHandler);
+        }
+
+        function clickHandler()
+        {
+            alert('jQuery Tutorial');
+        }
+    };
+</script>
+<%--<input type="button" value="Click Me" id="button1" />--%>
+
+
 </body>
 </html>
 
 
-$('#example tbody').on( 'AddStore', 'button', function () {
-var data = table.row( $(this).parents('tr') ).data();
-alert( data[0] +"'s salary is: "+ data[ 5 ] );
-} );
+
