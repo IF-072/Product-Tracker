@@ -30,7 +30,6 @@ $('#dialogAdd').dialog({autoOpen:false, buttons:{
 
 
         $.post("http://localhost:8080/product/add", product,
-        $.post("http://localhost:8080/product/add", {name : $('#name').val(),'description':$('#description').val()},
             function(result){
                 $('#productData').dataTable().fnAddData([
                     $('#name').val(),
