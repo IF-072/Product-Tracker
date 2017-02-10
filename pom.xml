@@ -208,6 +208,15 @@
                 <version>4.2.1.RELEASE</version>
             </dependency>
 
+            <!-- https://mvnrepository.com/artifact/commons-dbcp/commons-dbcp -->
+            <!-- is used to provide a pooled data source -->
+            <dependency>
+                <groupId>commons-dbcp</groupId>
+                <artifactId>commons-dbcp</artifactId>
+                <version>1.4</version>
+            </dependency>
+
+
         </dependencies>
     </dependencyManagement>
 

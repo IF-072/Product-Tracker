@@ -11,4 +11,4 @@
 # Maven
 log/
 target/
-/RESTserver/src/main/resources/application.properties
+/RESTserver/src/main/resources/database.properties
