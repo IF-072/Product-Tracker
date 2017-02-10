@@ -1,25 +1,27 @@
 package com.softserve.if072.common.model;
 
+import java.sql.Timestamp;
+
 /**
- * The Cart class stores information about products and their amount
- * that user is going to buy in current store
+ * The History class stores information about
+ * how many units of specific product and when were used by current user
  *
  * @author Igor Kryviuk
  */
-public class Cart {
+public class History {
     private User user;
-    private Store store;
     private Product product;
     private int amount;
+    private Timestamp usedDate;
 
-    public Cart() {
+    public History() {
     }
 
-    public Cart(User user, Store store, Product product, int amount) {
+    public History(User user, Product product, int amount, Timestamp usedDate) {
         this.user = user;
-        this.store = store;
         this.product = product;
         this.amount = amount;
+        this.usedDate = usedDate;
     }
 
     public User getUser() {
@@ -28,14 +30,6 @@ public class Cart {
 
     public void setUser(User user) {
         this.user = user;
-    }
-
-    public Store getStore() {
-        return store;
-    }
-
-    public void setStore(Store store) {
-        this.store = store;
     }
 
     public Product getProduct() {
@@ -54,16 +48,24 @@ public class Cart {
         this.amount = amount;
     }
 
+    public Timestamp getUsedDate() {
+        return usedDate;
+    }
+
+    public void setUsedDate(Timestamp usedDate) {
+        this.usedDate = usedDate;
+    }
+
     @Override
     public String toString() {
-        return "Cart{\nUser: " +
+        return "History{\nUser: " +
                 user.getName() +
                 ", email: " + user.getEmail() +
-                ";\nStore:  " + store.getName() +
-                ";\nProduct: " + product.getName() +
-                ", category: " + product.getCategory() +
-                ", amount: " + amount +
+                "\n used  " +
+                amount + " " +
                 product.getUnit().getName() +
+                " " + product.getName() +
+                " " + usedDate +
                 "\n}";
     }
 }

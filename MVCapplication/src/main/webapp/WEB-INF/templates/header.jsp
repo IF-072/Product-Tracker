@@ -81,7 +81,7 @@
                 <i class="fa fa-user fa-fw"></i> <i class="fa fa-caret-down"></i>
             </a>
             <ul class="dropdown-menu dropdown-user">
-                <li><a href="#"><i class="fa fa-user fa-fw"></i> User Profile</a>
+                <li><a href="/profile"><i class="fa fa-user fa-fw"></i> User Profile</a>
                 </li>
                 <li><a href="#"><i class="fa fa-gear fa-fw"></i> Settings</a>
                 </li>
@@ -113,12 +113,8 @@
                     <a href="<c:url value="../home"/>" class="active"><i class="fa fa-home fa-fw"></i> Home</a>
                 </li>
                 <li>
-<<<<<<< HEAD
-                    <a href="product/" class="active"><i class="fa fa-list-alt fa-fw"></i> My Products</a>
-=======
-                    <a href="<c:url value="../product"/>" class="active"><i class="fa fa-list-alt fa-fw"></i> My
+                    <a href="<c:url value="../product/"/>" class="active"><i class="fa fa-list-alt fa-fw"></i> My
                         Products</a>
->>>>>>> develop
                 </li>
                 <li>
                     <a href="<c:url value="../stores/"/>" class="active"><i class="fa fa-globe fa-fw"></i> My
