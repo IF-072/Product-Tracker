@@ -1,6 +1,10 @@
 package com.softserve.if072.mvcapp.controller;
 
 import com.softserve.if072.common.model.User;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -21,9 +25,18 @@ import java.util.Arrays;
  * @author Oleh Pochernin
  */
 @Controller
+@PropertySource(value = {"classpath:application.properties"})
 public class UserProfileController {
-    private static final String GET_CURRENT_USER = "http://localhost:8080/rest/api/security/user/current";
+    private static final Logger LOG = LogManager.getLogger(UserProfileController.class);
 
+    @Value("${service.user.current}")
+    private String getCurrentUser;
+
+    /**
+     * This method extract a user model for profile view.
+     *
+     * @return profile's view url
+     */
     @RequestMapping("/profile")
     public String getUserProfilePage(HttpServletRequest request, ModelMap model) {
         RestTemplate restTemplate = new RestTemplate();
@@ -33,7 +46,7 @@ public class UserProfileController {
         headers.add("X-Token", request.getHeader("X-Token"));
 
         HttpEntity entity = new HttpEntity(headers);
-        HttpEntity<User> response = restTemplate.exchange(GET_CURRENT_USER, HttpMethod.GET, entity, User.class);
+        HttpEntity<User> response = restTemplate.exchange(getCurrentUser, HttpMethod.GET, entity, User.class);
         User user = response.getBody();
         model.addAttribute("user", user);
 
@@ -42,6 +55,7 @@ public class UserProfileController {
 
     @ExceptionHandler(HttpClientErrorException.class)
     public String handleException() {
+        LOG.warn("User has tried to visit secured page without authorization.");
 
         return "login";
     }

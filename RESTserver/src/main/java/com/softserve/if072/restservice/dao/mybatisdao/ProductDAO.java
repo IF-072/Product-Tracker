@@ -103,7 +103,7 @@ public interface ProductDAO extends DAO<Product> {
     })
     public List<Product> getProductsByStoreId(int storeId);
 
-    @Select("SELECT store.id, store.name, address, store.user_id, latitute, longtitude, store.is_enabled " +
+    @Select("SELECT store.id, store.name, address, store.user_id, latitude, longitude, store.is_enabled " +
             "FROM stores_products JOIN store ON store_id = store.id JOIN product ON " +
             "product_id = product.id WHERE product.id = #{productId}")
     @Results(value = {

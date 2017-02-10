@@ -12,16 +12,14 @@ import org.apache.ibatis.annotations.Result;
 import org.apache.ibatis.annotations.Results;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
-import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 /**
- * This class allows to get a user model from a database.
+ * This class allows to get user model from a database.
  *
  * @author Oleh Pochernin
  */
-@Repository
 public interface UserDAO extends DAO<User> {
     String SELECT_ALL = "SELECT id, name, email, password, role_id, is_enabled FROM user";
     String SELECT_BY_ID = "SELECT id, name, email, password, role_id, is_enabled FROM user WHERE id = #{id}";
@@ -47,15 +45,15 @@ public interface UserDAO extends DAO<User> {
             @Result(property = "stores", column = "id", javaType = List.class,
                     many = @Many(select = "com.softserve.if072.restservice.dao.mybatisdao.StorageDAO.getByUserID")),
             @Result(property = "products", column = "id", javaType = List.class,
-                    many = @Many(select = "com.softserve.if072.restservice.dao.mybatisdao.ProductDAO.getAllByUserId")),
+                    many = @Many(select = "com.softserve.if072.restservice.dao.mybatisdao.ProductDAO.getByUserID")),
             @Result(property = "carts", column = "id", javaType = List.class,
-                    many = @Many(select = "com.softserve.if072.restservice.mapper.CartMapper.getByUserID")),
-//            @Result(property = "categories", column = "id", javaType = List.class,
-//                    many = @Many(select = "com.softserve.if072.restservice.dao.mybatisdao.CategoryDAO.getByUserID")),
+                    many = @Many(select = "com.softserve.if072.restservice.dao.mybatisdao.CartDAO.getByUserID")),
+            @Result(property = "categories", column = "id", javaType = List.class,
+                    many = @Many(select = "com.softserve.if072.restservice.dao.mybatisdao.CategoryDAO.getByUserID")),
             @Result(property = "shoppingLists", column = "id", javaType = List.class,
                     many = @Many(select = "com.softserve.if072.restservice.dao.mybatisdao.ShoppingListDAO.getByUserID")),
             @Result(property = "storages", column = "id", javaType = List.class,
-                    many = @Many(select = "com.softserve.if072.restservice.dao.mybatisdao.StorageDAO.getByUserID"))
+                    many = @Many(select = "com.softserve.if072.restservice.dao.mybatisdao.StorageDAO.getByUserID")),
     })
     List<User> getAll();
 

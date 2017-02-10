@@ -33,7 +33,7 @@ public class StorePageController {
 
         int userId =1;
 
-        final String uri = new String(storeUrl + "user/{userId}");
+        final String uri = new String(storeUrl + "/user/{userId}");
         Map<String, Integer> param = new HashMap<String, Integer>();
         param.put("userId", userId);
 

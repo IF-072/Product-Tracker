@@ -20,27 +20,29 @@ import java.util.List;
 public interface RoleDAO extends DAO<Role> {
 
     @Override
-    @Select("SELECT id, name FROM role")
+    @Select("SELECT id, name, description FROM role")
     @Results(value = {
             @Result(property = "id", column = "id"),
             @Result(property = "authority", column = "name"),
+            @Result(property = "description", column = "description"),
     })
     List<Role> getAll();
 
     @Override
-    @Select("SELECT id, name FROM role WHERE id = #{id}")
+    @Select("SELECT id, name, description FROM role WHERE id = #{id}")
     @Results(value = {
             @Result(property = "id", column = "id"),
             @Result(property = "authority", column = "name"),
+            @Result(property = "description", column = "description"),
     })
     Role getByID(int id);
 
     @Override
-    @Insert("INSERT into role(name) VALUES(#{name})")
+    @Insert("INSERT into role(name, description) VALUES(#{name}, #{description})")
     void insert(Role role);
 
     @Override
-    @Update("UPDATE role SET name = #{name} WHERE id = #{id}")
+    @Update("UPDATE role SET name = #{name}, description=#{description} WHERE id = #{id}")
     void update(Role role);
 
     @Override

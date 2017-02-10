@@ -5,9 +5,13 @@ import com.softserve.if072.restservice.dao.mybatisdao.ShoppingListDAO;
 import com.softserve.if072.restservice.exception.DataNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 
+/**
+ * Created by dyndyn on 21.01.2017.
+ */
 @Service
 public class ShoppingListService {
     private ShoppingListDAO shoppingListDAO;
@@ -19,19 +23,18 @@ public class ShoppingListService {
 
     public List<ShoppingList> getByUserId(int user_id) throws DataNotFoundException {
         List<ShoppingList> list = shoppingListDAO.getByUserID(user_id);
-        if (list != null && !list.isEmpty()) {
+        if (!CollectionUtils.isEmpty(list)) {
             return list;
         } else {
-            throw new DataNotFoundException("ShoppingList not found");
+            throw new DataNotFoundException("ShoppingLists not found");
         }
     }
 
+
     public void insert(ShoppingList shoppingList) {
-        shoppingListDAO.insert(shoppingList);
-    }
-            return shoppingList;
-        } else {
-            throw new DataNotFoundException(String.format("ShoppingList with id %d was not found", id));
+        ShoppingList list = shoppingListDAO.getByClass(shoppingList);
+        if (list == null) {
+            shoppingListDAO.insert(shoppingList);
         }
     }
 
@@ -43,12 +46,7 @@ public class ShoppingListService {
         if (shoppingList != null) {
             shoppingListDAO.delete(shoppingList);
         } else {
-            throw new DataNotFoundException("ShoppingList was not found");
-        }
-    }
-            shoppingListDAO.deleteById(id);
-        } else {
-            throw new DataNotFoundException(String.format("ShoppingList with id %d was not found", id));
+            throw new DataNotFoundException(String.format("ShoppingList with user's id %d and product's id %d was not found", shoppingList.getUser().getId(), shoppingList.getProduct().getId()));
         }
     }
 }
