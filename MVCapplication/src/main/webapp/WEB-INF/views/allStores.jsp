@@ -14,32 +14,31 @@
     <h1 class="page-header">Stores</h1>
 </div>
 
-
 <div class="col-lg-12">
     <div class="panel panel-default">
 
-        <!-- /.panel-heading -->
-
         <div class="panel-body">
-            <table width="100%" class="table table-striped table-bordered table-hover" id="dataTables-example">
+            <table width="100%" class="table table-striped table-bordered table-hover">
                 <thead>
                 <tr>
                     <th>Name</th>
                     <th>Address</th>
                     <th>Products at store</th>
-                    <th colspan="2">Edit </th>
-                    <th colspan="2">/ Delete</th>
+                    <th>Edit</th>
+                    <th>Delete</th>
                 </tr>
                 </thead>
                 <tbody>
                 <c:forEach items="${stores}" var="store">
                 <tr class="gradeA">
-                        <td><"${store.name}"/></td>
-                        <td><"${store.address}"/></td>
+                        <td>"${store.name}"</td>
+                        <td>"${store.address}"</td>
                     <td>
-                        <button type="button" class="btn btn-outline btn-link"
-                                onclick="<c:url value="../product"/>">products</button>
+                        <p> <button type="button" class="btn btn-outline btn-link" id="productButton">products</button>
+                        </p>
                     </td>
+                    <td> <span class = "glyphicon glyphicon-edit"></span></td>
+                    <td><span class = "glyphicon glyphicon-remove-circle"></span></td>
                 </tr>
                 </c:forEach>
         </div>
@@ -49,41 +48,12 @@
     <button type="button" class="btn btn-outline btn-primary" id="button1">AddStore</button>
 </p>
 
-
-<%--<input type="button" value="Click Me" id="button1" />--%>
-<%--<script type="text/javascript">--%>
-<%--$('document').ready(function () {--%>
-<%--$('#button1').click(function () {--%>
-<%--alert('jQuery Tutorial');--%>
-<%--});--%>
-<%--});--%>
-<%--</script>--%>
-
-
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 <script type="text/javascript">
-    window.onload = function ()
-    {
-        // For all modern browsers
-        if (document.addEventListener)
-        {
-            document.getElementById('button1')
-                    .addEventListener('click', clickHandler, false);
-        }
-        else
-        // For Internet Explorer < 9
-        {
-            document.getElementById('button1')
-                    .attachEvent('onclick', clickHandler);
-        }
-
-        function clickHandler()
-        {
-            alert('jQuery Tutorial');
-        }
+    document.getElementById("productButton").onclick = function () {
+        location.href = "../product";
     };
 </script>
-<%--<input type="button" value="Click Me" id="button1" />--%>
-
 
 </body>
 </html>

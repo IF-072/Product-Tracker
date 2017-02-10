@@ -29,7 +29,7 @@ import java.util.List;
 public interface StoreDAO extends DAO<Store> {
 
     @Override
-    @Select("SELECT id, name, address, user_id, is_enabled FROM store")
+    @Select("SELECT id, name, address, latitude, longitude, user_id, is_enabled FROM store")
     @Results(value = {
             @Result(property = "user", column = "user_id", javaType = User.class,
                     one = @One(select = "com.softserve.if072.restservice.dao.mybatisdao.UserDAO.getByID")),
@@ -37,12 +37,12 @@ public interface StoreDAO extends DAO<Store> {
     })
     List<Store> getAll();
 
-    @Select("SELECT id, name, address, is_enabled FROM store WHERE user_id = #{userId}")
+    @Select("SELECT id, name, address, latitude, longitude, is_enabled FROM store WHERE user_id = #{userId}")
     @Results({@Result(property = "isEnabled", column = "is_enabled")})
     List<Store> getAllByUser(int userId);
 
     @Override
-    @Select("SELECT id, name, address, user_id, is_enabled FROM store WHERE id = #{id}")
+    @Select("SELECT id, name, address, user_id, latitude, longitude, is_enabled FROM store WHERE id = #{id}")
     @Results(value = {
             @Result(property = "user", column = "user_id", javaType = User.class,
                     one = @One(select = "com.softserve.if072.restservice.dao.mybatisdao.UserDAO.getByID")),
@@ -57,7 +57,8 @@ public interface StoreDAO extends DAO<Store> {
     void insert(Store store);
 
     @Override
-    @Update("UPDATE store SET name = #{name}, address = #{address}, is_enabled = #{isEnabled} WHERE id = #{id}")
+    @Update("UPDATE store SET name = #{name}, address = #{address}, is_enabled = #{isEnabled}, latitude = " +
+            "#{latitude}, longitude = {longitude},  WHERE id = #{id}")
     void update(Store store);
 
     @Override
