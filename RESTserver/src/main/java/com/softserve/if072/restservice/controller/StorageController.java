@@ -29,7 +29,7 @@ import java.util.List;
 @RequestMapping(value = "/storage")
 public class StorageController {
 
-    public static final Logger LOGGER = LogManager.getLogger(StorageController.class);
+    private static final Logger LOGGER = LogManager.getLogger(StorageController.class);
     private StorageService storageService;
 
     @Autowired
@@ -42,10 +42,10 @@ public class StorageController {
     public void delete(@RequestBody Storage storage, HttpServletResponse response) {
         try {
             storageService.delete(storage);
-            LOGGER.info("Storage was deleted");
+            LOGGER.info(String.format("Storage with user's id %d and product's id %d was deleted", storage.getUser().getId(), storage.getProduct().getId()));
         } catch (DataNotFoundException e) {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-            LOGGER.error("Cannot delete Storage with");
+            LOGGER.error(String.format("Cannot delete Storage with user's id %d and product's id %d", storage.getUser().getId(), storage.getProduct().getId()), e);
         }
     }
 
@@ -77,10 +77,10 @@ public class StorageController {
     public void update(@RequestBody Storage storage, HttpServletResponse response) {
         try {
             storageService.update(storage);
-            LOGGER.info("Store was updated");
+            LOGGER.info(String.format("Storage with user's id %d and product's id %d was updated", storage.getUser().getId(), storage.getProduct().getId()));
         } catch (DataNotFoundException e) {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-            LOGGER.error("Cannot update Storage", e);
+            LOGGER.error(String.format("Cannot update Storage with user's id %d and product's id %d", storage.getUser().getId(), storage.getProduct().getId()), e);
         }
     }
 }

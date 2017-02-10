@@ -5,11 +5,36 @@
 
 <tiles-definitions>
     <definition name="mainLayout" template="/WEB-INF/layouts/mainLayout.jsp">
-        <put-attribute name="title" value="" />
-        <put-attribute name="header" value="/WEB-INF/templates/header.jsp" />
-        <put-attribute name="body" value="" />
+        <put-attribute name="title" value=""/>
+        <put-attribute name="header" value="/WEB-INF/templates/header.jsp"/>
+        <put-attribute name="body" value=""/>
 
         <put-list-attribute name="stylesheets">
+<<<<<<< HEAD
+            <add-attribute value="/css/bootstrap.css"/>
+            <add-attribute value="/css/metisMenu.css"/>
+            <add-attribute value="/css/dataTables.bootstrap.css"/>
+            <add-attribute value="/css/dataTables.responsive.css"/>
+            <add-attribute value="/css/sb-admin-2.css"/>
+            <add-attribute value="/css/morris.css"/>
+            <add-attribute value="/css/font-awesome.css"/>
+
+
+        </put-list-attribute>
+
+        <put-list-attribute name="javascripts">
+            <add-attribute value="/js/jquery.js"/>
+            <add-attribute value="/js/bootstrap.js"/>
+            <add-attribute value="/js/metisMenu.js"/>
+            <add-attribute value="/js/jquery.dataTables.js"/>
+            <add-attribute value="/js/dataTables.bootstrap.js"/>
+            <add-attribute value="/js/dataTables.responsive.js"/>
+            <add-attribute value="/js/sb-admin-2.js"/>
+            <add-attribute value="/js/raphael.js"/>
+            <add-attribute value="/js/morris.js"/>
+            <add-attribute value="/js/morris-data.js"/>
+
+=======
             <add-attribute value="/css/bootstrap.css" />
             <add-attribute value="/css/metisMenu.css" />
             <add-attribute value="/css/dataTables.bootstrap.css" />
@@ -34,34 +59,42 @@
             <add-attribute value="/js/morris.js" />
             <add-attribute value="/js/morris-data.js" />
             <add-attribute value="/js/enableTables.js" />
+>>>>>>> develop
 
         </put-list-attribute>
 
     </definition>
 
     <definition name="home" extends="mainLayout">
-        <put-attribute name="title" value="Product Tracker Project" />
-        <put-attribute name="body" value="/WEB-INF/views/home.jsp" />
+        <put-attribute name="title" value="Product Tracker Project"/>
+        <put-attribute name="body" value="/WEB-INF/views/home.jsp"/>
     </definition>
 
     <definition name="storage" extends="mainLayout">
-        <put-attribute name="title" value="Product Tracker Project" />
-        <put-attribute name="body" value="/WEB-INF/views/storage.jsp" />
+        <put-attribute name="title" value="Product Tracker Project"/>
+        <put-attribute name="body" value="/WEB-INF/views/storage.jsp"/>
     </definition>
+
     <definition name="login" extends="mainLayout">
+        <put-attribute name="header" value=""/>
+        <put-attribute name="title" value="Please Log In to continue"/>
+        <put-attribute name="body" value="/WEB-INF/views/login.jsp"/>
+    </definition>
+
+    <definition name="register" extends="mainLayout">
         <put-attribute name="header" value="" />
-        <put-attribute name="title" value="Please Log In to continue" />
-        <put-attribute name="body" value="/WEB-INF/views/login.jsp" />
+        <put-attribute name="title" value="Sign Up" />
+        <put-attribute name="body" value="/WEB-INF/views/register.jsp" />
     </definition>
 
     <definition name="product" extends="mainLayout">
-        <put-attribute name="title" value="Product Tracker Project" />
-        <put-attribute name="body" value="/WEB-INF/views/product.jsp" />
+        <put-attribute name="title" value="Product Tracker Project"/>
+        <put-attribute name="body" value="/WEB-INF/views/product.jsp"/>
     </definition>
 
     <definition name="allStores" extends="mainLayout">
-        <put-attribute name="title" value="Product Tracker Project" />
-        <put-attribute name="body" value="/WEB-INF/views/allStores.jsp" />
+        <put-attribute name="title" value="Product Tracker Project"/>
+        <put-attribute name="body" value="/WEB-INF/views/allStores.jsp"/>
     </definition>
 
 </tiles-definitions>
