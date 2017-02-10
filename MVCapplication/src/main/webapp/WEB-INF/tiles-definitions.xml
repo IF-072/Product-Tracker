@@ -34,6 +34,7 @@
             <add-attribute value="/js/morris.js" />
             <add-attribute value="/js/morris-data.js" />
             <add-attribute value="/js/enableTables.js" />
+            <add-attribute value="/js/storeTable.js" />
         </put-list-attribute>
 
     </definition>
