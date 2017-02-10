@@ -2,6 +2,7 @@ package com.softserve.if072.restservice.controller;
 
 import com.softserve.if072.common.model.Product;
 import com.softserve.if072.common.model.Store;
+import com.softserve.if072.common.model.User;
 import com.softserve.if072.restservice.exception.DataNotFoundException;
 import com.softserve.if072.restservice.service.ProductService;
 import org.apache.logging.log4j.LogManager;
