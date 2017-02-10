@@ -6,8 +6,9 @@ import com.softserve.if072.common.model.Storage;
 import com.softserve.if072.common.model.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,15 +18,23 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.Arrays;
+import java.util.List;
 
 /**
  * Created by dyndyn on 05.02.2017.
  */
 @Controller
 @RequestMapping("/storage")
+@PropertySource(value = {"classpath:application.properties"})
 public class StoragePageController {
-    public static final Logger LOGGER = LogManager.getLogger(StoragePageController.class);
+
+    @Value("${application.restStorageURL}")
+    private String storageUrl;
+
+    @Value("${application.restShoppingListURL}")
+    private String shoppingListURL;
+
+    private static final Logger LOGGER = LogManager.getLogger(StoragePageController.class);
 
     @GetMapping
     public ModelAndView getPage(@RequestParam(value = "user_id", required = false) Integer userId) {
@@ -33,11 +42,11 @@ public class StoragePageController {
             userId = 2;
 
         ModelAndView model = new ModelAndView("storage");
-        final String uri = "http://localhost:8080/rest/storage/" + userId;
+        final String uri = new String(storageUrl + userId);
         RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<Storage[]> storages = restTemplate.getForEntity(uri, Storage[].class);
+        List<Storage> list = restTemplate.getForObject(uri, List.class);
 
-        model.addObject("list", Arrays.asList(storages.getBody()));
+        model.addObject("list", list);
         return model;
 
     }
@@ -50,9 +59,8 @@ public class StoragePageController {
             storage.getUser().setId(userId);
             storage.getProduct().setId(productId);
 
-            final String uri = "http://localhost:8080/rest/storage/";
             RestTemplate restTemplate = new RestTemplate();
-            restTemplate.put(uri, storage);
+            restTemplate.put(new String(storageUrl), storage);
             LOGGER.info("Amount is updated");
         } catch (Exception e) {
             LOGGER.error("Something went wrong", e);
@@ -68,9 +76,8 @@ public class StoragePageController {
             shoppingList.getUser().setId(userId);
             shoppingList.getProduct().setId(productId);
 
-            final String uri = "http://localhost:8080/rest/shoppingList/";
             RestTemplate restTemplate = new RestTemplate();
-            restTemplate.put(uri, shoppingList);
+            restTemplate.put(new String(shoppingListURL), shoppingList);
             LOGGER.info("SoppingList is inserted");
         } catch (Exception e) {
             LOGGER.error("Something went wrong", e);

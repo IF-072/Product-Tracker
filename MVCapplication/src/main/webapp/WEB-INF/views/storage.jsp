@@ -1,4 +1,5 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<link rel="stylesheet" type="text/css" href="/css/storage.css"/>
 <div class="panel panel-default">
     <div class="panel-heading">
         Storage
@@ -35,46 +36,4 @@
     </div>
 </div>
 
-<script type="text/javascript" language="JavaScript">
-    function minus(userId, productId, index) {
-        var tr = document.getElementsByTagName("tr");
-        var amount = tr[index].children[3].innerHTML;
-        amount--;
-        if (amount > 0) {
-            $.ajax({
-                url: "http://localhost:8080/storage/update",
-                method: "POST",
-                data: {
-                    userId: userId,
-                    productId: productId,
-                    amount: amount
-                },
-                success: function () {
-                    tr[index].children[3].innerHTML = amount;
-                },
-                error: function (jqXHR, exception) {
-                    console.log(jqXHR);
-                    console.log(exception);
-                }
-            });
-        }
-    }
-
-    function addToShoppingList(userId, productId) {
-        $.ajax({
-            url: "http://localhost:8080/storage/addToSL",
-            method: "POST",
-            data: {
-                userId: userId,
-                productId: productId,
-            },
-            success: function () {
-            },
-            error: function (jqXHR, exception) {
-                console.log(jqXHR);
-                console.log(exception);
-            }
-        });
-
-    }
-</script>
+<script src="<c:url value="/js/storage.js"/>"></script>
