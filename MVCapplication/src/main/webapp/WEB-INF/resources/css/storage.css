@@ -1,1 +1,8 @@
-.fa{cursor: pointer}
+.fa {
+    cursor: pointer
+}
+
+input.form-control {
+    width: 50px;
+    display: inline-block;
+}
