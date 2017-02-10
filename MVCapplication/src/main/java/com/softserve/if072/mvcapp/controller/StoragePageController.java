@@ -70,14 +70,14 @@ public class StoragePageController {
 
     @PostMapping("/addToSL")
     @ResponseStatus(value = HttpStatus.OK)
-    public void addToShoppingList(@RequestParam("userId") int userId, @RequestParam("productId") int productId, @RequestParam("amount") int amount) {
+    public void addToShoppingList(@RequestParam("userId") int userId, @RequestParam("productId") int productId) {
         try {
-            ShoppingList shoppingList = new ShoppingList(new User(), new Product(), amount);
+            ShoppingList shoppingList = new ShoppingList(new User(), new Product(), 1);
             shoppingList.getUser().setId(userId);
             shoppingList.getProduct().setId(productId);
 
             RestTemplate restTemplate = new RestTemplate();
-            restTemplate.put(new String(shoppingListURL), shoppingList);
+            restTemplate.postForObject(new String(shoppingListURL), shoppingList, ShoppingList.class);
             LOGGER.info("SoppingList is inserted");
         } catch (Exception e) {
             LOGGER.error("Something went wrong", e);
