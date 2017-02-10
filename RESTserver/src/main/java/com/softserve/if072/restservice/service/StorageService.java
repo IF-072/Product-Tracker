@@ -12,13 +12,9 @@ import java.util.List;
 
 @Service
 public class StorageService {
-public class StorageService{
-    private StorageDAO storageDAO;
 
     @Autowired
     private StorageDAO storageDAO;
-        this.storageDAO = storageDAO;
-    }
 
     public List<Storage> getByUserId(int user_id) throws DataNotFoundException {
         List<Storage> list = storageDAO.getByUserID(user_id);
@@ -41,21 +37,21 @@ public class StorageService{
     public void insert(Storage storage) {
         storageDAO.insert(storage);
     }
-        } else {
-            storageDAO.updateAmount(storage);
+} else{
+        storageDAO.updateAmount(storage);
         }
-    }
+        }
 
-    public void update(Storage storage) throws DataNotFoundException {
+public void update(Storage storage)throws DataNotFoundException{
         storageDAO.update(storage);
-    }
-
-    public void delete(int id) throws DataNotFoundException {
-        Storage storage = storageDAO.getByID(id);
-        if (storage != null) {
-            storageDAO.deleteById(id);
-        } else {
-            throw new DataNotFoundException(String.format("Storage with id %d was not found", id));
         }
-    }
-}
+
+public void delete(int id)throws DataNotFoundException{
+        Storage storage=storageDAO.getByID(id);
+        if(storage!=null){
+        storageDAO.deleteById(id);
+        }else{
+        throw new DataNotFoundException(String.format("Storage with id %d was not found",id));
+        }
+        }
+        }

@@ -10,7 +10,6 @@ import java.util.List;
 
 @Service
 public class ShoppingListService {
-public class ShoppingListService{
     private ShoppingListDAO shoppingListDAO;
 
     @Autowired

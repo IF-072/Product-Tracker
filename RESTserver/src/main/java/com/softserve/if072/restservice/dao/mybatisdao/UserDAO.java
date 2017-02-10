@@ -12,6 +12,7 @@ import org.apache.ibatis.annotations.Result;
 import org.apache.ibatis.annotations.Results;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
@@ -20,6 +21,7 @@ import java.util.List;
  *
  * @author Oleh Pochernin
  */
+@Repository
 public interface UserDAO extends DAO<User> {
     String SELECT_ALL = "SELECT id, name, email, password, role_id, is_enabled FROM user";
     String SELECT_BY_ID = "SELECT id, name, email, password, role_id, is_enabled FROM user WHERE id = #{id}";
