@@ -48,7 +48,7 @@ public class ProductController {
             return products;
         } catch (DataNotFoundException e) {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-            LOGGER.error("Products were not found", e);
+            LOGGER.error(e.getMessage(), e);
             return null;
         }
     }
@@ -110,7 +110,7 @@ public class ProductController {
             return stores;
         } catch (DataNotFoundException e) {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-            LOGGER.error("Stores were not found", e);
+            LOGGER.error(e.getMessage(), e);
             return null;
         }
     }

@@ -12,7 +12,6 @@
     <div class="col-lg-12">
         <h1 class="page-header">My products</h1>
     </div>
-    <!-- /.col-lg-12 -->
 </div>
 <!-- /.row -->
 <div class="row">
@@ -48,19 +47,14 @@
                         </c:forEach>
                         </tbody>
                     </table>
-                <!-- /.table-responsive -->
             </div>
-            <!-- /.panel-body -->
         </div>
-        <!-- /.panel -->
     </div>
-    <!-- /.col-lg-12 -->
 </div>
 
 <div id="dialogAdd" title="Add new product">
     Please fill in the form.
     <br/>
-    <sf:form modelAttribute="product" method="post">
         <span>
                 <label for="name">Please enter product's name</label>
                 <input type="text" name="name" id="name">
@@ -90,8 +84,6 @@
                 <label for="stores">Please select stores where you can buy this product</label>
                 <input type="text" name="stores" id="stores">
         </span>
-
-    </sf:form>
 </div>
 
 
