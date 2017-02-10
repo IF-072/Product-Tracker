@@ -5,6 +5,7 @@ import com.softserve.if072.common.model.Store;
 
 import com.softserve.if072.restservice.exception.DataNotFoundException;
 import com.softserve.if072.restservice.dao.mybatisdao.StoreDAO;
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
@@ -51,7 +52,10 @@ public class StoreService {
     public void addStore(Store store) {storeDAO.insert(store);}
 
     @Transactional
-    public void updateStore(Store store) {
+    public void updateStore(Store store) throws DataNotFoundException {
+        if(store.getName().isEmpty()||store.getName()==""){
+            throw new DataNotFoundException("illegal arguments!");
+        }
         storeDAO.update(store);
     }
 
@@ -68,7 +72,7 @@ public class StoreService {
     @Transactional
     public List<Product> getProductsByStoreId(int storeId) throws DataNotFoundException {
         List<Product> products = storeDAO.getProductsByStoreId(storeId);
-        if (!products.isEmpty()){
+        if (CollectionUtils.isNotEmpty(products)) {
             return products;
         } else {
             throw new DataNotFoundException("Products not found");

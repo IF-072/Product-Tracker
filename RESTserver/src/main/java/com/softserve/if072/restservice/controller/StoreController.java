@@ -35,7 +35,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/stores")
-@PropertySource(value = {"classpath:message.properties"})
 public class StoreController {
     public static final Logger LOGGER =  LogManager.getLogger(StoreController.class);
     private StoreService storeService;
@@ -44,9 +43,6 @@ public class StoreController {
     public StoreController(StoreService storeService){
         this.storeService = storeService;
     }
-
-    @Value("${store.notFound}")
-    private String storeNotFound;
 
     @GetMapping ("/user/{userId}")
     @ResponseBody
@@ -58,7 +54,7 @@ public class StoreController {
             return stores;
         } catch (DataNotFoundException e) {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-            LOGGER.error("Stores were not found", e);
+            LOGGER.error(e.getMessage());
             return null;
         }
     }
@@ -69,11 +65,11 @@ public class StoreController {
         public Store getStoreByID(@PathVariable int id, HttpServletResponse response) {
         try {
             Store store = storeService.getStoreByID(id);
-            LOGGER.info(String.format("Store with id %d was retrieved", id));
+            LOGGER.info("Store with id %d was retrieved", id);
             return store;
         } catch (DataNotFoundException e) {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-            LOGGER.error(String.format(storeNotFound, id), e);
+            LOGGER.error(e.getMessage());
             return null;
         }
     }
@@ -92,12 +88,11 @@ public class StoreController {
        int id = store.getId();
        try {
             storeService.updateStore(store);
-            LOGGER.info(String.format("Store with id %d was updated", id));
-            store = storeService.getStoreByID(store.getId());
-            return store;
+            LOGGER.info("Store with id %d was updated", id);
+           return storeService.getStoreByID(store.getId());
         } catch (DataNotFoundException e) {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-            LOGGER.error(String.format(storeNotFound, id), e);
+            LOGGER.error(String.format("Cannot update Store %d", id), e);
             return null;
         }
     }
@@ -107,10 +102,10 @@ public class StoreController {
    public void deleteStore(@PathVariable int id, HttpServletResponse response) {
         try {
             storeService.deleteStore(id);
-            LOGGER.info(String.format("Store with id %d was deleted", id));
+            LOGGER.info("Store with id %d was deleted", id);
         } catch (DataNotFoundException e) {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-            LOGGER.error(String.format(storeNotFound, id), e);
+            LOGGER.error(e.getMessage());
         }
     }
 
@@ -132,7 +127,7 @@ public class StoreController {
             return products;
         } catch (DataNotFoundException e) {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-            LOGGER.error("Products were not found", e);
+            LOGGER.error(e.getMessage());
             return null;
         }
    }
@@ -148,7 +143,7 @@ public class StoreController {
             return product;
         } catch (DataNotFoundException e) {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-            LOGGER.error((String.format("Product %d from Store %d not found", productId, storeId)), e);
+            LOGGER.error(e.getMessage());
             return null;
         }
     }
@@ -159,10 +154,10 @@ public class StoreController {
             productId, HttpServletResponse response) {
         try {
             storeService.deleteProductFromStoreById (storeId, productId);
-            LOGGER.info(String.format("Product %d from Store %d was deleted", productId, storeId));
+            LOGGER.info("Product %d from Store %d was deleted", productId, storeId);
         } catch (DataNotFoundException e) {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-            LOGGER.error((String.format("Product %d from Store %d not found", productId, storeId)), e);
+            LOGGER.error(e.getMessage());
         }
     }
 
