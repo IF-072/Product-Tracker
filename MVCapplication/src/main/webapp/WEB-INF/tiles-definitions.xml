@@ -70,4 +70,9 @@
         <put-attribute name="body" value="/WEB-INF/views/allStores.jsp"/>
     </definition>
 
+    <definition name="profile" extends="mainLayout">
+        <put-attribute name="title" value="Your profile" />
+        <put-attribute name="body" value="/WEB-INF/views/profile.jsp" />
+    </definition>
+
 </tiles-definitions>
