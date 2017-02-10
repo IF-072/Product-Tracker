@@ -6,6 +6,7 @@ import com.softserve.if072.restservice.exception.DataNotFoundException;
 import com.softserve.if072.restservice.dao.mybatisdao.StorageDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 
@@ -25,7 +26,7 @@ public class StorageService{
 
     public List<Storage> getByUserId(int user_id) throws DataNotFoundException {
         List<Storage> list = storageDAO.getByUserID(user_id);
-        if (list != null && !list.isEmpty()) {
+        if (!CollectionUtils.isEmpty(list)) {
             return list;
         } else {
             throw new DataNotFoundException("Storages not found");
@@ -55,7 +56,7 @@ public class StorageService{
         if (storage != null) {
             storageDAO.delete(storage);
         } else {
-            throw new DataNotFoundException("Storage was not found");
+            throw new DataNotFoundException(String.format("Storage with user's id %d and product's id %d was not found", storage.getUser().getId(), storage.getProduct().getId()));
         }
     }
 }
