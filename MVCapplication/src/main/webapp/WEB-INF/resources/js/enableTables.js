@@ -6,6 +6,30 @@ var table = $('#productData').DataTable();
 
 $('#dialogAdd').dialog({autoOpen:false, buttons:{
     Add:function(){
+
+        var product = {
+            name : $('#name').val(),
+            description : $('#description').val()
+        }
+
+        /*$.ajax({
+            url : "http://localhost:8080/product/add",
+            contentType : 'application/json',
+            data : JSON.stringify(product),
+            type : 'POST',
+            success : function(data) {
+                alert('save');
+            },
+            error : function(xhr, status, errorThrown) {
+                alert('adding component failed with status: ' + status + ". "
+                    + errorThrown);
+            }
+
+        });*/
+
+
+
+        $.post("http://localhost:8080/product/add", product,
         $.post("http://localhost:8080/product/add", {name : $('#name').val(),'description':$('#description').val()},
             function(result){
                 $('#productData').dataTable().fnAddData([

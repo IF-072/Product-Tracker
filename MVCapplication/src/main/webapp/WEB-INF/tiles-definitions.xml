@@ -10,15 +10,16 @@
         <put-attribute name="body" value=""/>
 
         <put-list-attribute name="stylesheets">
-            <add-attribute value="/css/bootstrap.css"/>
-            <add-attribute value="/css/metisMenu.css"/>
-            <add-attribute value="/css/dataTables.bootstrap.css"/>
-            <add-attribute value="/css/dataTables.responsive.css"/>
-            <add-attribute value="/css/sb-admin-2.css"/>
-            <add-attribute value="/css/morris.css"/>
-            <add-attribute value="/css/font-awesome.css"/>
+            <add-attribute value="/css/bootstrap.css" />
+            <add-attribute value="/css/metisMenu.css" />
+            <add-attribute value="/css/dataTables.bootstrap.css" />
+            <add-attribute value="/css/dataTables.responsive.css" />
+            <add-attribute value="/css/sb-admin-2.css" />
+            <add-attribute value="/css/morris.css" />
+            <add-attribute value="/css/font-awesome.css" />
+            <add-attribute value="/css/jquery-ui.css" />
+            <add-attribute value="/css/jquery.dataTables.css" />
         </put-list-attribute>
-
 
         <put-list-attribute name="javascripts">
             <add-attribute value="/js/jquery.js" />

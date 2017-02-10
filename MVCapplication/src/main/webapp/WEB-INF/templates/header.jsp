@@ -113,12 +113,8 @@
                     <a href="<c:url value="../home"/>" class="active"><i class="fa fa-home fa-fw"></i> Home</a>
                 </li>
                 <li>
-<<<<<<< HEAD
-                    <a href="product/" class="active"><i class="fa fa-list-alt fa-fw"></i> My Products</a>
-=======
-                    <a href="<c:url value="../product"/>" class="active"><i class="fa fa-list-alt fa-fw"></i> My
+                    <a href="<c:url value="../product/"/>" class="active"><i class="fa fa-list-alt fa-fw"></i> My
                         Products</a>
->>>>>>> develop
                 </li>
                 <li>
                     <a href="<c:url value="../stores/"/>" class="active"><i class="fa fa-globe fa-fw"></i> My
