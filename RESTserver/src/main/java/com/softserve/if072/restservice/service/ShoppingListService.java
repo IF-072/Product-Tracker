@@ -1,5 +1,6 @@
 package com.softserve.if072.restservice.service;
 
+import com.softserve.if072.common.model.Product;
 import com.softserve.if072.common.model.ShoppingList;
 import com.softserve.if072.restservice.dao.mybatisdao.ShoppingListDAO;
 import com.softserve.if072.restservice.exception.DataNotFoundException;
@@ -27,6 +28,15 @@ public class ShoppingListService {
             return list;
         } else {
             throw new DataNotFoundException("ShoppingLists not found");
+        }
+    }
+
+    public List<Product> getProductsByUserId(int user_id) throws DataNotFoundException {
+        List<Product> list = shoppingListDAO.getProductsByUserId(user_id);
+        if (!CollectionUtils.isEmpty(list)) {
+            return list;
+        } else {
+            throw new DataNotFoundException("Product not found");
         }
     }
 

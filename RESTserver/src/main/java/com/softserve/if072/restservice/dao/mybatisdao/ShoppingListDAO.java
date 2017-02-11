@@ -1,8 +1,6 @@
 package com.softserve.if072.restservice.dao.mybatisdao;
 
-import com.softserve.if072.common.model.Product;
-import com.softserve.if072.common.model.ShoppingList;
-import com.softserve.if072.common.model.User;
+import com.softserve.if072.common.model.*;
 import com.softserve.if072.restservice.dao.DAO;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Result;
@@ -31,6 +29,19 @@ public interface ShoppingListDAO extends DAO<ShoppingList> {
                     one=@One(select="com.softserve.if072.restservice.dao.mybatisdao.ProductDAO.getByID"))
     })
     public List<ShoppingList> getByUserID(int user_id);
+
+    @Select("SELECT id, name, description, user_id, category_id, unit_id, is_enabled FROM product RIGHT JOIN "
+            + "shopping_list ON product.id = shopping_list.product_id WHERE user_id = #{userId}")
+    @Results(value = {
+            @Result(property = "user", column = "user_id", javaType = User.class,
+                    one = @One(select = "com.softserve.if072.restservice.dao.mybatisdao.UserDAO.getByID")),
+            @Result(property = "category", column = "category_id", javaType = Category.class,
+                    one = @One(select = "com.softserve.if072.restservice.dao.mybatisdao.CategoryDAO.getByID")),
+            @Result(property = "unit", column = "unit_id", javaType = Unit.class,
+                    one = @One(select = "com.softserve.if072.restservice.dao.mybatisdao.UnitDAO.getByID")),
+            @Result(property = "isEnabled", column = "is_enabled")
+    })
+    List<Product> getProductsByUserId(int userId);
 
     @Select("SELECT * FROM shopping_list WHERE user_id=#{user.id} AND product_id=#{product.id}")
     @Results(value = {
