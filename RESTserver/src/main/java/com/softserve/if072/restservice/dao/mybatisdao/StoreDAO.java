@@ -15,6 +15,7 @@ import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Update;
 import org.apache.ibatis.annotations.Delete;
+import org.apache.ibatis.annotations.Many;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -38,7 +39,11 @@ public interface StoreDAO extends DAO<Store> {
     List<Store> getAll();
 
     @Select("SELECT id, name, address, latitude, longitude, is_enabled FROM store WHERE user_id = #{userId}")
-    @Results({@Result(property = "isEnabled", column = "is_enabled")})
+    @Results(value = {
+            @Result(property = "isEnabled", column = "is_enabled"),
+            @Result(property = "products", column = "id", javaType = List.class,
+                    many = @Many(select = "com.softserve.if072.restservice.dao.mybatisdao.StoreDAO" +
+                            ".getProductsByStoreId"))})
     List<Store> getAllByUser(int userId);
 
     @Override
@@ -98,10 +103,10 @@ public interface StoreDAO extends DAO<Store> {
                     one = @One(select = "com.softserve.if072.restservice.dao.mybatisdao.UnitDAO.getByID")),
             @Result(property = "isEnabled", column = "is_enabled")
     })
-    Product getProductFromStoreById(@Param ("storeId") Integer storeId, @Param ("productId")Integer productId);
+    Product getProductFromStoreById(@Param("storeId") Integer storeId, @Param("productId") Integer productId);
 
     @Delete("DELETE FROM stores_products WHERE store_id = #{storeId} and product_id = #{productId}")
-    void deleteProductFromStoreById (@Param ("storeId") Integer storeId, @Param ("productId")Integer productId);
+    void deleteProductFromStoreById(@Param("storeId") Integer storeId, @Param("productId") Integer productId);
 
     @Insert("INSERT into stores_products(store_id, product_id) VALUES(#{store.id}, #{product.id})")
     void addProductToStore(Store store, Product product);

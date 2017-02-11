@@ -20,7 +20,8 @@ public class Product {
     private boolean isEnabled;
     private List<Store> stores;
 
-    public Product() {}
+    public Product() {
+    }
 
     public Product(int id, String name, String description, Image image, User user, Category category, Unit unit, boolean isEnabled, List<Store> stores) {
         this.id = id;
@@ -120,4 +121,18 @@ public class Product {
                 ", stores=" + stores + '}';
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Product product = (Product) o;
+
+        return id == product.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return id;
+    }
 }

@@ -75,4 +75,9 @@
         <put-attribute name="body" value="/WEB-INF/views/profile.jsp" />
     </definition>
 
+    <definition name="goShoppingStores" extends="mainLayout">
+        <put-attribute name="title" value="Product Tracker Project"/>
+        <put-attribute name="body" value="/WEB-INF/views/goShoppingStores.jsp"/>
+    </definition>
+
 </tiles-definitions>

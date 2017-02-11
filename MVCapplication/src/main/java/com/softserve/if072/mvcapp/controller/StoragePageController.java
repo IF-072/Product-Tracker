@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,26 +29,25 @@ import java.util.List;
 @PropertySource(value = {"classpath:application.properties"})
 public class StoragePageController {
 
+    private static final Logger LOGGER = LogManager.getLogger(StoragePageController.class);
+
     @Value("${application.restStorageURL}")
     private String storageUrl;
 
     @Value("${application.restShoppingListURL}")
     private String shoppingListURL;
 
-    private static final Logger LOGGER = LogManager.getLogger(StoragePageController.class);
-
     @GetMapping
-    public ModelAndView getPage(@RequestParam(value = "user_id", required = false) Integer userId) {
+    public String getPage(ModelMap model, @RequestParam(value = "user_id", required = false) Integer userId) {
         if (userId == null)
             userId = 2;
 
-        ModelAndView model = new ModelAndView("storage");
         final String uri = new String(storageUrl + userId);
         RestTemplate restTemplate = new RestTemplate();
         List<Storage> list = restTemplate.getForObject(uri, List.class);
 
-        model.addObject("list", list);
-        return model;
+        model.addAttribute("list", list);
+        return "storage";
 
     }
 
