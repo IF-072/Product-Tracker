@@ -38,7 +38,7 @@ public interface HistoryDAO {
      * @param userId unique user's identifier
      * @return list of all history items that belong to specific user
      */
-    @Select("SELECT user_id, product_id, amount, used_date FROM history" +
+    @Select("SELECT user_id, product_id, amount, used_date FROM history " +
             "WHERE user_id = #{userId}")
     @Results(value = {
             @Result(property = "user", column = "user_id", javaType = User.class,

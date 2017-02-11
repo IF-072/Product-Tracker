@@ -40,7 +40,7 @@ public interface CartDAO {
      * @param userId unique user's identifier
      * @return list of all cart items that belong to specific user
      */
-    @Select("SELECT user_id, store_id, product_id, amount FROM cart" +
+    @Select("SELECT user_id, store_id, product_id, amount FROM cart " +
             "WHERE user_id = #{userId}")
     @Results(value = {
             @Result(property = "user", column = "user_id", javaType = User.class,
