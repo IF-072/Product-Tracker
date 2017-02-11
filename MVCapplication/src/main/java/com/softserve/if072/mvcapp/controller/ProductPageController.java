@@ -7,10 +7,7 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Arrays;
@@ -69,5 +66,11 @@ public class ProductPageController {
 
         RestTemplate restTemplate = new RestTemplate();
         restTemplate.postForObject(uri, product1, Product.class);
+    }
+
+    @GetMapping("/addProduct")
+    public String addProductPage(){
+
+        return "addProduct";
     }
 }

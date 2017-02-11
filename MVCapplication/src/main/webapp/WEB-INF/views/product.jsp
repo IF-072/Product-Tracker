@@ -8,6 +8,10 @@
   Time: 21:40
 --%>
 
+<style>
+    #edit,#delete {text-align:center}
+</style>
+
 <div class="row">
     <div class="col-lg-12">
         <h1 class="page-header">My products</h1>
@@ -20,8 +24,7 @@
 
             <div class="panel-body">
 
-                <button id="addRow">Add new product</button>
-                <button id="deleteRow">Delete product</button>
+                <input type="button" onClick="window.location.href = 'addProduct'" value="Add new product">
 
                     <table width="100%" class="table table-striped table-bordered table-hover" id="productData">
                         <thead>
@@ -32,6 +35,8 @@
                             <th>Unit</th>
                             <th>Image</th>
                             <th>Stores</th>
+                            <th>Edit</th>
+                            <th>Delete</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -43,6 +48,8 @@
                                 <td><c:out value="${product.unit.name}"></c:out></td>
                                 <td><c:out value="${product.image}"></c:out></td>
                                 <td><c:out value="${product.image}"></c:out></td>
+                                <td id="edit" onclick="edit(${product.id});"><i class="fa fa-pencil fa-lg"></i></td>
+                                <td id="delete" onclick="del(${product.id})"><i class="fa fa-times fa-lg"></i></td>
                             </tr>
                         </c:forEach>
                         </tbody>
@@ -52,38 +59,11 @@
     </div>
 </div>
 
-<div id="dialogAdd" title="Add new product">
-    Please fill in the form.
+<div id="dialogDelete" title="Delete product">
     <br/>
-        <span>
-                <label for="name">Please enter product's name</label>
-                <input type="text" name="name" id="name">
-            </span>
-        <br/>
-        <span>
-                <label for="description">Please enter product's description</label>
-                <input type="text" name="description" id="description">
-            </span>
-        <br/>
-        <span>
-                <label for="image">Please chose image for product</label>
-                <input type="text" name="image" id="image">
-            </span>
-        <br/>
-        <span>
-                <label for="category">Please chose product's category</label>
-                <input type="text" name="category" id="category">
-            </span>
-        <br/>
-        <span>
-                <label for="unit">Please chose product's unit</label>
-                <input type="text" name="unit" id="unit">
-            </span>
-        <br/>
-        <span>
-                <label for="stores">Please select stores where you can buy this product</label>
-                <input type="text" name="stores" id="stores">
-        </span>
+    Are you shure?
+    <br/>
+
 </div>
 
 

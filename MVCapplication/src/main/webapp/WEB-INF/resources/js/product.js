@@ -4,28 +4,55 @@
 
 var table = $('#productData').DataTable();
 
-$('#dialogAdd').dialog({autoOpen:false, buttons:{
-    Add:function(){
+var prId;
 
-        var product = {
-            name : $('#name').val(),
-            description : $('#description').val()
+function edit(productId) {
+        $.ajax({
+            url: "update",
+            method: "GET",
+            data: {
+                productId: productId
+            },
+            error: function (jqXHR, exception) {
+                console.log(jqXHR);
+                console.log(exception);
+            }
+        });
+}
+
+function del(productId) {
+    prId = productId;
+    $('#dialogDelete').show();
+    $.ajax({
+        url: "update",
+        method: "GET",
+        data: {
+            productId: productId
+        },
+        error: function (jqXHR, exception) {
+            console.log(jqXHR);
+            console.log(exception);
         }
+    });
+}
 
-        /*$.ajax({
-            url : "http://localhost:8080/product/add",
-            contentType : 'application/json',
-            data : JSON.stringify(product),
-            type : 'POST',
+
+$('#dialogDelete').dialog({autoOpen:false, buttons:{
+    Yes:function(){
+
+        $.ajax({
+            url : "delete",
+            method : "POST",
+            data : {productId: prId},
             success : function(data) {
-                alert('save');
+                table.row('.selected').remove().draw( false );
             },
             error : function(xhr, status, errorThrown) {
                 alert('adding component failed with status: ' + status + ". "
                     + errorThrown);
             }
 
-        });*/
+        });
 
 
 
@@ -48,13 +75,6 @@ $('#dialogAdd').dialog({autoOpen:false, buttons:{
         $(this).dialog("close");
     }
 }});
-
-$('#addRow').click(function(){
-
-    $('#dialogAdd').dialog("open");
-    $('#name').val('');
-
-});
 
 $('#productData tbody').on( 'click', 'tr', function () {
     if ( $(this).hasClass('selected') ) {
