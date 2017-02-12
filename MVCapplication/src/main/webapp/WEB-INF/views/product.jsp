@@ -1,3 +1,4 @@
+<link rel="stylesheet" type="text/css" href="/css/product.css"/>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="sf" uri="http://www.springframework.org/tags/form"%>
 <%@ page isELIgnored="false" %>
@@ -48,8 +49,9 @@
                                 <td><c:out value="${product.unit.name}"></c:out></td>
                                 <td><c:out value="${product.image}"></c:out></td>
                                 <td><c:out value="${product.image}"></c:out></td>
-                                <td id="edit" onclick="edit(${product.id});"><i class="fa fa-pencil fa-lg"></i></td>
-                                <td id="delete" onclick="del(${product.id})"><i class="fa fa-times fa-lg"></i></td>
+                                <td onclick="edit(${product.id});">
+                                    <p class="fa fa-pencil fa-lg"></p></td>
+                                <td onclick="del(${product.id},this.rowIndex)"><i class="fa fa-times fa-lg"></i></td>
                             </tr>
                         </c:forEach>
                         </tbody>

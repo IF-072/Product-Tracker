@@ -13,7 +13,7 @@ import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import javax.sql.DataSource;
 
 @Configuration
-@PropertySource(value = {"classpath:application.properties"})
+@PropertySource(value = {"classpath:database.properties"})
 @MapperScan("com.softserve.if072.restservice.dao")
 public class DataSourceConfig {
 
