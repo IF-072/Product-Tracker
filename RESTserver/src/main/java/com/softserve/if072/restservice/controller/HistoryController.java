@@ -1,7 +1,7 @@
 package com.softserve.if072.restservice.controller;
 
-import com.softserve.if072.common.model.Cart;
-import com.softserve.if072.restservice.service.CartService;
+import com.softserve.if072.common.model.History;
+import com.softserve.if072.restservice.service.HistoryService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,40 +21,46 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 /**
- * The CartController class is used to mapping requests for
- * cart resources
+ * The HistoryController class is used to mapping requests for
+ * history resources
  *
  * @author Igor Kryviuk
  */
 @RestController
-@RequestMapping("/users/{userID}/carts")
-public class CartController {
+@RequestMapping("/users/{userID}/histories")
+public class HistoryController {
     @Autowired
-    private CartService cartService;
-    private static final Logger LOGGER = LogManager.getLogger(CartController.class);
+    private HistoryService historyService;
+    private static final Logger LOGGER = LogManager.getLogger(HistoryController.class);
 
     @GetMapping()
     @ResponseStatus(HttpStatus.OK)
-    public List<Cart> getByUserId(@PathVariable int userID) {
-        return cartService.getByUserId(userID);
+    public List<History> getByUserId(@PathVariable int userID) {
+        return historyService.getByUserId(userID);
+    }
+
+    @GetMapping("/products/{productID}")
+    @ResponseStatus(HttpStatus.OK)
+    public List<History> getByProductId(@PathVariable int userID, @PathVariable int productID) {
+        return historyService.getByProductId(userID, productID);
     }
 
     @PostMapping()
     @ResponseStatus(value = HttpStatus.CREATED)
-    public void insert(@RequestBody Cart cart) {
-        cartService.insert(cart);
+    public void insert(@RequestBody History history) {
+        historyService.insert(history);
     }
 
     @PutMapping()
     @ResponseStatus(value = HttpStatus.OK)
-    public void update(@RequestBody Cart cart) {
-        cartService.update(cart);
+    public void update(@RequestBody History history) {
+        historyService.update(history);
     }
 
     @DeleteMapping()
     @ResponseStatus(value = HttpStatus.OK)
-    public void delete(@RequestBody Cart cart) {
-        cartService.delete(cart);
+    public void delete(@RequestBody History history) {
+        historyService.delete(history);
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
