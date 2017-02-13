@@ -38,10 +38,10 @@ public class ShoppingListService {
         }
     }
 
-    public void update(ShoppingList shoppingList) throws DataNotFoundException {
+    public void update(ShoppingList shoppingList) throws  IllegalArgumentException {
         if ((shoppingList.getAmount() <= 0) || (shoppingList.getProduct() == null)
                 || (shoppingList.getUser() == null)) {
-            throw new DataNotFoundException("Incorrect fields by ShoppingList");
+            throw new  IllegalArgumentException("Incorrect fields by ShoppingList");
         } else {
             shoppingListDAO.update(shoppingList);
         }

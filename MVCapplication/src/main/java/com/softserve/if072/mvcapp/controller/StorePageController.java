@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- *  The class contains methods that handle the http requests from the stores`s page
+ * The class contains methods that handle the http requests from the stores`s page
  *
  * @author Nazar Vynnyk
  */
@@ -40,28 +40,27 @@ public class StorePageController {
     @GetMapping("/stores/")
     public String getAllStoresByUserId(Model model) {
 
-        int userId =1;
-try {
-    final String uri = storeUrl + "/user/{userId}";
-    Map<String, Integer> param = new HashMap<String, Integer>();
-    param.put("userId", userId);
+        int userId = 1;
+        try {
+            final String uri = storeUrl + "/user/{userId}";
+            Map<String, Integer> param = new HashMap<String, Integer>();
+            param.put("userId", userId);
 
-    RestTemplate restTemplate = new RestTemplate();
-    List<Store> stores = restTemplate.getForObject(uri, List.class, param);
+            RestTemplate restTemplate = new RestTemplate();
+            List<Store> stores = restTemplate.getForObject(uri, List.class, param);
 
-    model.addAttribute("stores", stores);
-      LOGGER.info(String.format("Stores of user with id %d were found", userId));
-    return "allStores";
-}
-catch (Exception e){
-    System.out.println(Arrays.toString(e.getStackTrace()));
-    return "redirect:/home";
+            model.addAttribute("stores", stores);
+            LOGGER.info(String.format("Stores of user with id %d were found", userId));
+            return "allStores";
+        } catch (Exception e) {
+            System.out.println(Arrays.toString(e.getStackTrace()));
+            return "redirect:/home";
 
-}
+        }
     }
 
     @GetMapping("/addStore")
-    public String addStore (Model model){
+    public String addStore(Model model) {
         model.addAttribute("store", new Store());
         LOGGER.info("Adding Store");
         return "addStore";
@@ -73,15 +72,15 @@ catch (Exception e){
         RestTemplate restTemplate = new RestTemplate();
 
         try {
-        User user = new User();
-        user.setId(1);
-        store.setUser(user);
-        restTemplate.postForObject(uri, store, Store.class);
+            User user = new User();
+            user.setId(1);
+            store.setUser(user);
+            restTemplate.postForObject(uri, store, Store.class);
             LOGGER.info(String.format("Store of user %d was added", user.getId()));
             return "redirect:/stores/";
 
         } catch (HttpClientErrorException e) {
-           return "addStore";
+            return "addStore";
         }
     }
 
@@ -102,9 +101,7 @@ catch (Exception e){
             LOGGER.info(String.format("Products from store %s were found", storeId));
 
             return "product";
-        }
-
-        catch (Exception e){
+        } catch (Exception e) {
             LOGGER.error(String.format("Products user %d from store %s were not found", userId, storeId));
             return "redirect:/stores/";
         }
