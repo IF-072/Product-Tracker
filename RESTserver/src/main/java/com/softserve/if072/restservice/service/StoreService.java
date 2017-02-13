@@ -1,10 +1,10 @@
 package com.softserve.if072.restservice.service;
 
+
 import com.softserve.if072.common.model.Product;
 import com.softserve.if072.common.model.Store;
-
-import com.softserve.if072.restservice.exception.DataNotFoundException;
 import com.softserve.if072.restservice.dao.mybatisdao.StoreDAO;
+import com.softserve.if072.restservice.exception.DataNotFoundException;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -49,7 +49,8 @@ public class StoreService {
     }
 
     @Transactional
-    public void addStore(Store store) {storeDAO.insert(store);}
+    public void addStore(Store store) {
+        storeDAO.insert(store);}
 
     @Transactional
     public void updateStore(Store store) throws DataNotFoundException {
@@ -70,8 +71,8 @@ public class StoreService {
     }
 
     @Transactional
-    public List<Product> getProductsByStoreId(int storeId) throws DataNotFoundException {
-        List<Product> products = storeDAO.getProductsByStoreId(storeId);
+    public List<Product> getProductsByStoreId(int storeId, int userId) throws DataNotFoundException {
+        List<Product> products = storeDAO.getProductsByStoreId(storeId, userId);
         if (CollectionUtils.isNotEmpty(products)) {
             return products;
         } else {

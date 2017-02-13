@@ -1,6 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="sf" uri="http://www.springframework.org/tags/form"%>
-<%@ page isELIgnored="false" %>
 
 <%--
   Created by Nazar Vynnyk
@@ -22,7 +22,8 @@
 
             <div class="panel-body">
 
-                <button type="button" class="btn btn-outline btn-primary" id="addStoreButton">AddStore</button>
+                <button type="button" class="btn btn-outline btn-primary" onclick="location.href='../addStore/';"
+                        id="addStoreButton">AddStore</button>
                 <button type="button" class="btn btn-outline btn-primary" id="addProductButton">AddProducts</button>
 
                     <table width="100%" class="table table-striped table-bordered table-hover" id="storeTab">
@@ -40,11 +41,14 @@
                             <tr class="gradeA">
                                     <td id="name">${store.name}</td>
                                     <td id="address">${store.address}</td>
-                                    <td> <button type="button" class="btn btn-outline btn-link"
-                                                onclick="location.href='../product/';" id="productButton"> products</button>
+
+                                <td> <button type="button" class="btn btn-outline btn-link"
+                                             onclick="productList(${store.id})">products</button>
+                                                 <%--onclick="location.href='../product/';"--%>
+
                                     </td>
-                                    <td id="edit"><i class="fa fa-pencil fa-lg"></i></td>
-                                    <td id="delete"><i class="fa fa-times fa-lg"></i></td>
+                                <td id="edit" onclick="edit(${store.id});"><i class="fa fa-pencil fa-lg"></i></td>
+                                <td id="delete" onclick="delete(${store.id})"><i class="fa fa-times fa-lg"></i></td>
                             </tr>
                         </c:forEach>
                         <tbody>
@@ -54,3 +58,9 @@
     </div>
 </div>
 </div>
+
+
+
+
+
+

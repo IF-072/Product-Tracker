@@ -33,16 +33,7 @@ public class Store {
 
     public Store() {}
 
-    public Store(int id, String name, String address, User user, boolean isEnabled, List<Product> products) {
-        this.id = id;
-        this.name = name;
-        this.address = address;
-        this.user = user;
-        this.isEnabled = isEnabled;
-        this.products = products;
-    }
-
-    public int getId() {
+      public int getId() {
         return id;
     }
 
