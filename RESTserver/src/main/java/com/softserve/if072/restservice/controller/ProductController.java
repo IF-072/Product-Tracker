@@ -91,13 +91,10 @@ public class ProductController {
     @DeleteMapping(value = "/{id}")
     @ResponseStatus(value = HttpStatus.OK)
     public void delete(@PathVariable int id, HttpServletResponse response) {
-        System.out.println("In controller");
         try {
-            System.out.println("In controller In try");
             productService.deleteProduct(id);
             LOGGER.info(String.format("Product with id %d was deleted", id));
         } catch (DataNotFoundException e) {
-            System.out.println("In controller in Catch");
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             LOGGER.error(String.format(productNotFound, id), e);
         }

@@ -115,8 +115,6 @@ public class ProductPageController {
     @RequestMapping(value = "/delProduct", method = RequestMethod.POST)
     public String delProduct(@RequestParam int productId){
 
-        System.out.println("MVC" + productId);
-
         final String uri = new String(productUrl + "/{productId}");
         Map<String, Integer> param = new HashMap<String, Integer>();
         param.put("productId", productId);
