@@ -258,8 +258,6 @@ CREATE INDEX `product_id_idx` ON `cart` (`product_id` ASC);
 
 CREATE INDEX `store_id_idx` ON `cart` (`store_id` ASC);
 
-CREATE UNIQUE INDEX `store_id_UNIQUE` ON `cart` (`store_id` ASC);
-
 CREATE UNIQUE INDEX `product_id_UNIQUE` ON `cart` (`product_id` ASC);
 
 
