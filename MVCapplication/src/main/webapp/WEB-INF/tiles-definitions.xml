@@ -39,12 +39,12 @@
     </definition>
 
     <definition name="home" extends="mainLayout">
-        <put-attribute name="title" value="Product Tracker Project"/>
+        <put-attribute name="title" value="Product Tracker"/>
         <put-attribute name="body" value="/WEB-INF/views/home.jsp"/>
     </definition>
 
     <definition name="storage" extends="mainLayout">
-        <put-attribute name="title" value="Product Tracker Project"/>
+        <put-attribute name="title" value="Product Tracker"/>
         <put-attribute name="body" value="/WEB-INF/views/storage.jsp"/>
     </definition>
 
@@ -61,7 +61,7 @@
     </definition>
 
     <definition name="product" extends="mainLayout">
-        <put-attribute name="title" value="Product Tracker Project"/>
+        <put-attribute name="title" value="Product Tracker"/>
         <put-attribute name="body" value="/WEB-INF/views/product.jsp"/>
     </definition>
 
@@ -70,9 +70,19 @@
         <put-attribute name="body" value="/WEB-INF/views/addProduct.jsp"/>
     </definition>
 
+    <definition name = "categories" extends="mainLayout">
+        <put-attribute name="title" value = "Product Tracker" />
+        <put-attribute name="body" value="/WEB-INF/views/categories.jsp" />
+    </definition>
+
     <definition name="allStores" extends="mainLayout">
-        <put-attribute name="title" value="Product Tracker Project"/>
+        <put-attribute name="title" value="Product Tracker"/>
         <put-attribute name="body" value="/WEB-INF/views/allStores.jsp"/>
+    </definition>
+
+    <definition name="profile" extends="mainLayout">
+        <put-attribute name="title" value="Your profile" />
+        <put-attribute name="body" value="/WEB-INF/views/profile.jsp" />
     </definition>
 
 </tiles-definitions>

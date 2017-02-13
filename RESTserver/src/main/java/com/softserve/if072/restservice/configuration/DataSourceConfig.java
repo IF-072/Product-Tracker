@@ -1,5 +1,6 @@
 package com.softserve.if072.restservice.configuration;
 
+import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.annotation.MapperScan;
@@ -8,7 +9,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
-import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
 import javax.sql.DataSource;
 
@@ -31,11 +31,13 @@ public class DataSourceConfig {
 
     @Bean
     public DataSource dataSource() {
-        DriverManagerDataSource dataSource = new DriverManagerDataSource();
+        BasicDataSource dataSource = new BasicDataSource();
         dataSource.setDriverClassName(dbDriver);
         dataSource.setUrl(dbURL);
         dataSource.setUsername(dbUsername);
         dataSource.setPassword(dbPassword);
+        dataSource.setInitialSize(5);
+        dataSource.setMaxActive(10);
         return dataSource;
     }
 

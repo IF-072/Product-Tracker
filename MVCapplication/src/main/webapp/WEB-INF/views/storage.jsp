@@ -13,7 +13,6 @@
                     <th>Product</th>
                     <th>End date</th>
                     <th>Amount</th>
-                    <th>Used</th>
                     <th>Add to sopping list</th>
                 </tr>
                 </thead>
@@ -23,9 +22,14 @@
                         <td>${loop.count}</td>
                         <td>${storage.product.name}</td>
                         <td>${storage.endDate}</td>
-                        <td>${storage.amount}</td>
-                        <td onclick="minus(${storage.user.id}, ${storage.product.id}, ${loop.count});">
-                            <p class="fa fa-minus"></p></td>
+                        <td>
+                            <form method="post" action="update">
+                                <input type="hidden" name="userId" value="${storage.user.id}">
+                                <input type="hidden" name="productId" value="${storage.product.id}">
+                                <input type="number" name="amount" min="0" value="${storage.amount}" class="form-control" onchange="allowBtn(${loop.count}, ${storage.amount})">
+                                <input type="submit" class="btn disabled btn-default" value="confirm">
+                            </form>
+                        </td>
                         <td onclick="addToShoppingList(${storage.user.id}, ${storage.product.id});">
                             <p class="fa fa-check"></p></td>
                     </tr>

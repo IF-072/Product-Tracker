@@ -1,6 +1,8 @@
 package com.softserve.if072.mvcapp.controller;
 
 import com.softserve.if072.common.model.Store;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Controller;
@@ -24,6 +26,8 @@ import java.util.Map;
 @RequestMapping("/stores")
 @PropertySource(value = {"classpath:application.properties"})
 public class StorePageController {
+
+    public static final Logger LOGGER = LogManager.getLogger(StorePageController.class);
 
     @Value("${application.restStoreURL}")
     private String storeUrl;
