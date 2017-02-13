@@ -31,7 +31,7 @@ import java.util.List;
 @RequestMapping("/shoppingList")
 public class ShoppingListController {
 
-    public static final Logger LOGGER =  LogManager.getLogger(ShoppingListController.class);
+    public static final Logger LOGGER = LogManager.getLogger(ShoppingListController.class);
     private ShoppingListService shoppingListService;
 
     @Autowired
@@ -69,7 +69,7 @@ public class ShoppingListController {
         try {
             shoppingListService.update(shoppingList);
             LOGGER.info(String.format("ShoppingList of user id %d was updated", id));
-        } catch (DataNotFoundException e) {
+        } catch (IllegalArgumentException e) {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             LOGGER.error(String.format("Cannot update ShoppingList of user id %d", id), e);
 
@@ -80,7 +80,7 @@ public class ShoppingListController {
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void deleteShoppingList(@RequestBody ShoppingList shoppingList, HttpServletResponse response) {
         try {
-           shoppingListService.delete(shoppingList);
+            shoppingListService.delete(shoppingList);
             LOGGER.info("ShoppingList was deleted");
         } catch (DataNotFoundException e) {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);

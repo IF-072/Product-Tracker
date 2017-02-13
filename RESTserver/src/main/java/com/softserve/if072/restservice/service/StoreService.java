@@ -31,17 +31,17 @@ public class StoreService {
     @Transactional
     public List<Store> getAllStores(int userId) throws DataNotFoundException {
         List<Store> stores = storeDAO.getAllStoresByUser(userId);
-      if (!stores.isEmpty()){
+        if (!stores.isEmpty()) {
             return stores;
         } else {
             throw new DataNotFoundException("Stores not found");
-      }
+        }
     }
 
     @Transactional
     public Store getStoreByID(int id) throws DataNotFoundException {
         Store store = storeDAO.getByID(id);
-        if (store != null){
+        if (store != null) {
             return store;
         } else {
             throw new DataNotFoundException(String.format(storeNotFound, id));
@@ -50,11 +50,12 @@ public class StoreService {
 
     @Transactional
     public void addStore(Store store) {
-        storeDAO.insert(store);}
+        storeDAO.insert(store);
+    }
 
     @Transactional
     public void updateStore(Store store) throws DataNotFoundException {
-        if(store.getName().isEmpty()||store.getName()==""){
+        if (store.getName().isEmpty() || store.getName() == "") {
             throw new DataNotFoundException("illegal arguments!");
         }
         storeDAO.update(store);
@@ -63,7 +64,7 @@ public class StoreService {
     @Transactional
     public void deleteStore(int id) throws DataNotFoundException {
         Store store = storeDAO.getByID(id);
-        if (store != null){
+        if (store != null) {
             storeDAO.deleteById(id);
         } else {
             throw new DataNotFoundException(String.format(storeNotFound, id));
@@ -83,20 +84,22 @@ public class StoreService {
     @Transactional
     public void deleteProductFromStoreById(int storeId, int productId) throws DataNotFoundException {
         Product product = storeDAO.getProductFromStoreById(storeId, productId);
-        if (product != null){
-            storeDAO.deleteProductFromStoreById (storeId, productId);
+        if (product != null) {
+            storeDAO.deleteProductFromStoreById(storeId, productId);
         } else {
             throw new DataNotFoundException(String.format("Product %d from Store %d not found", productId, storeId));
         }
     }
 
     @Transactional
-   public void addProductToStore(Store store, Product product){storeDAO.addProductToStore(store, product); }
+    public void addProductToStore(Store store, Product product) {
+        storeDAO.addProductToStore(store, product);
+    }
 
     @Transactional
     public Product getProductFromStoreById(int storeId, int productId) throws DataNotFoundException {
         Product product = storeDAO.getProductFromStoreById(storeId, productId);
-        if (product != null){
+        if (product != null) {
             return product;
         } else {
             throw new DataNotFoundException(String.format("Product %d from Store %d not found", productId, storeId));

@@ -31,15 +31,15 @@ import java.util.List;
 @RestController
 @RequestMapping("/stores")
 public class StoreController {
-    public static final Logger LOGGER =  LogManager.getLogger(StoreController.class);
+    public static final Logger LOGGER = LogManager.getLogger(StoreController.class);
     private StoreService storeService;
 
     @Autowired
-    public StoreController(StoreService storeService){
+    public StoreController(StoreService storeService) {
         this.storeService = storeService;
     }
 
-    @GetMapping ("/user/{userId}")
+    @GetMapping("/user/{userId}")
     @ResponseBody
     @ResponseStatus(value = HttpStatus.OK)
     public List<Store> getAllStoresByUserId(@PathVariable int userId, HttpServletResponse response) {
@@ -57,7 +57,7 @@ public class StoreController {
     @GetMapping("/{id}")
     @ResponseBody
     @ResponseStatus(value = HttpStatus.OK)
-        public Store getStoreByID(@PathVariable int id, HttpServletResponse response) {
+    public Store getStoreByID(@PathVariable int id, HttpServletResponse response) {
         try {
             Store store = storeService.getStoreByID(id);
             LOGGER.info(String.format("Store with id %d was retrieved", id));
@@ -69,22 +69,22 @@ public class StoreController {
         }
     }
 
-   @PostMapping("/")
-   @ResponseStatus(value = HttpStatus.CREATED)
-   public void addStore(@RequestBody Store store) {
-       storeService.addStore(store);
-       LOGGER.info("New Store was created");
-  }
+    @PostMapping("/")
+    @ResponseStatus(value = HttpStatus.CREATED)
+    public void addStore(@RequestBody Store store) {
+        storeService.addStore(store);
+        LOGGER.info("New Store was created");
+    }
 
-   @PutMapping("/")
-   @ResponseBody
-   @ResponseStatus(value = HttpStatus.OK)
-   public Store updateStore(@RequestBody Store store, HttpServletResponse response) {
-       int id = store.getId();
-       try {
+    @PutMapping("/")
+    @ResponseBody
+    @ResponseStatus(value = HttpStatus.OK)
+    public Store updateStore(@RequestBody Store store, HttpServletResponse response) {
+        int id = store.getId();
+        try {
             storeService.updateStore(store);
             LOGGER.info(String.format("Store with id %d was updated", id));
-           return storeService.getStoreByID(store.getId());
+            return storeService.getStoreByID(store.getId());
         } catch (DataNotFoundException e) {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             LOGGER.error(String.format("Cannot update Store %d", id), e);
@@ -92,9 +92,9 @@ public class StoreController {
         }
     }
 
-   @DeleteMapping("/{id}")
-   @ResponseStatus(value = HttpStatus.NO_CONTENT)
-   public void deleteStore(@PathVariable int id, HttpServletResponse response) {
+    @DeleteMapping("/{id}")
+    @ResponseStatus(value = HttpStatus.NO_CONTENT)
+    public void deleteStore(@PathVariable int id, HttpServletResponse response) {
         try {
             storeService.deleteStore(id);
             LOGGER.info(String.format("Store with id %d was deleted", id));
@@ -107,16 +107,16 @@ public class StoreController {
     /**
      * This method shows all products that sell at the current store
      *
-     * @param storeId current store_id
+     * @param storeId  current store_id
      * @param response list of products
      * @return list of products that sell at the current store
      */
 
-   @GetMapping("/{storeId}/storeProducts/{userId}")
-   @ResponseBody
-   @ResponseStatus(value = HttpStatus.OK)
-   public List<Product> getAllProductsFromStore(@PathVariable Integer storeId, @PathVariable Integer userId,
-           HttpServletResponse response) {
+    @GetMapping("/{storeId}/storeProducts/{userId}")
+    @ResponseBody
+    @ResponseStatus(value = HttpStatus.OK)
+    public List<Product> getAllProductsFromStore(@PathVariable Integer storeId, @PathVariable Integer userId,
+                                                 HttpServletResponse response) {
         try {
             List<Product> products = storeService.getProductsByStoreId(storeId, userId);
             LOGGER.info("All Products were found");
@@ -126,12 +126,12 @@ public class StoreController {
             LOGGER.error(e.getMessage());
             return null;
         }
-   }
+    }
 
     @GetMapping("/{storeId}/products/{productId}")
     @ResponseBody
     @ResponseStatus(value = HttpStatus.OK)
-    public Product getProductFromStore(@PathVariable Integer storeId, @PathVariable  Integer productId,
+    public Product getProductFromStore(@PathVariable Integer storeId, @PathVariable Integer productId,
                                        HttpServletResponse response) {
         try {
             Product product = storeService.getProductFromStoreById(storeId, productId);
@@ -149,7 +149,7 @@ public class StoreController {
     public void deleteProductFromStore(@PathVariable Integer storeId, @PathVariable Integer
             productId, HttpServletResponse response) {
         try {
-            storeService.deleteProductFromStoreById (storeId, productId);
+            storeService.deleteProductFromStoreById(storeId, productId);
             LOGGER.info(String.format("Product %d from Store %d was deleted", productId, storeId));
         } catch (DataNotFoundException e) {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
