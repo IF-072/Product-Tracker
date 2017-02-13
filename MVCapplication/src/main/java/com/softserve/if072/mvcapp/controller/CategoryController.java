@@ -36,7 +36,7 @@ public class CategoryController {
      * Method for mapping on default categories url
      * shows the list of available categories and allows to add a new one
      *
-     * @param model which we will put into the view
+     * @param model with data for view
      * @return
      */
     @GetMapping

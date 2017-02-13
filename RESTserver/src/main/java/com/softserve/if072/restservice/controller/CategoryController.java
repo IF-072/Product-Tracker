@@ -14,6 +14,7 @@ import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.crypto.Data;
+import java.util.IllegalFormatCodePointException;
 import java.util.List;
 
 @Controller
@@ -59,7 +60,7 @@ public class CategoryController {
         try {
             categoryService.update(category);
             LOGGER.info(String.format("Category with id %d was updated", id));
-        } catch (DataNotFoundException e) {
+        } catch (IllegalArgumentException e) {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             LOGGER.error(String.format("Cannot update category with id %d", id), e);
         }

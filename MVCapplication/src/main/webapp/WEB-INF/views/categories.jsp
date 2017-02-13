@@ -21,10 +21,10 @@
                 <table width="100%" class="table table-striped table-bordered table-hover">
                     <thead>
                     <tr>
-                        <th>ID</th>
-                        <th>Name</th>
-                        <th>Edit</th>
-                        <th>Delete</th>
+                        <th class="text-center">ID</th>
+                        <th class="text-center">Name</th>
+                        <th class="text-center">Edit</th>
+                        <th class="text-center">Delete</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -32,8 +32,8 @@
                         <tr class="gradeA">
                             <td><c:out value="${category.id}"></c:out></td>
                             <td><c:out value="${category.name}"></c:out></td>
-                            <td>edit</td>
-                            <td>delete</td>
+                            <td class="text-center"><a href="#"><i class="fa fa-edit fa-fw"></i>edit</a></td>
+                            <td class="text-center"><a href="#"><i class="fa fa-trash-o fa-fw"></i>delete</a></td>
                         </tr>
                     </c:forEach>
                     </tbody>
