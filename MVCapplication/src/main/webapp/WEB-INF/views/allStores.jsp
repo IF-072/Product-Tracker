@@ -3,60 +3,46 @@
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="sf" %>
 
-<!DOCTYPE html>
-<html>
-<head>
-    <title>UserStores</title>
-</head>
-<body>
+<style>
+    #edit,#delete {text-align:center}
+</style>
 
-<div class="col-lg-12">
-    <h1 class="page-header">Stores</h1>
+<div class="row">
+    <div class="col-lg-12">
+        <h1 class="page-header">Stores</h1>
+    </div>
 </div>
 
-<div class="col-lg-12">
-    <div class="panel panel-default">
-
-        <div class="panel-body">
-            <table width="100%" class="table table-striped table-bordered table-hover">
-                <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Address</th>
-                    <th>Products at store</th>
-                    <th>Edit</th>
-                    <th>Delete</th>
-                </tr>
-                </thead>
-                <tbody>
-                <c:forEach items="${stores}" var="store">
-                <tr class="gradeA">
-                        <td>"${store.name}"</td>
-                        <td>"${store.address}"</td>
-                    <td>
-                        <p> <button type="button" class="btn btn-outline btn-link" id="productButton">products</button>
-                        </p>
-                    </td>
-                    <td> <span class = "glyphicon glyphicon-edit"></span></td>
-                    <td><span class = "glyphicon glyphicon-remove-circle"></span></td>
-                </tr>
-                </c:forEach>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <table width="100%" class="table table-striped table-bordered table-hover" id="productData">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Address</th>
+                            <th>Products at store</th>
+                            <th>Edit</th>
+                            <th>Delete</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <c:forEach items="${stores}" var="store">
+                        <tr class="gradeA">
+                            <td><"${store.name}"/></td>
+                            <td><"${store.address}"/></td>
+                            <td>products</td>
+                            <td id="edit"><i class="fa fa-pencil fa-lg"></i></td>
+                            <td id="delete"><i class="fa fa-times fa-lg"></i></td>
+                        </tr>
+                        </c:forEach>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>
 <p>
     <button type="button" class="btn btn-outline btn-primary" id="button1">AddStore</button>
 </p>
-
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-<script type="text/javascript">
-    document.getElementById("productButton").onclick = function () {
-        location.href = "../product";
-    };
-</script>
-
-</body>
-</html>
-
-
-

@@ -32,7 +32,11 @@ public class ImageUploadController {
 
         redirectAttrs.addFlashAttribute("message", "Your image succesfully uploaded");
 
-        return "redirect:/image/upload";
+        //final String getUri = "http://localhost:8080/rest/image/getByFileName";
+
+
+
+        return "redirect:/product/addProduct";
     }
 
     @RequestMapping(value = "/upload", method = RequestMethod.GET)
@@ -45,6 +49,11 @@ public class ImageUploadController {
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public ModelAndView getUploadPage(@PathVariable("id") int id) {
-        return new ModelAndView("getImage", "imageId", id);
+        return new ModelAndView("addProduct", "imageId", id);
+    }
+
+    @RequestMapping(value = "/productPage/{id}", method = RequestMethod.GET)
+    public ModelAndView getUploadPageProduct(@PathVariable("id") int id) {
+        return new ModelAndView("product", "imageId", id);
     }
 }

@@ -33,7 +33,7 @@
             <add-attribute value="/js/raphael.js" />
             <add-attribute value="/js/morris.js" />
             <add-attribute value="/js/morris-data.js" />
-            <add-attribute value="/js/enableTables.js" />
+            <add-attribute value="/js/product.js" />
         </put-list-attribute>
 
     </definition>
@@ -63,6 +63,11 @@
     <definition name="product" extends="mainLayout">
         <put-attribute name="title" value="Product Tracker"/>
         <put-attribute name="body" value="/WEB-INF/views/product.jsp"/>
+    </definition>
+
+    <definition name="addProduct" extends="mainLayout">
+        <put-attribute name="title" value="Product Tracker Project"/>
+        <put-attribute name="body" value="/WEB-INF/views/addProduct.jsp"/>
     </definition>
 
     <definition name = "categories" extends="mainLayout">
