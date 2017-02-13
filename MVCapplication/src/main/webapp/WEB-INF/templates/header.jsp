@@ -113,19 +113,19 @@
                     <a href="<c:url value="../home"/>" class="active"><i class="fa fa-home fa-fw"></i> Home</a>
                 </li>
                 <li>
-                    <a href="<c:url value="../product/"/>" class="active"><i class="fa fa-list-alt fa-fw"></i> My
-                        Products</a>
+                    <a href="<c:url value="../categories"/>" class="active"><i class="fa fa-list-alt fa-fw"></i> Categories</a>
                 </li>
                 <li>
-                    <a href="<c:url value="../stores/"/>" class="active"><i class="fa fa-globe fa-fw"></i> My
-                        Stores</a>
+                    <a href="<c:url value="../product/"/>" class="active"><i class="fa fa-inbox fa-fw"></i> Products</a>
                 </li>
                 <li>
-                    <a href="#" class="active"><i class="fa fa-archive fa-fw"></i> Shopping List</a>
+                    <a href="<c:url value="../stores/"/>" class="active"><i class="fa fa-globe fa-fw"></i> Stores</a>
                 </li>
                 <li>
-                    <a href="<c:url value="../storage/"/>" class="active"><i class="fa fa-archive fa-fw"></i> My
-                        Storage</a>
+                    <a href="#" class="active"><i class="fa fa-money fa-fw"></i> Shopping List</a>
+                </li>
+                <li>
+                    <a href="<c:url value="../storage/"/>" class="active"><i class="fa fa-archive fa-fw"></i> Storage</a>
                 </li>
                 <li>
                     <p><button type="button" class="btn btn-outline btn-primary">Go shopping</button> </p>
