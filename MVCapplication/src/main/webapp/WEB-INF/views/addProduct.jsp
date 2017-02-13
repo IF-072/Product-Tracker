@@ -38,6 +38,7 @@
         </tr>
         <tr>
             <td><b>Category</b></td>
+
             <td><sf:select path="category.id">
                 <sf:option label="--- Select ---" value="-1"/>
                 <sf:options items="${categories}" itemLabel="name" itemValue="id"/>

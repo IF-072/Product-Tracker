@@ -38,7 +38,7 @@ public class ProductPageController {
     private String categoryUrl;
 
     private Unit[] unitResult;
-    private Category[] categoryResult;
+    //private Category[] categoryResult;
 
     @RequestMapping("/")
     public String getProductPage(ModelMap model) {
@@ -64,7 +64,7 @@ public class ProductPageController {
         int userId = 1;
 
         final String unitUri = new String(unitUrl + "/");
-        //final String categoryUri = new String(categoryUrl + "/user/{userId}");
+        final String categoryUri = new String(categoryUrl + "{userId}");
 
         model.addAttribute("product", new Product());
         //model.addAttribute("image", new Image());
@@ -74,11 +74,13 @@ public class ProductPageController {
         unitResult = restTemplate.getForObject(unitUri, Unit[].class);
         List<Unit> units = Arrays.asList(unitResult);
 
-        //categoryResult = restTemplate.getForObject(categoryUri, Category[].class);
-        //List<Category> categories = Arrays.asList(categoryResult);
+        Map<String, Integer> param = new HashMap<String, Integer>();
+        param.put("userId", userId);
+        Category[] categoryResult = restTemplate.getForObject(categoryUri, Category[].class, param);
+        List<Category> categories = Arrays.asList(categoryResult);
 
         model.addAttribute("units", units);
-        //model.addAttribute("categories", categories);
+        model.addAttribute("categories", categories);
 
         return "addProduct";
     }
@@ -86,19 +88,25 @@ public class ProductPageController {
     @RequestMapping(value = "/addProduct", method = RequestMethod.POST)
     public String addProduct(@ModelAttribute("product") Product product) {
 
+        final String categoryByIdUri = new String(categoryUrl + "{userId}");
+
         final String uri = new String(productUrl +"/");
 
         User user = new User();
         user.setId(1);
+
+        RestTemplate restTemplate = new RestTemplate();
+
+        Map<String, Integer> param = new HashMap<String, Integer>();
+        param.put("categoryId", product.getCategory().getId());
+        //Category category = restTemplate.getForObject(categoryByIdUri, Category.class, param);
 
         product.setUser(user);
         product.setEnabled(true);
         product.setCategory(null);
         product.setImage(null);
         product.setUnit(unitResult[product.getUnit().getId()]);
-        //product.setUnit(unit);
 
-        RestTemplate restTemplate = new RestTemplate();
         restTemplate.postForObject(uri, product, Product.class);
 
         return "redirect:/product/";
