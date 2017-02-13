@@ -2,15 +2,11 @@ package com.softserve.if072.restservice.controller;
 
 import com.softserve.if072.common.model.Product;
 import com.softserve.if072.common.model.Store;
-
 import com.softserve.if072.restservice.exception.DataNotFoundException;
 import com.softserve.if072.restservice.service.StoreService;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,7 +20,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
-
 import java.util.List;
 
 /**
@@ -65,7 +60,7 @@ public class StoreController {
         public Store getStoreByID(@PathVariable int id, HttpServletResponse response) {
         try {
             Store store = storeService.getStoreByID(id);
-            LOGGER.info("Store with id %d was retrieved", id);
+            LOGGER.info(String.format("Store with id %d was retrieved", id));
             return store;
         } catch (DataNotFoundException e) {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
@@ -88,7 +83,7 @@ public class StoreController {
        int id = store.getId();
        try {
             storeService.updateStore(store);
-            LOGGER.info("Store with id %d was updated", id);
+            LOGGER.info(String.format("Store with id %d was updated", id));
            return storeService.getStoreByID(store.getId());
         } catch (DataNotFoundException e) {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
@@ -102,7 +97,7 @@ public class StoreController {
    public void deleteStore(@PathVariable int id, HttpServletResponse response) {
         try {
             storeService.deleteStore(id);
-            LOGGER.info("Store with id %d was deleted", id);
+            LOGGER.info(String.format("Store with id %d was deleted", id));
         } catch (DataNotFoundException e) {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             LOGGER.error(e.getMessage());
@@ -117,12 +112,13 @@ public class StoreController {
      * @return list of products that sell at the current store
      */
 
-   @GetMapping("/{storeId}/products")
+   @GetMapping("/{storeId}/storeProducts/{userId}")
    @ResponseBody
    @ResponseStatus(value = HttpStatus.OK)
-   public List<Product> getAllProductsFromStore(@PathVariable int storeId, HttpServletResponse response) {
+   public List<Product> getAllProductsFromStore(@PathVariable Integer storeId, @PathVariable Integer userId,
+           HttpServletResponse response) {
         try {
-            List<Product> products = storeService.getProductsByStoreId(storeId);
+            List<Product> products = storeService.getProductsByStoreId(storeId, userId);
             LOGGER.info("All Products were found");
             return products;
         } catch (DataNotFoundException e) {
@@ -139,7 +135,7 @@ public class StoreController {
                                        HttpServletResponse response) {
         try {
             Product product = storeService.getProductFromStoreById(storeId, productId);
-            LOGGER.info("All Products were found");
+            LOGGER.info("Product was found");
             return product;
         } catch (DataNotFoundException e) {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
@@ -154,7 +150,7 @@ public class StoreController {
             productId, HttpServletResponse response) {
         try {
             storeService.deleteProductFromStoreById (storeId, productId);
-            LOGGER.info("Product %d from Store %d was deleted", productId, storeId);
+            LOGGER.info(String.format("Product %d from Store %d was deleted", productId, storeId));
         } catch (DataNotFoundException e) {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             LOGGER.error(e.getMessage());

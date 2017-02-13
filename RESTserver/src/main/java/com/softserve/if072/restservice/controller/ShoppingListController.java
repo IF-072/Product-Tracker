@@ -45,7 +45,7 @@ public class ShoppingListController {
     public List<ShoppingList> getShoppingListByUserId(@PathVariable int userId, HttpServletResponse response) {
         try {
             List<ShoppingList> shoppingLists = shoppingListService.getByUserId(userId);
-            LOGGER.info("Full ShoppingList of user id %d was found ", userId);
+            LOGGER.info(String.format("Full ShoppingList of user id %d was found ", userId));
             return shoppingLists;
         } catch (DataNotFoundException e) {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
@@ -68,7 +68,7 @@ public class ShoppingListController {
         int id = shoppingList.getUser().getId();
         try {
             shoppingListService.update(shoppingList);
-            LOGGER.info("ShoppingList of user id %d was updated", id);
+            LOGGER.info(String.format("ShoppingList of user id %d was updated", id));
         } catch (DataNotFoundException e) {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             LOGGER.error(String.format("Cannot update ShoppingList of user id %d", id), e);
