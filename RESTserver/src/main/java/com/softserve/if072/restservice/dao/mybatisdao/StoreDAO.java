@@ -41,6 +41,14 @@ public interface StoreDAO extends DAO<Store> {
 
     @Select("SELECT id, name, address, latitude, longitude, is_enabled FROM store WHERE user_id = #{userId}")
     @Results({@Result(property = "isEnabled", column = "is_enabled")})
+    List<Store> getAllStoresByUser(int userId);
+
+    @Select("SELECT id, name, address, products, latitude, longitude, is_enabled FROM store WHERE user_id = #{userId}")
+    @Results(value =
+            {@Result(property = "isEnabled", column = "is_enabled"),
+                    @Result(property = "products", column = "id", javaType = List.class,
+                            many = @Many(select = "com.softserve.if072.restservice.dao.mybatisdao.StoreDAO" +
+                                    ".getProductsByStoreId"))})
     List<Store> getAllByUser(int userId);
 
     @Override

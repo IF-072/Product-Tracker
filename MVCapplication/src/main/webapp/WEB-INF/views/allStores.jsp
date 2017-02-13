@@ -42,11 +42,12 @@
                                     <td id="name">${store.name}</td>
                                     <td id="address">${store.address}</td>
 
-                                <td> <button type="button" class="btn btn-outline btn-link"
-                                             onclick="productList(${store.id})">products</button>
-                                                 <%--onclick="location.href='../product/';"--%>
+                                <td> <a href="<c:url value='/stores/storeProducts?storeId=${store.id}'/>">products</a>
+                                </td>
+                                    <%--<button type="button" class="btn btn-outline btn-link"--%>
+                                    <%--onclick="productList(${store.id})">products</button>--%>
+                                    <%--&lt;%&ndash;onclick="location.href='../product/';"&ndash;%&gt;--%>
 
-                                    </td>
                                 <td id="edit" onclick="edit(${store.id});"><i class="fa fa-pencil fa-lg"></i></td>
                                 <td id="delete" onclick="delete(${store.id})"><i class="fa fa-times fa-lg"></i></td>
                             </tr>

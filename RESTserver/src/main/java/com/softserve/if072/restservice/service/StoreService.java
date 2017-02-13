@@ -30,7 +30,7 @@ public class StoreService {
 
     @Transactional
     public List<Store> getAllStores(int userId) throws DataNotFoundException {
-        List<Store> stores = storeDAO.getAllByUser(userId);
+        List<Store> stores = storeDAO.getAllStoresByUser(userId);
       if (!stores.isEmpty()){
             return stores;
         } else {
