@@ -2,12 +2,70 @@
  * Created by Vitaliy Malisevych on 06.02.2017.
  */
 
-var table = $('#productData').DataTable();
-
 var prId;
 var rowIndex;
 
-function edit(productId) {
+function deleteProduct(productId) {
+    $("#dialogDelete").dialog("open");
+    prId = productId;
+};
+
+$("#dialogDelete").dialog({autoOpen:false,buttons:{
+    Delete:function(){
+        $.ajax({
+            url : "http://localhost:8080/product/delProduct",
+            method : "POST",
+            data : {productId: prId}
+        });
+        $(this).dialog("close");
+        setTimeout(function() {window.location.reload();}, 1000);
+    },
+    Cancel:function(){
+        $(this).dialog("close");}}
+});
+
+$(document).ready(function() {
+    var table = $('#productData').DataTable();
+});
+
+
+/*
+
+function deleteProduct(productId) {
+    $('#dialogDelete').dialog();
+    prId = productId;
+    //rowIndex = this.rowIndex;
+};*/
+
+//$('#dialogDelete').dialog({autoOpen:false, buttons:{
+    //Yes:function(){
+        //$(this).dialog("close");
+        /*$.ajax({
+            url : "http://localhost:8080/product/delProduct",
+            method : "POST",
+            data : {productId: prId},
+            success : function(data) {
+                table.row(rowIndex).remove().draw( false );
+                $(this).dialog("close");
+            },
+            error : function(xhr, status, errorThrown) {
+                alert('adding component failed with status: ' + status + ". " + errorThrown);
+            }
+        });*/
+    //},
+   // Cancel:function(){
+     //   $(this).dialog("close");
+   // }
+// }});
+
+
+
+/*$('#deleteRow').click( function () {
+    table.row('.selected').remove().draw( false );
+} );*/
+
+
+/*function edit(productId) {
         $.ajax({
             url: "update",
             method: "GET",
@@ -19,35 +77,11 @@ function edit(productId) {
                 console.log(exception);
             }
         });
-}
-
-function del(productId, rI) {
-    prId = productId;
-    rowIndex = rI;
-    $('#dialogDelete').show();
-}
+}*/
 
 
-$('#dialogDelete').dialog({autoOpen:false, buttons:{
-    Yes:function(){
-        $.ajax({
-            url : "http://localhost:8080/product/delProduct",
-            method : "POST",
-            data : {productId: prId},
-            success : function(data) {
-                table.row(rowIndex).remove().draw( false );
-                $(this).dialog("close");
-            },
-            error : function(xhr, status, errorThrown) {
-                alert('adding component failed with status: ' + status + ". "
-                    + errorThrown);
-            }
-        });
-    },
-    Cancel:function(){
-        $(this).dialog("close");
-    }
-}});
+
+
 
 /*$('#productData tbody').on( 'click', 'tr', function () {
     if ( $(this).hasClass('selected') ) {
@@ -59,15 +93,18 @@ $('#dialogDelete').dialog({autoOpen:false, buttons:{
     }
 } );*/
 
-$('#deleteRow').click( function () {
-    table.row('.selected').remove().draw( false );
+
+
+/*
+$('#addRow').click( function () {
+    $('#dialogDelete').dialog();
 } );
 
 //Function to add new product
 
 $( "#addBut" ).click(function add() {
     var x = $( "#selUnit option:selected" ).val();
-    /*document.getElementById("selUnit");*/
+    /!*document.getElementById("selUnit");*!/
     var product = {
         name: $("#name").val(),
         description: $("#description").val(),
@@ -82,4 +119,4 @@ $( "#addBut" ).click(function add() {
         mimeType: 'application/json',
         data: JSON.stringify(product)
     });
-})
+});*/

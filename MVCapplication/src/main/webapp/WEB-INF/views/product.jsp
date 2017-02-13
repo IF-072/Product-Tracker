@@ -18,18 +18,16 @@
         <h1 class="page-header">My products</h1>
     </div>
 </div>
-<!-- /.row -->
+
 <div class="row">
     <div class="col-lg-12">
         <div class="panel panel-default">
-
             <div class="panel-body">
-
                 <input type="button" onClick="window.location.href = 'addProduct'" value="Add new product">
-
-                    <table width="100%" class="table table-striped table-bordered table-hover" id="productData">
+                    <table width="100%" class="table table-striped" id="productData">
                         <thead>
                         <tr>
+                            <th>ID</th>
                             <th>Name</th>
                             <th>Description</th>
                             <th>Category</th>
@@ -43,15 +41,15 @@
                         <tbody>
                         <c:forEach items="${products}" var="product">
                             <tr class="gradeA">
+                                <td><c:out value="${product.id}"></c:out></td>
                                 <td><c:out value="${product.name}"></c:out></td>
                                 <td><c:out value="${product.description}"></c:out></td>
                                 <td><c:out value="${product.category.name}"></c:out></td>
                                 <td><c:out value="${product.unit.name}"></c:out></td>
-                                <td><c:out value="${product.image}"></c:out></td>
-                                <td><c:out value="${product.image}"></c:out></td>
-                                <td onclick="edit(${product.id});">
-                                    <p class="fa fa-pencil fa-lg"></p></td>
-                                <td onclick="del(${product.id},this.rowIndex)"><i class="fa fa-times fa-lg"></i></td>
+                                <td><c:out value="${product.image.id}"></c:out></td>
+                                <td><c:url value="../stores/">Stores</c:url></td>
+                                <td><p class="fa fa-pencil fa-lg" id="edit"></p></td>
+                                <td onclick="deleteProduct(${product.id});" id="delete"><p class="fa fa-times fa-lg" ></p></td>
                             </tr>
                         </c:forEach>
                         </tbody>
@@ -59,14 +57,17 @@
             </div>
         </div>
     </div>
+    <div id="dialogDelete" title="Delete product">
+    <br/>
+    <b>Are you shure?</b>
+    <br/>
+    </div>
 </div>
 
-<div id="dialogDelete" title="Delete product">
-    <br/>
-    Are you shure?
-    <br/>
 
-</div>
+
+
+
 
 
 
