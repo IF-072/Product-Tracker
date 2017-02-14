@@ -10,7 +10,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.client.HttpClientErrorException;
@@ -33,12 +33,12 @@ public class UserProfileController {
     private String getCurrentUser;
 
     /**
-     * This method extract a user model for profile view.
+     * This method extracts a user model for the profile view.
      *
      * @return profile's view url
      */
     @RequestMapping("/profile")
-    public String getUserProfilePage(HttpServletRequest request, ModelMap model) {
+    public String getUserProfilePage(HttpServletRequest request, Model model) {
         RestTemplate restTemplate = new RestTemplate();
 
         HttpHeaders headers = new HttpHeaders();
@@ -57,6 +57,6 @@ public class UserProfileController {
     public String handleException() {
         LOG.warn("User has tried to visit secured page without authorization.");
 
-        return "login";
+        return "redirect:login";
     }
 }

@@ -75,4 +75,8 @@
         <put-attribute name="body" value="/WEB-INF/views/profile.jsp" />
     </definition>
 
+    <definition name="shopping_list" extends="mainLayout">
+        <put-attribute name="title" value="Shopping list" />
+        <put-attribute name="body" value="/WEB-INF/views/shopping_list.jsp" />
+    </definition>
 </tiles-definitions>
