@@ -75,4 +75,17 @@
         <put-attribute name="body" value="/WEB-INF/views/profile.jsp" />
     </definition>
 
+    <definition name="403" extends="mainLayout">
+        <put-attribute name="header" value=""/>
+        <put-attribute name="title" value="Forbidden"/>
+        <put-attribute name="body" value="/WEB-INF/views/403.jsp"/>
+    </definition>
+
+    <definition name="404" extends="mainLayout">
+        <put-attribute name="header" value=""/>
+        <put-attribute name="title" value="Not Found"/>
+        <put-attribute name="body" value="/WEB-INF/views/404.jsp"/>
+    </definition>
+
+
 </tiles-definitions>

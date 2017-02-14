@@ -25,7 +25,7 @@ import java.util.Map;
 
 @Controller
 @RequestMapping("/register")
-@PropertySource(value = {"classpath:application.properties"})
+@PropertySource({"classpath:application.properties", "classpath:message.properties"})
 public class RegistrationController {
 
     private static final Logger LOGGER = LogManager.getLogger(RegistrationController.class);
@@ -63,13 +63,13 @@ public class RegistrationController {
                                    BindingResult result, RedirectAttributes redirectAttributes) {
         if (result.hasErrors()) {
             redirectAttributes.addFlashAttribute("validationErrors", result.getFieldErrors());
-            return "redirect:register";
+            return "redirect:/register";
         }
 
         Role role = getRoleByID(registrationForm.getRoleId());
         if(role == null) {
             redirectAttributes.addFlashAttribute(errorMessage, "Please select correct account type");
-            return "redirect:register";
+            return "redirect:/register";
         }
 
         User user = new User();
@@ -85,7 +85,7 @@ public class RegistrationController {
             ResponseEntity<String> responseEntity = template.postForEntity(url, user, String.class);
             if (responseEntity.getStatusCode().equals(HttpStatus.OK)){
                 redirectAttributes.addFlashAttribute("successMessage", "Your account was successfully created");
-                return "redirect:login";
+                return "redirect:/login";
             }
         }  catch (HttpClientErrorException e) {
             if(e.getStatusCode().equals(HttpStatus.UNPROCESSABLE_ENTITY)){
@@ -93,10 +93,10 @@ public class RegistrationController {
             } else {
                 redirectAttributes.addFlashAttribute(errorMessage, "Something went wrong... Please try one more time");
             }
-            return "redirect:register";
+            return "redirect:/register";
         }
 
-       return "redirect:register";
+       return "redirect:/register";
     }
 
     private Role getRoleByID(int roleId) {
