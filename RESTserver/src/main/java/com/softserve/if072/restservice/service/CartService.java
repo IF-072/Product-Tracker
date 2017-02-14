@@ -2,6 +2,7 @@ package com.softserve.if072.restservice.service;
 
 import com.softserve.if072.common.model.Cart;
 import com.softserve.if072.restservice.dao.mybatisdao.CartDAO;
+import com.softserve.if072.restservice.exception.DataNotFoundException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,16 +41,16 @@ public class CartService {
         LOGGER.info(String.format(successfullyOperation, cart.getProduct().getName(), "inserted into"));
     }
 
-    public void update(Cart cart) {
+    public void update(Cart cart) throws DataNotFoundException {
         if (cartDAO.update(cart) == 0) {
-            throw new IllegalArgumentException(String.format(cartNotFound, "invalid UPDATE operation", cart.getProduct().getName()));
+            throw new DataNotFoundException(String.format(cartNotFound, "invalid UPDATE operation", cart.getProduct().getName()));
         }
         LOGGER.info(String.format(successfullyOperation, cart.getProduct().getName(), "updated in"));
     }
 
-    public void delete(Cart cart) {
+    public void delete(Cart cart) throws DataNotFoundException {
         if (cartDAO.delete(cart) == 0) {
-            throw new IllegalArgumentException(String.format(cartNotFound, "invalid DELETE operation", cart.getProduct().getName()));
+            throw new DataNotFoundException(String.format(cartNotFound, "invalid DELETE operation", cart.getProduct().getName()));
         }
         LOGGER.info(String.format(successfullyOperation, cart.getProduct().getName(), "deleted from"));
     }

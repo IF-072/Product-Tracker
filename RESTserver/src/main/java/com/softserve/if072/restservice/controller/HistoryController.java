@@ -1,14 +1,13 @@
 package com.softserve.if072.restservice.controller;
 
 import com.softserve.if072.common.model.History;
+import com.softserve.if072.restservice.exception.DataNotFoundException;
 import com.softserve.if072.restservice.service.HistoryService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,7 +27,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/users/{userID}/histories")
-public class HistoryController {
+public class HistoryController extends ExceptionHandlerController {
     @Autowired
     private HistoryService historyService;
     private static final Logger LOGGER = LogManager.getLogger(HistoryController.class);
@@ -53,27 +52,13 @@ public class HistoryController {
 
     @PutMapping()
     @ResponseStatus(value = HttpStatus.OK)
-    public void update(@RequestBody History history) {
+    public void update(@RequestBody History history) throws DataNotFoundException {
         historyService.update(history);
     }
 
     @DeleteMapping()
     @ResponseStatus(value = HttpStatus.OK)
-    public void delete(@RequestBody History history) {
+    public void delete(@RequestBody History history) throws DataNotFoundException {
         historyService.delete(history);
-    }
-
-    @ExceptionHandler(IllegalArgumentException.class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    public String dataNotFound(IllegalArgumentException e) {
-        LOGGER.error(e.getMessage());
-        return e.getMessage();
-    }
-
-    @ExceptionHandler(DataAccessException.class)
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public String dataAccessException(DataAccessException e) {
-        LOGGER.error(e.getMessage());
-        return e.getMessage();
     }
 }
