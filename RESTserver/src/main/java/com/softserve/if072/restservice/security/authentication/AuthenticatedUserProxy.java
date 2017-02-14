@@ -36,14 +36,12 @@ public class AuthenticatedUserProxy implements Authentication {
 
     @Override
     public Object getDetails() {
-        return null;
+        return user;
     }
 
     @Override
     public Object getPrincipal() {
-        if (user != null)
-            return user.getEmail();
-        return null;
+        return user;
     }
 
     @Override
