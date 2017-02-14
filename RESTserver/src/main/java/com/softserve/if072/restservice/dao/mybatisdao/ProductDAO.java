@@ -38,6 +38,9 @@ public interface ProductDAO extends DAO<Product> {
 
     @Select("SELECT id, name, description, image_id, user_id, category_id, unit_id, is_enabled FROM product WHERE user_id = #{userId}")
     @Results(value = {
+            @Result(property = "id", column = "id"),
+            @Result(property = "name", column = "name"),
+            @Result(property = "description", column = "description"),
             @Result(property = "image", column = "image_id", javaType = Image.class,
                     one = @One(select = "com.softserve.if072.restservice.dao.mybatisdao.ImageDAO.getByID")),
             @Result(property = "user", column = "user_id", javaType = User.class,

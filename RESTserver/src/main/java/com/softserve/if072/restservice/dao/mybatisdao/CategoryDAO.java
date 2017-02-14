@@ -13,26 +13,27 @@ import java.util.List;
 
 public interface CategoryDAO extends DAO<Category> {
 
-    @Select("SELECT * FROM category")
-    @Results({
+    @Select("SELECT id, name, user_id, is_enabled FROM category WHERE user_id = #{userID}")
+    @Results(value = {
             @Result(property = "id", column = "id"),
             @Result(property = "name", column = "name"),
-            @Result(property = "user", column = "user_id", javaType = User.class, one = @One(select = "com.softserve.if072.restservice.dao.mybatisdao.UserDAO.findAllUsers"))
+            @Result(property = "user", column = "user_id", javaType = User.class, one = @One(select = "com.softserve.if072.restservice.dao.mybatisdao.UserDAO.getByID")),
+            @Result(property = "isEnabled", column = "is_enabled")
     })
     List<Category> getByUserID(int userID);
 
     @Override
-    @Select("SELECT * FROM category WHERE id = #{id}")
+    @Select("SELECT id, name, user_id FROM category WHERE id = #{id}")
     @Results(value = {
             @Result(property = "id", column = "id"),
             @Result(property = "name", column = "name"),
-            @Result(property = "user", column = "user_id", javaType = User.class, one = @One(select = "com.softserve.if072.restservice.dao.mybatisdao.UserDAO.getByID"))
+            @Result(property = "user", column = "user_id", javaType = User.class, one = @One(select = "com.softserve.if072.restservice.dao.mybatisdao.UserDAO.getByID")),
+            @Result(property = "isEnabled", column = "is_enabled")
     })
-     Category getByID(@Param("id") int id);
+    Category getByID(int id);
 
     @Override
     @Insert("INSERT INTO category(name, user_id) VALUES(#{name}, #{user.id})")
-    @Options(useGeneratedKeys = true)
     void insert(Category category);
 
 
@@ -41,6 +42,7 @@ public interface CategoryDAO extends DAO<Category> {
     void update(Category category);
 
     @Override
-    @Delete("DELETE FROM category WHERE id = #{id}")
-    void deleteById(@Param("id") int id);
+    @Delete("UPDATE category SET is_enabled = 0 WHERE id = #{id}")
+    void deleteById(int id);
+
 }
