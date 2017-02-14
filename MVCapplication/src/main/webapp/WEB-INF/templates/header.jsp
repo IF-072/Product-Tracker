@@ -81,7 +81,7 @@
                 <i class="fa fa-user fa-fw"></i> <i class="fa fa-caret-down"></i>
             </a>
             <ul class="dropdown-menu dropdown-user">
-                <li><a href="/profile"><i class="fa fa-user fa-fw"></i> User Profile</a>
+                <li><a href="<c:url value="/profile" />"><i class="fa fa-user fa-fw"></i> User Profile</a>
                 </li>
                 <li><a href="#"><i class="fa fa-gear fa-fw"></i> Settings</a>
                 </li>
@@ -108,13 +108,14 @@
                     <a href="<c:url value="../product/"/>" class="active"><i class="fa fa-inbox fa-fw"></i> Products</a>
                 </li>
                 <li>
+                    <a href="<c:url value="/shopping_list" />" class="active"><i class="fa fa-archive fa-fw"></i> Shopping List</a>
+                </li>
+                <li>
                     <a href="<c:url value="../stores/"/>" class="active"><i class="fa fa-globe fa-fw"></i> Stores</a>
                 </li>
                 <li>
-                    <a href="#" class="active"><i class="fa fa-money fa-fw"></i> Shopping List</a>
-                </li>
-                <li>
-                    <a href="<c:url value="../storage/"/>" class="active"><i class="fa fa-archive fa-fw"></i> Storage</a>
+                    <a href="<c:url value="../storage/"/>" class="active"><i class="fa fa-archive fa-fw"></i> My
+                        Storage</a>
                 </li>
                 <li>
                     <p><button type="button" class="btn btn-outline btn-primary">Go shopping</button> </p>
