@@ -22,6 +22,8 @@ public class ImageService {
         return imageDAO.getByID(id);
     }
 
+    public Image getByFileName(String fileName) { return imageDAO.getByFileName(fileName); }
+
     public void insert(Image image) {
         imageDAO.insert(image);
     }

@@ -28,6 +28,14 @@ public interface ImageDAO extends DAO<Image> {
     })
     Image getByID(@Param("id") int id);
 
+    @Select("SELECT id, file_name, content_type, image_data FROM image WHERE file_name = #{fileName}")
+    @Results(value = {
+            @Result(property = "id", column = "id"),
+            @Result(property = "fileName", column = "file_name"),
+            @Result(property = "contentType", column = "content_type"),
+            @Result(property = "imageData", column = "image_data")
+    })
+    Image getByFileName(@Param("fileName") String fileName);
 
     @Override
     @Insert("INSERT INTO image (file_name, content_type, image_data) VALUES (#{fileName}, #{contentType}, #{imageData})")
