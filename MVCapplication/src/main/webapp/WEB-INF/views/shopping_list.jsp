@@ -1,4 +1,4 @@
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>.
 
 <div class="row">
     <div class="panel panel-default">
@@ -20,7 +20,7 @@
                         <tr>
                             <td>${elem.product.name}</td>
                             <td>${elem.amount}</td>
-                            <td><a class="fa fa-minus-square fa-lg"/></td>
+                            <td><a href="/shopping_list/decrease" class="fa fa-minus-square fa-lg"/></td>
                             <td><a class="fa fa-plus-square fa-lg"/></td>
                             <td><a class="fa fa-times fa-lg"/></td>
                         </tr>
