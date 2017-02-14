@@ -22,6 +22,10 @@
                             <td>email</td>
                             <td>${user.email}</td>
                         </tr>
+                        <tr>
+                            <td>authority</td>
+                            <td>${user.role.authority}</td>
+                        </tr>
                         </tbody>
                     </table>
                 </div>

@@ -23,18 +23,14 @@ import javax.servlet.http.HttpServletRequest;
 public class UserProfileController extends BaseController {
     private static final Logger LOG = LogManager.getLogger(UserProfileController.class);
 
-    @Value("${service.user.current}")
-    private String getCurrentUser;
-
     /**
      * This method extracts a user model for the profile view.
      *
      * @return profile's view url
      */
     @RequestMapping("/profile")
-    public String getUserProfilePage(HttpServletRequest request, Model model) {
-        RestTemplate restTemplate = getRestTemplate();
-        User user = restTemplate.getForObject(getCurrentUser, User.class);
+    public String getUserProfilePage(Model model) {
+        User user = getCurrentUser();
         model.addAttribute("user", user);
 
         return "profile";
