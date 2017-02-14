@@ -11,6 +11,7 @@
             <add-attribute value="/css/morris.css" />
             <add-attribute value="/css/jquery-ui.css" />
             <add-attribute value="/css/jquery.dataTables.css" />
+            <add-attribute value="/css/shopping_list.css" />
         </put-list-attribute>
 
         <put-list-attribute name="javascripts">
