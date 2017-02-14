@@ -8,6 +8,7 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
@@ -41,5 +42,12 @@ public class ShoppingListController {
         model.addAttribute("shoppingList", shoppingList);
 
         return "shopping_list";
+    }
+
+    @RequestMapping("/shopping_list/increase")
+    public String increaseProductAmount(@RequestParam("userId") int userId, @RequestParam("productId") int productId) {
+
+
+        return "redirect:../shopping_list";
     }
 }
