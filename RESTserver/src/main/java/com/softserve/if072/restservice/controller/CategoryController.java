@@ -4,13 +4,20 @@ import com.softserve.if072.common.model.Category;
 import com.softserve.if072.restservice.exception.DataNotFoundException;
 import com.softserve.if072.restservice.service.CategoryService;
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
-import org.apache.logging.log4j.Logger;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
@@ -28,10 +35,7 @@ public class CategoryController {
         this.categoryService = categoryService;
     }
 
-    @Value("${category.notFound}")
-    private String categoryNotFound;
-
-    @GetMapping(value = "/user/{userID}")
+    @GetMapping(value = "/{userID}")
     @ResponseBody
     @ResponseStatus(value = HttpStatus.OK)
     public List<Category> getAllCategoriesByUserID(@PathVariable("userID") int userID, HttpServletResponse response) {
@@ -46,17 +50,17 @@ public class CategoryController {
         }
     }
 
-    @GetMapping(value = "/{id}")
+    @GetMapping(value = "/id/{categoryID}")
     @ResponseBody
     @ResponseStatus(value = HttpStatus.OK)
-    public Category getById(@PathVariable("id") int id, HttpServletResponse response) {
+    public Category getCategoryByID(@PathVariable("categoryID") int categoryID, HttpServletResponse response) {
         try {
-            Category category = categoryService.getById(id);
-            LOGGER.info(String.format("Category with id %d was retrieved", id));
+            Category category = categoryService.getById(categoryID);
+            LOGGER.info(String.format("Category with id %d was found", categoryID));
             return category;
         } catch (DataNotFoundException e) {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-            LOGGER.error(String.format(categoryNotFound, id), e);
+            LOGGER.error(("Category wasn't found"));
             return null;
         }
     }
@@ -64,19 +68,25 @@ public class CategoryController {
     @PostMapping(value = "/")
     @ResponseStatus(value = HttpStatus.CREATED)
     public void insert(@RequestBody Category category)  {
-        categoryService.insert(category);
-        LOGGER.info("New category was created");
+            categoryService.insert(category);
+            LOGGER.info("New category %d was created", category.getId());
     }
 
     @PutMapping(value = "/")
     @ResponseStatus(value = HttpStatus.OK)
-    public void update(@RequestBody Category category) {
+    public void update(@RequestBody Category category, HttpServletResponse response) {
         int id = category.getId();
-        categoryService.update(category);
-        LOGGER.info(String.format("Category with id %d was updated", id));
+
+        try {
+            categoryService.update(category);
+            LOGGER.info(String.format("Category with id %d was updated", id));
+        } catch (IllegalArgumentException e) {
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            LOGGER.error(String.format("Cannot update category with id %d", id), e);
+        }
     }
 
-    @RequestMapping(value = "/{id}")
+    @DeleteMapping(value = "/{id}")
     @ResponseStatus(value = HttpStatus.OK)
     public void delete(@PathVariable("id") int id) {
         categoryService.deleteById(id);

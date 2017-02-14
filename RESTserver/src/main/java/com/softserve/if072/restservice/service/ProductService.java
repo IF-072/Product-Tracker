@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.xml.crypto.Data;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -33,10 +34,13 @@ public class ProductService {
         this.productDAO = productDAO;
     }
 
-    @Transactional
     public List<Product> getAllProducts(int userId) throws DataNotFoundException {
-        List<Product> products = productDAO.getAllByUserId(userId);
-        if (!products.isEmpty()){
+        List<Product> getProducts = productDAO.getAllByUserId(userId);
+        List<Product> products = new ArrayList<Product>();
+        if (!getProducts.isEmpty()){
+            for(Product getProduct : getProducts) {
+                if(getProduct.isEnabled()) {products.add(getProduct);}
+            }
             return products;
         } else {
             throw new DataNotFoundException("Products not found");

@@ -9,11 +9,11 @@ import java.util.List;
 
 public interface UnitDAO extends DAO<Unit> {
     @Override
-    @Select("SELECT * FROM unit")
+    @Select("SELECT id, name FROM unit")
     List<Unit> getAll();
 
     @Override
-    @Select("SELECT * FROM unit WHERE id = #{id}")
+    @Select("SELECT id, name FROM unit WHERE id = #{id}")
     Unit getByID(@Param("id") int id);
 
     @Override
