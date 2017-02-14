@@ -20,8 +20,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import javax.servlet.http.HttpServletResponse;
-import javax.xml.crypto.Data;
-import java.util.IllegalFormatCodePointException;
 import java.util.List;
 
 @Controller
@@ -48,6 +46,21 @@ public class CategoryController {
         } catch (DataNotFoundException e) {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             LOGGER.error("Categories were not found", e);
+            return null;
+        }
+    }
+
+    @GetMapping(value = "/id/{categoryID}")
+    @ResponseBody
+    @ResponseStatus(value = HttpStatus.OK)
+    public Category getCategoryByID(@PathVariable("categoryID") int categoryID, HttpServletResponse response) {
+        try {
+            Category category = categoryService.getById(categoryID);
+            LOGGER.info(String.format("Category with id %d was found", categoryID));
+            return category;
+        } catch (DataNotFoundException e) {
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            LOGGER.error(("Category wasn't found"));
             return null;
         }
     }
