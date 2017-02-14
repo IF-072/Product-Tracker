@@ -2,6 +2,7 @@ package com.softserve.if072.restservice.service;
 
 import com.softserve.if072.common.model.History;
 import com.softserve.if072.restservice.dao.mybatisdao.HistoryDAO;
+import com.softserve.if072.restservice.exception.DataNotFoundException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,16 +47,16 @@ public class HistoryService {
         LOGGER.info(String.format(successfullyOperation, history.getProduct().getName(), "inserted into"));
     }
 
-    public void update(History history){
+    public void update(History history) throws DataNotFoundException {
         if (historyDAO.update(history) == 0) {
-            throw new IllegalArgumentException(String.format(historyNotFound, "invalid UPDATE operation", history.getProduct().getName()));
+            throw new DataNotFoundException(String.format(historyNotFound, "invalid UPDATE operation", history.getProduct().getName()));
         }
         LOGGER.info(String.format(successfullyOperation, history.getProduct().getName(), "updated in"));
     }
 
-    public void delete(History history) {
+    public void delete(History history) throws DataNotFoundException {
         if (historyDAO.delete(history) == 0) {
-            throw new  IllegalArgumentException(String.format(historyNotFound, "invalid DELETE operation", history.getProduct().getName()));
+            throw new  DataNotFoundException(String.format(historyNotFound, "invalid DELETE operation", history.getProduct().getName()));
         }
         LOGGER.info(String.format(successfullyOperation, history.getProduct().getName(), "deleted from"));
     }
