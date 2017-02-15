@@ -56,6 +56,12 @@
     <definition name="storage" extends="mainLayout">
         <put-attribute name="title" value="Product Tracker"/>
         <put-attribute name="body" value="/WEB-INF/views/storage.jsp"/>
+        <put-list-attribute name="stylesheets" inherit="true">
+            <add-attribute value="/css/storage.css"/>
+        </put-list-attribute>
+        <put-list-attribute name="javascripts" inherit="true">
+            <add-attribute value="/js/storage.js"/>
+        </put-list-attribute>
     </definition>
 
     <definition name="login" extends="mainLayout">
@@ -95,6 +101,13 @@
         <put-attribute name="body" value="/WEB-INF/views/profile.jsp"/>
     </definition>
 
+    <definition name="goShoppingStores" extends="mainLayout">
+        <put-attribute name="title" value="Product Tracker Project"/>
+        <put-attribute name="body" value="/WEB-INF/views/goShoppingStores.jsp"/>
+        <put-list-attribute name="javascripts" inherit="true">
+            <add-attribute value="/js/goshopping.js"/>
+        </put-list-attribute>
+    </definition>
     <definition name="addStore" extends="mainLayout">
         <put-attribute name="title" value="Product Tracker Project"/>
         <put-attribute name="body" value="/WEB-INF/views/addStore.jsp"/>
@@ -120,6 +133,17 @@
         <put-attribute name="header" value=""/>
         <put-attribute name="title" value="Not Found"/>
         <put-attribute name="body" value="/WEB-INF/views/404.jsp"/>
+    </definition>
+
+    <definition name="goShoppingProducts" extends="mainLayout">
+        <put-attribute name="title" value="Product Tracker Project"/>
+        <put-attribute name="body" value="/WEB-INF/views/goShoppingProducts.jsp"/>
+        <put-list-attribute name="stylesheets" inherit="true">
+            <add-attribute value="/css/storage.css"/>
+        </put-list-attribute>
+        <put-list-attribute name="javascripts" inherit="true">
+            <add-attribute value="/js/goshopping.js"/>
+        </put-list-attribute>
     </definition>
 
 </tiles-definitions>
