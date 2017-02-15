@@ -44,4 +44,14 @@ public class  ImageController {
         return new ResponseEntity<String>(HttpStatus.OK);
     }
 
+    @RequestMapping(value = "/getByFileName", method = RequestMethod.GET)
+    @ResponseBody
+    public void getByImageFileName(@RequestParam String fileName, HttpServletResponse response) throws IOException {
+        Image image = imageService.getByFileName(fileName);
+        if (image != null) {
+            response.setContentType(image.getContentType());
+            response.getOutputStream().write(image.getImageData());
+            response.getOutputStream().close();
+        }
+    }
 }

@@ -81,7 +81,7 @@
                 <i class="fa fa-user fa-fw"></i> <i class="fa fa-caret-down"></i>
             </a>
             <ul class="dropdown-menu dropdown-user">
-                <li><a href="/profile"><i class="fa fa-user fa-fw"></i> User Profile</a>
+                <li><a href="<c:url value="/profile" />"><i class="fa fa-user fa-fw"></i> User Profile</a>
                 </li>
                 <li><a href="#"><i class="fa fa-gear fa-fw"></i> Settings</a>
                 </li>
@@ -98,30 +98,20 @@
     <div class="navbar-default sidebar" role="navigation">
         <div class="sidebar-nav navbar-collapse">
             <ul class="nav in" id="side-menu">
-                <li class="sidebar-search">
-                    <div class="input-group custom-search-form">
-                        <input type="text" class="form-control" placeholder="Search...">
-                        <span class="input-group-btn">
-                                <button class="btn btn-default" type="button">
-                                    <i class="fa fa-search"></i>
-                                </button>
-                            </span>
-                    </div>
-                    <!-- /input-group -->
-                </li>
                 <li>
                     <a href="<c:url value="../home"/>" class="active"><i class="fa fa-home fa-fw"></i> Home</a>
                 </li>
                 <li>
-                    <a href="<c:url value="../product/"/>" class="active"><i class="fa fa-list-alt fa-fw"></i> My
-                        Products</a>
+                    <a href="<c:url value="../categories"/>" class="active"><i class="fa fa-list-alt fa-fw"></i> Categories</a>
                 </li>
                 <li>
-                    <a href="<c:url value="../stores/"/>" class="active"><i class="fa fa-globe fa-fw"></i> My
-                        Stores</a>
+                    <a href="<c:url value="../product/"/>" class="active"><i class="fa fa-inbox fa-fw"></i> Products</a>
                 </li>
                 <li>
-                    <a href="#" class="active"><i class="fa fa-archive fa-fw"></i> Shopping List</a>
+                    <a href="<c:url value="/shopping_list" />" class="active"><i class="fa fa-archive fa-fw"></i> Shopping List</a>
+                </li>
+                <li>
+                    <a href="<c:url value="../stores/"/>" class="active"><i class="fa fa-globe fa-fw"></i> Stores</a>
                 </li>
                 <li>
                     <a href="<c:url value="../storage/"/>" class="active"><i class="fa fa-archive fa-fw"></i> My

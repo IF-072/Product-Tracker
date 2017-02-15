@@ -30,7 +30,5 @@
         <script src="<c:url value="${js}"/>"></script>
     </c:forEach>
 
-
-
 </body>
 </html>

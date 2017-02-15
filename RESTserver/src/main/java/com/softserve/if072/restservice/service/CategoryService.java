@@ -23,7 +23,10 @@ public class CategoryService {
 
     private CategoryDAO categoryDAO;
 
-    @Value("${category.notFound}")
+    @Value("categories.notFound")
+    private String categoriesNotFound;
+
+    @Value("categoryNotFound")
     private String categoryNotFound;
 
     @Autowired
@@ -37,7 +40,7 @@ public class CategoryService {
         if (!categories.isEmpty()) {
             return categories;
         } else {
-            throw new DataNotFoundException("Categories not found");
+            throw new DataNotFoundException(categoriesNotFound);
         }
     }
 
@@ -52,11 +55,19 @@ public class CategoryService {
     }
 
     public void insert(Category category) {
-        categoryDAO.insert(category);
+        Category category1 = categoryDAO.getByID(category.getId());
+
+        if (category1 == null) {
+            categoryDAO.insert(category);
+        }
     }
 
-    public void update(Category category) {
-        categoryDAO.update(category);
+    public void update(Category category) throws IllegalArgumentException {
+        if (category.getName() != null && category.getUser() != null) {
+            categoryDAO.update(category);
+        } else {
+            throw new IllegalArgumentException("Incorrect fields for category");
+        }
     }
 
     public void deleteById(int id) {

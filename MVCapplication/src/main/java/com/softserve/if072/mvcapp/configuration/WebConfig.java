@@ -1,13 +1,17 @@
 package com.softserve.if072.mvcapp.configuration;
 
 
+import com.softserve.if072.mvcapp.interceptor.AddTokenHeaderInterceptor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+
+import java.util.Collections;
 
 @Configuration
 @EnableWebMvc
@@ -16,7 +20,6 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        //registry.addResourceHandler("/resources/**").addResourceLocations("/resources/");
         registry.addResourceHandler("/css/**").addResourceLocations("WEB-INF/resources/css/");
         registry.addResourceHandler("/js/**").addResourceLocations("WEB-INF/resources/js/");
         registry.addResourceHandler("/fonts/**").addResourceLocations("WEB-INF/resources/fonts/");
@@ -27,7 +30,18 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     public CommonsMultipartResolver multipartResolver() {
         CommonsMultipartResolver resolver = new CommonsMultipartResolver();
         resolver.setMaxUploadSizePerFile(1048576);  //1MB
-
         return resolver;
+    }
+
+    @Bean
+    public AddTokenHeaderInterceptor addTokenHeaderInterceptor(){
+        return new AddTokenHeaderInterceptor();
+    }
+
+    @Bean
+    public RestTemplate restTemplate() {
+        RestTemplate template = new RestTemplate();
+        template.setInterceptors(Collections.singletonList(addTokenHeaderInterceptor()));
+        return template;
     }
 }
