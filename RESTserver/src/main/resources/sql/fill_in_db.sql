@@ -8,13 +8,13 @@ INSERT INTO role(name, description) VALUES('ROLE_PREMIUM', 'Premium account');
 -- -----------------------------------------------------
 -- Fill in user table
 -- -----------------------------------------------------
-INSERT INTO user(name, email, password, role_id, is_enabled) VALUES('Igor  Parada', 'igorParada@gmail.com', '1111',2, 1);
-INSERT INTO user(name, email, password, role_id, is_enabled) VALUES('Roman Dyndyn', 'romanDyndyn@gmail.com', '2222',2, 1);
-INSERT INTO user(name, email, password, role_id, is_enabled) VALUES('Pavlo Bendus', 'pavloBendus@gmail.com', '3333',2, 1);
-INSERT INTO user(name, email, password, role_id, is_enabled) VALUES('Igor Kryviuk', 'igorKryviuk@gmail.com', '4444',2, 1);
-INSERT INTO user(name, email, password, role_id, is_enabled) VALUES('Oleh Pochernin', 'olehPochernin@gmail.com', '5555',2, 1);
-INSERT INTO user(name, email, password, role_id, is_enabled) VALUES('Vitaliy Malisevych', 'vitaliyMalisevych@gmail.com', '6666',2, 1);
-INSERT INTO user(name, email, password, role_id, is_enabled) VALUES('Nazar Vynnyk', 'nazarVynnyk@gmail.com', '7777',2, 1);
+INSERT INTO user(name, email, password, role_id, is_enabled) VALUES('Igor  Parada', 'igorParada@gmail.com', 'B59C67BF196A4758191E42F76670CEBA',2, 1);
+INSERT INTO user(name, email, password, role_id, is_enabled) VALUES('Roman Dyndyn', 'romanDyndyn@gmail.com', '934B535800B1CBA8F96A5D72F72F1611',2, 1);
+INSERT INTO user(name, email, password, role_id, is_enabled) VALUES('Pavlo Bendus', 'pavloBendus@gmail.com', '2BE9BD7A3434F7038CA27D1918DE58BD',2, 1);
+INSERT INTO user(name, email, password, role_id, is_enabled) VALUES('Igor Kryviuk', 'igorKryviuk@gmail.com', 'DBC4D84BFCFE2284BA11BEFFB853A8C4',2, 1);
+INSERT INTO user(name, email, password, role_id, is_enabled) VALUES('Oleh Pochernin', 'olehPochernin@gmail.com', '6074C6AA3488F3C2DDDFF2A7CA821AAB',2, 1);
+INSERT INTO user(name, email, password, role_id, is_enabled) VALUES('Vitaliy Malisevych', 'vitaliyMalisevych@gmail.com', 'E9510081AC30FFA83F10B68CDE1CAC07',2, 1);
+INSERT INTO user(name, email, password, role_id, is_enabled) VALUES('Nazar Vynnyk', 'nazarVynnyk@gmail.com', 'D79C8788088C2193F0244D8F1F36D2DB',2, 1);
 
 
 -- -----------------------------------------------------

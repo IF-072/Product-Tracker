@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 
 import javax.xml.bind.annotation.adapters.HexBinaryAdapter;
 import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 
 import static org.apache.commons.codec.binary.StringUtils.getBytesUtf8;
 import static org.apache.commons.lang3.StringUtils.isBlank;
@@ -26,7 +25,6 @@ public class TokenService {
     private static final Logger LOGGER = LogManager.getLogger(TokenService.class);
 
     private final String SECURITY_KEY;
-    private final String MESSAGE_DIGEST_ALGORITHM;
     private final String TOKEN_DELIMITER;
     private final int TOKEN_VALIDITY_TIME;
 
@@ -36,19 +34,14 @@ public class TokenService {
     private HexBinaryAdapter hexBinaryAdapter;
 
     @Autowired
-    public TokenService(Environment environment, UserDAO userDAO) {
+    public TokenService(Environment environment, UserDAO userDAO, MessageDigest messageDigest, HexBinaryAdapter adapter) {
         this.environment = environment;
         this.userDAO = userDAO;
-        this.hexBinaryAdapter = new HexBinaryAdapter();
+        this.messageDigest = messageDigest;
+        this.hexBinaryAdapter = adapter;
         this.SECURITY_KEY = environment.getProperty("security.tokenEncryptionKey");
-        this.MESSAGE_DIGEST_ALGORITHM = environment.getProperty("security.messageDigestAlgorithm");
         this.TOKEN_DELIMITER = environment.getProperty("security.tokenDelimiter");
         this.TOKEN_VALIDITY_TIME = Integer.parseInt(environment.getProperty("security.tokenValidityTimeInSeconds"));
-        try {
-            this.messageDigest = MessageDigest.getInstance(MESSAGE_DIGEST_ALGORITHM);
-        } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException("Can't find message digest instance for " + MESSAGE_DIGEST_ALGORITHM, e);
-        }
     }
 
     public void validate(CustomAuthenticationToken token) {

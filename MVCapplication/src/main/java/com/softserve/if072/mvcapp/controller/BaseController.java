@@ -1,4 +1,4 @@
-package com.softserve.if072.mvcapp.controller.core;
+package com.softserve.if072.mvcapp.controller;
 
 import com.softserve.if072.common.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +11,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @PropertySource({"classpath:application.properties", "classpath:message.properties"})
-public class BaseController {
+abstract public class BaseController {
 
     @Value("${application.authenticationCookieName}")
     private String tokenHeaderName;
