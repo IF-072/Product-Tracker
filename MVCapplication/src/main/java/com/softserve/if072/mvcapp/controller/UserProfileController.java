@@ -1,7 +1,6 @@
 package com.softserve.if072.mvcapp.controller;
 
 import com.softserve.if072.common.model.User;
-import com.softserve.if072.mvcapp.controller.core.BaseController;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
