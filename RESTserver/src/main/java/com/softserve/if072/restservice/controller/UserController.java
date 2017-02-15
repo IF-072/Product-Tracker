@@ -54,11 +54,11 @@ public class UserController {
     @PreAuthorize("#id == authentication.user.id")
     @RequestMapping(value = "/user/{id}", method = RequestMethod.GET)
     public ResponseEntity<User> getUserById(@PathVariable("id") int id) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         LOG.debug("Fetching User with id " + id);
         User user = userService.getById(id);
+
         if (user == null) {
-            LOG.warn("User with id " + id + " not found");
+            LOG.warn(String.format("User with id %d not found"), id);
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(user, HttpStatus.OK);

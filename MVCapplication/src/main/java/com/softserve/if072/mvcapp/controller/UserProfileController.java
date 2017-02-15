@@ -4,14 +4,10 @@ import com.softserve.if072.common.model.User;
 import com.softserve.if072.mvcapp.controller.core.BaseController;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.client.RestTemplate;
-
-import javax.servlet.http.HttpServletRequest;
 
 /**
  * This class provides access to the user's profile page.
@@ -32,6 +28,7 @@ public class UserProfileController extends BaseController {
     public String getUserProfilePage(Model model) {
         User user = getCurrentUser();
         model.addAttribute("user", user);
+        LOG.debug(String.format("User with id %d has been put into model", user.getId()));
 
         return "profile";
     }

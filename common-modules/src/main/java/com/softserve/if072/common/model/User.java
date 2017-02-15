@@ -128,7 +128,6 @@ public class User {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
-                ", password='" + password + '\'' +
                 ", isEnabled=" + isEnabled +
                 ", stores=" + stores +
                 ", products=" + products +
