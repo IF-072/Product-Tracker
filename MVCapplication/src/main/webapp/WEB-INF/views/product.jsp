@@ -23,7 +23,8 @@
     <div class="col-lg-12">
         <div class="panel panel-default">
             <div class="panel-body">
-                <input type="button" onClick="window.location.href = 'addProduct'" value="Add new product">
+                <input type="button" onClick="window.location.href ='<c:url value= "/product/addProduct"/>'"
+                       value="Add new product">
                     <table width="100%" class="table table-striped" id="productData">
                         <thead>
                         <tr>
