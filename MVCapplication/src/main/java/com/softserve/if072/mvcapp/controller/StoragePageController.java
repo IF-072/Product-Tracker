@@ -42,7 +42,7 @@ public class StoragePageController {
         if (userId == null)
             userId = 2;
 
-        final String uri = new String(storageUrl + userId);
+        final String uri = storageUrl + userId;
         RestTemplate restTemplate = new RestTemplate();
         List<Storage> list = restTemplate.getForObject(uri, List.class);
 
@@ -60,7 +60,7 @@ public class StoragePageController {
             storage.getProduct().setId(productId);
 
             RestTemplate restTemplate = new RestTemplate();
-            restTemplate.put(new String(storageUrl), storage);
+            restTemplate.put(storageUrl, storage);
             LOGGER.info("Amount is updated");
         } catch (Exception e) {
             LOGGER.error("Something went wrong", e);
@@ -77,7 +77,7 @@ public class StoragePageController {
             shoppingList.getProduct().setId(productId);
 
             RestTemplate restTemplate = new RestTemplate();
-            restTemplate.postForObject(new String(shoppingListURL), shoppingList, ShoppingList.class);
+            restTemplate.postForObject(shoppingListURL, shoppingList, ShoppingList.class);
             LOGGER.info("SoppingList is inserted");
         } catch (Exception e) {
             LOGGER.error("Something went wrong", e);

@@ -43,23 +43,24 @@ public interface StoreDAO extends DAO<Store> {
     @Results({@Result(property = "isEnabled", column = "is_enabled")})
     List<Store> getAllStoresByUser(int userId);
 
-    @Select("SELECT id, name, address, products, latitude, longitude, is_enabled FROM store WHERE user_id = #{userId}")
-    @Results(value =
-            {@Result(property = "isEnabled", column = "is_enabled"),
-                    @Result(property = "products", column = "id", javaType = List.class,
-                            many = @Many(select = "com.softserve.if072.restservice.dao.mybatisdao.StoreDAO" +
-                                    ".getProductsByStoreId"))})
+    @Select("SELECT id, name, address, latitude, longitude, is_enabled FROM store WHERE user_id = #{userId}")
+    @Results(value = {
+            @Result(property = "isEnabled", column = "is_enabled"),
+            @Result(property = "id", column = "id"),
+            @Result(property = "products", column = "id", javaType = List.class,
+                    many = @Many(select = "com.softserve.if072.restservice.dao.mybatisdao.StoreDAO" +
+                            ".getProductsOnlyByStoreId"))})
     List<Store> getAllByUser(int userId);
 
     @Override
-    @Select("SELECT id, name, address, user_id, products, latitude, longitude, is_enabled FROM store WHERE id = #{id}")
+    @Select("SELECT id, name, address, user_id, latitude, longitude, is_enabled FROM store WHERE id = #{id}")
     @Results(value = {
             @Result(property = "user", column = "user_id", javaType = User.class,
                     one = @One(select = "com.softserve.if072.restservice.dao.mybatisdao.UserDAO.getByID")),
             @Result(property = "isEnabled", column = "is_enabled"),
             @Result(property = "products", column = "id", javaType = List.class,
                     many = @Many(select = "com.softserve.if072.restservice.dao.mybatisdao.StoreDAO" +
-                            ".getProductsByStoreId"))})
+                            ".getProductsOnlyByStoreId"))})
     Store getByID(int id);
 
     @Override
@@ -96,7 +97,16 @@ public interface StoreDAO extends DAO<Store> {
 //@Results(value = {
 //        @Result(property = "isEnabled", column = "is_enabled"),
 //})
-    List<Product> getProductsByStoreId(@Param ("storeId") Integer storeId, @Param ("userId")Integer userId);
+    List<Product> getProductsByStoreId(@Param("storeId") Integer storeId, @Param("userId") Integer userId);
+
+    @Select("SELECT id, name, is_enabled FROM product  JOIN " +
+            "stores_products ON product.id = stores_products.product_id WHERE store_id = #{storeId} " +
+            "AND is_enabled = 1")
+    @Results(value = {
+            @Result(property = "id", column = "id"),
+            @Result(property = "isEnabled", column = "is_enabled")
+    })
+    List<Product> getProductsOnlyByStoreId(@Param("storeId") Integer storeId);
 
     @Select("SELECT id, name, description, image_id, user_id, category_id, unit_id, is_enabled FROM product  JOIN " +
             "stores_products ON product.id = stores_products.product_id WHERE store_id = #{storeId} and product_id " +
