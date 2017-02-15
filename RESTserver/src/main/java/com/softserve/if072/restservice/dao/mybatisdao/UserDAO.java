@@ -81,7 +81,6 @@ public interface UserDAO {
      * @param user model you want to put to the database
      */
     @Insert(INSERT)
-    @Options(useGeneratedKeys = true)
     void insert(User user);
 
     /**
