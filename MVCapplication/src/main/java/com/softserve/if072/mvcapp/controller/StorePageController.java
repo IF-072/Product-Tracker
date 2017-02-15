@@ -3,6 +3,7 @@ package com.softserve.if072.mvcapp.controller;
 import com.softserve.if072.common.model.Product;
 import com.softserve.if072.common.model.Store;
 import com.softserve.if072.common.model.User;
+import com.softserve.if072.mvcapp.controller.core.BaseController;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
@@ -29,7 +30,7 @@ import java.util.Map;
 
 @Controller
 @PropertySource(value = {"classpath:application.properties"})
-public class StorePageController {
+public class StorePageController extends BaseController {
 
     public static final Logger LOGGER = LogManager.getLogger(StorePageController.class);
 
@@ -39,16 +40,19 @@ public class StorePageController {
     @Value("${application.restProductURL}")
     private String productUrl;
 
+    @Value("${service.user.current}")
+    private String getCurrentUser;
+
     @GetMapping("/stores/")
     public String getAllStoresByUserId(Model model) {
+        final String uri = storeUrl + "/user/{userId}";
+        RestTemplate restTemplate = getRestTemplate();
+        User user = restTemplate.getForObject(getCurrentUser, User.class);
+        int userId = user.getId();
 
-        int userId = 1;
         try {
-            final String uri = storeUrl + "/user/{userId}";
             Map<String, Integer> param = new HashMap<>();
             param.put("userId", userId);
-
-            RestTemplate restTemplate = new RestTemplate();
             List stores = restTemplate.getForObject(uri, List.class, param);
             model.addAttribute("stores", stores);
             LOGGER.info(String.format("Stores of user with id %d were found", userId));
@@ -71,11 +75,11 @@ public class StorePageController {
     @PostMapping(value = "/addStore")
     public String addStore(@ModelAttribute("store") Store store) {
         final String uri = storeUrl + "/";
-        RestTemplate restTemplate = new RestTemplate();
+        RestTemplate restTemplate = getRestTemplate();
+        User user = restTemplate.getForObject(getCurrentUser, User.class);
+        int userId = user.getId();
 
         try {
-            User user = new User();
-            user.setId(1);
             store.setUser(user);
             store.setEnabled(true);
             restTemplate.postForObject(uri, store, Store.class);
@@ -91,15 +95,15 @@ public class StorePageController {
 
     @GetMapping("/stores/storeProducts")
     public String getAllProductsByStoreId(@RequestParam("storeId") String storeId, ModelMap model) {
-
         final String uri = storeUrl + "/{storeId}/storeProducts/{userId}";
-        Integer userId = 1;
+        RestTemplate restTemplate = getRestTemplate();
+        User user = restTemplate.getForObject(getCurrentUser, User.class);
+        int userId = user.getId();
+
         try {
             Map<String, Integer> param = new HashMap<>();
             param.put("storeId", Integer.parseInt(storeId));
             param.put("userId", userId);
-
-            RestTemplate restTemplate = new RestTemplate();
             List products = restTemplate.getForObject(uri, List.class, param);
             model.addAttribute("products", products);
             LOGGER.info(String.format("Products from store %s were found", storeId));
@@ -114,16 +118,17 @@ public class StorePageController {
 
     @GetMapping("/addProductsToStore")
     public String addProductsToStore(ModelMap model) {
-        int userId = 1;
-
         final String uri = storeUrl + "/user/{userId}";
         final String productUri = productUrl + "/user/{userId}";
+        RestTemplate restTemplate = getRestTemplate();
+        User user = restTemplate.getForObject(getCurrentUser, User.class);
+        int userId = user.getId();
+
         try {
             Map<String, Integer> param = new HashMap<>();
             param.put("userId", userId);
             model.addAttribute("myStore", new Store());
 
-            RestTemplate restTemplate = new RestTemplate();
             Store[] storeResult = restTemplate.getForObject(uri, Store[].class, param);
             List<Store> stores = Arrays.asList(storeResult);
             Product[] productResult = restTemplate.getForObject(productUri, Product[].class, param);
@@ -151,13 +156,12 @@ public class StorePageController {
 
     @PostMapping(value = "/stores/delStore")
     public String deleteStore(@RequestParam("storeId") int storeId) {
-
         final String uri = storeUrl + "/{storeId}";
+        RestTemplate restTemplate = getRestTemplate();
+
         try {
             Map<String, Integer> param = new HashMap<>();
             param.put("storeId", storeId);
-
-            RestTemplate restTemplate = new RestTemplate();
             restTemplate.put(uri, Store.class, param);
             LOGGER.info(String.format("Store with id %d was deleted", storeId));
             return "redirect:/stores/";
