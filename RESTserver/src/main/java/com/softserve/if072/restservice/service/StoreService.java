@@ -12,6 +12,7 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -31,8 +32,14 @@ public class StoreService {
     @Transactional
     public List<Store> getAllStores(int userId) throws DataNotFoundException {
         List<Store> stores = storeDAO.getAllStoresByUser(userId);
+        List<Store> enabledStores = new ArrayList<>();
         if (!stores.isEmpty()) {
-            return stores;
+            for (Store getStore : stores) {
+                if (getStore.isEnabled()) {
+                    enabledStores.add(getStore);
+                }
+            }
+            return enabledStores;
         } else {
             throw new DataNotFoundException("Stores not found");
         }

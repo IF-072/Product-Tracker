@@ -91,4 +91,9 @@
         <put-attribute name="body" value="/WEB-INF/views/addStore.jsp"/>
     </definition>
 
+    <definition name="addProductsToStore" extends="mainLayout">
+        <put-attribute name="title" value="Product Tracker Project"/>
+        <put-attribute name="body" value="/WEB-INF/views/addProductsToStore.jsp"/>
+    </definition>
+
 </tiles-definitions>

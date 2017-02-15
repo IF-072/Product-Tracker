@@ -19,6 +19,9 @@ public class Store {
     private String latitude;
     private String longitude;
 
+    public Store() {
+    }
+
     public Store(int id, String name, String address, User user, boolean isEnabled, List<Product> products, String
             latitude, String longitude) {
         this.id = id;
@@ -31,9 +34,7 @@ public class Store {
         this.longitude = longitude;
     }
 
-    public Store() {}
-
-      public int getId() {
+    public int getId() {
         return id;
     }
 
@@ -57,11 +58,17 @@ public class Store {
         this.address = address;
     }
 
-    public User getUser() {return this.user; }
+    public User getUser() {
+        return this.user;
+    }
 
-    public void setUser(User user) {this.user = user;}
+    public void setUser(User user) {
+        this.user = user;
+    }
 
-    public boolean isEnabled() { return isEnabled; }
+    public boolean isEnabled() {
+        return isEnabled;
+    }
 
     public void setEnabled(boolean enabled) {
         isEnabled = enabled;

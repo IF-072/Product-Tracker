@@ -92,12 +92,13 @@ public class StoreController {
         }
     }
 
-    @DeleteMapping("/{id}")
-    @ResponseStatus(value = HttpStatus.NO_CONTENT)
-    public void deleteStore(@PathVariable int id, HttpServletResponse response) {
+    @PutMapping("/{storeId}")
+    @ResponseStatus(value = HttpStatus.OK)
+    @ResponseBody
+    public void deleteStore(@PathVariable int storeId, HttpServletResponse response) {
         try {
-            storeService.deleteStore(id);
-            LOGGER.info(String.format("Store with id %d was deleted", id));
+            storeService.deleteStore(storeId);
+            LOGGER.info(String.format("Store with id %d was deleted", storeId));
         } catch (DataNotFoundException e) {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             LOGGER.error(e.getMessage());
