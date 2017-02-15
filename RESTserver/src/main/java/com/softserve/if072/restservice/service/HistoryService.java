@@ -20,9 +20,9 @@ import java.util.List;
 @Service
 @PropertySource("classpath:message.properties")
 public class HistoryService {
+    private static final Logger LOGGER = LogManager.getLogger(HistoryService.class);
     @Autowired
     private HistoryDAO historyDAO;
-    private static final Logger LOGGER = LogManager.getLogger(HistoryService.class);
     @Value("${history.notFound}")
     private String historyNotFound;
     @Value("${history.found}")
