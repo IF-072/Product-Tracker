@@ -12,6 +12,7 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -31,8 +32,14 @@ public class StoreService {
     @Transactional
     public List<Store> getAllStores(int userId) throws DataNotFoundException {
         List<Store> stores = storeDAO.getAllStoresByUser(userId);
+        List<Store> enabledStores = new ArrayList<>();
         if (!stores.isEmpty()) {
-            return stores;
+            for (Store getStore : stores) {
+                if (getStore.isEnabled()) {
+                    enabledStores.add(getStore);
+                }
+            }
+            return enabledStores;
         } else {
             throw new DataNotFoundException("Stores not found");
         }
@@ -54,9 +61,10 @@ public class StoreService {
     }
 
     @Transactional
-    public void updateStore(Store store) throws DataNotFoundException {
-        if (store.getName().isEmpty() || store.getName() == "") {
-            throw new DataNotFoundException("illegal arguments!");
+    public void updateStore(int storeId, Store store) throws IllegalArgumentException {
+        Store oldStore = storeDAO.getByID(storeId);
+        if (oldStore == null || store.getName().isEmpty() || store.getName() == "") {
+            throw new IllegalArgumentException("illegal arguments!");
         }
         storeDAO.update(store);
     }

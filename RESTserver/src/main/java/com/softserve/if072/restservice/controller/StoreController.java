@@ -76,28 +76,32 @@ public class StoreController {
         LOGGER.info("New Store was created");
     }
 
-    @PutMapping("/")
+    @PutMapping("/update/{storeId}")
     @ResponseBody
     @ResponseStatus(value = HttpStatus.OK)
-    public Store updateStore(@RequestBody Store store, HttpServletResponse response) {
-        int id = store.getId();
+    public Store updateStore(@PathVariable int storeId, @RequestBody Store store, HttpServletResponse response) {
         try {
-            storeService.updateStore(store);
-            LOGGER.info(String.format("Store with id %d was updated", id));
-            return storeService.getStoreByID(store.getId());
+            storeService.updateStore(storeId, store);
+            LOGGER.info(String.format("Store with id %d was updated", storeId));
+            return storeService.getStoreByID(storeId);
+        } catch (IllegalArgumentException e) {
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            LOGGER.error(String.format("New Store %d has empty name", storeId), e);
+            return null;
         } catch (DataNotFoundException e) {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-            LOGGER.error(String.format("Cannot update Store %d", id), e);
+            LOGGER.error(String.format("Cannot update Store %d", storeId), e);
             return null;
         }
     }
 
-    @DeleteMapping("/{id}")
-    @ResponseStatus(value = HttpStatus.NO_CONTENT)
-    public void deleteStore(@PathVariable int id, HttpServletResponse response) {
+    @PutMapping("/{storeId}")
+    @ResponseStatus(value = HttpStatus.OK)
+    @ResponseBody
+    public void deleteStore(@PathVariable int storeId, HttpServletResponse response) {
         try {
-            storeService.deleteStore(id);
-            LOGGER.info(String.format("Store with id %d was deleted", id));
+            storeService.deleteStore(storeId);
+            LOGGER.info(String.format("Store with id %d was deleted", storeId));
         } catch (DataNotFoundException e) {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             LOGGER.error(e.getMessage());
