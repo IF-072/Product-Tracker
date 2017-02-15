@@ -7,7 +7,7 @@
 --%>
 
 <style>
-    #edit, #delete {
+    #ed, #del {
         text-align: center
     }
 </style>
@@ -25,10 +25,12 @@
 
             <div class="panel-body">
 
-                <button type="button" class="btn btn-outline btn-primary" onclick="location.href='../addStore/';"
+                <button type="button" class="btn btn-outline btn-primary" onclick="location.href='/addStore/';"
                         id="addStoreButton">AddStore
                 </button>
-                <button type="button" class="btn btn-outline btn-primary" id="addProductButton">AddProducts</button>
+                <button type="button" class="btn btn-outline btn-primary" onclick=
+                        "location.href='/addProductsToStore/';" id="addProductButton">AddProducts
+                </button>
 
                 <table width="100%" class="table table-striped table-bordered table-hover" id="storeTab">
                     <thead>
@@ -47,8 +49,9 @@
                         <td id="address">${store.address}</td>
                         <td><a href="<c:url value='/stores/storeProducts?storeId=${store.id}'/>">products</a>
                         </td>
-                        <td id="edit" onclick="edit(${store.id});"><i class="fa fa-pencil fa-lg"></i></td>
-                        <td id="delete" onclick="delete(${store.id})"><i class="fa fa-times fa-lg"></i></td>
+                        <td id="ed" ; onclick="edit(${store.id});"><i class="fa fa-pencil fa-lg"></i></td>
+                        <td onclick="deleteStore(${store.id});" id="delete"><p class="fa fa-times fa-lg"></p></td>
+
                     </tr>
                     </c:forEach>
                     <tbody>
@@ -57,6 +60,11 @@
             </div>
         </div>
     </div>
-</div>
+
+    <div id="dialog" title="Delete product">
+        <br/>
+        <b>Are you sure?</b>
+        <br/>
+    </div>
 </div>
 

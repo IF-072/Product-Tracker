@@ -66,7 +66,7 @@ public class GoShoppingPagesController {
     @PostMapping("/addToCart")
     public String addToCart(@ModelAttribute("cartForm") FormForCart form) {
         System.out.println(form);
-        return "";
+        return "redirect:/storage";
     }
 
 }

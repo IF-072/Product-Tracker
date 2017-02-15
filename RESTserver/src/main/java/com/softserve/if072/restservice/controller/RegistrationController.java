@@ -1,7 +1,7 @@
 package com.softserve.if072.restservice.controller;
 
 import com.softserve.if072.common.model.User;
-import com.softserve.if072.restservice.dao.mybatisdao.UserDAO;
+import com.softserve.if072.restservice.service.UserService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +19,7 @@ public class RegistrationController {
     private static final Logger LOGGER = LogManager.getLogger(RegistrationController.class);
 
     @Autowired
-    private UserDAO userDAO;
+    private UserService userService;
 
     @RequestMapping(value = "/", method = RequestMethod.POST)
     public ResponseEntity<String> performRegistration(@RequestBody User user) {
@@ -27,13 +27,13 @@ public class RegistrationController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        User alreadyRegisteredUser = userDAO.getByUsername(user.getEmail());
+        User alreadyRegisteredUser = userService.getByUsername(user.getEmail());
         if (alreadyRegisteredUser != null) {
             return new ResponseEntity<>(HttpStatus.UNPROCESSABLE_ENTITY);
         }
 
-        userDAO.insert(user);
-        LOGGER.info("User succesfully registered: " + user);
+        userService.insert(user);
+        LOGGER.info("User successfully registered: " + user);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }

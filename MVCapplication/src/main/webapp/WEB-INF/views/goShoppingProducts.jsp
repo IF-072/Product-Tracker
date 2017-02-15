@@ -33,7 +33,7 @@
                                     <select class="form-control" name="carts[${loop.index}].store.id">
                                         <c:forEach var="store" items="${product.stores}">
 
-                                            <option value="${store.id}">${store.name}, ${store.address}</option>
+                                            <option value="${store.id}" selected>${store.name}, ${store.address}</option>
 
                                         </c:forEach>
                                     </select>
