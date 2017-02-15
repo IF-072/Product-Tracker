@@ -94,6 +94,16 @@
     <definition name="allStores" extends="mainLayout">
         <put-attribute name="title" value="Product Tracker"/>
         <put-attribute name="body" value="/WEB-INF/views/allStores.jsp"/>
+        <put-list-attribute name="stylesheets" inherit="true">
+            <add-attribute value="/css/dataTables.bootstrap.css"/>
+            <add-attribute value="/css/dataTables.responsive.css"/>
+            <add-attribute value="/css/jquery-ui.css"/>
+        </put-list-attribute>
+        <put-list-attribute name="javascripts" inherit="true">
+            <add-attribute value="/js/jquery-ui.js"/>
+            <add-attribute value="/js/storeTable.js"/>
+            <add-attribute value="/js/jquery.dataTables.js"/>
+        </put-list-attribute>
     </definition>
 
     <definition name="profile" extends="mainLayout">
@@ -108,9 +118,14 @@
             <add-attribute value="/js/goshopping.js"/>
         </put-list-attribute>
     </definition>
+
     <definition name="addStore" extends="mainLayout">
         <put-attribute name="title" value="Product Tracker Project"/>
         <put-attribute name="body" value="/WEB-INF/views/addStore.jsp"/>
+        <put-list-attribute name="stylesheets" inherit="true">
+            <add-attribute value="/css/dataTables.bootstrap.css"/>
+            <add-attribute value="/css/dataTables.responsive.css"/>
+        </put-list-attribute>
     </definition>
 
     <definition name="addProductsToStore" extends="mainLayout">
