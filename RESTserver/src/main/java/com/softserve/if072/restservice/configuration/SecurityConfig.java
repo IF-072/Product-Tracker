@@ -6,11 +6,11 @@ import com.softserve.if072.restservice.security.handlers.CustomAccessDeniedHandl
 import com.softserve.if072.restservice.security.handlers.CustomAuthenticationFailureHandler;
 import com.softserve.if072.restservice.security.handlers.CustomAuthenticationSuccessHandler;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.core.env.Environment;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -22,6 +22,10 @@ import org.springframework.security.web.authentication.AuthenticationFailureHand
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
+import javax.xml.bind.annotation.adapters.HexBinaryAdapter;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
@@ -29,11 +33,14 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 @PropertySource("classpath:security.properties")
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private static final String SECURED_URL_PATTERN = "security.securedURLPattern";
-    private static final String TOKEN_HEADER_NAME = "security.tokenHeaderName";
+    @Value("${security.securedURLPattern}")
+    private String securedUrlPattern;
 
-    @Autowired
-    private Environment environment;
+    @Value("${security.tokenHeaderName}")
+    private String tokenHeaderName;
+
+    @Value("${security.messageDigestAlgorithm}")
+    private String messageDigestAlgorithm;
 
     @Autowired
     private CustomRESTAuthenticationManager customRESTAuthenticationManager;
@@ -45,7 +52,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                .antMatchers(environment.getProperty(SECURED_URL_PATTERN)).authenticated()
+                .antMatchers(securedUrlPattern).authenticated()
                 .and()
                 .httpBasic().disable()
                 .formLogin().disable()
@@ -68,8 +75,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public AbstractAuthenticationProcessingFilter customAuthenticationProcessingFilter() {
         CustomAuthenticationProcessingFilter filter =
-                new CustomAuthenticationProcessingFilter(environment.getProperty(SECURED_URL_PATTERN),
-                        environment.getProperty(TOKEN_HEADER_NAME));
+                new CustomAuthenticationProcessingFilter(securedUrlPattern, tokenHeaderName);
         filter.setAuthenticationManager(customRESTAuthenticationManager);
         filter.setAuthenticationSuccessHandler(getAuthenticationSuccessHandler());
         filter.setAuthenticationFailureHandler(getAuthenticationFailureHandler());
@@ -79,5 +85,21 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public AccessDeniedHandler getCustomAccessDeniedHandler() {
         return new CustomAccessDeniedHandler();
+    }
+
+    @Bean
+    public MessageDigest messageDigest() {
+        MessageDigest messageDigest;
+        try {
+            messageDigest = MessageDigest.getInstance(messageDigestAlgorithm);
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException("Can't find message digest instance for " + messageDigestAlgorithm, e);
+        }
+        return messageDigest;
+    }
+
+    @Bean
+    public HexBinaryAdapter hexBinaryAdapter(){
+        return new HexBinaryAdapter();
     }
 }
