@@ -25,13 +25,19 @@ import java.util.Map;
 
 @Controller
 @RequestMapping("/register")
-@PropertySource(value = {"classpath:application.properties"})
+@PropertySource({"classpath:application.properties", "classpath:message.properties"})
 public class RegistrationController {
 
     private static final Logger LOGGER = LogManager.getLogger(RegistrationController.class);
 
-    @Value("${service.url}")
-    private String serviceUrl;
+    @Value("${service.url.getRoleById}")
+    private String getRoleByIdUrl;
+
+    @Value("${service.url.roles}")
+    private String rolesUrl;
+
+    @Value("${service.url.register}")
+    private String registerUrl;
 
     @Value("${registration.errorMessage}")
     private String errorMessage;
@@ -39,12 +45,10 @@ public class RegistrationController {
 
     @RequestMapping(value = "", method = RequestMethod.GET)
     public String getRegisterPage(Model model) {
-
-        String url = new String(serviceUrl + "/roles");
         RestTemplate template = new RestTemplate();
         Map<Integer, String> rolesMap = new LinkedHashMap<>();
         try {
-           ResponseEntity<Role[]> responseEntity = template.getForEntity(url, Role[].class);
+           ResponseEntity<Role[]> responseEntity = template.getForEntity(rolesUrl, Role[].class);
            Role[] roles = responseEntity.getBody();
            for(Role role : roles)
                rolesMap.put(role.getId(), role.getDescription());
@@ -63,13 +67,13 @@ public class RegistrationController {
                                    BindingResult result, RedirectAttributes redirectAttributes) {
         if (result.hasErrors()) {
             redirectAttributes.addFlashAttribute("validationErrors", result.getFieldErrors());
-            return "redirect:register";
+            return "redirect:/register";
         }
 
         Role role = getRoleByID(registrationForm.getRoleId());
         if(role == null) {
             redirectAttributes.addFlashAttribute(errorMessage, "Please select correct account type");
-            return "redirect:register";
+            return "redirect:/register";
         }
 
         User user = new User();
@@ -79,13 +83,12 @@ public class RegistrationController {
         user.setRole(role);
         user.setEnabled(true);
 
-        String url = new String(serviceUrl + "/register/");
         RestTemplate template = new RestTemplate();
         try {
-            ResponseEntity<String> responseEntity = template.postForEntity(url, user, String.class);
+            ResponseEntity<String> responseEntity = template.postForEntity(registerUrl, user, String.class);
             if (responseEntity.getStatusCode().equals(HttpStatus.OK)){
                 redirectAttributes.addFlashAttribute("successMessage", "Your account was successfully created");
-                return "redirect:login";
+                return "redirect:/login";
             }
         }  catch (HttpClientErrorException e) {
             if(e.getStatusCode().equals(HttpStatus.UNPROCESSABLE_ENTITY)){
@@ -93,16 +96,15 @@ public class RegistrationController {
             } else {
                 redirectAttributes.addFlashAttribute(errorMessage, "Something went wrong... Please try one more time");
             }
-            return "redirect:register";
+            return "redirect:/register";
         }
 
-       return "redirect:register";
+       return "redirect:/register";
     }
 
     private Role getRoleByID(int roleId) {
-        String url = new String(serviceUrl + "/roles/"+roleId);
         RestTemplate template = new RestTemplate();
-        ResponseEntity<Role> responseEntity = template.getForEntity(url, Role.class);
+        ResponseEntity<Role> responseEntity = template.getForEntity(String.format(getRoleByIdUrl, roleId), Role.class);
         return responseEntity.getBody();
     }
 

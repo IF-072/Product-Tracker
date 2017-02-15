@@ -21,7 +21,6 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 @Controller
@@ -31,14 +30,17 @@ public class LoginController {
 
     private static final Logger LOGGER = LogManager.getLogger(LoginController.class);
 
-    @Value("${service.url}")
-    private String serviceUrl;
+    @Value("${service.url.login}")
+    private String loginUrl;
 
     @Value("${application.authenticationCookieName}")
     private String cookieName;
 
+    @Value("${application.authenticationCookieLifetimeInSeconds}")
+    private int cookieLifeTime;
+
     @RequestMapping(value = "", method = RequestMethod.GET)
-    public String getLoginPage(HttpServletRequest httpServletRequest, Model model) {
+    public String getLoginPage(Model model) {
         model.addAttribute("loginForm", new UserLoginForm());
         return "login";
     }
@@ -51,20 +53,19 @@ public class LoginController {
             model.addAttribute("errorMessages", result.getFieldErrors());
             return "login";
         }
-        String url = new String(serviceUrl + "/login/");
         RestTemplate template = new RestTemplate();
         MultiValueMap<String, String> params = new LinkedMultiValueMap<String, String>();
         params.set("login", loginForm.getEmail());
         params.set("password", loginForm.getPassword());
         try {
-            ResponseEntity<String> response = template.postForEntity(url, params, String.class);
+            ResponseEntity<String> response = template.postForEntity(loginUrl, params, String.class);
             String responseBody = response.getBody();
             HttpStatus statusCode = response.getStatusCode();
 
             if (statusCode.equals(HttpStatus.OK) && responseBody != null && !responseBody.isEmpty()) {
                 Cookie cookie = new Cookie(cookieName, responseBody);
                 if (rememberMe) {
-                    cookie.setMaxAge(999999);
+                    cookie.setMaxAge(cookieLifeTime);
                 }
                 httpServletResponse.addCookie(cookie);
                 return "redirect:home";

@@ -50,6 +50,21 @@ public class CategoryController {
         }
     }
 
+    @GetMapping(value = "/id/{categoryID}")
+    @ResponseBody
+    @ResponseStatus(value = HttpStatus.OK)
+    public Category getCategoryByID(@PathVariable("categoryID") int categoryID, HttpServletResponse response) {
+        try {
+            Category category = categoryService.getById(categoryID);
+            LOGGER.info(String.format("Category with id %d was found", categoryID));
+            return category;
+        } catch (DataNotFoundException e) {
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            LOGGER.error(("Category wasn't found"));
+            return null;
+        }
+    }
+
     @PostMapping(value = "/")
     @ResponseStatus(value = HttpStatus.CREATED)
     public void insert(@RequestBody Category category)  {
@@ -65,7 +80,7 @@ public class CategoryController {
         try {
             categoryService.update(category);
             LOGGER.info(String.format("Category with id %d was updated", id));
-        } catch (DataNotFoundException e) {
+        } catch (IllegalArgumentException e) {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             LOGGER.error(String.format("Cannot update category with id %d", id), e);
         }

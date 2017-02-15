@@ -6,6 +6,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -35,21 +36,19 @@ public class CategoryController {
      * Method for mapping on default categories url
      * shows the list of available categories and allows to add a new one
      *
-     * @param userID
+     * @param model with data for view
      * @return
      */
     @GetMapping
-    public ModelAndView getPage(@RequestParam(value = "user_id", required = false) Integer userID) {
-        if (userID == null)
-            userID = 2;
+    public String getPage(ModelMap model) {
 
-        ModelAndView model = new ModelAndView("categories");
-        final String uri = new String(restCategoryURL + userID);
+        int userID = 2;
+
         RestTemplate restTemplate = new RestTemplate();
-        List<Category> categories = restTemplate.getForObject(uri, List.class);
+        List<Category> categories = restTemplate.getForObject(restCategoryURL + userID, List.class);
+        LOGGER.info(categories);
+        model.addAttribute("categories", categories);
 
-
-        model.addObject("categories", categories);
-        return model;
+        return "categories";
     }
 }

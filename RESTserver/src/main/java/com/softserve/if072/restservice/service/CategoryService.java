@@ -18,9 +18,16 @@ import java.util.List;
  */
 
 @Service
+@PropertySource("classpath:message.properties")
 public class CategoryService {
 
     private CategoryDAO categoryDAO;
+
+    @Value("categories.notFound")
+    private String categoriesNotFound;
+
+    @Value("categoryNotFound")
+    private String categoryNotFound;
 
     @Autowired
     public CategoryService(CategoryDAO categoryDAO) {
@@ -33,7 +40,7 @@ public class CategoryService {
         if (!categories.isEmpty()) {
             return categories;
         } else {
-            throw new DataNotFoundException("Categories not found");
+            throw new DataNotFoundException(categoriesNotFound);
         }
     }
 
@@ -43,7 +50,7 @@ public class CategoryService {
         if (category != null) {
             return category;
         } else {
-            throw new DataNotFoundException(String.format("Category with id %d not found", id));
+            throw new DataNotFoundException(String.format(categoryNotFound, id));
         }
     }
 
@@ -55,11 +62,11 @@ public class CategoryService {
         }
     }
 
-    public void update(Category category) throws DataNotFoundException {
+    public void update(Category category) throws IllegalArgumentException {
         if (category.getName() != null && category.getUser() != null) {
             categoryDAO.update(category);
         } else {
-            throw new DataNotFoundException("Incorrect fields for category");
+            throw new IllegalArgumentException("Incorrect fields for category");
         }
     }
 

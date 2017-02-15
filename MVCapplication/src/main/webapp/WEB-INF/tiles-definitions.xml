@@ -4,6 +4,29 @@
         "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
 
 <tiles-definitions>
+    <definition name="abstractDefinition">
+        <put-list-attribute name="stylesheets">
+            <add-attribute value="/css/dataTables.bootstrap.css" />
+            <add-attribute value="/css/dataTables.responsive.css" />
+            <add-attribute value="/css/morris.css" />
+            <add-attribute value="/css/jquery-ui.css" />
+            <add-attribute value="/css/jquery.dataTables.css" />
+            <add-attribute value="/css/shopping_list.css" />
+        </put-list-attribute>
+
+        <put-list-attribute name="javascripts">
+            <add-attribute value="/js/jquery-ui.js" />
+            <add-attribute value="/js/jquery.dataTables.js" />
+            <add-attribute value="/js/dataTables.bootstrap.js" />
+            <add-attribute value="/js/dataTables.responsive.js" />
+            <add-attribute value="/js/raphael.js" />
+            <add-attribute value="/js/morris.js" />
+            <add-attribute value="/js/morris-data.js" />
+            <add-attribute value="/js/storeTable.js" />
+            <add-attribute value="/js/product.js" />
+        </put-list-attribute>
+    </definition>
+
     <definition name="mainLayout" template="/WEB-INF/layouts/mainLayout.jsp">
         <put-attribute name="title" value=""/>
         <put-attribute name="header" value="/WEB-INF/templates/header.jsp"/>
@@ -12,29 +35,15 @@
         <put-list-attribute name="stylesheets">
             <add-attribute value="/css/bootstrap.css" />
             <add-attribute value="/css/metisMenu.css" />
-            <add-attribute value="/css/dataTables.bootstrap.css" />
-            <add-attribute value="/css/dataTables.responsive.css" />
             <add-attribute value="/css/sb-admin-2.css" />
-            <add-attribute value="/css/morris.css" />
             <add-attribute value="/css/font-awesome.css" />
-            <add-attribute value="/css/jquery-ui.css" />
-            <add-attribute value="/css/jquery.dataTables.css" />
         </put-list-attribute>
 
         <put-list-attribute name="javascripts">
             <add-attribute value="/js/jquery.js" />
-            <add-attribute value="/js/jquery-ui.js" />
             <add-attribute value="/js/bootstrap.js" />
             <add-attribute value="/js/metisMenu.js" />
-            <add-attribute value="/js/jquery.dataTables.js" />
-            <add-attribute value="/js/dataTables.bootstrap.js" />
-            <add-attribute value="/js/dataTables.responsive.js" />
             <add-attribute value="/js/sb-admin-2.js" />
-            <add-attribute value="/js/raphael.js" />
-            <add-attribute value="/js/morris.js" />
-            <add-attribute value="/js/morris-data.js" />
-            <add-attribute value="/js/storeTable.js" />
-            <add-attribute value="/js/product.js" />
         </put-list-attribute>
 
     </definition>
@@ -94,6 +103,23 @@
     <definition name="addProductsToStore" extends="mainLayout">
         <put-attribute name="title" value="Product Tracker Project"/>
         <put-attribute name="body" value="/WEB-INF/views/addProductsToStore.jsp"/>
+    </definition>
+
+    <definition name="shopping_list" extends="mainLayout">
+        <put-attribute name="title" value="Shopping list" />
+        <put-attribute name="body" value="/WEB-INF/views/shopping_list.jsp" />
+    </definition>
+
+    <definition name="403" extends="mainLayout">
+        <put-attribute name="header" value=""/>
+        <put-attribute name="title" value="Forbidden"/>
+        <put-attribute name="body" value="/WEB-INF/views/403.jsp"/>
+    </definition>
+
+    <definition name="404" extends="mainLayout">
+        <put-attribute name="header" value=""/>
+        <put-attribute name="title" value="Not Found"/>
+        <put-attribute name="body" value="/WEB-INF/views/404.jsp"/>
     </definition>
 
 </tiles-definitions>
