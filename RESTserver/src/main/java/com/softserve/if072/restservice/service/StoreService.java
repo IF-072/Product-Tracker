@@ -61,9 +61,10 @@ public class StoreService {
     }
 
     @Transactional
-    public void updateStore(Store store) throws DataNotFoundException {
-        if (store.getName().isEmpty() || store.getName() == "") {
-            throw new DataNotFoundException("illegal arguments!");
+    public void updateStore(int storeId, Store store) throws IllegalArgumentException {
+        Store oldStore = storeDAO.getByID(storeId);
+        if (oldStore == null || store.getName().isEmpty() || store.getName() == "") {
+            throw new IllegalArgumentException("illegal arguments!");
         }
         storeDAO.update(store);
     }

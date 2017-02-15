@@ -82,7 +82,7 @@ public interface StoreDAO extends DAO<Store> {
     void insert(Store store);
 
     @Override
-    @Update("UPDATE store SET name = #{name}, address = #{address}, is_enabled = #{isEnabled}, latitude = " +
+    @Update("UPDATE store SET name = #{name}, address = #{address}, is_enabled = 1, latitude = " +
             "#{latitude}, longitude = {longitude},  WHERE id = #{id}")
     void update(Store store);
 
