@@ -23,7 +23,7 @@ import java.util.*;
 
 @Controller
 @PropertySource(value = {"classpath:application.properties"})
-public class GoShoppingPagesController {
+public class GoShoppingPagesController extends BaseController {
 
     private static final Logger LOGGER = LogManager.getLogger(GoShoppingPagesController.class);
 
@@ -31,12 +31,11 @@ public class GoShoppingPagesController {
     private String goShoppingURL;
 
     @GetMapping("/goShoppingStores")
-    public String getPageWithStores(ModelMap model, @RequestParam(value = "user_id", required = false) Integer userId) {
-        if (userId == null)
-            userId = 2;
+    public String getPageWithStores(ModelMap model) {
+        int userId = getCurrentUser().getId();
 
         final String uri = goShoppingURL + "/stores/" + userId;
-        RestTemplate restTemplate = new RestTemplate();
+        RestTemplate restTemplate = getRestTemplate();
         List<Store> list = restTemplate.getForObject(uri, List.class);
 
         model.addAttribute("list", list);
@@ -46,15 +45,15 @@ public class GoShoppingPagesController {
 
 
     @PostMapping("/goShoppingProducts")
-    public String getProductList(ModelMap model, @RequestParam("stores") Integer stores[], @RequestParam(value = "userId", required = false) Integer userId) {
-        if (userId == null)
-            userId = 2;
+    public String getProductList(ModelMap model, @RequestParam("stores") Integer stores[]) {
+
+        int userId = getCurrentUser().getId();
 
         MultiValueMap<String, Integer[]> params = new LinkedMultiValueMap<String, Integer[]>();
         params.set("stores", stores);
 
         final String uri = goShoppingURL + "/products/" + userId;
-        RestTemplate restTemplate = new RestTemplate();
+        RestTemplate restTemplate = getRestTemplate();
         Map<String, List<Product>> map = restTemplate.postForEntity(uri, params, Map.class).getBody();
         model.addAllAttributes(map);
 
@@ -66,6 +65,11 @@ public class GoShoppingPagesController {
     @PostMapping("/addToCart")
     public String addToCart(@ModelAttribute("cartForm") FormForCart form) {
         System.out.println(form);
+        form.setUser(getCurrentUser());
+
+        final String uri = goShoppingURL + "/cart";
+        RestTemplate restTemplate = getRestTemplate();
+        restTemplate.postForObject(uri, form, FormForCart.class);
         return "redirect:/storage";
     }
 
