@@ -98,6 +98,7 @@
             <add-attribute value="/css/dataTables.bootstrap.css"/>
             <add-attribute value="/css/dataTables.responsive.css"/>
             <add-attribute value="/css/jquery-ui.css"/>
+            <add-attribute value="/css/jquery.dataTables.css"/>
         </put-list-attribute>
         <put-list-attribute name="javascripts" inherit="true">
             <add-attribute value="/js/jquery-ui.js"/>
@@ -158,6 +159,15 @@
         </put-list-attribute>
         <put-list-attribute name="javascripts" inherit="true">
             <add-attribute value="/js/goshopping.js"/>
+        </put-list-attribute>
+    </definition>
+
+    <definition name="editStore" extends="mainLayout">
+        <put-attribute name="title" value="Product Tracker Project"/>
+        <put-attribute name="body" value="/WEB-INF/views/editStore.jsp"/>
+        <put-list-attribute name="stylesheets" inherit="true">
+            <add-attribute value="/css/dataTables.bootstrap.css"/>
+            <add-attribute value="/css/dataTables.responsive.css"/>
         </put-list-attribute>
     </definition>
 

@@ -33,6 +33,7 @@ public class StorePageController extends BaseController {
 
     public static final Logger LOGGER = LogManager.getLogger(StorePageController.class);
 
+    private int idStore;
     @Value("${application.restStoreURL}")
     private String storeUrl;
 
@@ -135,8 +136,6 @@ public class StorePageController extends BaseController {
 
             model.addAttribute("stores", stores);
             model.addAttribute("products", products);
-            System.out.println(Arrays.toString(stores.toArray()));
-            System.out.println(Arrays.toString(products.toArray()));
             LOGGER.info(String.format("Stores and products of user %d found", userId));
 
             return "addProductsToStore";
@@ -163,10 +162,51 @@ public class StorePageController extends BaseController {
             param.put("storeId", storeId);
             restTemplate.put(uri, Store.class, param);
             LOGGER.info(String.format("Store with id %d was deleted", storeId));
+
             return "redirect:/stores/";
 
         } catch (Exception e) {
             LOGGER.error(String.format("Store with id %d was not deleted", storeId));
+            return "redirect:/stores/";
+        }
+    }
+
+    @GetMapping("/editStore")
+    public String editStore(@RequestParam("storeId") String storeId, ModelMap model) {
+        final String uri = storeUrl + "/{storeId}";
+        RestTemplate restTemplate = getRestTemplate();
+        idStore = Integer.parseInt(storeId);
+
+        try {
+            Map<String, Integer> param = new HashMap<>();
+            param.put("storeId", Integer.parseInt(storeId));
+            Store store = restTemplate.getForObject(uri, Store.class, param);
+            model.addAttribute("store", store);
+            LOGGER.info("Editing Store         " + idStore);
+            return "editStore";
+
+        } catch (Exception e) {
+            LOGGER.error(String.format("Store with id %d is not possible to edit", storeId));
+            return "redirect:/stores/";
+        }
+    }
+
+    @PostMapping("/editStore")
+    public String editStore(@ModelAttribute("store") Store store) {
+        store.setId(idStore);
+        int storeId = store.getId();
+        final String uri = storeUrl + "/update";
+        RestTemplate restTemplate = getRestTemplate();
+        User user = restTemplate.getForObject(getCurrentUser, User.class);
+        store.setUser(user);
+
+        try {
+            restTemplate.put(uri, store, Store.class);
+            LOGGER.info(String.format("Store with id %d was updated", store.getId()));
+            return "redirect:/stores/";
+
+        } catch (Exception e) {
+            LOGGER.error(String.format("Store with id %d was not updated", store.getId()));
             return "redirect:/stores/";
         }
     }

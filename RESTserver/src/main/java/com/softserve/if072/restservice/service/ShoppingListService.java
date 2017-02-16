@@ -31,12 +31,22 @@ public class ShoppingListService {
         }
     }
 
+    public ShoppingList getByUserAndProductId(int user_id, int product_id) throws DataNotFoundException {
+        ShoppingList list = shoppingListDAO.getByUserAndProductId(user_id, product_id);
+        if (list != null) {
+            return list;
+        } else {
+            throw new DataNotFoundException("ShoppingList not found");
+        }
+    }
+
     public List<Product> getProductsByUserId(int user_id) throws DataNotFoundException {
         List<Product> list = shoppingListDAO.getProductsByUserId(user_id);
         if (!CollectionUtils.isEmpty(list)) {
             return list;
         } else {
-            throw new DataNotFoundException(String.format("Product not found of user with id %d in shoppinglist", user_id));
+            throw new DataNotFoundException(String.format("Product not found of user with id %d in shoppinglist",
+                    user_id));
         }
     }
 
@@ -48,10 +58,10 @@ public class ShoppingListService {
         }
     }
 
-    public void update(ShoppingList shoppingList) throws  IllegalArgumentException {
+    public void update(ShoppingList shoppingList) throws IllegalArgumentException {
         if ((shoppingList.getAmount() <= 0) || (shoppingList.getProduct() == null)
                 || (shoppingList.getUser() == null)) {
-            throw new  IllegalArgumentException("Incorrect fields by ShoppingList");
+            throw new IllegalArgumentException("Incorrect fields by ShoppingList");
         } else {
             shoppingListDAO.update(shoppingList);
         }
@@ -61,7 +71,8 @@ public class ShoppingListService {
         if (shoppingList != null) {
             shoppingListDAO.delete(shoppingList);
         } else {
-            throw new DataNotFoundException(String.format("ShoppingList with user's id %d and product's id %d was not found", shoppingList.getUser().getId(), shoppingList.getProduct().getId()));
+            throw new DataNotFoundException(String.format("ShoppingList with user's id %d and product's id %d was not" +
+                    " found", shoppingList.getUser().getId(), shoppingList.getProduct().getId()));
         }
     }
 }
