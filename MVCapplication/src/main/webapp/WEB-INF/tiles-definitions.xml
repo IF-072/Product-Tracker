@@ -73,11 +73,39 @@
     <definition name="product" extends="mainLayout">
         <put-attribute name="title" value="Product Tracker"/>
         <put-attribute name="body" value="/WEB-INF/views/product.jsp"/>
+
+        <put-list-attribute name="stylesheets" inherit="true">
+            <add-attribute value="/css/jquery-ui.css" />
+            <add-attribute value="/css/dataTables.bootstrap.css" />
+            <add-attribute value="/css/dataTables.responsive.css" />
+            <add-attribute value="/css/jquery.dataTables.css" />
+        </put-list-attribute>
+
+        <put-list-attribute name="javascripts" inherit="true">
+            <add-attribute value="/js/jquery-ui.js" />
+            <add-attribute value="/js/jquery.dataTables.js" />
+            <add-attribute value="/js/dataTables.bootstrap.js" />
+            <add-attribute value="/js/dataTables.responsive.js" />
+            <add-attribute value="/js/product.js" />
+        </put-list-attribute>
     </definition>
 
     <definition name="addProduct" extends="mainLayout">
         <put-attribute name="title" value="Product Tracker Project"/>
         <put-attribute name="body" value="/WEB-INF/views/addProduct.jsp"/>
+
+        <put-list-attribute name="stylesheets" inherit="true">
+            <add-attribute value="/css/DataTables.bootstrap.css" />
+            <add-attribute value="/css/dataTables.responsive.css" />
+            <add-attribute value="/css/jquery.dataTables.css" />
+        </put-list-attribute>
+
+        <put-list-attribute name="javascripts" inherit="true">
+            <add-attribute value="/js/jquery.dataTables.js" />
+            <add-attribute value="/js/dataTables.bootstrap.js" />
+            <add-attribute value="/js/dataTables.responsive.js" />
+            <add-attribute value="/js/product.js" />
+        </put-list-attribute>
     </definition>
 
     <definition name = "categories" extends="mainLayout">
@@ -120,6 +148,34 @@
         <put-attribute name="header" value=""/>
         <put-attribute name="title" value="Not Found"/>
         <put-attribute name="body" value="/WEB-INF/views/404.jsp"/>
+    </definition>
+
+    <definition name="editProduct" extends="mainLayout">
+        <put-attribute name="title" value="Product Tracker Project"/>
+        <put-attribute name="body" value="/WEB-INF/views/editProduct.jsp"/>
+
+        <put-list-attribute name="stylesheets" inherit="true">
+            <add-attribute value="/css/dataTables.bootstrap.css" />
+            <add-attribute value="/css/dataTables.responsive.css" />
+            <add-attribute value="/css/jquery.dataTables.css" />
+        </put-list-attribute>
+
+        <put-list-attribute name="javascripts" inherit="true">
+            <add-attribute value="/js/jquery.dataTables.js" />
+            <add-attribute value="/js/dataTables.bootstrap.js" />
+            <add-attribute value="/js/dataTables.responsive.js" />
+            <add-attribute value="/js/product.js" />
+        </put-list-attribute>
+    </definition>
+
+    <definition name="addImage" extends="mainLayout">
+        <put-attribute name="title" value="Add image" />
+        <put-attribute name="body" value="/WEB-INF/views/addImage.jsp" />
+    </definition>
+
+    <definition name="editImage" extends="mainLayout">
+        <put-attribute name="title" value="Edit image" />
+        <put-attribute name="body" value="/WEB-INF/views/editImage.jsp" />
     </definition>
 
 </tiles-definitions>
