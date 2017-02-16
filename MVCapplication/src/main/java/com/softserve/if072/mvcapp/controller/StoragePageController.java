@@ -54,17 +54,14 @@ public class StoragePageController extends BaseController {
     @PostMapping("/update")
     @ResponseStatus(value = HttpStatus.OK)
     public void updateAmount(@RequestParam("userId") int userId, @RequestParam("productId") int productId, @RequestParam("amount") int amount) {
-        try {
-            Storage storage = new Storage(new User(), new Product(), amount, null);
-            storage.getUser().setId(userId);
-            storage.getProduct().setId(productId);
+        Storage storage = new Storage(new User(), new Product(), amount, null);
+        storage.getUser().setId(userId);
+        storage.getProduct().setId(productId);
 
-            RestTemplate restTemplate = getRestTemplate();
-            restTemplate.put(storageUrl, storage);
-            LOGGER.info("Amount is updated");
-        } catch (Exception e) {
-            LOGGER.error("Something went wrong", e);
-        }
+        RestTemplate restTemplate = getRestTemplate();
+        restTemplate.put(storageUrl, storage);
+        LOGGER.info("Amount is updated");
+
 
     }
 
