@@ -33,7 +33,7 @@ public class GoShoppingController {
         this.goShoppingService = goShoppingService;
     }
 
-    @PreAuthorize("#user_id == authentication.user.id")
+    @PreAuthorize("#userId == authentication.user.id")
     @GetMapping("/stores/{userId}")
     @ResponseBody
     @ResponseStatus(value = HttpStatus.OK)
@@ -52,7 +52,7 @@ public class GoShoppingController {
         }
     }
 
-    @PreAuthorize("#user_id == authentication.user.id")
+    @PreAuthorize("#userId == authentication.user.id")
     @PostMapping("/products/{userId}")
     @ResponseBody
     @ResponseStatus(value = HttpStatus.OK)
