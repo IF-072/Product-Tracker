@@ -76,22 +76,18 @@ public class StoreController {
         LOGGER.info("New Store was created");
     }
 
-    @PutMapping("/update/{storeId}")
+    @PutMapping("/update")
     @ResponseBody
     @ResponseStatus(value = HttpStatus.OK)
-    public Store updateStore(@PathVariable int storeId, @RequestBody Store store, HttpServletResponse response) {
+    public void updateStore(@RequestBody Store store, HttpServletResponse response) {
+        int storeId1 = store.getId();
         try {
-            storeService.updateStore(storeId, store);
-            LOGGER.info(String.format("Store with id %d was updated", storeId));
-            return storeService.getStoreByID(storeId);
+            storeService.updateStore(store);
+            LOGGER.info(String.format("Store with id %d was updated", storeId1));
+
         } catch (IllegalArgumentException e) {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-            LOGGER.error(String.format("New Store %d has empty name", storeId), e);
-            return null;
-        } catch (DataNotFoundException e) {
-            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-            LOGGER.error(String.format("Cannot update Store %d", storeId), e);
-            return null;
+            LOGGER.error(String.format("New Store %d has empty name", storeId1), e);
         }
     }
 

@@ -11,6 +11,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,7 +27,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/storage")
+@RequestMapping(value = "/api/storage")
 public class StorageController {
 
     private static final Logger LOGGER = LogManager.getLogger(StorageController.class);
@@ -37,6 +38,7 @@ public class StorageController {
         this.storageService = storageService;
     }
 
+    @PreAuthorize("#storage.user != null && #storage.user.id == authentication.user.id")
     @DeleteMapping()
     @ResponseStatus(value = HttpStatus.OK)
     public void delete(@RequestBody Storage storage, HttpServletResponse response) {
@@ -49,6 +51,7 @@ public class StorageController {
         }
     }
 
+    @PreAuthorize("#user_id == authentication.user.id")
     @GetMapping(value = "/{user_id}")
     @ResponseBody
     @ResponseStatus(value = HttpStatus.OK)
@@ -64,7 +67,7 @@ public class StorageController {
         }
     }
 
-
+    @PreAuthorize("#storage.user != null && #storage.user.id == authentication.user.id")
     @PostMapping(value = "/")
     @ResponseStatus(value = HttpStatus.CREATED)
     public void insert(@RequestBody Storage storage) {
@@ -72,6 +75,7 @@ public class StorageController {
         LOGGER.info("New Storage was created");
     }
 
+    @PreAuthorize("#storage.user != null && #storage.user.id == authentication.user.id")
     @PutMapping(value = "/")
     @ResponseStatus(value = HttpStatus.OK)
     public void update(@RequestBody Storage storage, HttpServletResponse response) {

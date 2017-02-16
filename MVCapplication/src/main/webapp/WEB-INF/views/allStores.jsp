@@ -7,7 +7,7 @@
 --%>
 
 <style>
-    #ed, #del {
+    #edit, #delete {
         text-align: center
     }
 </style>
@@ -49,8 +49,9 @@
                         <td id="address">${store.address}</td>
                         <td><a href="<c:url value='/stores/storeProducts?storeId=${store.id}'/>">products</a>
                         </td>
-                        <td id="ed" ; onclick="edit(${store.id});"><i class="fa fa-pencil fa-lg"></i></td>
-                        <td onclick="deleteStore(${store.id});" id="delete"><p class="fa fa-times fa-lg"></p></td>
+                        <td id="edit"> <a href="<c:url value='/editStore?storeId=${store.id}'/>"
+                                            class="fa fa-pencil fa-lg"></a></td>
+                        <td onclick="deleteStore(${store.id})"; id="delete"><p class="fa fa-times fa-lg"></p></td>
 
                     </tr>
                     </c:forEach>

@@ -3,6 +3,15 @@
 }
 
 input.form-control {
-    width: 50px;
+    width: 60px;
     display: inline-block;
 }
+
+.fa-info-circle{
+    font-size: 14pt;
+}
+
+input[type=submit].selected {
+    float: right;
+}
+

@@ -118,7 +118,7 @@
                         Storage</a>
                 </li>
                 <li>
-                    <p><button type="button" class="btn btn-outline btn-primary">Go shopping</button> </p>
+                    <a href="<c:url value="../goShoppingStores/"/>"><button type="button" class="btn btn-outline btn-primary">Go shopping</button></a>
                 </li>
 
             </ul>

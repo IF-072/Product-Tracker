@@ -10,13 +10,13 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
 
@@ -26,7 +26,9 @@ import java.util.List;
 @Controller
 @RequestMapping("/storage")
 @PropertySource(value = {"classpath:application.properties"})
-public class StoragePageController {
+public class StoragePageController extends BaseController {
+
+    private static final Logger LOGGER = LogManager.getLogger(StoragePageController.class);
 
     @Value("${application.restStorageURL}")
     private String storageUrl;
@@ -34,37 +36,31 @@ public class StoragePageController {
     @Value("${application.restShoppingListURL}")
     private String shoppingListURL;
 
-    private static final Logger LOGGER = LogManager.getLogger(StoragePageController.class);
-
     @GetMapping
-    public ModelAndView getPage(@RequestParam(value = "user_id", required = false) Integer userId) {
-        if (userId == null)
-            userId = 2;
+    public String getPage(ModelMap model) {
 
-        ModelAndView model = new ModelAndView("storage");
-        final String uri = new String(storageUrl + userId);
-        RestTemplate restTemplate = new RestTemplate();
+        int userId = getCurrentUser().getId();
+
+        final String uri = storageUrl + userId;
+        RestTemplate restTemplate = getRestTemplate();
         List<Storage> list = restTemplate.getForObject(uri, List.class);
 
-        model.addObject("list", list);
-        return model;
+        model.addAttribute("list", list);
+        return "storage";
 
     }
 
     @PostMapping("/update")
     @ResponseStatus(value = HttpStatus.OK)
     public void updateAmount(@RequestParam("userId") int userId, @RequestParam("productId") int productId, @RequestParam("amount") int amount) {
-        try {
-            Storage storage = new Storage(new User(), new Product(), amount, null);
-            storage.getUser().setId(userId);
-            storage.getProduct().setId(productId);
+        Storage storage = new Storage(new User(), new Product(), amount, null);
+        storage.getUser().setId(userId);
+        storage.getProduct().setId(productId);
 
-            RestTemplate restTemplate = new RestTemplate();
-            restTemplate.put(new String(storageUrl), storage);
-            LOGGER.info("Amount is updated");
-        } catch (Exception e) {
-            LOGGER.error("Something went wrong", e);
-        }
+        RestTemplate restTemplate = getRestTemplate();
+        restTemplate.put(storageUrl, storage);
+        LOGGER.info("Amount is updated");
+
 
     }
 
@@ -76,8 +72,8 @@ public class StoragePageController {
             shoppingList.getUser().setId(userId);
             shoppingList.getProduct().setId(productId);
 
-            RestTemplate restTemplate = new RestTemplate();
-            restTemplate.postForObject(new String(shoppingListURL), shoppingList, ShoppingList.class);
+            RestTemplate restTemplate = getRestTemplate();
+            restTemplate.postForObject(shoppingListURL, shoppingList, ShoppingList.class);
             LOGGER.info("SoppingList is inserted");
         } catch (Exception e) {
             LOGGER.error("Something went wrong", e);
