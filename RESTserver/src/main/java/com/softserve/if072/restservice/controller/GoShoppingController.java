@@ -7,6 +7,7 @@ import com.softserve.if072.restservice.exception.DataNotFoundException;
 import com.softserve.if072.restservice.service.GoShoppingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -21,7 +22,7 @@ import java.util.Map;
  */
 
 @RestController
-@RequestMapping("/goShopping")
+@RequestMapping("/api/goShopping")
 public class GoShoppingController {
 
     public static final Logger LOGGER = LogManager.getLogger(GoShoppingController.class);
@@ -32,6 +33,7 @@ public class GoShoppingController {
         this.goShoppingService = goShoppingService;
     }
 
+    @PreAuthorize("#user_id == authentication.user.id")
     @GetMapping("/stores/{userId}")
     @ResponseBody
     @ResponseStatus(value = HttpStatus.OK)
@@ -50,6 +52,7 @@ public class GoShoppingController {
         }
     }
 
+    @PreAuthorize("#user_id == authentication.user.id")
     @PostMapping("/products/{userId}")
     @ResponseBody
     @ResponseStatus(value = HttpStatus.OK)
@@ -69,13 +72,14 @@ public class GoShoppingController {
         }
     }
 
+    @PreAuthorize("#cart != null && #cart.carts != null && #cart.carts[0] != null && #cart.carts[0].user.id == authentication.user.id")
     @PostMapping("/cart")
     @ResponseBody
     @ResponseStatus(value = HttpStatus.OK)
-    public void getProducts(@RequestBody FormForCart carts, HttpServletResponse response) {
+    public void getProducts(@RequestBody FormForCart cart, HttpServletResponse response) {
         try {
-            goShoppingService.insertCart(carts);
-            LOGGER.info(String.format("Cart of user id %d was updated", carts.getUserId()));
+            goShoppingService.insertCart(cart);
+            LOGGER.info(String.format("Cart of user id %d was updated", cart.getUserId()));
         } catch (Exception e) {
             e.printStackTrace();
         }
