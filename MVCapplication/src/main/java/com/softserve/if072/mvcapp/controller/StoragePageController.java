@@ -27,7 +27,7 @@ import java.util.List;
 @Controller
 @RequestMapping("/storage")
 @PropertySource(value = {"classpath:application.properties"})
-public class StoragePageController {
+public class StoragePageController extends BaseController {
 
     private static final Logger LOGGER = LogManager.getLogger(StoragePageController.class);
 
@@ -38,12 +38,12 @@ public class StoragePageController {
     private String shoppingListURL;
 
     @GetMapping
-    public String getPage(ModelMap model, @RequestParam(value = "user_id", required = false) Integer userId) {
-        if (userId == null)
-            userId = 2;
+    public String getPage(ModelMap model) {
+
+        int userId = getCurrentUser().getId();
 
         final String uri = storageUrl + userId;
-        RestTemplate restTemplate = new RestTemplate();
+        RestTemplate restTemplate = getRestTemplate();
         List<Storage> list = restTemplate.getForObject(uri, List.class);
 
         model.addAttribute("list", list);
@@ -59,7 +59,7 @@ public class StoragePageController {
             storage.getUser().setId(userId);
             storage.getProduct().setId(productId);
 
-            RestTemplate restTemplate = new RestTemplate();
+            RestTemplate restTemplate = getRestTemplate();
             restTemplate.put(storageUrl, storage);
             LOGGER.info("Amount is updated");
         } catch (Exception e) {
@@ -76,7 +76,7 @@ public class StoragePageController {
             shoppingList.getUser().setId(userId);
             shoppingList.getProduct().setId(productId);
 
-            RestTemplate restTemplate = new RestTemplate();
+            RestTemplate restTemplate = getRestTemplate();
             restTemplate.postForObject(shoppingListURL, shoppingList, ShoppingList.class);
             LOGGER.info("SoppingList is inserted");
         } catch (Exception e) {

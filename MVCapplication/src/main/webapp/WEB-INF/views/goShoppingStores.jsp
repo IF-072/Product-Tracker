@@ -11,7 +11,7 @@
                 <table class="table table-striped table-bordered table-hover">
                     <thead>
                     <tr>
-                        <th>#</th>
+                        <th></th>
                         <th>Store</th>
                         <th>Address</th>
                         <th>Products</th>
@@ -22,9 +22,7 @@
                     <c:forEach var="store" items="${list}" varStatus="loop">
                         <tr onclick="checkBox(${loop.index})">
                             <td>
-                                <label class="checkbox-inline">
-                                <input type="checkbox" value="${store.id}" name="stores" id="checkbox${loop.index}">
-                                </label>
+                                <input type="checkbox" value="${store.id}" name="stores" id="checkbox${loop.index}" onclick="checkBox(${loop.index})">
                             </td>
                             <td>${store.name}</td>
                             <td>${store.address}</td>

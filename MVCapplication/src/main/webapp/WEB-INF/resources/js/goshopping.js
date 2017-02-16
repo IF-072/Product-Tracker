@@ -6,3 +6,11 @@ function checkBox(index) {
         checkbox.checked = true;
     }
 }
+
+function selectAll() {
+    $('input[type=checkbox]').prop('checked', true);
+}
+
+function prevStep() {
+    window.history.back();
+}
