@@ -81,7 +81,7 @@ public class StoreController {
     @ResponseStatus(value = HttpStatus.OK)
     public Store updateStore(@PathVariable int storeId, @RequestBody Store store, HttpServletResponse response) {
         try {
-            storeService.updateStore(storeId, store);
+            storeService.updateStore(store);
             LOGGER.info(String.format("Store with id %d was updated", storeId));
             return storeService.getStoreByID(storeId);
         } catch (IllegalArgumentException e) {

@@ -161,4 +161,13 @@
         </put-list-attribute>
     </definition>
 
+    <definition name="editStore" extends="mainLayout">
+        <put-attribute name="title" value="Product Tracker Project"/>
+        <put-attribute name="body" value="/WEB-INF/views/editStore.jsp"/>
+        <put-list-attribute name="stylesheets" inherit="true">
+            <add-attribute value="/css/dataTables.bootstrap.css"/>
+            <add-attribute value="/css/dataTables.responsive.css"/>
+        </put-list-attribute>
+    </definition>
+
 </tiles-definitions>

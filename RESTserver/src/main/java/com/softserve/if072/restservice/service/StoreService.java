@@ -49,8 +49,11 @@ public class StoreService {
     public Store getStoreByID(int id) throws DataNotFoundException {
         Store store = storeDAO.getByID(id);
         if (store != null) {
+            System.out.println(store.toString());
             return store;
+
         } else {
+            System.out.println(store.toString());
             throw new DataNotFoundException(String.format(storeNotFound, id));
         }
     }
@@ -61,11 +64,13 @@ public class StoreService {
     }
 
     @Transactional
-    public void updateStore(int storeId, Store store) throws IllegalArgumentException {
-        Store oldStore = storeDAO.getByID(storeId);
+    public void updateStore(Store store) throws IllegalArgumentException {
+        Store oldStore = storeDAO.getByID(store.getId());
         if (oldStore == null || store.getName().isEmpty() || store.getName() == "") {
             throw new IllegalArgumentException("illegal arguments!");
         }
+        System.out.println("Update" + store.toString() );
+        System.out.println("Update" + store.getId());
         storeDAO.update(store);
     }
 

@@ -171,4 +171,43 @@ public class StorePageController extends BaseController {
         }
     }
 
+    @GetMapping("/editStore")
+    public String editStore(@RequestParam("storeId") String storeId, ModelMap model) {
+        final String uri = storeUrl + "/{storeId}";
+        RestTemplate restTemplate = getRestTemplate();
+
+        try {
+            Map<String, Integer> param = new HashMap<>();
+            param.put("storeId", Integer.parseInt(storeId));
+            Store store = restTemplate.getForObject(uri, Store.class, param);
+            model.addAttribute("store", store);
+
+            LOGGER.info("Editing Store");
+            return "editStore";
+        } catch (Exception e) {
+            LOGGER.error(String.format("Store with id %d is not possible to edit", storeId));
+            return "redirect:/stores/";
+        }
+
+    }
+
+    @PostMapping("/editStore")
+    public String editStore(@ModelAttribute("store") Store store) {
+        LOGGER.info(store.toString());
+
+        int storeId = store.getId();
+        final String uri = storeUrl + "/update/{storeId}";
+        RestTemplate restTemplate = getRestTemplate();
+
+        try {
+            restTemplate.put(uri, store, Store.class);
+            LOGGER.info(String.format("Store with id %d was updated", storeId));
+            return "redirect:/stores/";
+
+        } catch (Exception e) {
+            LOGGER.error(String.format("Store with id %d was not updated", storeId));
+            return "redirect:/stores/";
+        }
+    }
+
 }
