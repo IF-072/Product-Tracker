@@ -1,8 +1,8 @@
 package com.softserve.if072.restservice.controller;
 
 import com.softserve.if072.common.model.User;
-import com.softserve.if072.restservice.dao.mybatisdao.UserDAO;
 import com.softserve.if072.restservice.service.TokenService;
+import com.softserve.if072.restservice.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,18 +24,18 @@ public class LoginController {
     private TokenService tokenService;
 
     @Autowired
-    private UserDAO userDAO;
+    private UserService userService;
 
     @RequestMapping(value = "/", method = RequestMethod.POST)
     @ResponseBody
     @ResponseStatus(value = HttpStatus.OK)
     public ResponseEntity<?> getAuthenticationToken(@RequestParam String login, @RequestParam String password, HttpServletResponse response) {
         try {
-            User user = userDAO.getByUsername(login);
+            User user = userService.getByUsername(login);
             if (user == null) {
                 throw new BadCredentialsException("Invalid login");
             }
-            if (!user.getPassword().equals(password)) {
+            if (!user.getPassword().equals(userService.encodePassword(password))) {
                 throw new BadCredentialsException("Wrong password");
             }
             return new ResponseEntity<>(tokenService.generateTokenFor(login), HttpStatus.OK);

@@ -76,28 +76,28 @@ public class StoreController {
         LOGGER.info("New Store was created");
     }
 
-    @PutMapping("/")
+    @PutMapping("/update")
     @ResponseBody
     @ResponseStatus(value = HttpStatus.OK)
-    public Store updateStore(@RequestBody Store store, HttpServletResponse response) {
-        int id = store.getId();
+    public void updateStore(@RequestBody Store store, HttpServletResponse response) {
+        int storeId1 = store.getId();
         try {
             storeService.updateStore(store);
-            LOGGER.info(String.format("Store with id %d was updated", id));
-            return storeService.getStoreByID(store.getId());
-        } catch (DataNotFoundException e) {
+            LOGGER.info(String.format("Store with id %d was updated", storeId1));
+
+        } catch (IllegalArgumentException e) {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-            LOGGER.error(String.format("Cannot update Store %d", id), e);
-            return null;
+            LOGGER.error(String.format("New Store %d has empty name", storeId1), e);
         }
     }
 
-    @DeleteMapping("/{id}")
-    @ResponseStatus(value = HttpStatus.NO_CONTENT)
-    public void deleteStore(@PathVariable int id, HttpServletResponse response) {
+    @PutMapping("/{storeId}")
+    @ResponseStatus(value = HttpStatus.OK)
+    @ResponseBody
+    public void deleteStore(@PathVariable int storeId, HttpServletResponse response) {
         try {
-            storeService.deleteStore(id);
-            LOGGER.info(String.format("Store with id %d was deleted", id));
+            storeService.deleteStore(storeId);
+            LOGGER.info(String.format("Store with id %d was deleted", storeId));
         } catch (DataNotFoundException e) {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             LOGGER.error(e.getMessage());

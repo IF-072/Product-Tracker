@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
 
+import javax.xml.bind.annotation.adapters.HexBinaryAdapter;
+import java.security.MessageDigest;
 import java.util.List;
 
 /**
@@ -38,7 +40,11 @@ public class UserService {
         } else {
             throw new DataNotFoundException(usersNotFound);
         }
-    }
+    @Autowired
+    private MessageDigest messageDigest;
+
+    @Autowired
+    private HexBinaryAdapter hexBinaryAdapter;
 
     public User getById(int id) throws DataNotFoundException {
         User user = userDAO.getByID(id);
@@ -54,7 +60,12 @@ public class UserService {
         }
     }
 
+    public User getByUsername(String username) {
+        return userDAO.getByUsername(username);
+    }
+
     public void insert(User user) {
+        user.setPassword(encodePassword(user.getPassword()));
         userDAO.insert(user);
     }
 
@@ -64,5 +75,9 @@ public class UserService {
 
     public void delete(int id) {
         userDAO.deleteById(id);
+    }
+
+    public String encodePassword(String password) {
+        return hexBinaryAdapter.marshal( messageDigest.digest(getBytesUtf8(password)));
     }
 }

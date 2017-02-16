@@ -1,17 +1,15 @@
 function allowBtn(index, amount) {
     var tr = document.getElementsByTagName("tr");
-    var value = tr[index].children[3].children[0].children[2].value;
-    var list = tr[index].children[3].children[0].children[3].classList;
+    var jtr = $(tr[index]);
+    var value = jtr.find(' input[type=number]').val();
+    var jbtn = jtr.find(' input[type=submit]');
+
     if (amount == value) {
-        if (list.contains("btn-default"))
-            list.remove("btn-default");
-        if (!list.contains("disabled"))
-            list.add("disabled");
+        jbtn.removeClass("btn-default");
+        jbtn.addClass("disabled");
     } else {
-        if (list.contains("disabled"))
-            list.remove("disabled");
-        if (!list.contains("btn-default"))
-            list.add("btn-default");
+        jbtn.removeClass("disabled");
+        jbtn.addClass("btn-default");
     }
 
 }
@@ -20,10 +18,15 @@ function subForm(e) {
     e.preventDefault();
     var url = $(this).closest('form').attr('action'),
         data = $(this).closest('form').serialize();
+    var jbtn = $(this).find(' input[type=submit]');
     $.ajax({
         url: url,
         type: 'post',
         data: data,
+        success: function () {
+            jbtn.removeClass("btn-default");
+            jbtn.addClass("disabled");
+        }
     });
 }
 
@@ -45,6 +48,6 @@ function addToShoppingList(userId, productId) {
 
 }
 
-Array.prototype.slice.call(document.getElementsByTagName("form")).forEach(function(item) {
+Array.prototype.slice.call(document.getElementsByTagName("form")).forEach(function (item) {
     item.addEventListener("submit", subForm);
 })

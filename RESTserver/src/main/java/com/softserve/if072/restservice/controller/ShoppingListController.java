@@ -54,6 +54,22 @@ public class ShoppingListController {
         }
     }
 
+    @GetMapping("/{userId}/{productId}")
+    @ResponseBody
+    @ResponseStatus(value = HttpStatus.OK)
+    public ShoppingList getByUserAndProductId(@PathVariable int userId, @PathVariable int productId,
+                                                    HttpServletResponse response) {
+        try {
+            ShoppingList shoppingList = shoppingListService.getByUserAndProductId(userId, productId);
+            LOGGER.info(String.format("ShoppingList of user id %d with product %d was found ", userId, productId));
+            return shoppingList;
+        } catch (DataNotFoundException e) {
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            LOGGER.error(e.getMessage());
+            return null;
+        }
+    }
+
     @PostMapping("/")
     @ResponseStatus(value = HttpStatus.CREATED)
     public void addShoppingList(@RequestBody ShoppingList shoppingList) {

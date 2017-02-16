@@ -8,13 +8,13 @@ INSERT INTO role(name, description) VALUES('ROLE_PREMIUM', 'Premium account');
 -- -----------------------------------------------------
 -- Fill in user table
 -- -----------------------------------------------------
-INSERT INTO user(name, email, password, role_id, is_enabled) VALUES('Igor  Parada', 'igorParada@gmail.com', '1111',2, 1);
-INSERT INTO user(name, email, password, role_id, is_enabled) VALUES('Roman Dyndyn', 'romanDyndyn@gmail.com', '2222',2, 1);
-INSERT INTO user(name, email, password, role_id, is_enabled) VALUES('Pavlo Bendus', 'pavloBendus@gmail.com', '3333',2, 1);
-INSERT INTO user(name, email, password, role_id, is_enabled) VALUES('Igor Kryviuk', 'igorKryviuk@gmail.com', '4444',2, 1);
-INSERT INTO user(name, email, password, role_id, is_enabled) VALUES('Oleh Pochernin', 'olehPochernin@gmail.com', '5555',2, 1);
-INSERT INTO user(name, email, password, role_id, is_enabled) VALUES('Vitaliy Malisevych', 'vitaliyMalisevych@gmail.com', '6666',2, 1);
-INSERT INTO user(name, email, password, role_id, is_enabled) VALUES('Nazar Vynnyk', 'nazarVynnyk@gmail.com', '7777',2, 1);
+INSERT INTO user(name, email, password, role_id, is_enabled) VALUES('Igor  Parada', 'igorParada@gmail.com', 'B59C67BF196A4758191E42F76670CEBA',2, 1);
+INSERT INTO user(name, email, password, role_id, is_enabled) VALUES('Roman Dyndyn', 'romanDyndyn@gmail.com', '934B535800B1CBA8F96A5D72F72F1611',2, 1);
+INSERT INTO user(name, email, password, role_id, is_enabled) VALUES('Pavlo Bendus', 'pavloBendus@gmail.com', '2BE9BD7A3434F7038CA27D1918DE58BD',2, 1);
+INSERT INTO user(name, email, password, role_id, is_enabled) VALUES('Igor Kryviuk', 'igorKryviuk@gmail.com', 'DBC4D84BFCFE2284BA11BEFFB853A8C4',2, 1);
+INSERT INTO user(name, email, password, role_id, is_enabled) VALUES('Oleh Pochernin', 'olehPochernin@gmail.com', '6074C6AA3488F3C2DDDFF2A7CA821AAB',2, 1);
+INSERT INTO user(name, email, password, role_id, is_enabled) VALUES('Vitaliy Malisevych', 'vitaliyMalisevych@gmail.com', 'E9510081AC30FFA83F10B68CDE1CAC07',2, 1);
+INSERT INTO user(name, email, password, role_id, is_enabled) VALUES('Nazar Vynnyk', 'nazarVynnyk@gmail.com', 'D79C8788088C2193F0244D8F1F36D2DB',2, 1);
 
 
 -- -----------------------------------------------------
@@ -70,6 +70,15 @@ INSERT INTO category(name, user_id) VALUES('Телевізори та аксес
 INSERT INTO category(name, user_id) VALUES('Побутова хімія', 6);
 INSERT INTO category(name, user_id) VALUES('Накопичувачі інформації', 6);
 
+-- for user with id 7
+-- -----------------------------------------------------
+INSERT INTO category(name, user_id) VALUES('Продовольчі товари', 7);
+INSERT INTO category(name, user_id) VALUES('Компютери і аксесуари', 7);
+INSERT INTO category(name, user_id) VALUES('Харчові продукти', 7);
+INSERT INTO category(name, user_id) VALUES('Побутова техніка', 7);
+INSERT INTO category(name, user_id) VALUES('Hi-Tech', 7);
+INSERT INTO category(name, user_id) VALUES('Дитячі товари', 7);
+-- -----------------------------------------------------
 
 -- -----------------------------------------------------
 -- Fill in product table
@@ -94,8 +103,18 @@ INSERT INTO product(name, description, user_id, category_id, unit_id, is_enabled
 INSERT INTO product(name, description, user_id, category_id, unit_id, is_enabled) VALUES('Apple MacBook Pro 16', 'передостання модель', 2, 10, 3, 1);
 INSERT INTO product(name, description, user_id, category_id, unit_id, is_enabled) VALUES('LG', 'телевізор з 4K розширенням', 2, 10, 3, 0);
 INSERT INTO product(name, description, user_id, category_id, unit_id, is_enabled) VALUES('Persil', Null, 2, 10, 3, 1);
-
-
+-- -----------------------------------------------------
+-- for user with id 7
+-- -----------------------------------------------------
+INSERT INTO product(name, description, user_id, category_id, unit_id, is_enabled) VALUES('Sony LCD', 'телевізор з FULL-HD розширенням', 7, 34, 3, 1);
+INSERT INTO product(name, description, user_id, category_id, unit_id, is_enabled) VALUES('Google Glasses', 'розумні окуляри', 7, 34, 3, 1);
+INSERT INTO product(name, description, user_id, category_id, unit_id, is_enabled) VALUES('Масло', 'Селянське', 7, 32, 2, 1);
+INSERT INTO product(name, description, user_id, category_id, unit_id, is_enabled) VALUES('Яйця', 'Ясенсвіт', 7, 32, 3, 1);
+INSERT INTO product(name, description, user_id, category_id, unit_id, is_enabled) VALUES('Макарони', 'Чумак, 400г.', 7, 32, 3, 1);
+INSERT INTO product(name, description, user_id, category_id, unit_id, is_enabled) VALUES('Підгузки','Pampers Baby care', 7, 35, 3, 1);
+INSERT INTO product(name, description, user_id, category_id, unit_id, is_enabled) VALUES('мяч','надувний резиновий', 7, 35, 3, 1);
+INSERT INTO product(name, description, user_id, category_id, unit_id, is_enabled) VALUES('Бодік', 'літній 98 розмір', 7, 35, 3, 1);                                                                                    1);
+-- -----------------------------------------------------
 -- -----------------------------------------------------
 -- Fill in store table
 -- -----------------------------------------------------
@@ -105,6 +124,21 @@ INSERT INTO store(name, address, user_id) VALUES('Ельдорадо', 'Вовч
 INSERT INTO store(name, address, user_id) VALUES('MOYO', 'Вовчинецька, 40', 2);
 INSERT INTO store(name, address, user_id) VALUES('Rozetka', 'Інтернет', 3);
 INSERT INTO store(name, address, user_id) VALUES('Вопак', 'Галицька, 20', 4);
+-- -----------------------------------------------------
+-- for user with id 7
+-- -----------------------------------------------------
+INSERT INTO store(name, address, user_id) VALUES('Вопак', 'Галицька, 20', 7);
+INSERT INTO store(name, address, user_id) VALUES('Вопак', 'Галицька, 44', 7);
+INSERT INTO store(name, address, user_id) VALUES('Ельдорадо', 'Вовчинецька, 40', 7);
+INSERT INTO store(name, address, user_id) VALUES('MOYO', 'Вовчинецька, 40', 7);
+INSERT INTO store(name, address, user_id) VALUES('Rozetka', 'Інтернет', 7);
+INSERT INTO store(name, address, user_id) VALUES('Вопак', 'Чорновола, 80,', 7);
+INSERT INTO store(name, address, user_id) VALUES('Сільпо', 'Мазепи, 153', 7);
+INSERT INTO store(name, address, user_id) VALUES('Велес', 'Вовчинецька, 150', 7);
+INSERT INTO store(name, address, user_id) VALUES('Малятко', 'Галицька, 35', 7);
+INSERT INTO store(name, address, user_id) VALUES('Bomba', 'Дністровська, 6', 7);
+INSERT INTO store(name, address, user_id) VALUES('Карапуз', 'Коновальця, 6', 7);
+INSERT INTO store(name, address, user_id) VALUES('Словянка', 'Коновальця, 58', 7);
 
 
 -- -----------------------------------------------------
@@ -116,8 +150,25 @@ INSERT INTO stores_products(product_id, store_id) VALUES(7, 3);
 INSERT INTO stores_products(product_id, store_id) VALUES(9, 4);
 INSERT INTO stores_products(product_id, store_id) VALUES(10, 4);
 INSERT INTO stores_products(product_id, store_id) VALUES(11, 4);
-
-
+-- -----------------------------------------------------
+-- for user with id 7
+-- -----------------------------------------------------
+INSERT INTO stores_products(product_id, store_id) VALUES(28, 17);
+INSERT INTO stores_products(product_id, store_id) VALUES(29, 17);
+INSERT INTO stores_products(product_id, store_id) VALUES(30, 17);
+INSERT INTO stores_products(product_id, store_id) VALUES(28, 23);
+INSERT INTO stores_products(product_id, store_id) VALUES(29, 23);
+INSERT INTO stores_products(product_id, store_id) VALUES(30, 23);
+INSERT INTO stores_products(product_id, store_id) VALUES(28, 18);
+INSERT INTO stores_products(product_id, store_id) VALUES(29, 18);
+INSERT INTO stores_products(product_id, store_id) VALUES(30, 18);
+INSERT INTO stores_products(product_id, store_id) VALUES(31, 27);
+INSERT INTO stores_products(product_id, store_id) VALUES(32, 27);
+INSERT INTO stores_products(product_id, store_id) VALUES(33, 27);
+INSERT INTO stores_products(product_id, store_id) VALUES(26, 20);
+INSERT INTO stores_products(product_id, store_id) VALUES(27, 20);
+INSERT INTO stores_products(product_id, store_id) VALUES(26, 29);
+INSERT INTO stores_products(product_id, store_id) VALUES(27, 29);
 -- -----------------------------------------------------
 -- Fill in storages table
 -- -----------------------------------------------------
