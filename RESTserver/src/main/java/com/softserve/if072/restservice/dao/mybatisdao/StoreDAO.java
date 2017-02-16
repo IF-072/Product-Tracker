@@ -76,7 +76,8 @@ public interface StoreDAO extends DAO<Store> {
             @Result(property = "isEnabled", column = "is_enabled"),
             @Result(property = "products", column = "id", javaType = List.class,
                     many = @Many(select = "com.softserve.if072.restservice.dao.mybatisdao.StoreDAO" +
-                            ".getProductsOnlyByStoreId"))})
+                            ".getProductsOnlyByStoreId"))
+    })
     Store getByID(int id);
 
     @Override
@@ -87,7 +88,16 @@ public interface StoreDAO extends DAO<Store> {
 
     @Override
     @Update("UPDATE store SET name = #{name}, address = #{address}, is_enabled = 1, latitude = " +
-            "#{latitude}, longitude = {longitude},  WHERE id = #{id}")
+            "#{latitude}, longitude = #{longitude} WHERE id = #{id}")
+    @Results(value = {
+            @Result(property = "id", column = "id"),
+            @Result(property = "name", column = "name"),
+            @Result(property = "address", column = "address"),
+            @Result(property = "latitude", column = "latitude"),
+            @Result(property = "longitude", column = "longitude"),
+            @Result(property = "user", column = "user_id", javaType = User.class,
+                    one = @One(select = "com.softserve.if072.restservice.dao.mybatisdao.UserDAO.getByID")),
+            @Result(property = "isEnabled", column = "is_enabled")})
     void update(Store store);
 
     @Override

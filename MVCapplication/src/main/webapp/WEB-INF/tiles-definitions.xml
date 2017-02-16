@@ -98,6 +98,7 @@
             <add-attribute value="/css/dataTables.bootstrap.css"/>
             <add-attribute value="/css/dataTables.responsive.css"/>
             <add-attribute value="/css/jquery-ui.css"/>
+            <add-attribute value="/css/jquery.dataTables.css"/>
         </put-list-attribute>
         <put-list-attribute name="javascripts" inherit="true">
             <add-attribute value="/js/jquery-ui.js"/>
