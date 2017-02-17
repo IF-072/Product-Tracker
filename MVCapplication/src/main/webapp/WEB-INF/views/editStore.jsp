@@ -33,7 +33,7 @@
 
 
                         <input type="submit" class="btn btn-lg btn-success btn-default" value="Submit"/>
-                        <input type="reset" class="btn btn-lg btn-warning btn-default" value="Cancel"/>
+                        <input type="reset"  class="btn btn-lg btn-warning btn-default" value="Cancel"/>
                     </fieldset>
                 </form:form>
             </div>

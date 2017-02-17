@@ -1,8 +1,8 @@
 package com.softserve.if072.restservice.service;
 
-
 import com.softserve.if072.common.model.Product;
 import com.softserve.if072.common.model.Store;
+import com.softserve.if072.restservice.dao.mybatisdao.ProductDAO;
 import com.softserve.if072.restservice.dao.mybatisdao.StoreDAO;
 import com.softserve.if072.restservice.exception.DataNotFoundException;
 import org.apache.commons.collections.CollectionUtils;
@@ -13,22 +13,33 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 @PropertySource(value = {"classpath:message.properties"})
 public class StoreService {
 
     private final StoreDAO storeDAO;
+    private final ProductDAO productDAO;
 
     @Value("${store.notFound}")
     private String storeNotFound;
 
     @Autowired
-    public StoreService(StoreDAO storeDAO) {
+    public StoreService(StoreDAO storeDAO, ProductDAO productDAO) {
         this.storeDAO = storeDAO;
+        this.productDAO = productDAO;
     }
 
+    /**
+     * Returns all user stores
+     *
+     * @param userId - user whose stores will be returned
+     * @return - list of user stores
+     * @throws DataNotFoundException - if stores not found
+     */
     @Transactional
     public List<Store> getAllStores(int userId) throws DataNotFoundException {
         List<Store> stores = storeDAO.getAllStoresByUser(userId);
@@ -45,6 +56,13 @@ public class StoreService {
         }
     }
 
+    /**
+     * Returns store from DataBase
+     *
+     * @param id of store that will be returned
+     * @return - store
+     * @throws DataNotFoundException - if the store is not found
+     */
     @Transactional
     public Store getStoreByID(int id) throws DataNotFoundException {
         Store store = storeDAO.getByID(id);
@@ -55,11 +73,22 @@ public class StoreService {
         }
     }
 
+    /**
+     * Adds new store to DataBase
+     *
+     * @param store - will be written
+     */
     @Transactional
     public void addStore(Store store) {
         storeDAO.insert(store);
     }
 
+    /**
+     * This method  updates store that is in DataBase and has the same id as the passed hire.
+     *
+     * @param store - will be written
+     * @throws IllegalArgumentException - if the passed store has empty name field or the updated store is not found
+     */
     @Transactional
     public void updateStore(Store store) throws IllegalArgumentException {
         Store oldStore = storeDAO.getByID(store.getId());
@@ -69,6 +98,12 @@ public class StoreService {
         storeDAO.update(store);
     }
 
+    /**
+     * This method removes store
+     *
+     * @param id - store which will be removed
+     * @throws DataNotFoundException if the store is not found
+     */
     @Transactional
     public void deleteStore(int id) throws DataNotFoundException {
         Store store = storeDAO.getByID(id);
@@ -79,16 +114,31 @@ public class StoreService {
         }
     }
 
+    /**
+     * This method retrieves products that are presented in the store
+     *
+     * @param storeId - store where we look for products
+     * @param userId  - user whose products and stores we are looking for
+     * @return - list of products that are presented in the store
+     * @throws DataNotFoundException - if result set is empty
+     */
     @Transactional
     public List<Product> getProductsByStoreId(int storeId, int userId) throws DataNotFoundException {
         List<Product> products = storeDAO.getProductsByStoreId(storeId, userId);
-        if (CollectionUtils.isNotEmpty(products)) {
+        if (products != null) {
             return products;
         } else {
             throw new DataNotFoundException("Products not found");
         }
     }
 
+    /**
+     * This method removes product that is presented in the shop
+     *
+     * @param storeId   - store were the product is presented
+     * @param productId - product from this store which will be deleted
+     * @throws DataNotFoundException if the product is not presented in this store
+     */
     @Transactional
     public void deleteProductFromStoreById(int storeId, int productId) throws DataNotFoundException {
         Product product = storeDAO.getProductFromStoreById(storeId, productId);
@@ -104,6 +154,14 @@ public class StoreService {
         storeDAO.addProductToStore(store, product);
     }
 
+    /**
+     * This method returns product that is presented in the shop
+     *
+     * @param storeId   - store were the product is presented
+     * @param productId - product from this store
+     * @return - if the store contains product
+     * @throws DataNotFoundException if the product in return staitment is null
+     */
     @Transactional
     public Product getProductFromStoreById(int storeId, int productId) throws DataNotFoundException {
         Product product = storeDAO.getProductFromStoreById(storeId, productId);
@@ -111,6 +169,29 @@ public class StoreService {
             return product;
         } else {
             throw new DataNotFoundException(String.format("Product %d from Store %d not found", productId, storeId));
+        }
+    }
+
+    /**
+     * This method retrieves products that are`nt presented in the store. This
+     * method is used to add products to store
+     *
+     * @param storeId - store where we look for products, that are not added there yet
+     * @param userId  - user whose products and stores we are looking for
+     * @return - set of products that are not added to store
+     * @throws DataNotFoundException - if result set is empty
+     */
+    @Transactional
+    public Set<Product> getNotMappedProducts(int storeId, int userId) throws DataNotFoundException {
+        Set<Product> storeProducts = new HashSet<Product>(getProductsByStoreId(storeId, userId));
+        Set<Product> allProducts = new HashSet<Product>(productDAO.getEnabledProductsByUserId(userId));
+
+        if (CollectionUtils.isNotEmpty(allProducts)) {
+            allProducts.removeAll(storeProducts);
+
+            return allProducts;
+        } else {
+            throw new DataNotFoundException("Products not found");
         }
     }
 

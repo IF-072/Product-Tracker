@@ -1,9 +1,22 @@
 package com.softserve.if072.restservice.dao.mybatisdao;
 
-import com.softserve.if072.common.model.*;
+import com.softserve.if072.common.model.Category;
+import com.softserve.if072.common.model.Image;
+import com.softserve.if072.common.model.Product;
+import com.softserve.if072.common.model.Store;
+import com.softserve.if072.common.model.Unit;
+import com.softserve.if072.common.model.User;
 import com.softserve.if072.restservice.dao.DAO;
-import org.apache.ibatis.annotations.*;
-import org.springframework.stereotype.Component;
+import org.apache.ibatis.annotations.Delete;
+import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Many;
+import org.apache.ibatis.annotations.One;
+import org.apache.ibatis.annotations.Options;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Result;
+import org.apache.ibatis.annotations.Results;
+import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -121,4 +134,22 @@ public interface ProductDAO extends DAO<Product> {
 
     @Insert("INSERT INTO stores_products(store_id, product_id) VALUES(#{store.id}, #{product.id})")
     void addStoreToProduct(Store store, Product product);
+
+    @Select("SELECT id, name, description, image_id, user_id, category_id, unit_id, is_enabled FROM product WHERE " +
+            "user_id = #{userId} and is_enabled =1 ")
+    @Results(value = {
+            @Result(property = "id", column = "id"),
+            @Result(property = "name", column = "name"),
+            @Result(property = "description", column = "description"),
+            @Result(property = "image", column = "image_id", javaType = Image.class,
+                    one = @One(select = "com.softserve.if072.restservice.dao.mybatisdao.ImageDAO.getByID")),
+            @Result(property = "user", column = "user_id", javaType = User.class,
+                    one = @One(select = "com.softserve.if072.restservice.dao.mybatisdao.UserDAO.getByID")),
+            @Result(property = "category", column = "category_id", javaType = Category.class,
+                    one = @One(select = "com.softserve.if072.restservice.dao.mybatisdao.CategoryDAO.getByID")),
+            @Result(property = "unit", column = "unit_id", javaType = Unit.class,
+                    one = @One(select = "com.softserve.if072.restservice.dao.mybatisdao.UnitDAO.getByID")),
+            @Result(property = "isEnabled", column = "is_enabled")
+    })
+    List<Product> getEnabledProductsByUserId(int userId);
 }

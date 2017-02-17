@@ -117,24 +117,21 @@ public class StorePageController extends BaseController {
     }
 
     @GetMapping("/addProductsToStore")
-    public String addProductsToStore(ModelMap model) {
-        final String uri = storeUrl + "/user/{userId}";
-        final String productUri = productUrl + "/user/{userId}";
+    public String addProductsToStore(@RequestParam("storeId") String storeId, ModelMap model) {
+        final String storeUri = storeUrl + "/{storeId}/notMappedProducts/{userId}";
         RestTemplate restTemplate = getRestTemplate();
         User user = restTemplate.getForObject(getCurrentUser, User.class);
         int userId = user.getId();
 
         try {
             Map<String, Integer> param = new HashMap<>();
+            param.put("storeId", Integer.parseInt(storeId));
             param.put("userId", userId);
             model.addAttribute("myStore", new Store());
 
-            Store[] storeResult = restTemplate.getForObject(uri, Store[].class, param);
-            List<Store> stores = Arrays.asList(storeResult);
-            Product[] productResult = restTemplate.getForObject(productUri, Product[].class, param);
+            Product[] productResult = restTemplate.getForObject(storeUri, Product[].class, param);
             List<Product> products = Arrays.asList(productResult);
 
-            model.addAttribute("stores", stores);
             model.addAttribute("products", products);
             LOGGER.info(String.format("Stores and products of user %d found", userId));
 
