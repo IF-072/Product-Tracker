@@ -49,4 +49,8 @@ public interface ImageDAO extends DAO<Image> {
     @Override
     @Delete("DELETE FROM image WHERE id = #{id}")
     void deleteById(@Param("id") int id);
+
+    @Select("SELECT LAST_INSERT_ID()")
+    int getLastInsertId();
+
 }
