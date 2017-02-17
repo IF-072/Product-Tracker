@@ -14,6 +14,8 @@ import javax.xml.bind.annotation.adapters.HexBinaryAdapter;
 import java.security.MessageDigest;
 import java.util.List;
 
+import static org.apache.commons.codec.binary.StringUtils.getBytesUtf8;
+
 /**
  * This class contains method for CRUD operations with users.
  *
@@ -32,6 +34,12 @@ public class UserService {
     @Autowired
     private UserDAO userDAO;
 
+    @Autowired
+    private MessageDigest messageDigest;
+
+    @Autowired
+    private HexBinaryAdapter hexBinaryAdapter;
+
     public List<User> getAll() throws DataNotFoundException {
         List<User> users = userDAO.getAll();
 
@@ -40,11 +48,8 @@ public class UserService {
         } else {
             throw new DataNotFoundException(usersNotFound);
         }
-    @Autowired
-    private MessageDigest messageDigest;
+    }
 
-    @Autowired
-    private HexBinaryAdapter hexBinaryAdapter;
 
     public User getById(int id) throws DataNotFoundException {
         User user = userDAO.getByID(id);
@@ -78,6 +83,6 @@ public class UserService {
     }
 
     public String encodePassword(String password) {
-        return hexBinaryAdapter.marshal( messageDigest.digest(getBytesUtf8(password)));
+        return hexBinaryAdapter.marshal(messageDigest.digest(getBytesUtf8(password)));
     }
 }

@@ -11,7 +11,6 @@
             <add-attribute value="/css/morris.css"/>
             <add-attribute value="/css/jquery-ui.css"/>
             <add-attribute value="/css/jquery.dataTables.css"/>
-            <add-attribute value="/css/shopping_list.css"/>
         </put-list-attribute>
 
         <put-list-attribute name="javascripts">
@@ -37,7 +36,6 @@
             <add-attribute value="/css/metisMenu.css"/>
             <add-attribute value="/css/sb-admin-2.css"/>
             <add-attribute value="/css/font-awesome.css"/>
-            <add-attribute value="/css/shopping_list.css"/>
         </put-list-attribute>
 
         <put-list-attribute name="javascripts">
@@ -138,6 +136,12 @@
     <definition name="shopping_list" extends="mainLayout">
         <put-attribute name="title" value="Shopping list"/>
         <put-attribute name="body" value="/WEB-INF/views/shopping_list.jsp"/>
+        <put-list-attribute name="stylesheets" inherit="true">
+            <add-attribute value="/css/shopping_list.css"/>
+        </put-list-attribute>
+        <put-list-attribute name="javascripts" inherit="true">
+            <add-attribute value="/js/shopping_list.js"/>
+        </put-list-attribute>
     </definition>
 
     <definition name="403" extends="mainLayout">
