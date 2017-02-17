@@ -13,7 +13,7 @@ function deleteProduct(productId) {
 $("#dialogDelete").dialog({autoOpen:false,buttons:{
     Delete:function(){
         $.ajax({
-            url : "http://localhost:8080/product/delProduct",
+            url : "product/delProduct",
             method : "POST",
             data : {productId: prId}
         });

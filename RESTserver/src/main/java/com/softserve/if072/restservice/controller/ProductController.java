@@ -113,6 +113,7 @@ public class ProductController {
     @ResponseStatus(value = HttpStatus.OK)
     public List<Store> getAllStoresFromProduct(@PathVariable int id, HttpServletResponse response) {
         try {
+            System.out.println("Product id is " + id);
             List<Store> stores = productService.getStoresByProductId(id);
             LOGGER.info("All Stores were found");
             return stores;

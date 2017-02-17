@@ -10,7 +10,8 @@
 --%>
 
 <style>
-    #edit,#delete {text-align:center}
+    #edit,#delete, #goStores, #addImage, #addImage {text-align:center; cursor: pointer}
+    #image {text-align:center}
 </style>
 
 <div class="row">
@@ -23,12 +24,11 @@
     <div class="col-lg-12">
         <div class="panel panel-default">
             <div class="panel-body">
-                <input type="button" onClick="window.location.href ='<c:url value= "/product/addProduct"/>'"
+                <input type="button" class="btn btn-outline btn-primary" onClick="window.location.href = 'addProduct'"
                        value="Add new product">
                     <table width="100%" class="table table-striped" id="productData">
                         <thead>
                         <tr>
-                            <th>ID</th>
                             <th>Name</th>
                             <th>Description</th>
                             <th>Category</th>
@@ -42,15 +42,32 @@
                         <tbody>
                         <c:forEach items="${products}" var="product">
                             <tr class="gradeA">
-                                <td><c:out value="${product.id}"></c:out></td>
-                                <td><c:out value="${product.name}"></c:out></td>
-                                <td><c:out value="${product.description}"></c:out></td>
-                                <td><c:out value="${product.category.name}"></c:out></td>
-                                <td><c:out value="${product.unit.name}"></c:out></td>
-                                <td><c:out value="${product.image.id}"></c:out></td>
-                                <td><c:url value="../stores/">Stores</c:url></td>
-                                <td><p class="fa fa-pencil fa-lg" id="edit"></p></td>
-                                <td onclick="deleteProduct(${product.id});" id="delete"><p class="fa fa-times fa-lg" ></p></td>
+                                <td>${product.name}</td>
+                                <td>${product.description}</td>
+                                <td>${product.category.name}</td>
+                                <td>${product.unit.name}</td>
+                                <td id="image">
+                                    <c:if test="${product.image.id == null}">
+                                    <p id="addImage"
+                                       onclick="document.location.href='/image/upload?productId=${product.id}'">
+                                        Add image</p>
+                                    </c:if>
+                                    <c:if test="${product.image.id != null}">
+                                    <img src="../image/${product.image.id}" width="50" height="50" id="editImage"
+                                    onclick="document.location.href='/image/edit?productId=${product.id}'">
+                                    </c:if>
+                                </td>
+                                <td>
+                                    <p onclick="document.location.href='/product/stores?productId=${product.id}'"
+                                       id="goStores">Stores</p>
+                                </td>
+                                <td id="edit">
+                                    <p onclick="document.location.href='/product/editProduct?id=${product.id}'"
+                                       class="fa fa-pencil fa-lg"></p>
+                                </td>
+                                <td onclick="deleteProduct(${product.id});" id="delete">
+                                    <p class="fa fa-times fa-lg" ></p>
+                                </td>
                             </tr>
                         </c:forEach>
                         </tbody>
