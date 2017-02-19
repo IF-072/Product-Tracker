@@ -53,8 +53,8 @@
                                             class="fa fa-pencil fa-lg"></a></td>
                         <td onclick="deleteStore(${store.id})"; id="delete"><p class="fa fa-times fa-lg"></p></td>
 
-                    </tr>
-                    </c:forEach>
+                    </tr></c:forEach>
+
                     <tbody>
                 </table>
 

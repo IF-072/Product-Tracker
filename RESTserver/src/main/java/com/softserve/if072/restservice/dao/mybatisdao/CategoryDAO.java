@@ -13,7 +13,7 @@ import java.util.List;
 
 public interface CategoryDAO extends DAO<Category> {
 
-    @Select("SELECT id, name, user_id, is_enabled FROM category WHERE user_id = #{userID}")
+    @Select("SELECT id, name, user_id, is_enabled FROM category WHERE user_id = #{userID} AND ")
     @Results(value = {
             @Result(property = "id", column = "id"),
             @Result(property = "name", column = "name"),

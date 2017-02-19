@@ -75,18 +75,17 @@ public class CategoryController {
     @PutMapping(value = "/")
     @ResponseStatus(value = HttpStatus.OK)
     public void update(@RequestBody Category category, HttpServletResponse response) {
-        int id = category.getId();
 
         try {
             categoryService.update(category);
-            LOGGER.info(String.format("Category with id %d was updated", id));
+            LOGGER.info(String.format("Category with id %d was updated", category.getId()));
         } catch (IllegalArgumentException e) {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-            LOGGER.error(String.format("Cannot update category with id %d", id), e);
+            LOGGER.error(String.format("Cannot update category with id %d", category.getId()), e);
         }
     }
 
-    @DeleteMapping(value = "/{id}")
+    @PostMapping(value = "/{id}")
     @ResponseStatus(value = HttpStatus.OK)
     public void delete(@PathVariable("id") int id) {
         categoryService.deleteById(id);
