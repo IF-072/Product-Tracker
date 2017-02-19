@@ -39,9 +39,7 @@ public class CartController extends BaseController {
 
     @GetMapping
     public String getCart(Model model) {
-
         RestTemplate template = getRestTemplate();
-
         List<Cart> carts = template.getForObject(String.format(restCartURL, getCurrentUser().getId()), List.class);
         model.addAttribute("carts", carts);
         LOGGER.info(String.format(cartFound, getCurrentUser().getId(), carts.size()));
@@ -57,13 +55,12 @@ public class CartController extends BaseController {
      * If user storage already has the same product, product amount will be increased,
      * otherwise new product with buying amount will be stored in the user cart.
      *
-     * @param userId - current user unique identifier
-     * @param storeId - store unique identifier
+     * @param userId    - current user unique identifier
+     * @param storeId   - store unique identifier
      * @param productId - product unique identifier
-     * @param amount - amount of the product to be bought
+     * @param amount    - amount of the product to be bought
      * @return string with appropriate redirect statement
      */
-
     @PostMapping("/bought")
     public String productBuying(@RequestParam int userId, int storeId, int productId, int amount) {
         CartDTO cartDTO = new CartDTO(userId, storeId, productId, amount);
@@ -76,8 +73,7 @@ public class CartController extends BaseController {
         }
 
         template.delete(String.format(restCartDeleteURL, getCurrentUser().getId(), productId));
-        LOGGER.info(String.format(successfullyOperation, userId, amount, productId));
-
+        LOGGER.info(String.format(successfullyOperation, userId, "bought", amount, productId));
         return "redirect: /cart/";
     }
 
@@ -87,5 +83,12 @@ public class CartController extends BaseController {
     private boolean isProductInStorage(int productId) {
 
         return true;
+    }
+
+    @GetMapping("/delete")
+    public String deleteProductFromCart(@RequestParam int userId, int productId, int amount) {
+        template.delete(String.format(restCartDeleteURL, getCurrentUser().getId(), productId));
+        LOGGER.info(String.format(successfullyOperation, userId, "deleted", amount, productId));
+        return "redirect: /cart/";
     }
 }
