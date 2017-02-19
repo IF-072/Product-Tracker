@@ -10,6 +10,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * Handles authentication errors via catching AuthenticationException.
+ * Sets response status code to 401 Unauthorized.
+ *
+ * @author Igor Parada
+ */
 public class CustomAuthenticationFailureHandler implements AuthenticationFailureHandler {
 
     private static final Logger LOGGER = LogManager.getLogger(CustomAuthenticationFailureHandler.class);

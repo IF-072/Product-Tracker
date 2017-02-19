@@ -6,6 +6,7 @@ import java.util.List;
  * This class stores information about user.
  *
  * @author Oleh Pochernin
+ * @author Igor Parada
  */
 public class User {
 

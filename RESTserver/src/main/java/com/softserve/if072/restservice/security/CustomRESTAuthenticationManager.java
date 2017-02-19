@@ -19,6 +19,12 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The CustomRESTAuthenticationManager is a custom implementation of {@link AuthenticationManager} interface.
+ * Performs authentication based on input {@link CustomAuthenticationToken}.
+ *
+ * @author Igor Parada
+ */
 @Component
 public class CustomRESTAuthenticationManager implements AuthenticationManager {
 
@@ -30,6 +36,14 @@ public class CustomRESTAuthenticationManager implements AuthenticationManager {
     public CustomRESTAuthenticationManager(TokenService tokenService) {
         this.tokenService = tokenService;
     }
+
+    /**
+     * Performs custom authentication process based on input CustomAuthenticationToken.
+     *
+     * @param authentication {@link CustomAuthenticationToken} instance
+     * @return an instance of {@link AuthenticatedUserProxy} with user details
+     * @throws AuthenticationException if authentication was unsuccessful
+     */
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {

@@ -26,6 +26,11 @@ import javax.xml.bind.annotation.adapters.HexBinaryAdapter;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+/**
+ * Configuration class for Spring Security framework
+ *
+ * @author Igor Parada
+ */
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
@@ -45,6 +50,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private CustomRESTAuthenticationManager customRESTAuthenticationManager;
 
+    /**
+     * Configures Spring HttpSecurity for using with RESTful service. Defines stateless session creation policy, sets
+     * necessary authentication for secured URL pattern, disables any web-related stuff like forms and adds
+     * custom authentication filter to the Spring Security FilterChain.
+     *
+     * @param http spring security http context
+     */
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
@@ -73,6 +85,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
+    public AccessDeniedHandler getCustomAccessDeniedHandler() {
+        return new CustomAccessDeniedHandler();
+    }
+
+
+    /**
+     * Defines AbstractAuthenticationProcessingFilter bean with configured AuthenticationManager and success/failure handlers
+     */
+    @Bean
     public AbstractAuthenticationProcessingFilter customAuthenticationProcessingFilter() {
         CustomAuthenticationProcessingFilter filter =
                 new CustomAuthenticationProcessingFilter(securedUrlPattern, tokenHeaderName);
@@ -82,11 +103,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return filter;
     }
 
-    @Bean
-    public AccessDeniedHandler getCustomAccessDeniedHandler() {
-        return new CustomAccessDeniedHandler();
-    }
-
+    /**
+     * Creates MessageDigest bean based on pre-defined digest algorithm
+     *
+     * @return created MessageDigest instance
+     */
     @Bean
     public MessageDigest messageDigest() {
         MessageDigest messageDigest;
@@ -98,8 +119,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return messageDigest;
     }
 
+    /**
+     * Defines hexBinaryAdapter used for bi-directional converting byte array into UTF-8 string
+     *
+     * @return created adapter instance
+     */
     @Bean
-    public HexBinaryAdapter hexBinaryAdapter(){
+    public HexBinaryAdapter hexBinaryAdapter() {
         return new HexBinaryAdapter();
     }
 }

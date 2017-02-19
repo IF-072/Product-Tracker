@@ -24,6 +24,12 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+/**
+ * The controller contains methods that handle user registration process
+ *
+ * @author Igor Parada
+ */
+
 @Controller
 @RequestMapping("/register")
 @PropertySource({"classpath:application.properties", "classpath:message.properties"})
@@ -41,18 +47,21 @@ public class RegistrationController extends BaseController {
     private String registerUrl;
 
     @Value("${registration.alreadyExists}")
-    private String alreadyExist;
+    private String alreadyExistMessage;
 
     @Value("${registration.generalError}")
-    private String generalError;
+    private String generalErrorMessage;
 
     @Value("${registration.successful}")
-    private String registrationSuccessful;
+    private String registrationSuccessfulMessage;
 
     @Value("${registration.incorrectAccountType}")
-    private String incorrectAccountType;
+    private String incorrectAccountTypeMessage;
 
-
+    /**
+     * Creates empty {@link UserRegistrationForm} and puts it with into model.
+     * Displays user registration page.
+     */
     @GetMapping
     public String getRegisterPage(Model model) {
         RestTemplate template = getRestTemplate();
@@ -68,6 +77,15 @@ public class RegistrationController extends BaseController {
         return "register";
     }
 
+    /**
+     * Handles user registration process. In case of errors (such as already existed account,
+     * incorrect account type etc.) redirects to register page with displaying error message.
+     *
+     * @param registrationForm an {@link ModelAttribute} filled in with user's data
+     * @param result validation result
+     * @param redirectAttributes attributes with custom messages to be displayed on the page
+     * @return view name
+     */
     @PostMapping
     public String postRegisterPage(@Validated @ModelAttribute("registrationForm") UserRegistrationForm registrationForm,
                                    BindingResult result, RedirectAttributes redirectAttributes) {
@@ -78,7 +96,7 @@ public class RegistrationController extends BaseController {
 
         Role role = getRoleByID(registrationForm.getRoleId());
         if (role == null) {
-            redirectAttributes.addFlashAttribute("errorMessage", incorrectAccountType);
+            redirectAttributes.addFlashAttribute("errorMessage", incorrectAccountTypeMessage);
             return "redirect:/register";
         }
 
@@ -93,15 +111,15 @@ public class RegistrationController extends BaseController {
         try {
             ResponseEntity<String> responseEntity = template.postForEntity(registerUrl, user, String.class);
             if (responseEntity.getStatusCode().equals(HttpStatus.OK)) {
-                redirectAttributes.addFlashAttribute("successMessage", registrationSuccessful);
+                redirectAttributes.addFlashAttribute("successMessage", registrationSuccessfulMessage);
                 return "redirect:/login";
             }
         } catch (HttpClientErrorException e) {
             if (e.getStatusCode().equals(HttpStatus.UNPROCESSABLE_ENTITY)) {
-                LOGGER.warn("User tried to register under already registered username");
-                redirectAttributes.addFlashAttribute("errorMessage", alreadyExist);
+                LOGGER.warn("User tried to register with already registered username");
+                redirectAttributes.addFlashAttribute("errorMessage", alreadyExistMessage);
             } else {
-                redirectAttributes.addFlashAttribute("errorMessage", generalError);
+                redirectAttributes.addFlashAttribute("errorMessage", generalErrorMessage);
             }
             return "redirect:/register";
         }
