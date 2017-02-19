@@ -53,16 +53,20 @@ public class ShoppingListController extends BaseController {
     }
 
     @RequestMapping(value = "/shopping_list/edit", method = RequestMethod.POST)
-    public String editProductAmount(@RequestParam("userId") int userId,
-                                    @RequestParam("productId") int productId,
-                                    @RequestParam("val") int value) {
+    public String editShoppingList(@RequestParam("userId") int userId,
+                                   @RequestParam("productId") int productId,
+                                   @RequestParam("val") int value) {
         RestTemplate restTemplate = new RestTemplate();
-
         ShoppingList shoppingList = restTemplate.getForObject(String.format(shoppingListByUserAndProductUrl, userId, productId), ShoppingList.class);
-        shoppingList.setAmount(shoppingList.getAmount() + value);
 
         HttpEntity<ShoppingList> entity = new HttpEntity<>(shoppingList);
-        restTemplate.exchange(shoppingListUrl, HttpMethod.PUT, entity, ShoppingList.class);
+
+        if (value == 0) {
+            restTemplate.exchange(shoppingListUrl, HttpMethod.DELETE, entity, ShoppingList.class);
+        } else {
+            shoppingList.setAmount(shoppingList.getAmount() + value);
+            restTemplate.exchange(shoppingListUrl, HttpMethod.PUT, entity, ShoppingList.class);
+        }
 
         return "redirect:../shopping_list";
     }

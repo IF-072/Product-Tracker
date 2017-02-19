@@ -23,11 +23,11 @@
                         <c:forEach items="${shoppingList}" var="elem">
                             <tr>
                                 <td>${elem.product.name}</td>
-                                <td>${elem.amount}</td>
+                                <td>${elem.amount} ${elem.product.unit.name}</td>
 
                                 <td><a onclick="edit(${elem.user.id}, ${elem.product.id}, -1)" class="fa fa-minus-square fa-lg"/></td>
                                 <td><a onclick="edit(${elem.user.id}, ${elem.product.id}, 1)" class="fa fa-plus-square fa-lg"/></td>
-                                <td><a class="fa fa-times fa-lg"/></td>
+                                <td><a onclick="edit(${elem.user.id}, ${elem.product.id}, 0)" class="fa fa-times fa-lg"/></td>
                             </tr>
                         </c:forEach>
                     </form>
