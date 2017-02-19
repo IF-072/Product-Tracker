@@ -22,6 +22,10 @@
                             <td>email</td>
                             <td>${user.email}</td>
                         </tr>
+                        <tr>
+                            <td>account type</td>
+                            <td>${user.role.description}</td>
+                        </tr>
                         </tbody>
                     </table>
                 </div>

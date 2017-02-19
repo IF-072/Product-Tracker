@@ -4,10 +4,10 @@
 
                     <div class="login-panel panel panel-red">
                         <div class="panel-heading">
-                            404 Not Found
+                            Internal server error
                         </div>
                         <div class="panel-body">
-                            <p>The requested resource is not available. </p>
+                            <p>The site didn't respond or got internal error. Please contact site administrator or try again later.</p>
                         </div>
                         <div class="panel-footer">
                             <a href="javascript:window.history.back();"><i class="fa fa-arrow-left" aria-hidden="true"></i> Back</a>

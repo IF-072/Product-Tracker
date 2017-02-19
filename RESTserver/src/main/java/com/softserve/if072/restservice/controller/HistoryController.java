@@ -27,7 +27,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/users/{userID}/histories")
-public class HistoryController extends ExceptionHandlerController {
+public class HistoryController {
     @Autowired
     private HistoryService historyService;
     private static final Logger LOGGER = LogManager.getLogger(HistoryController.class);

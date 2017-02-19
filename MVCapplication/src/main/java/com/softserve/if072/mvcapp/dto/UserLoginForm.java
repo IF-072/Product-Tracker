@@ -3,6 +3,11 @@ package com.softserve.if072.mvcapp.dto;
 import org.hibernate.validator.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
+/**
+ * A simple POJO that holds fields required for user login
+ *
+ * @author Igor Parada
+ */
 public class UserLoginForm {
 
     @NotEmpty(message = "{error.email.notnull}")
@@ -13,8 +18,7 @@ public class UserLoginForm {
     @Size(min = 4, max = 64, message = "{error.password.size}")
     private String password;
 
-    public UserLoginForm() {
-    }
+    public UserLoginForm() { }
 
     public String getEmail() {
         return email;

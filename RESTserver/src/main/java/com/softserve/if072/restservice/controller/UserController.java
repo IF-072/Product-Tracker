@@ -1,6 +1,7 @@
 package com.softserve.if072.restservice.controller;
 
 import com.softserve.if072.common.model.User;
+import com.softserve.if072.restservice.exception.DataNotFoundException;
 import com.softserve.if072.restservice.service.UserService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -37,10 +38,11 @@ public class UserController {
      */
     @RequestMapping(value = "/user/", method = RequestMethod.GET)
     public ResponseEntity<List<User>> getAllUsers() {
-        List<User> users = userService.getAll();
-
-        if(users.isEmpty()){
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        List<User> users = null;
+        try {
+            users = userService.getAll();
+        } catch (DataNotFoundException e) {
+            LOG.warn(e.getMessage());
         }
 
         return new ResponseEntity<>(users, HttpStatus.OK);
@@ -54,13 +56,15 @@ public class UserController {
     @PreAuthorize("#id == authentication.user.id")
     @RequestMapping(value = "/user/{id}", method = RequestMethod.GET)
     public ResponseEntity<User> getUserById(@PathVariable("id") int id) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         LOG.debug("Fetching User with id " + id);
-        User user = userService.getById(id);
-        if (user == null) {
-            LOG.warn("User with id " + id + " not found");
+        User user = null;
+        try {
+            user = userService.getById(id);
+        } catch (DataNotFoundException e) {
+            LOG.warn(e.getMessage());
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 

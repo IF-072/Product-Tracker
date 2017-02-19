@@ -2,13 +2,17 @@ package com.softserve.if072.common.model;
 
 import org.springframework.security.core.GrantedAuthority;
 
+/**
+ * This class stores information about user's role. Implements Spring Security {@link GrantedAuthority} interface.
+ */
 public class Role implements GrantedAuthority {
 
     private int id;
     private String authority;
     private String description;
 
-    public Role() { }
+    public Role() {
+    }
 
     public Role(String authority) {
         this.authority = authority;

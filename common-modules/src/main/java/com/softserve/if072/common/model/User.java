@@ -6,6 +6,7 @@ import java.util.List;
  * This class stores information about user.
  *
  * @author Oleh Pochernin
+ * @author Igor Parada
  */
 public class User {
 
@@ -128,7 +129,6 @@ public class User {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
-                ", password='" + password + '\'' +
                 ", isEnabled=" + isEnabled +
                 ", stores=" + stores +
                 ", products=" + products +

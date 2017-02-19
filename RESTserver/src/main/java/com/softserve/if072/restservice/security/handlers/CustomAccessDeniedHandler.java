@@ -10,6 +10,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * Provides an method for AccessDeniedException handling.
+ * Sets response status code to 403 Forbidden.
+ *
+ * @author Igor Parada
+ */
 public class CustomAccessDeniedHandler implements AccessDeniedHandler {
 
     private static final Logger LOG = LogManager.getLogger(CustomAccessDeniedHandler.class);
