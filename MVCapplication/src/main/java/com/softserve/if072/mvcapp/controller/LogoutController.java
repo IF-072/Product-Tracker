@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 
 @Controller
 @RequestMapping("/logout")
-@PropertySource(value = {"classpath:application.properties"})
+@PropertySource({"classpath:application.properties", "classpath:message.properties"})
 public class LogoutController {
 
     private static final Logger LOGGER = LogManager.getLogger(LogoutController.class);
@@ -22,13 +22,16 @@ public class LogoutController {
     @Value("${application.authenticationCookieName}")
     private String cookieName;
 
-    @GetMapping(value = "")
+    @Value("${logout.succesfull}")
+    private String logoutSuccessfullMessage;
+
+    @GetMapping()
     public String logoutAndRedirectToLogin(HttpServletResponse response, final RedirectAttributes redirectAttributes) {
         Cookie cookie = new Cookie(cookieName, null);
         cookie.setMaxAge(0);
         response.addCookie(cookie);
 
-        redirectAttributes.addFlashAttribute("successMessage", "You have been successfully logged out");
+        redirectAttributes.addFlashAttribute("successMessage", logoutSuccessfullMessage);
         return "redirect:login";
     }
 }

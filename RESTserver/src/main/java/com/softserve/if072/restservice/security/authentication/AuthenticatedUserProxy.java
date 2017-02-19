@@ -6,6 +6,12 @@ import org.springframework.security.core.GrantedAuthority;
 
 import java.util.Collection;
 
+/**
+ * Implementation of {@link Authentication} interface. Stores an instance of {@link User} class, which contains
+ * information about current logged in user.
+ *
+ * @author Igor Parada
+ */
 public class AuthenticatedUserProxy implements Authentication {
 
     private User user;

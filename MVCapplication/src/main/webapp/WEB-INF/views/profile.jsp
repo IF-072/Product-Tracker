@@ -23,8 +23,8 @@
                             <td>${user.email}</td>
                         </tr>
                         <tr>
-                            <td>authority</td>
-                            <td>${user.role.authority}</td>
+                            <td>account type</td>
+                            <td>${user.role.description}</td>
                         </tr>
                         </tbody>
                     </table>

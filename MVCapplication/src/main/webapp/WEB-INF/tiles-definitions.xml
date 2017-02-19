@@ -184,6 +184,12 @@
         <put-attribute name="body" value="/WEB-INF/views/404.jsp"/>
     </definition>
 
+    <definition name="generalError" extends="mainLayout">
+        <put-attribute name="header" value=""/>
+        <put-attribute name="title" value="General Error"/>
+        <put-attribute name="body" value="/WEB-INF/views/generalError.jsp"/>
+    </definition>
+
     <definition name="editProduct" extends="mainLayout">
         <put-attribute name="title" value="Product Tracker Project"/>
         <put-attribute name="body" value="/WEB-INF/views/editProduct.jsp"/>

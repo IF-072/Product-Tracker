@@ -11,6 +11,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * Handles authentication success events. Redirects the request to its destination
+ * instead of redirecting it to home controller.
+ *
+ * @author Igor Parada
+ */
 public class CustomAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
 
     private static final Logger LOGGER = LogManager.getLogger(CustomAuthenticationSuccessHandler.class);
