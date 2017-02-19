@@ -23,7 +23,7 @@ public class  ImageController {
     private ImageService imageService;
 
     @Autowired
-    ImageController(ImageService imageService) {
+    public ImageController(ImageService imageService) {
         this.imageService = imageService;
     }
 
@@ -64,22 +64,6 @@ public class  ImageController {
         } catch (DataNotFoundException e) {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             LOGGER.error(String.format(imageNotFound, id), e);
-        }
-
-    }
-
-    @RequestMapping(value = "/getByFileName", method = RequestMethod.GET)
-    @ResponseBody
-    public Image getByImageFileName(@RequestParam String fileName, HttpServletResponse response) {
-
-        try {
-            Image image = imageService.getByFileName(fileName);
-            LOGGER.info("Image was found by fileName");
-            return image;
-        } catch (DataNotFoundException e) {
-            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-            LOGGER.error(e.getMessage(), e);
-            return null;
         }
 
     }
