@@ -18,12 +18,21 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 /**
- * Created by dyndyn on 17.01.2017.
+ * The StorageDAO interface is used to configure
+ * mapped SQL statements for Storage class
+ *
+ * @author Roman Dyndyn
  */
 @Repository
 public interface StorageDAO extends DAO<Storage> {
 
-    @Select("SELECT * FROM storage WHERE user_id = #{user_id}")
+    /**
+     * Select all records from the storage table that belong to specific user
+     *
+     * @param userId unique user's identifier
+     * @return list of all storage items that belong to specific user
+     */
+    @Select("SELECT end_date, amount, user_id, product_id FROM storage WHERE user_id = #{userId}")
     @Results(value = {
             @Result(property = "endDate", column = "end_date"),
             @Result(property = "amount", column = "amount"),
@@ -32,20 +41,57 @@ public interface StorageDAO extends DAO<Storage> {
             @Result(property = "product", column = "product_id", javaType=Product.class,
                     one=@One(select="com.softserve.if072.restservice.dao.mybatisdao.ProductDAO.getByID"))
     })
-    public List<Storage> getByUserID(int user_id);
+    public List<Storage> getByUserID(int userId);
 
+    /**
+     * Select record from the storage table that belong to specific product
+     *
+     * @param productId unique product's identifier
+     * @return storage item that belong to specific product
+     */
+    @Select("SELECT end_date, amount, user_id, product_id FROM storage WHERE product_id = #{productId}")
+    @Results(value = {
+            @Result(property = "endDate", column = "end_date"),
+            @Result(property = "amount", column = "amount"),
+            @Result(property = "user", column = "user_id", javaType=User.class,
+                    one=@One(select="com.softserve.if072.restservice.dao.mybatisdao.UserDAO.getByID")),
+            @Result(property = "product", column = "product_id", javaType=Product.class,
+                    one=@One(select="com.softserve.if072.restservice.dao.mybatisdao.ProductDAO.getByID"))
+    })
+    public Storage getByProductID(int productId);
+
+    /**
+     * Insert new record into the storage table
+     *
+     * @param storage item to be inserted to the storage table
+     */
     @Override
     @Insert("INSERT INTO storage (user_id, product_id, amount, end_date) VALUES (#{user.id}, #{product.id}, #{amount}, #{endDate})")
     @Options(useGeneratedKeys = true)
     public void insert(Storage storage);
 
+    /**
+     * Update amount and endDate for current storage.
+     *
+     * @param storage item to be updated in the storage table
+     */
     @Override
     @Update("UPDATE storage SET end_date=#{endDate}, amount=#{amount} WHERE user_id=#{user.id} AND product_id=#{product.id}")
     public void update(Storage storage);
 
+    /**
+     * Update amount for current storage.
+     *
+     * @param storage item to be updated in the storage table
+     */
     @Update("UPDATE storage SET amount=#{amount} WHERE user_id=#{user.id} AND product_id=#{product.id}")
     public void updateAmount(Storage storage);
 
+    /**
+     * Delete current storage from the storage table
+     *
+     * @param storage item to be deleted from the storage table
+     */
     @Delete("DELETE FROM storage WHERE user_id=#{user.id} AND product_id=#{product.id}")
     public void delete(Storage storage) ;
 }

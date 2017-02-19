@@ -19,12 +19,21 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 /**
- * Created by dyndyn on 17.01.2017.
+ * The ShoppingListDAO interface is used to configure
+ * mapped SQL statements for ShoppingList class
+ *
+ * @author Roman Dyndyn
  */
 @Repository
 public interface ShoppingListDAO extends DAO<ShoppingList> {
 
-    @Select("SELECT * FROM shopping_list WHERE user_id = #{user_id}")
+    /**
+     * Select all records from the shopping_list table that belong to specific user
+     *
+     * @param userId unique user's identifier
+     * @return list of all shoppingList items that belong to specific user
+     */
+    @Select("SELECT amount, user_id, product_id FROM shopping_list WHERE user_id = #{userId}")
     @Results(value = {
             @Result(property = "amount", column = "amount"),
             @Result(property = "user", column = "user_id", javaType = User.class,
@@ -32,9 +41,16 @@ public interface ShoppingListDAO extends DAO<ShoppingList> {
             @Result(property = "product", column = "product_id", javaType = Product.class,
                     one = @One(select = "com.softserve.if072.restservice.dao.mybatisdao.ProductDAO.getByID"))
     })
-    public List<ShoppingList> getByUserID(int user_id);
+    public List<ShoppingList> getByUserID(int userId);
 
-    @Select("SELECT * FROM shopping_list WHERE user_id = #{user_id} and product_id = #{product_id}")
+    /**
+     * Select record from the shopping_list table that belong to specific user and product
+     *
+     * @param userId unique user's identifier
+     * @param productId unique product's identifier
+     * @return ShoppingList item that belong to specific product
+     */
+    @Select("SELECT * FROM shopping_list WHERE user_id = #{userId} and product_id = #{productId}")
     @Results(value = {
             @Result(property = "amount", column = "amount"),
             @Result(property = "user", column = "user_id", javaType = User.class,
@@ -42,9 +58,14 @@ public interface ShoppingListDAO extends DAO<ShoppingList> {
             @Result(property = "product", column = "product_id", javaType = Product.class,
                     one = @One(select = "com.softserve.if072.restservice.dao.mybatisdao.ProductDAO.getByID"))
     })
-    public ShoppingList getByUserAndProductId(@Param("user_id") Integer user_id, @Param("product_id") Integer
-            product_id);
+    public ShoppingList getByUserAndProductId(Integer userId, Integer productId);
 
+    /**
+     * Select all products from the product table that belong to specific user's rows of shopping_list table
+     *
+     * @param userId unique user's identifier
+     * @return list of all product items that belong to specific user
+     */
     @Select("SELECT id, name, shopping_list.user_id, is_enabled FROM product RIGHT JOIN "
             + "shopping_list ON product.id = shopping_list.product_id WHERE shopping_list.user_id = #{userId} " +
             "AND is_enabled = 1")
@@ -58,6 +79,12 @@ public interface ShoppingListDAO extends DAO<ShoppingList> {
     })
     List<Product> getProductsByUserId(int userId);
 
+    /**
+     * Select record from the shopping_list table that belong to specific user and product
+     *
+     * @param shoppingList the object being inspected
+     * @return ShoppingList item that belong to specific product
+     */
     @Select("SELECT * FROM shopping_list WHERE user_id=#{user.id} AND product_id=#{product.id}")
     @Results(value = {
             @Result(property = "amount", column = "amount"),
@@ -68,15 +95,30 @@ public interface ShoppingListDAO extends DAO<ShoppingList> {
     })
     public ShoppingList getByClass(ShoppingList shoppingList);
 
+    /**
+     * Insert new record into the shopping_list table
+     *
+     * @param shoppingList item to be inserted to the shopping_list table
+     */
     @Override
     @Insert("INSERT INTO shopping_list (user_id, product_id, amount) VALUES (#{user.id}, #{product.id}, #{amount})")
     @Options(useGeneratedKeys = true)
     public void insert(ShoppingList shoppingList);
 
+    /**
+     * Update amount for current shoppingList.
+     *
+     * @param shoppingList item to be updated in the shopping_list table
+     */
     @Override
     @Update("UPDATE shopping_list SET amount=#{amount} WHERE user_id=#{user.id} AND product_id=#{product.id}")
     public void update(ShoppingList shoppingList);
 
+    /**
+     * Delete current shoppingList from the shopping_list table
+     *
+     * @param shoppingList item to be deleted from the shopping_list table
+     */
     @Delete("DELETE FROM shopping_list WHERE user_id=#{user.id} AND product_id=#{product.id}")
     public void delete(ShoppingList shoppingList);
 }

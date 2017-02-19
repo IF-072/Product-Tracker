@@ -1,6 +1,5 @@
 package com.softserve.if072.mvcapp.controller;
 
-import com.softserve.if072.common.model.Cart;
 import com.softserve.if072.common.model.FormForCart;
 import com.softserve.if072.common.model.Product;
 import com.softserve.if072.common.model.Store;
@@ -10,6 +9,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,7 +18,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.*;
+import java.util.List;
+import java.util.Map;
+
 
 
 @Controller
@@ -55,7 +57,9 @@ public class GoShoppingPagesController extends BaseController {
         final String uri = goShoppingURL + "/products/" + userId;
         RestTemplate restTemplate = getRestTemplate();
         Map<String, List<Product>> map = restTemplate.postForEntity(uri, params, Map.class).getBody();
-        model.addAllAttributes(map);
+        if (!CollectionUtils.isEmpty(map)) {
+            model.addAllAttributes(map);
+        }
 
         model.addAttribute("cartForm", new FormForCart(map.get("selected").size()));
 
@@ -64,7 +68,6 @@ public class GoShoppingPagesController extends BaseController {
 
     @PostMapping("/addToCart")
     public String addToCart(@ModelAttribute("cartForm") FormForCart form) {
-        System.out.println(form);
         form.setUser(getCurrentUser());
 
         final String uri = goShoppingURL + "/cart";
