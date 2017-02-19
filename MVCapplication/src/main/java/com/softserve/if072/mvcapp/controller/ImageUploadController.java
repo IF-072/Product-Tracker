@@ -53,7 +53,7 @@ public class ImageUploadController {
         getImage.setId(imageId);
         product.setImage(getImage);
 
-        final String updateProductUri = productUrl +"/";
+        final String updateProductUri = productUrl +"/image";
         restTemplate.put(updateProductUri, product, Product.class);
 
         return "redirect:/product/";
@@ -64,11 +64,18 @@ public class ImageUploadController {
 
         imageProductId = productId;
 
-        System.out.println(productId);
+        final String uri = productUrl + "/{id}";
+        Map<String, Integer> param = new HashMap<>();
+        param.put("id", productId);
+
+        RestTemplate restTemplate = new RestTemplate();
+        Product product = restTemplate.getForObject(uri, Product.class, param);
 
         String message = (String) model.asMap().get("message");
         model.addAttribute("image", new Image());
         model.addAttribute("message", message);
+        model.addAttribute("product", product);
+
 
         return "addImage";
 

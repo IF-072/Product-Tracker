@@ -274,4 +274,9 @@
         <put-attribute name="body" value="/WEB-INF/views/history/emptyHistory.jsp"/>
     </definition>
 
+    <definition name="productInStores" extends="mainLayout">
+        <put-attribute name="title" value="Product Tracker Project"/>
+        <put-attribute name="body" value="/WEB-INF/views/productInStores.jsp"/>
+    </definition>
+
 </tiles-definitions>
