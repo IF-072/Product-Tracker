@@ -20,20 +20,28 @@ import java.util.List;
 @Service
 @PropertySource("classpath:message.properties")
 public class CartService {
+    private static final Logger LOGGER = LogManager.getLogger(CartService.class);
     @Autowired
     private CartDAO cartDAO;
-    private static final Logger LOGGER = LogManager.getLogger(CartService.class);
     @Value("${cart.notFound}")
     private String cartNotFound;
     @Value("${cart.found}")
     private String cartFound;
     @Value("${cart.SuccessfullyOperation}")
     private String successfullyOperation;
+    @Value("%{cart.foundProductId}")
+    private String cartFoundProductId;
 
-    public List<Cart> getByUserId(int userID) {
-        List<Cart> carts = cartDAO.getByUserId(userID);
-        LOGGER.info(String.format(cartFound, userID, carts.size()));
+    public List<Cart> getByUserId(int userId) {
+        List<Cart> carts = cartDAO.getByUserId(userId);
+        LOGGER.info(String.format(cartFound, userId, carts.size()));
         return carts;
+    }
+
+    public Cart getByProductId(int productId) {
+        Cart cart=cartDAO.getByProductId(productId);
+        LOGGER.info(String.format(cartFoundProductId, productId));
+        return cart;
     }
 
     public void insert(Cart cart) {
@@ -53,6 +61,13 @@ public class CartService {
             throw new DataNotFoundException(String.format(cartNotFound, "invalid DELETE operation", cart.getProduct().getName()));
         }
         LOGGER.info(String.format(successfullyOperation, cart.getProduct().getName(), "deleted from"));
+    }
+
+    public void delete(int productId) throws DataNotFoundException {
+        if (cartDAO.deleteByProductId(productId) == 0) {
+            throw new DataNotFoundException(String.format(cartNotFound, "invalid DELETE operation", productId));
+        }
+        LOGGER.info(String.format(successfullyOperation, productId, "deleted from"));
     }
 }
 

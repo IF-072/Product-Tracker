@@ -5,16 +5,16 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
 
 /**
  * The ExceptionHandlerController class is used to provide methods that handler common exceptions
  *
  * @author Igor Kryviuk
  */
-@RestController
+@ControllerAdvice
 public class ExceptionHandlerController {
     private static final Logger LOGGER = LogManager.getLogger(ExceptionHandlerController.class);
 
