@@ -22,7 +22,8 @@
                     <c:forEach var="store" items="${list}" varStatus="loop">
                         <tr onclick="checkBox(${loop.index})">
                             <td>
-                                <input type="checkbox" value="${store.id}" name="stores" id="checkbox${loop.index}" onclick="checkBox(${loop.index})">
+                                <input type="checkbox" value="${store.id}" name="stores" id="checkbox${loop.index}"
+                                       onclick="checkBox(${loop.index})">
                             </td>
                             <td>${store.name}</td>
                             <td>${store.address}</td>

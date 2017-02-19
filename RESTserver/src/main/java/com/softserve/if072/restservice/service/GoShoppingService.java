@@ -12,11 +12,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
-import java.sql.SQLException;
-import java.util.*;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
 
 /**
- * Created by dyndyn on 15.02.2017.
+ * The GoShoppingService class is used to hold business logic for working with the function "Go Shopping"
+ *
+ * @author Roman Dyndyn
  */
 @Service
 public class GoShoppingService {
@@ -32,38 +40,36 @@ public class GoShoppingService {
         this.cartDAO = cartDAO;
     }
 
+    /**
+     * Select stores from the shopping_list table that belong to specific user
+     *
+     * @param userId unique user's identifier
+     * @return list of store item that belong to specific user
+     */
     public List<Store> getStoreByUserId(int userId) throws DataNotFoundException {
         List<Product> shoppingList = shoppingListDAO.getProductsByUserId(userId);
         if (CollectionUtils.isEmpty(shoppingList)) {
             throw new DataNotFoundException(String.format("Shopping list of user with id %d is empty", userId));
         }
-        List<Store> list = storeDAO.getAllByUser(userId);
-        if (CollectionUtils.isEmpty(list)) {
+        List<Store> storeList = storeDAO.getAllByUser(userId);
+        if (CollectionUtils.isEmpty(storeList)) {
             throw new DataNotFoundException(String.format("Store list of user with id %d is empty", userId));
         }
 
-        Iterator<Store> iterator = list.iterator();
-        while (iterator.hasNext()) {
-            Store store = iterator.next();
-            if (!CollectionUtils.isEmpty(store.getProducts())) {
-                Set<Product> set = new HashSet<Product>(shoppingList);
-                set.retainAll(store.getProducts());
-                if (CollectionUtils.isEmpty(set)) {
-                    iterator.remove();
-                } else {
-                    store.setProducts(new LinkedList<Product>(set));
-                }
-            } else {
-                iterator.remove();
-            }
-
-        }
-        return list;
+        return retainProductFormShoppingList(storeList, shoppingList);
     }
 
+    /**
+     * Select products from the stores that user chose and contained in the shopping list ("selected"), and products
+     * that are remained in shoppinglist.
+     *
+     * @param userId unique user's identifier
+     * @param storesIds unique store's identifier
+     * @return two lists of products item that belong to specific user
+     */
     public Map<String, List<Product>> getProducts(Integer userId, int[] storesIds) throws DataNotFoundException {
-        Map<String, List<Product>> map = new HashMap<String, List<Product>>();
-        List<Product> selected = new ArrayList<Product>();
+        Map<String, List<Product>> productsMap = new HashMap<String, List<Product>>();
+        List<Product> productsFromSelectedStore = new ArrayList<Product>();
 
         Set<Product> set = new HashSet<Product>(shoppingListDAO.getProductsByUserId(userId));
         for (int i : storesIds) {
@@ -71,27 +77,27 @@ public class GoShoppingService {
             for (Product product : storeDAO.getProductsOnlyByStoreId(i)) {
                 if (set.contains(product)) {
                     int index;
-                    if ((index = selected.indexOf(product)) != -1) {
-                        selected.get(index).getStores().add(store);
+                    if ((index = productsFromSelectedStore.indexOf(product)) != -1) {
+                        productsFromSelectedStore.get(index).getStores().add(store);
                     } else {
                         product.setStores(new ArrayList<Store>());
                         product.getStores().add(store);
-                        selected.add(product);
+                        productsFromSelectedStore.add(product);
                     }
                 }
             }
         }
 
 
-        if (CollectionUtils.isEmpty(selected)) {
+        if (CollectionUtils.isEmpty(productsFromSelectedStore)) {
             throw new DataNotFoundException(String.format("Shopping list of user with id %d is empty", userId));
         }
 
-        set.removeAll(selected);
+        set.removeAll(productsFromSelectedStore);
 
-        map.put("selected", selected);
-        map.put("remained", new ArrayList<Product>(set));
-        return map;
+        productsMap.put("selected", productsFromSelectedStore);
+        productsMap.put("remained", new ArrayList<Product>(set));
+        return productsMap;
     }
 
     public void insertCart(FormForCart carts) {
@@ -103,5 +109,34 @@ public class GoShoppingService {
 
             }
         }
+    }
+
+    /**
+     * method retain in each store only products that are contained in the shopping list. If store doesn't contain
+     * products from shopping list, it will be removed.
+     *
+     * @param shoppingList list of products from shoppinglist
+     * @param storeList list of stores
+     * @return storage item that belong to specific product
+     */
+    private List<Store> retainProductFormShoppingList(List<Store> storeList, List<Product> shoppingList){
+        Iterator<Store> iterator = storeList.iterator();
+        while (iterator.hasNext()) {
+            Store store = iterator.next();
+            if (!CollectionUtils.isEmpty(store.getProducts())) {
+                Set<Product> set = new HashSet<Product>(shoppingList);
+                set.retainAll(store.getProducts());
+                if (CollectionUtils.isEmpty(set)) {
+                    iterator.remove();
+                } else {
+                    store.setProducts(new ArrayList<Product>(set));
+                }
+            } else {
+                iterator.remove();
+            }
+
+        }
+
+        return storeList;
     }
 }
