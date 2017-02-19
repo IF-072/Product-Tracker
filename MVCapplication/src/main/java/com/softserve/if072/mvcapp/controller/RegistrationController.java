@@ -13,9 +13,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -26,7 +27,7 @@ import java.util.Map;
 @Controller
 @RequestMapping("/register")
 @PropertySource({"classpath:application.properties", "classpath:message.properties"})
-public class RegistrationController {
+public class RegistrationController extends BaseController {
 
     private static final Logger LOGGER = LogManager.getLogger(RegistrationController.class);
 
@@ -39,22 +40,27 @@ public class RegistrationController {
     @Value("${service.url.register}")
     private String registerUrl;
 
-    @Value("${registration.errorMessage}")
-    private String errorMessage;
+    @Value("${registration.alreadyExists}")
+    private String alreadyExist;
+
+    @Value("${registration.generalError}")
+    private String generalError;
+
+    @Value("${registration.successful}")
+    private String registrationSuccessful;
+
+    @Value("${registration.incorrectAccountType}")
+    private String incorrectAccountType;
 
 
-    @RequestMapping(value = "", method = RequestMethod.GET)
+    @GetMapping
     public String getRegisterPage(Model model) {
-        RestTemplate template = new RestTemplate();
+        RestTemplate template = getRestTemplate();
+        ResponseEntity<Role[]> responseEntity = template.getForEntity(rolesUrl, Role[].class);
         Map<Integer, String> rolesMap = new LinkedHashMap<>();
-        try {
-           ResponseEntity<Role[]> responseEntity = template.getForEntity(rolesUrl, Role[].class);
-           Role[] roles = responseEntity.getBody();
-           for(Role role : roles)
-               rolesMap.put(role.getId(), role.getDescription());
-        }  catch (HttpClientErrorException e) {
-            LOGGER.error("Can't retrieve roles from REST-service ", e);
-        }
+        Role[] roles = responseEntity.getBody();
+        for (Role role : roles)
+            rolesMap.put(role.getId(), role.getDescription());
 
         model.addAttribute("roleMap", rolesMap);
         model.addAttribute("registrationForm", new UserRegistrationForm());
@@ -62,7 +68,7 @@ public class RegistrationController {
         return "register";
     }
 
-    @RequestMapping(value = "", method = RequestMethod.POST)
+    @PostMapping
     public String postRegisterPage(@Validated @ModelAttribute("registrationForm") UserRegistrationForm registrationForm,
                                    BindingResult result, RedirectAttributes redirectAttributes) {
         if (result.hasErrors()) {
@@ -71,8 +77,8 @@ public class RegistrationController {
         }
 
         Role role = getRoleByID(registrationForm.getRoleId());
-        if(role == null) {
-            redirectAttributes.addFlashAttribute(errorMessage, "Please select correct account type");
+        if (role == null) {
+            redirectAttributes.addFlashAttribute("errorMessage", incorrectAccountType);
             return "redirect:/register";
         }
 
@@ -83,28 +89,32 @@ public class RegistrationController {
         user.setRole(role);
         user.setEnabled(true);
 
-        RestTemplate template = new RestTemplate();
+        RestTemplate template = getRestTemplate();
         try {
             ResponseEntity<String> responseEntity = template.postForEntity(registerUrl, user, String.class);
-            if (responseEntity.getStatusCode().equals(HttpStatus.OK)){
-                redirectAttributes.addFlashAttribute("successMessage", "Your account was successfully created");
+            if (responseEntity.getStatusCode().equals(HttpStatus.OK)) {
+                redirectAttributes.addFlashAttribute("successMessage", registrationSuccessful);
                 return "redirect:/login";
             }
-        }  catch (HttpClientErrorException e) {
-            if(e.getStatusCode().equals(HttpStatus.UNPROCESSABLE_ENTITY)){
-                redirectAttributes.addFlashAttribute(errorMessage, "User with such email already exists");
+        } catch (HttpClientErrorException e) {
+            if (e.getStatusCode().equals(HttpStatus.UNPROCESSABLE_ENTITY)) {
+                LOGGER.warn("User tried to register under already registered username");
+                redirectAttributes.addFlashAttribute("errorMessage", alreadyExist);
             } else {
-                redirectAttributes.addFlashAttribute(errorMessage, "Something went wrong... Please try one more time");
+                redirectAttributes.addFlashAttribute("errorMessage", generalError);
             }
             return "redirect:/register";
         }
 
-       return "redirect:/register";
+        return "redirect:/register";
     }
 
     private Role getRoleByID(int roleId) {
         RestTemplate template = new RestTemplate();
         ResponseEntity<Role> responseEntity = template.getForEntity(String.format(getRoleByIdUrl, roleId), Role.class);
+        if (responseEntity == null || !responseEntity.hasBody()) {
+            return null;
+        }
         return responseEntity.getBody();
     }
 
