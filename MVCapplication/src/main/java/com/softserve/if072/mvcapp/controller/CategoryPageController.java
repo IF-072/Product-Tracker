@@ -75,7 +75,6 @@ public class CategoryPageController extends BaseController{
 
     @PostMapping(value = "/edit")
     public String editCategory(@ModelAttribute Category category) {
-        LOGGER.info("CATEGORY ID IS: " + category.getId());
 
         RestTemplate restTemplate = getRestTemplate();
         User user = getCurrentUser();
@@ -89,22 +88,20 @@ public class CategoryPageController extends BaseController{
         } catch (Exception e) {
             LOGGER.error("Category " + category.getName() + " was not updated");
             LOGGER.error(e);
-            return "redirect:/categories/";
+            return "redirect:/categories";
         }
     }
 
     /**
      * Method for deleting category from the list
      *
-     * @param id
-     * @return
+     * @param id id of category that will be deleted
+     * @return redirect to the categories list
      */
 
     @PostMapping(value = "/delete")
-    public String deleteCategory(@RequestParam int id) {
-        LOGGER.info("YEAH 11111111111111111111111111111111");
+    public void deleteCategory(@RequestParam int id) {
         RestTemplate restTemplate = getRestTemplate();
         restTemplate.delete(restCategoryURL + id);
-        return "redirect:/categories/";
     }
 }
