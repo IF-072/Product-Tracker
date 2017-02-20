@@ -40,7 +40,7 @@ public class ImageService {
         if (image != null){
             return image;
         } else {
-            throw new DataNotFoundException("Image with fileName" + fileName + " not found");
+            throw new DataNotFoundException("Image with fileName " + fileName + " not found");
         }
     }
 

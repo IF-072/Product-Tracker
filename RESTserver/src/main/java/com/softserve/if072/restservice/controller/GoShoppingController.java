@@ -8,7 +8,15 @@ import com.softserve.if072.restservice.service.GoShoppingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -46,9 +54,6 @@ public class GoShoppingController {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             LOGGER.error(e.getMessage());
             return null;
-        } catch (Exception e){
-            e.printStackTrace();
-            return null;
         }
     }
 
@@ -66,9 +71,6 @@ public class GoShoppingController {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             LOGGER.error(e.getMessage());
             return null;
-        } catch (Exception e){
-            e.printStackTrace();
-            return null;
         }
     }
 
@@ -76,12 +78,10 @@ public class GoShoppingController {
     @PostMapping("/cart")
     @ResponseBody
     @ResponseStatus(value = HttpStatus.OK)
-    public void getProducts(@RequestBody FormForCart cart, HttpServletResponse response) {
-        try {
-            goShoppingService.insertCart(cart);
-            LOGGER.info(String.format("Cart of user id %d was updated", cart.getUserId()));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    public void insertInCart(@RequestBody FormForCart cart, HttpServletResponse response) {
+
+        goShoppingService.insertCart(cart);
+        LOGGER.info(String.format("Cart of user id %d was updated", cart.getUserId()));
+
     }
 }

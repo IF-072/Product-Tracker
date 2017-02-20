@@ -24,15 +24,21 @@ import java.util.List;
  * @author Igor Kryviuk
  */
 @RestController
-@RequestMapping("/users/{userID}/carts")
-public class CartController extends ExceptionHandlerController {
+@RequestMapping("/users/{userId}/carts")
+public class CartController {
     @Autowired
     private CartService cartService;
 
     @GetMapping()
     @ResponseStatus(HttpStatus.OK)
-    public List<Cart> getByUserId(@PathVariable int userID) {
-        return cartService.getByUserId(userID);
+    public List<Cart> getByUserId(@PathVariable int userId) {
+        return cartService.getByUserId(userId);
+    }
+
+    @GetMapping("/{productId}")
+    @ResponseStatus(HttpStatus.OK)
+    public Cart getByProductId(@PathVariable int productId) {
+        return cartService.getByProductId(productId);
     }
 
     @PostMapping()
@@ -51,5 +57,11 @@ public class CartController extends ExceptionHandlerController {
     @ResponseStatus(value = HttpStatus.OK)
     public void delete(@RequestBody Cart cart) throws DataNotFoundException {
         cartService.delete(cart);
+    }
+
+    @DeleteMapping("/{productId}")
+    @ResponseStatus(value = HttpStatus.OK)
+    public void deleteByProductId(@PathVariable int productId) throws DataNotFoundException {
+        cartService.delete(productId);
     }
 }

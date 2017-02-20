@@ -8,6 +8,12 @@ import org.springframework.web.servlet.view.UrlBasedViewResolver;
 import org.springframework.web.servlet.view.tiles3.TilesConfigurer;
 import org.springframework.web.servlet.view.tiles3.TilesView;
 
+/**
+ * Configuration class for Apache Tiles framework
+ *
+ * @author Pavlo Bendus
+ * @author Igor Parada
+ */
 @Configuration
 public class TilesConfig extends WebMvcConfigurerAdapter {
 

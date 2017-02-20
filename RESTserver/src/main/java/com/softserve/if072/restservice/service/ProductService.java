@@ -4,6 +4,7 @@ import com.softserve.if072.common.model.Product;
 import com.softserve.if072.common.model.Store;
 import com.softserve.if072.restservice.dao.mybatisdao.ProductDAO;
 import com.softserve.if072.restservice.exception.DataNotFoundException;
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
@@ -64,6 +65,9 @@ public class ProductService {
     public void updateProduct(Product product) throws DataNotFoundException {productDAO.update(product);}
 
     @Transactional
+    public void updateProductByImage(Product product) throws DataNotFoundException {productDAO.updateImage(product);}
+
+    @Transactional
     public void deleteProduct(int id) throws DataNotFoundException {
         Product product = productDAO.getByID(id);
         if (product != null){
@@ -84,9 +88,9 @@ public class ProductService {
     }
 
     @Transactional
-    public List<Store> getStoresByProductId(int productId) throws DataNotFoundException {
-        List<Store> stores = productDAO.getStoresByProductId(productId);
-        if (!stores.isEmpty()){
+    public List<Store> getStoresByProductId(int productId, int userId) throws DataNotFoundException {
+        List<Store> stores = productDAO.getStoresByProductId(productId, userId);
+        if (CollectionUtils.isNotEmpty(stores)){
             return stores;
         } else {
             throw new DataNotFoundException("Stores not found");
@@ -94,19 +98,25 @@ public class ProductService {
     }
 
     @Transactional
-    public void deleteStoreFromProduct(Store store, Product product) throws DataNotFoundException {
-        List<Store> stores = productDAO.getStoresByProductId(product.getId());
-        for(Store s : stores) {
-            if(s.getId() == store.getId()) {
+    public void deleteStoreFromProductById(Product product) throws DataNotFoundException {
+
+        for(Store s : product.getStores()) {
+            Store store = productDAO.getStoreFromProductById(s.getId(), product.getId());
+            if (store != null) {
                 productDAO.deleteStoreFromProductById(store.getId(), product.getId());
             } else {
-                throw new DataNotFoundException("Store not found in product");
+                throw new DataNotFoundException(String.format("Store %d from product %d not found", store.getId(), product.getId()));
             }
         }
+
     }
 
     @Transactional
-    public void addStoreToProduct(Store store, Product product) {
-        productDAO.addStoreToProduct(store, product);
+    public void addStoreToProduct(Product product) {
+
+        for(Store s : product.getStores()) {
+            productDAO.addStoreToProduct(s.getId(), product.getId());
+        }
+
     }
 }

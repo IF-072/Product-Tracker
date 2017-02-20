@@ -58,11 +58,27 @@ public class StorageController {
     public List<Storage> getByUserId(@PathVariable int user_id, HttpServletResponse response) {
         try {
             List<Storage> stores = storageService.getByUserId(user_id);
-            LOGGER.info("All Storages were found");
+            LOGGER.info(String.format("All Storages of user with id %d were found", user_id));
             return stores;
         } catch (DataNotFoundException e) {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-            LOGGER.error("Storages were not found", e);
+            LOGGER.error(String.format("Storages of user with id %d were not found", user_id), e);
+            return null;
+        }
+    }
+
+    @PreAuthorize("#user_id == authentication.user.id")
+    @GetMapping(value = "/{user_id}/{product_id}")
+    @ResponseBody
+    @ResponseStatus(value = HttpStatus.OK)
+    public Storage getByProductId(@PathVariable int user_id, @PathVariable int product_id, HttpServletResponse response) {
+        try {
+            Storage store = storageService.getByProductId(product_id);
+            LOGGER.info(String.format("Storage with id %d was found", product_id));
+            return store;
+        } catch (DataNotFoundException e) {
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            LOGGER.error(String.format("Storage with id %d was not found", product_id), e);
             return null;
         }
     }

@@ -1,5 +1,7 @@
 package com.softserve.if072.common.model;
 
+import org.hibernate.validator.constraints.NotEmpty;
+
 import java.util.List;
 
 /**
@@ -10,7 +12,10 @@ import java.util.List;
  */
 
 public class Product {
+
     private int id;
+
+    @NotEmpty(message = "{error.productName.notnull}")
     private String name;
     private String description;
     private Image image;
