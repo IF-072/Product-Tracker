@@ -24,7 +24,7 @@
                             <td >
 
                                 <input type="checkbox" value="${loop.index}" name="checkbox[${loop.index}]"
-                                       id="checkbox${loop.index}" onclick="checkBox(${loop.index})">
+                                       id="checkbox${loop.index}" onclick="checkBox(${loop.index})" class="checkbox">
 
                             </td>
                             <td ><input type="hidden"

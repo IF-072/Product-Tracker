@@ -118,6 +118,12 @@
                         Storage</a>
                 </li>
                 <li>
+                    <a href="<c:url value="../cart/"/>" class="active"><i class="fa fa-shopping-cart"></i> Cart</a>
+                </li>
+                <li>
+                    <a href="<c:url value="../history/"/>" class="active"><i class="fa fa-calendar"></i> History</a>
+                </li>
+                <li>
                     <a href="<c:url value="../goShoppingStores/"/>"><button type="button" class="btn btn-outline btn-primary">Go shopping</button></a>
                 </li>
 

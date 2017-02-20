@@ -13,6 +13,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * Intercepts all requests to secured context and tries to authenticated them using {@link CustomRESTAuthenticationManager}
+ * Throws AccessDeniedException if authentication process fails.
+ *
+ * @author Igor Parada
+ */
 public class CustomAuthenticationProcessingFilter extends AbstractAuthenticationProcessingFilter {
 
     private static final Logger LOGGER = LogManager.getLogger(CustomAuthenticationProcessingFilter.class);
@@ -24,6 +30,13 @@ public class CustomAuthenticationProcessingFilter extends AbstractAuthentication
         this.tokenHeaderName = tokenHeaderName;
     }
 
+    /**
+     * Grabs the token string from input request's header, wraps it with {@link CustomAuthenticationToken} object
+     * and tries to authenticate the request using {@link CustomRESTAuthenticationManager}
+     *
+     * @return authenticated user details as Authentication object
+     * @throws AuthenticationException if authentication was unsuccessful
+     */
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
             throws AuthenticationException, IOException, ServletException {

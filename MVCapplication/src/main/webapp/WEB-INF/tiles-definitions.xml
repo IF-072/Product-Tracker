@@ -184,6 +184,12 @@
         <put-attribute name="body" value="/WEB-INF/views/404.jsp"/>
     </definition>
 
+    <definition name="generalError" extends="mainLayout">
+        <put-attribute name="header" value=""/>
+        <put-attribute name="title" value="General Error"/>
+        <put-attribute name="body" value="/WEB-INF/views/generalError.jsp"/>
+    </definition>
+
     <definition name="editProduct" extends="mainLayout">
         <put-attribute name="title" value="Product Tracker Project"/>
         <put-attribute name="body" value="/WEB-INF/views/editProduct.jsp"/>
@@ -230,6 +236,47 @@
             <add-attribute value="/css/dataTables.bootstrap.css"/>
             <add-attribute value="/css/dataTables.responsive.css"/>
         </put-list-attribute>
+
+        <put-list-attribute name="javascripts" inherit="true">
+            <add-attribute value="/js/cart.js"/>
+        </put-list-attribute>
+    </definition>
+
+    <definition name="cart" extends="mainLayout">
+        <put-attribute name="title" value="Cart"/>
+        <put-attribute name="body" value="/WEB-INF/views/cart/cart.jsp"/>
+
+        <put-list-attribute name="stylesheets" inherit="true">
+            <add-attribute value="/css/cart-history.css"/>
+        </put-list-attribute>
+
+        <put-list-attribute name="javascripts" inherit="true">
+            <add-attribute value="/js/cart.js"/>
+        </put-list-attribute>
+    </definition>
+
+    <definition name="emptyCart" extends="mainLayout">
+        <put-attribute name="title" value="Cart"/>
+        <put-attribute name="body" value="/WEB-INF/views/cart/emptyCart.jsp"/>
+    </definition>
+
+    <definition name="history" extends="mainLayout">
+        <put-attribute name="title" value="History"/>
+        <put-attribute name="body" value="/WEB-INF/views/history/history.jsp"/>
+
+        <put-list-attribute name="stylesheets" inherit="true">
+            <add-attribute value="/css/cart-history.css"/>
+        </put-list-attribute>
+    </definition>
+
+    <definition name="emptyHistory" extends="mainLayout">
+        <put-attribute name="title" value="History"/>
+        <put-attribute name="body" value="/WEB-INF/views/history/emptyHistory.jsp"/>
+    </definition>
+
+    <definition name="productInStores" extends="mainLayout">
+        <put-attribute name="title" value="Product Tracker Project"/>
+        <put-attribute name="body" value="/WEB-INF/views/productInStores.jsp"/>
     </definition>
 
 </tiles-definitions>
