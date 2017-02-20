@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Serve requests used for working with Store model
@@ -162,6 +163,30 @@ public class StoreController {
     public void addProductToStore(@RequestBody Store store, Product product) {
         storeService.addProductToStore(store, product);
         LOGGER.info(String.format("Product %d was added to Store %d", product.getId(), store.getId()));
+    }
+
+    @PostMapping("/manyProducts/")
+    @ResponseStatus(value = HttpStatus.CREATED)
+    public void addProducstToStore(@RequestBody Store store, Product product) {
+        storeService.addProductToStore(store, product);
+        LOGGER.info(String.format("Product %d was added to Store %d", product.getId(), store.getId()));
+    }
+
+    @GetMapping("/{storeId}/notMappedProducts/{userId}")
+    @ResponseBody
+    @ResponseStatus(value = HttpStatus.OK)
+    public Set<Product> getNotMappedProducts(@PathVariable Integer storeId, @PathVariable Integer userId,
+                                             HttpServletResponse response) {
+        try {
+            Set<Product> notMappedProducts = storeService.getNotMappedProducts(storeId, userId);
+
+            LOGGER.info("All Products were found");
+            return notMappedProducts;
+        } catch (DataNotFoundException e) {
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            LOGGER.error(e.getMessage());
+            return null;
+        }
     }
 
 }

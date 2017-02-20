@@ -1,9 +1,22 @@
 package com.softserve.if072.restservice.dao.mybatisdao;
 
-import com.softserve.if072.common.model.*;
+import com.softserve.if072.common.model.Category;
+import com.softserve.if072.common.model.Image;
+import com.softserve.if072.common.model.Product;
+import com.softserve.if072.common.model.Store;
+import com.softserve.if072.common.model.Unit;
+import com.softserve.if072.common.model.User;
 import com.softserve.if072.restservice.dao.DAO;
-import org.apache.ibatis.annotations.*;
-import org.springframework.stereotype.Component;
+import org.apache.ibatis.annotations.Delete;
+import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Many;
+import org.apache.ibatis.annotations.One;
+import org.apache.ibatis.annotations.Options;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Result;
+import org.apache.ibatis.annotations.Results;
+import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -32,11 +45,13 @@ public interface ProductDAO extends DAO<Product> {
                     one = @One(select = "com.softserve.if072.restservice.dao.mybatisdao.UnitDAO.getByID")),
             @Result(property = "isEnabled", column = "is_enabled"),
             @Result(property = "stores", column = "id", javaType = List.class,
-                    many = @Many(select = "com.softserve.if072.restservice.dao.mybatisdao.StoreDAO.getStoresByProductID"))
+                    many = @Many(select = "com.softserve.if072.restservice.dao.mybatisdao.StoreDAO" +
+                            ".getStoresByProductID"))
     })
     List<Product> getAll();
 
-    @Select("SELECT id, name, description, image_id, user_id, category_id, unit_id, is_enabled FROM product WHERE user_id = #{userId}")
+    @Select("SELECT id, name, description, image_id, user_id, category_id, unit_id, is_enabled FROM product WHERE " +
+            "user_id = #{userId}")
     @Results(value = {
             @Result(property = "id", column = "id"),
             @Result(property = "name", column = "name"),
@@ -51,12 +66,14 @@ public interface ProductDAO extends DAO<Product> {
                     one = @One(select = "com.softserve.if072.restservice.dao.mybatisdao.UnitDAO.getByID")),
             @Result(property = "isEnabled", column = "is_enabled"),
             @Result(property = "stores", column = "id", javaType = List.class,
-                    many = @Many(select = "com.softserve.if072.restservice.dao.mybatisdao.ProductDAO.getStoresByProductId"))
+                    many = @Many(select = "com.softserve.if072.restservice.dao.mybatisdao.ProductDAO" +
+                            ".getStoresByProductId"))
     })
     List<Product> getAllByUserId(int userId);
 
     @Override
-    @Select("SELECT id, name, description, image_id, user_id, category_id, unit_id, is_enabled FROM product WHERE id = #{id}")
+    @Select("SELECT id, name, description, image_id, user_id, category_id, unit_id, is_enabled FROM product WHERE id " +
+            "= #{id}")
     @Results(value = {
             @Result(property = "id", column = "id"),
             @Result(property = "name", column = "name"),
@@ -71,7 +88,8 @@ public interface ProductDAO extends DAO<Product> {
                     one = @One(select = "com.softserve.if072.restservice.dao.mybatisdao.UnitDAO.getByID")),
             @Result(property = "isEnabled", column = "is_enabled"),
             @Result(property = "stores", column = "id", javaType = List.class,
-                    many = @Many(select = "com.softserve.if072.restservice.dao.mybatisdao.ProductDAO.getStoresByProductId"))
+                    many = @Many(select = "com.softserve.if072.restservice.dao.mybatisdao.ProductDAO" +
+                            ".getStoresByProductId"))
     })
     Product getByID(@Param("id") int id);
 
@@ -123,14 +141,30 @@ public interface ProductDAO extends DAO<Product> {
             "FROM store JOIN stores_products ON store.id = stores_products.store_id " +
             "WHERE product_id = #{productId} and store_id = #{storeId}")
     @Result(property = "isEnabled", column = "is_enabled")
-
     Store getStoreFromProductById(@Param("storeId") Integer storeId, @Param("productId") Integer productId);
 
 
     @Delete("DELETE FROM stores_products WHERE store_id = #{storeId} and product_id = #{productId}")
-    void deleteStoreFromProductById (@Param("storeId") Integer storeId, @Param("productId") Integer productId);
+    void deleteStoreFromProductById(@Param("storeId") Integer storeId, @Param("productId") Integer productId);
 
     @Insert("INSERT INTO stores_products(store_id, product_id) VALUES(#{storeId}, #{productId})")
     void addStoreToProduct(@Param("storeId") Integer storeId, @Param("productId") Integer productId);
 
+    @Select("SELECT id, name, description, image_id, user_id, category_id, unit_id, is_enabled FROM product WHERE " +
+            "user_id = #{userId} and is_enabled =1 ")
+    @Results(value = {
+            @Result(property = "id", column = "id"),
+            @Result(property = "name", column = "name"),
+            @Result(property = "description", column = "description"),
+            @Result(property = "image", column = "image_id", javaType = Image.class,
+                    one = @One(select = "com.softserve.if072.restservice.dao.mybatisdao.ImageDAO.getByID")),
+            @Result(property = "user", column = "user_id", javaType = User.class,
+                    one = @One(select = "com.softserve.if072.restservice.dao.mybatisdao.UserDAO.getByID")),
+            @Result(property = "category", column = "category_id", javaType = Category.class,
+                    one = @One(select = "com.softserve.if072.restservice.dao.mybatisdao.CategoryDAO.getByID")),
+            @Result(property = "unit", column = "unit_id", javaType = Unit.class,
+                    one = @One(select = "com.softserve.if072.restservice.dao.mybatisdao.UnitDAO.getByID")),
+            @Result(property = "isEnabled", column = "is_enabled")
+    })
+    List<Product> getEnabledProductsByUserId(int userId);
 }

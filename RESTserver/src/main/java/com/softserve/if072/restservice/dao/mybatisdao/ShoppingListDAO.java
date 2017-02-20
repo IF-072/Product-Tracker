@@ -58,7 +58,7 @@ public interface ShoppingListDAO extends DAO<ShoppingList> {
             @Result(property = "product", column = "product_id", javaType = Product.class,
                     one = @One(select = "com.softserve.if072.restservice.dao.mybatisdao.ProductDAO.getByID"))
     })
-    public ShoppingList getByUserAndProductId(Integer userId, Integer productId);
+    public ShoppingList getByUserAndProductId(@Param("userId") Integer userId, @Param("productId") Integer productId);
 
     /**
      * Select all products from the product table that belong to specific user's rows of shopping_list table
