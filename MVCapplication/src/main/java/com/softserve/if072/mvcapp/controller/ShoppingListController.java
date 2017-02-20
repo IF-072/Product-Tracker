@@ -1,5 +1,6 @@
 package com.softserve.if072.mvcapp.controller;
 
+import com.softserve.if072.common.model.Product;
 import com.softserve.if072.common.model.ShoppingList;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -34,6 +35,9 @@ public class ShoppingListController extends BaseController {
 
     @Value("${service.shoppingList.byUserAndProduct}")
     private String shoppingListByUserAndProductUrl;
+
+    @Value("${service.product.byId}")
+    private String productById;
 
     /**
      * This method extracts a shopping list model for th shopping list's view.
@@ -95,9 +99,10 @@ public class ShoppingListController extends BaseController {
 
         if (shoppingList == null) {
             shoppingList = new ShoppingList();
+            Product product = restTemplate.getForObject(String.format(productById, productId), Product.class);
 
             shoppingList.setUser(getCurrentUser());
-            shoppingList.setProduct(null);
+            shoppingList.setProduct(product);
             shoppingList.setAmount(1);
 
             HttpEntity<ShoppingList> entity = new HttpEntity<>(shoppingList);
