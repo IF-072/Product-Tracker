@@ -97,7 +97,7 @@ public interface StoreDAO extends DAO<Store> {
 
     @Override
     @Update("UPDATE store SET name = #{name}, address = #{address}, is_enabled = 1, latitude = " +
-            "#{latitude}, longitude = #{longitude},  WHERE id = #{id}")
+            "#{latitude}, longitude = #{longitude}  WHERE id = #{id}")
     @Results(value = {
             @Result(property = "id", column = "id"),
             @Result(property = "name", column = "name"),

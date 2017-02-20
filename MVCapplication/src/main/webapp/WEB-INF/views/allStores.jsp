@@ -29,7 +29,7 @@
                         id="addStoreButton">AddStore
                 </button>
                 <%--<button type="button" class="btn btn-outline btn-primary" onclick=--%>
-                        <%--"location.href='/addProductsToStore/';" id="addProductButton">AddProducts--%>
+                <%--"location.href='/addProductsToStore/';" id="addProductButton">AddProducts--%>
                 <%--</button>--%>
 
                 <table width="100%" class="table table-striped table-bordered table-hover" id="storeTab">
@@ -52,14 +52,15 @@
                         </td>
                         <td>
                             <button type="button" class="btn btn-outline btn-primary" onclick=
-                                    "location.href='/addProductsToStore?storeId=${store.id}'"
+                                    "location.href='/addProductsToStore?storeId=${store.id}&name=${store.name}&adr=${store.address}'"
                                     id="addProductButton">AddProducts
                             </button>
                         </td>
                         <td id="edit"> <a href="<c:url value='/editStore?storeId=${store.id}'/>"
-                                            class="fa fa-pencil fa-lg"></a></td>
-                        <td onclick="deleteStore(${store.id})"; id="delete"><p class="fa fa-times fa-lg"></p></td>
-
+                                          class="fa fa-pencil fa-lg"></a></td>
+                        <td onclick="deleteStore(${store.id});" id="delete">
+                            <p class="fa fa-times fa-lg"></p>
+                        </td>
                     </tr>
                     </c:forEach>
                     <tbody>

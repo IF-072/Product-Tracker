@@ -117,23 +117,30 @@ public class StorePageController extends BaseController {
     }
 
     @GetMapping("/addProductsToStore")
-    public String addProductsToStore(@RequestParam("storeId") String storeId, ModelMap model) {
+    public String addProductsToStore(@RequestParam("storeId") String storeId, @RequestParam("name") String name,
+                                     @RequestParam("adr") String adr, ModelMap model, ModelMap model2 ) {
         final String storeUri = storeUrl + "/{storeId}/notMappedProducts/{userId}";
         RestTemplate restTemplate = getRestTemplate();
         User user = restTemplate.getForObject(getCurrentUser, User.class);
         int userId = user.getId();
-
+        int returnedStoreId = Integer.parseInt(storeId);
+   System.out.println(adr + name +" ++++++++++++++++++++++++++++=+++");
         try {
             Map<String, Integer> param = new HashMap<>();
-            param.put("storeId", Integer.parseInt(storeId));
+            param.put("storeId", returnedStoreId);
             param.put("userId", userId);
-            model.addAttribute("myStore", new Store());
-
             Product[] productResult = restTemplate.getForObject(storeUri, Product[].class, param);
             List<Product> products = Arrays.asList(productResult);
 
-            model.addAttribute("products", products);
-            LOGGER.info(String.format("Stores and products of user %d found", userId));
+            Store myStore = new Store();
+            myStore.setId(returnedStoreId);
+            myStore.setName(name);
+            myStore.setAddress(adr);
+//            myStore.setProducts(products);
+            model.addAttribute("myStore", myStore);
+            model2.addAttribute("products", products);
+
+            LOGGER.info(String.format("Products of user %d in store %s found", userId, storeId));
 
             return "addProductsToStore";
 
@@ -144,9 +151,20 @@ public class StorePageController extends BaseController {
     }
 
     @PostMapping(value = "/addProductsToStore")
-    public String addProductsToStore(@ModelAttribute("newStore") Store store) {
+    public String addProductsToStore(@ModelAttribute("myStore") Store myStore, @ModelAttribute("products")
+                                     List<Product> products ) {
 
-        return "redirect:/stores/";
+            final String uri = storeUrl + "/{storeId}";
+            try {
+                RestTemplate restTemplate = getRestTemplate();
+         
+
+            return "redirect:/stores/";
+        } catch (Exception e) {
+            LOGGER.error("Stores and products not found");
+            return "redirect:/stores/";
+        }
+
     }
 
     @PostMapping(value = "/stores/delStore")
@@ -196,7 +214,7 @@ public class StorePageController extends BaseController {
         RestTemplate restTemplate = getRestTemplate();
         User user = restTemplate.getForObject(getCurrentUser, User.class);
         store.setUser(user);
-
+        LOGGER.info(store.toString());
         try {
             restTemplate.put(uri, store, Store.class);
             LOGGER.info(String.format("Store with id %d was updated", store.getId()));
