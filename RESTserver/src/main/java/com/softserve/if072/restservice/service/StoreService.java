@@ -66,17 +66,17 @@ public class StoreService {
     @Transactional
     public Store getStoreByID(int id) throws DataNotFoundException {
         Store store = storeDAO.getByID(id);
-        if (store != null) {
-            return store;
-        } else {
+        if (store == null) {
             throw new DataNotFoundException(String.format(storeNotFound, id));
+        } else {
+            return store;
         }
     }
 
     /**
      * Adds new store to DataBase
      *
-     * @param store - will be written
+     * @param store - will be written to DataBase
      */
     @Transactional
     public void addStore(Store store) {
@@ -149,9 +149,16 @@ public class StoreService {
         }
     }
 
+    /**
+     * This method add product to store
+     *
+     * @param storeId    - store where product will be added
+     * @param productId - product that will be added to store
+     * @throws DataNotFoundException - if product or store is not found
+     */
     @Transactional
-    public void addProductToStore(Store store, Product product) {
-        storeDAO.addProductToStore(store, product);
+    public void addProductToStore(int storeId, int productId) throws DataNotFoundException {
+        storeDAO.addProductToStore(storeId, productId);
     }
 
     /**
@@ -160,7 +167,7 @@ public class StoreService {
      * @param storeId   - store were the product is presented
      * @param productId - product from this store
      * @return - if the store contains product
-     * @throws DataNotFoundException if the product in return staitment is null
+     * @throws DataNotFoundException if the product in return statement is null
      */
     @Transactional
     public Product getProductFromStoreById(int storeId, int productId) throws DataNotFoundException {
@@ -183,7 +190,7 @@ public class StoreService {
      */
     @Transactional
     public Set<Product> getNotMappedProducts(int storeId, int userId) throws DataNotFoundException {
-        Set<Product> storeProducts = new HashSet<Product>(getProductsByStoreId(storeId, userId));
+        Set<Product> storeProducts = new HashSet<>(getProductsByStoreId(storeId, userId));
         Set<Product> allProducts = new HashSet<Product>(productDAO.getEnabledProductsByUserId(userId));
 
         if (CollectionUtils.isNotEmpty(allProducts)) {
@@ -192,6 +199,27 @@ public class StoreService {
             return allProducts;
         } else {
             throw new DataNotFoundException("Products not found");
+        }
+    }
+
+    /**
+     * This method adds products to store
+     *
+     * @param storeId    - id of store where products will be added
+     * @param productsId - list of productId that will be added to store
+     * @throws DataNotFoundException - if list of productId is empty, or store is not found
+     */
+    @Transactional
+    public void addProductsToStore(List<Integer> productsId, int storeId) throws DataNotFoundException {
+
+        Store store = getStoreByID(storeId);
+        if (store != null && CollectionUtils.isNotEmpty(productsId)) {
+            for (int id : productsId) {
+
+                addProductToStore(id, storeId);
+            }
+        } else {
+            throw new DataNotFoundException(String.format("Products not added to store %d", storeId));
         }
     }
 

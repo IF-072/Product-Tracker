@@ -135,21 +135,12 @@ public class StorePageController extends BaseController {
             param.put("storeId", returnedStoreId);
             Store myStore = restTemplate.getForObject(storeUri, Store.class, param);
 
-            param.clear();
-            param.put("storeId", returnedStoreId);
             param.put("userId", userId);
             Product[] productResult = restTemplate.getForObject(productsUri, Product[].class, param);
             List<Product> products = Arrays.asList(productResult);
-
             model.addAttribute("myStore", myStore);
 
-            List<Integer> listProductID = new ArrayList<>();
-            for (Product prod : products) {
-                listProductID.add(prod.getId());
-            }
-
-            ProductsWrapper productsWrapper = new ProductsWrapper();
-            productsWrapper.setProducts(listProductID);
+            ProductsWrapper productsWrapper = new ProductsWrapper(new ArrayList<>(products.size()));
 
             model.addAttribute("products", products);
             model.addAttribute("wrapedProducts", productsWrapper);
@@ -164,21 +155,25 @@ public class StorePageController extends BaseController {
     }
 
     @PostMapping("/addProductsToStore")
-    public String addProductsToStore(@RequestParam("storeId") String storeId,
-                                     @ModelAttribute("wrapedProducts") ProductsWrapper wrapedProducts, BindingResult
-                                                 result) {
-
-        final String uri = storeUrl + "/manyProducts/";
+    public String addProductsToStore(@RequestParam("storeId") String storeId, @ModelAttribute("wrapedProducts")
+            ProductsWrapper wrapedProducts, BindingResult result) {
         try {
             RestTemplate restTemplate = getRestTemplate();
-            List<Integer> products = wrapedProducts.getProducts();
+            User user = restTemplate.getForObject(getCurrentUser, User.class);
+            int userId = user.getId();
+            final String uri = storeUrl + "/manyProducts/" + userId + "/" + storeId;
+
+            List<Integer> productsId = wrapedProducts.getProducts();
+            restTemplate.postForObject(uri, productsId, List.class);
+            System.out.println(Arrays.asList(productsId).toString());
+
+            LOGGER.info(String.format("Products of user %d added in store %s ", userId, storeId));
 
             return "redirect:/stores/";
         } catch (Exception e) {
-            LOGGER.error("Stores and products not found");
+            LOGGER.error(" products in Store not found");
             return "redirect:/stores/";
         }
-
     }
 
     @PostMapping(value = "/stores/delStore")

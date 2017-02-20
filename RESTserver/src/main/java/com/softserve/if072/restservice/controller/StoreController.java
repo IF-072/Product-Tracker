@@ -40,36 +40,44 @@ public class StoreController {
         this.storeService = storeService;
     }
 
+    /**
+     * Returns all user stores
+     *
+     * @param userId user whose stores will be returned
+     * @return list of user stores
+     * @throws DataNotFoundException - if stores not found
+     */
     @GetMapping("/user/{userId}")
     @ResponseBody
     @ResponseStatus(value = HttpStatus.OK)
-    public List<Store> getAllStoresByUserId(@PathVariable int userId, HttpServletResponse response) {
-        try {
-            List<Store> stores = storeService.getAllStores(userId);
-            LOGGER.info("All Stores were found");
-            return stores;
-        } catch (DataNotFoundException e) {
-            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-            LOGGER.error(e.getMessage());
-            return null;
-        }
+    public List<Store> getAllStoresByUserId(@PathVariable int userId, HttpServletResponse response)
+            throws DataNotFoundException {
+        List<Store> stores = storeService.getAllStores(userId);
+        LOGGER.info("All Stores were found");
+        return stores;
     }
 
+    /**
+     * Returns store by id
+     *
+     * @param id store that will be returned
+     * @return store
+     * @throws DataNotFoundException - if the store is not found
+     */
     @GetMapping("/{id}")
     @ResponseBody
     @ResponseStatus(value = HttpStatus.OK)
-    public Store getStoreByID(@PathVariable int id, HttpServletResponse response) {
-        try {
-            Store store = storeService.getStoreByID(id);
-            LOGGER.info(String.format("Store with id %d was retrieved", id));
-            return store;
-        } catch (DataNotFoundException e) {
-            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-            LOGGER.error(e.getMessage());
-            return null;
-        }
+    public Store getStoreByID(@PathVariable int id) throws DataNotFoundException {
+        Store store = storeService.getStoreByID(id);
+        LOGGER.info(String.format("Store with id %d was retrieved", id));
+        return store;
     }
 
+    /**
+     * Adds new store
+     *
+     * @param store will be saved
+     */
     @PostMapping("/")
     @ResponseStatus(value = HttpStatus.CREATED)
     public void addStore(@RequestBody Store store) {
@@ -77,116 +85,137 @@ public class StoreController {
         LOGGER.info("New Store was created");
     }
 
+    /**
+     * This method  updates store that is in DataBase and has the same id as the passed hire.
+     *
+     * @param store will be saved
+     * @throws IllegalArgumentException - if the passed store has empty name field or the updated store is not found
+     */
     @PutMapping("/update")
     @ResponseBody
     @ResponseStatus(value = HttpStatus.OK)
-    public void updateStore(@RequestBody Store store, HttpServletResponse response) {
+    public void updateStore(@RequestBody Store store) throws IllegalArgumentException {
         int storeId1 = store.getId();
-        try {
-            storeService.updateStore(store);
-            LOGGER.info(String.format("Store with id %d was updated", storeId1));
-
-        } catch (IllegalArgumentException e) {
-            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-            LOGGER.error(String.format("New Store %d has empty name", storeId1), e);
-        }
-    }
-
-    @PutMapping("/{storeId}")
-    @ResponseStatus(value = HttpStatus.OK)
-    @ResponseBody
-    public void deleteStore(@PathVariable int storeId, HttpServletResponse response) {
-        try {
-            storeService.deleteStore(storeId);
-            LOGGER.info(String.format("Store with id %d was deleted", storeId));
-        } catch (DataNotFoundException e) {
-            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-            LOGGER.error(e.getMessage());
-        }
+        storeService.updateStore(store);
     }
 
     /**
-     * This method shows all products that sell at the current store
+     * This method removes store
      *
-     * @param storeId  current store_id
-     * @param response list of products
-     * @return list of products that sell at the current store
+     * @param storeId store which will be removed
+     * @throws DataNotFoundException if the store is not found
      */
+    @PutMapping("/{storeId}")
+    @ResponseStatus(value = HttpStatus.OK)
+    @ResponseBody
+    public void deleteStore(@PathVariable int storeId) throws DataNotFoundException {
+        storeService.deleteStore(storeId);
+        LOGGER.info(String.format("Store with id %d was deleted", storeId));
+    }
 
+    /**
+     * This method returns all products from the current store
+     *
+     * @param storeId store where we look for products
+     * @param userId  user whose products will be returned
+     * @return list of products of current store
+     */
     @GetMapping("/{storeId}/storeProducts/{userId}")
     @ResponseBody
     @ResponseStatus(value = HttpStatus.OK)
-    public List<Product> getAllProductsFromStore(@PathVariable Integer storeId, @PathVariable Integer userId,
-                                                 HttpServletResponse response) {
-        try {
-            List<Product> products = storeService.getProductsByStoreId(storeId, userId);
-            LOGGER.info("All Products were found");
-            return products;
-        } catch (DataNotFoundException e) {
-            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-            LOGGER.error(e.getMessage());
-            return null;
-        }
+    public List<Product> getAllProductsFromStore(@PathVariable Integer storeId, @PathVariable Integer userId)
+            throws DataNotFoundException {
+        List<Product> products = storeService.getProductsByStoreId(storeId, userId);
+        LOGGER.info("All Products were found");
+        return products;
+
     }
 
+    /**
+     * This method returns only one product from the current store
+     *
+     * @param storeId   current store which product will be returned
+     * @param productId product that will be returned
+     * @return product
+     * @throws DataNotFoundException if result set is empty
+     */
     @GetMapping("/{storeId}/products/{productId}")
     @ResponseBody
     @ResponseStatus(value = HttpStatus.OK)
-    public Product getProductFromStore(@PathVariable Integer storeId, @PathVariable Integer productId,
-                                       HttpServletResponse response) {
-        try {
-            Product product = storeService.getProductFromStoreById(storeId, productId);
-            LOGGER.info("Product was found");
-            return product;
-        } catch (DataNotFoundException e) {
-            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-            LOGGER.error(e.getMessage());
-            return null;
-        }
+    public Product getProductFromStore(@PathVariable Integer storeId, @PathVariable Integer productId)
+            throws DataNotFoundException {
+        Product product = storeService.getProductFromStoreById(storeId, productId);
+        LOGGER.info("Product was found");
+        return product;
+
     }
 
+    /**
+     * This method removes product that is presented in the shop
+     *
+     * @param storeId   store were the product is presented
+     * @param productId product from this store which will be deleted
+     * @throws DataNotFoundException if the product is not presented in this store
+     */
     @DeleteMapping("/{storeId}/products/{productId}")
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
-    public void deleteProductFromStore(@PathVariable Integer storeId, @PathVariable Integer
-            productId, HttpServletResponse response) {
-        try {
-            storeService.deleteProductFromStoreById(storeId, productId);
-            LOGGER.info(String.format("Product %d from Store %d was deleted", productId, storeId));
-        } catch (DataNotFoundException e) {
-            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-            LOGGER.error(e.getMessage());
-        }
+    public void deleteProductFromStore(@PathVariable Integer storeId, @PathVariable Integer productId)
+            throws DataNotFoundException {
+        storeService.deleteProductFromStoreById(storeId, productId);
+        LOGGER.info(String.format("Product %d from Store %d was deleted", productId, storeId));
     }
 
+    /**
+     * This method add product to store
+     *
+     * @param storeId   store where product will be added
+     * @param productId product that will be added to store
+     * @throws DataNotFoundException - if product or store is not found
+     */
     @PostMapping("/products/")
     @ResponseStatus(value = HttpStatus.CREATED)
-    public void addProductToStore(@RequestBody Store store, Product product) {
-        storeService.addProductToStore(store, product);
-        LOGGER.info(String.format("Product %d was added to Store %d", product.getId(), store.getId()));
+    public void addProductToStore(@PathVariable Integer storeId, @PathVariable Integer productId)
+            throws DataNotFoundException {
+        storeService.addProductToStore(storeId, productId);
+        LOGGER.info(String.format("Product %d was added to Store %d", productId, storeId));
     }
 
-    @PostMapping("/manyProducts/")
-    @ResponseStatus(value = HttpStatus.CREATED)
-    public void addProducstToStore(@RequestBody Store store, Product product) {
-        storeService.addProductToStore(store, product);
-        LOGGER.info(String.format("Product %d was added to Store %d", product.getId(), store.getId()));
+    /**
+     * This method adds products to store
+     *
+     * @param productsId list of productId that will be added to store
+     * @param storeId    store where products will be added
+     * @throws DataNotFoundException if list of productId is empty, or store is not found
+     */
+    @PostMapping("/manyProducts/{userId}/{storeId}")
+    @ResponseStatus(value = HttpStatus.OK)
+    public void addProductsToStore(@RequestBody List<Integer> productsId, @PathVariable Integer storeId,
+                                   @PathVariable Integer userId) throws DataNotFoundException {
+
+        storeService.addProductsToStore(productsId, storeId);
+        LOGGER.info(String.format("Products  where added to Store %d", storeId));
     }
 
+
+    /**
+     * This method retrieves products that are not presented in the store. This
+     * method is used for adding products to store
+     *
+     * @param storeId - store where we look for products, that are not added there yet
+     * @param userId  - user whose products and stores we are looking for
+     * @return - set of products that are not added to store
+     * @throws DataNotFoundException - if result set is empty
+     */
     @GetMapping("/{storeId}/notMappedProducts/{userId}")
     @ResponseBody
     @ResponseStatus(value = HttpStatus.OK)
     public Set<Product> getNotMappedProducts(@PathVariable Integer storeId, @PathVariable Integer userId,
-                                             HttpServletResponse response) {
-        try {
-            Set<Product> notMappedProducts = storeService.getNotMappedProducts(storeId, userId);
+                                             HttpServletResponse response) throws DataNotFoundException {
 
-            LOGGER.info("All Products were found");
-            return notMappedProducts;
-        } catch (DataNotFoundException e) {
-            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-            LOGGER.error(e.getMessage());
-            return null;
-        }
+        Set<Product> notMappedProducts = storeService.getNotMappedProducts(storeId, userId);
+
+        LOGGER.info("All Products were found");
+        return notMappedProducts;
     }
 
 }
