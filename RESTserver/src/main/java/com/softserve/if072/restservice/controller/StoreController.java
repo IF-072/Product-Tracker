@@ -50,7 +50,7 @@ public class StoreController {
     @GetMapping("/user/{userId}")
     @ResponseBody
     @ResponseStatus(value = HttpStatus.OK)
-    public List<Store> getAllStoresByUserId(@PathVariable int userId, HttpServletResponse response)
+    public List<Store> getAllStoresByUserId(@PathVariable int userId)
             throws DataNotFoundException {
         List<Store> stores = storeService.getAllStores(userId);
         LOGGER.info("All Stores were found");
@@ -95,7 +95,6 @@ public class StoreController {
     @ResponseBody
     @ResponseStatus(value = HttpStatus.OK)
     public void updateStore(@RequestBody Store store) throws IllegalArgumentException {
-        int storeId1 = store.getId();
         storeService.updateStore(store);
     }
 
