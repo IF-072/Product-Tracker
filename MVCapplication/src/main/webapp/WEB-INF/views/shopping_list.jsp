@@ -13,6 +13,7 @@
                     <tr>
                         <th>Product</th>
                         <th>Amount</th>
+                        <th>Image</th>
                         <th colspan="2">Edit</th>
                         <th>Delete</th>
                     </tr>
@@ -24,6 +25,7 @@
                             <tr>
                                 <td>${elem.product.name}</td>
                                 <td>${elem.amount} ${elem.product.unit.name}</td>
+                                <td><img src="<c:url value="/image/${elem.product.image.id}"/>" width="50" height="50" id="editImage"></td>
 
                                 <td><a onclick="edit(${elem.user.id}, ${elem.product.id}, -1)" class="fa fa-minus-square fa-lg"/></td>
                                 <td><a onclick="edit(${elem.user.id}, ${elem.product.id}, 1)" class="fa fa-plus-square fa-lg"/></td>
