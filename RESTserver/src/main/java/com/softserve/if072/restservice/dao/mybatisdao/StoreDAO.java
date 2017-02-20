@@ -33,10 +33,15 @@ public interface StoreDAO extends DAO<Store> {
     @Override
     @Select("SELECT id, name, address, latitude, longitude, user_id, is_enabled FROM store")
     @Results(value = {
+            @Result(property = "id", column = "id"),
+            @Result(property = "name", column = "name"),
+            @Result(property = "address", column = "address"),
+            @Result(property = "latitude", column = "latitude"),
+            @Result(property = "longitude", column = "longitude"),
             @Result(property = "user", column = "user_id", javaType = User.class,
                     one = @One(select = "com.softserve.if072.restservice.dao.mybatisdao.UserDAO.getByID")),
-            @Result(property = "isEnabled", column = "is_enabled")
-    })
+            @Result(property = "isEnabled", column = "is_enabled"),
+           })
     List<Store> getAll();
 
     @Select("SELECT id, name, address, latitude, longitude, user_id, is_enabled FROM store WHERE user_id = #{userId}")
@@ -56,11 +61,17 @@ public interface StoreDAO extends DAO<Store> {
 
     @Select("SELECT id, name, address, latitude, longitude, is_enabled FROM store WHERE user_id = #{userId}")
     @Results(value = {
-            @Result(property = "isEnabled", column = "is_enabled"),
             @Result(property = "id", column = "id"),
+            @Result(property = "name", column = "name"),
+            @Result(property = "address", column = "address"),
+            @Result(property = "latitude", column = "latitude"),
+            @Result(property = "longitude", column = "longitude"),
+            @Result(property = "user", column = "user_id", javaType = User.class,
+                    one = @One(select = "com.softserve.if072.restservice.dao.mybatisdao.UserDAO.getByID")),
+            @Result(property = "isEnabled", column = "is_enabled"),
             @Result(property = "products", column = "id", javaType = List.class,
                     many = @Many(select = "com.softserve.if072.restservice.dao.mybatisdao.StoreDAO" +
-                            ".getProductsOnlyByStoreId"))})
+                            ".getProductsByStoreId"))})
     List<Store> getAllByUser(int userId);
 
     @Override
@@ -74,9 +85,7 @@ public interface StoreDAO extends DAO<Store> {
             @Result(property = "user", column = "user_id", javaType = User.class,
                     one = @One(select = "com.softserve.if072.restservice.dao.mybatisdao.UserDAO.getByID")),
             @Result(property = "isEnabled", column = "is_enabled"),
-            @Result(property = "products", column = "id", javaType = List.class,
-                    many = @Many(select = "com.softserve.if072.restservice.dao.mybatisdao.StoreDAO" +
-                            ".getProductsOnlyByStoreId"))
+
     })
     Store getByID(int id);
 
@@ -88,7 +97,7 @@ public interface StoreDAO extends DAO<Store> {
 
     @Override
     @Update("UPDATE store SET name = #{name}, address = #{address}, is_enabled = 1, latitude = " +
-            "#{latitude}, longitude = #{longitude} WHERE id = #{id}")
+            "#{latitude}, longitude = #{longitude}  WHERE id = #{id}")
     @Results(value = {
             @Result(property = "id", column = "id"),
             @Result(property = "name", column = "name"),
@@ -105,17 +114,22 @@ public interface StoreDAO extends DAO<Store> {
     void deleteById(int id);
 
 
-    @Select("SELECT name, description, image_id, category_id, unit_id, is_enabled FROM product  JOIN " +
+    @Select("SELECT id, name, description, image_id, category_id, unit_id, is_enabled FROM product  JOIN " +
             "stores_products ON product.id = stores_products.product_id WHERE store_id = #{storeId} and user_id = " +
             "#{userId} ")
     @Results(value = {
+            @Result(property = "id", column = "id"),
+            @Result(property = "name", column = "name"),
+            @Result(property = "description", column = "description"),
             @Result(property = "image", column = "image_id", javaType = Image.class,
                     one = @One(select = "com.softserve.if072.restservice.dao.mybatisdao.ImageDAO.getByID")),
+            @Result(property = "user", column = "user_id", javaType = User.class,
+                    one = @One(select = "com.softserve.if072.restservice.dao.mybatisdao.UserDAO.getByID")),
             @Result(property = "category", column = "category_id", javaType = Category.class,
                     one = @One(select = "com.softserve.if072.restservice.dao.mybatisdao.CategoryDAO.getByID")),
             @Result(property = "unit", column = "unit_id", javaType = Unit.class,
                     one = @One(select = "com.softserve.if072.restservice.dao.mybatisdao.UnitDAO.getByID")),
-            @Result(property = "isEnabled", column = "is_enabled"),
+            @Result(property = "isEnabled", column = "is_enabled")
     })
     List<Product> getProductsByStoreId(@Param("storeId") Integer storeId, @Param("userId") Integer userId);
 

@@ -1,11 +1,10 @@
 package com.softserve.if072.mvcapp.controller;
 
 import com.softserve.if072.common.model.Category;
-import com.softserve.if072.common.model.Image;
 import com.softserve.if072.common.model.Product;
+import com.softserve.if072.common.model.Store;
 import com.softserve.if072.common.model.Unit;
 import com.softserve.if072.common.model.User;
-import com.softserve.if072.common.model.Store;
 import com.softserve.if072.mvcapp.dto.StoresInProduct;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
@@ -14,11 +13,19 @@ import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletResponse;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * The class contains methods that handle the http requests from the product's page

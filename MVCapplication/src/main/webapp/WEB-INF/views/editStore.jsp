@@ -30,14 +30,10 @@
                             <label class="control-label" for="inputWarning">Store Address</label>
                             <form:input path="address" class="form-control" placeholder="Address" type="text"/>
                         </div>
-
-
                         <input type="submit" class="btn btn-lg btn-success btn-default" value="Submit"/>
-                        <input type="reset" class="btn btn-lg btn-warning btn-default" value="Cancel"/>
                     </fieldset>
                 </form:form>
             </div>
         </div>
     </div>
 </div>
-
