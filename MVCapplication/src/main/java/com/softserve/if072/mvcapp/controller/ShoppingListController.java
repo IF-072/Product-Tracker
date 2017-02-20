@@ -68,6 +68,26 @@ public class ShoppingListController extends BaseController {
             restTemplate.exchange(shoppingListUrl, HttpMethod.PUT, entity, ShoppingList.class);
         }
 
-        return "redirect:../shopping_list";
+        return "redirect:/shopping_list/";
+    }
+
+    @RequestMapping(value = "shopping_list/add", method = RequestMethod.POST)
+    public String addProductToShoppingList(@RequestParam("userId") int userId,
+                                           @RequestParam("productId") int productId) {
+        RestTemplate restTemplate = new RestTemplate();
+        ShoppingList shoppingList = restTemplate.getForObject(String.format(shoppingListByUserAndProductUrl, userId, productId), ShoppingList.class);
+
+        if (shoppingList == null) {
+            shoppingList = new ShoppingList();
+
+            shoppingList.setUser(getCurrentUser());
+            shoppingList.setProduct(null);
+            shoppingList.setAmount(1);
+
+            HttpEntity<ShoppingList> entity = new HttpEntity<>(shoppingList);
+            restTemplate.exchange(shoppingListUrl, HttpMethod.POST, entity, ShoppingList.class);
+        }
+
+        return "redirect:/product/";
     }
 }
