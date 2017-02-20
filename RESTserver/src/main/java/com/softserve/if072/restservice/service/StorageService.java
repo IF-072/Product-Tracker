@@ -11,7 +11,9 @@ import org.springframework.util.CollectionUtils;
 import java.util.List;
 
 /**
- * Created by dyndyn on 21.01.2017.
+ * The StorageService class is used to hold business logic for working with the storage DAO
+ *
+ * @author Roman Dyndyn
  */
 @Service
 public class StorageService{
@@ -29,7 +31,16 @@ public class StorageService{
         if (!CollectionUtils.isEmpty(list)) {
             return list;
         } else {
-            throw new DataNotFoundException("Storages not found");
+            throw new DataNotFoundException(String.format("Storages of user with id %d not found", user_id));
+        }
+    }
+
+    public Storage getByProductId(int product_id) throws DataNotFoundException {
+        Storage storage = storageDAO.getByProductID(product_id);
+        if (storage != null) {
+            return storage;
+        } else {
+            throw new DataNotFoundException(String.format("Storage of product with id %d not found", product_id));
         }
     }
 

@@ -1,16 +1,37 @@
 <%@ taglib prefix="sf" uri="http://www.springframework.org/tags/form"%>
 <%@ page isELIgnored="false" %>
 
-<b>Change or delete image for your product: ${product.name}</b>
+<div class="row">
+    <div class="col-lg-12">
+        <h1 class="page-header">Change or delete image for your product</h1>
+        <h3 class="page-header">${product.name} (${product.description})</h3>
 
-<i>Current image</i>
-<br/>
-<img src="../image/${product.image.id}" width="100" height="100">
-<br/>
-<input type="button" onClick="window.location.href = '/image/delete?id=${product.image.id}'" value="Delete image">
+    </div>
+</div>
 
 
-<sf:form method="POST" modelAttribute="image" enctype="multipart/form-data">
-    <sf:input type="file" path="multipartFile" id="imageToUpload"/>
-    <input type="submit" value="Change image">
-</sf:form>
+
+<div class="col-lg-6">
+    <div class="form-group has-warning">
+        <div class="panel-body">
+            <h3>Current image</h3>
+            <br/>
+            <img src="../image/${product.image.id}" width="100" height="100">
+            <br/>
+            <input type="button" class="btn btn-lg btn-success"
+                   onClick="window.location.href = '/image/delete?id=${product.image.id}'" value="Delete image">
+            <br/>
+            <h3>Or you can choose another image</h3>
+            <sf:form method="POST" role="form" modelAttribute="image" enctype="multipart/form-data">
+                <sf:input type="file" path="multipartFile" id="imageToUpload"/>
+                <br/>
+                <input type="submit" class="btn btn-lg btn-success" value="Change image">
+            </sf:form>
+        </div>
+    </div>
+</div>
+
+
+
+
+

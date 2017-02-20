@@ -7,11 +7,11 @@ input.form-control {
     display: inline-block;
 }
 
-.fa-info-circle{
+.fa-info-circle {
     font-size: 14pt;
 }
 
-input[type=submit].selected {
+.selected {
     float: right;
 }
 

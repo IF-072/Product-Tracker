@@ -2,6 +2,7 @@ package com.softserve.if072.restservice.controller;
 
 import com.softserve.if072.common.model.Role;
 import com.softserve.if072.restservice.dao.mybatisdao.RoleDAO;
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,7 +31,7 @@ public class RoleController {
     @RequestMapping(value = "")
     public ResponseEntity<List<Role>> getRolesList() {
         List<Role> roles = roleDAO.getAll();
-        if(roles != null && roles.size() > 0) {
+        if(CollectionUtils.isNotEmpty(roles)) {
             return new ResponseEntity<List<Role>>(roles, HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);

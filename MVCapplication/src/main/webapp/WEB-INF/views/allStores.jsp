@@ -28,9 +28,9 @@
                 <button type="button" class="btn btn-outline btn-primary" onclick="location.href='/addStore/';"
                         id="addStoreButton">AddStore
                 </button>
-                <button type="button" class="btn btn-outline btn-primary" onclick=
-                        "location.href='/addProductsToStore/';" id="addProductButton">AddProducts
-                </button>
+                <%--<button type="button" class="btn btn-outline btn-primary" onclick=--%>
+                <%--"location.href='/addProductsToStore/';" id="addProductButton">AddProducts--%>
+                <%--</button>--%>
 
                 <table width="100%" class="table table-striped table-bordered table-hover" id="storeTab">
                     <thead>
@@ -38,6 +38,7 @@
                         <th>Name</th>
                         <th>Address</th>
                         <th>Products at store</th>
+                        <th>Add Products to Store</th>
                         <th>Edit</th>
                         <th>Delete</th>
                     </tr>
@@ -49,12 +50,19 @@
                         <td id="address">${store.address}</td>
                         <td><a href="<c:url value='/stores/storeProducts?storeId=${store.id}'/>">products</a>
                         </td>
+                        <td>
+                            <button type="button" class="btn btn-outline btn-primary" onclick=
+                                    "location.href='/addProductsToStore?storeId=${store.id}'"
+                                    id="addProductButton">AddProducts
+                            </button>
+                        </td>
                         <td id="edit"> <a href="<c:url value='/editStore?storeId=${store.id}'/>"
-                                            class="fa fa-pencil fa-lg"></a></td>
-                        <td onclick="deleteStore(${store.id})"; id="delete"><p class="fa fa-times fa-lg"></p></td>
-
-                    </tr></c:forEach>
-
+                                          class="fa fa-pencil fa-lg"></a></td>
+                        <td onclick="deleteStore(${store.id});" id="delete">
+                            <p class="fa fa-times fa-lg"></p>
+                        </td>
+                    </tr>
+                    </c:forEach>
                     <tbody>
                 </table>
 

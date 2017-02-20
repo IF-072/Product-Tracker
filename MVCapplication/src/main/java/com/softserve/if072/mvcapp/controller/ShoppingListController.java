@@ -52,18 +52,60 @@ public class ShoppingListController extends BaseController {
         return "shopping_list";
     }
 
+    /**
+     * This method allows to change product amount in the shopping list and delete
+     * element from the shopping list.
+     *
+     * @param userId
+     * @param productId
+     * @param value if value is positive product amount is increased by val,
+     *            if value is positive product amount is decreased by val,
+     *            if value equals 0 product is removed from a shopping list.
+     * @return redirect to shopping list's view url
+     */
     @RequestMapping(value = "/shopping_list/edit", method = RequestMethod.POST)
-    public String editProductAmount(@RequestParam("userId") int userId,
-                                    @RequestParam("productId") int productId,
-                                    @RequestParam("val") int value) {
+    public String editShoppingList(@RequestParam("userId") int userId,
+                                   @RequestParam("productId") int productId,
+                                   @RequestParam("val") int value) {
         RestTemplate restTemplate = new RestTemplate();
-
         ShoppingList shoppingList = restTemplate.getForObject(String.format(shoppingListByUserAndProductUrl, userId, productId), ShoppingList.class);
-        shoppingList.setAmount(shoppingList.getAmount() + value);
 
         HttpEntity<ShoppingList> entity = new HttpEntity<>(shoppingList);
-        restTemplate.exchange(shoppingListUrl, HttpMethod.PUT, entity, ShoppingList.class);
 
-        return "redirect:../shopping_list";
+        if (value == 0) {
+            restTemplate.exchange(shoppingListUrl, HttpMethod.DELETE, entity, ShoppingList.class);
+        } else {
+            shoppingList.setAmount(shoppingList.getAmount() + value);
+            restTemplate.exchange(shoppingListUrl, HttpMethod.PUT, entity, ShoppingList.class);
+        }
+
+        return "redirect:/shopping_list/";
+    }
+
+    /**
+     * This method allows to add product to the shopping list.
+     *
+     * @param userId
+     * @param productId
+     * @return redirect to shopping list's view url
+     */
+    @RequestMapping(value = "shopping_list/add", method = RequestMethod.POST)
+    public String addProductToShoppingList(@RequestParam("userId") int userId,
+                                           @RequestParam("productId") int productId) {
+        RestTemplate restTemplate = new RestTemplate();
+        ShoppingList shoppingList = restTemplate.getForObject(String.format(shoppingListByUserAndProductUrl, userId, productId), ShoppingList.class);
+
+        if (shoppingList == null) {
+            shoppingList = new ShoppingList();
+
+            shoppingList.setUser(getCurrentUser());
+            shoppingList.setProduct(null);
+            shoppingList.setAmount(1);
+
+            HttpEntity<ShoppingList> entity = new HttpEntity<>(shoppingList);
+            restTemplate.exchange(shoppingListUrl, HttpMethod.POST, entity, ShoppingList.class);
+        }
+
+        return "redirect:/product/";
     }
 }

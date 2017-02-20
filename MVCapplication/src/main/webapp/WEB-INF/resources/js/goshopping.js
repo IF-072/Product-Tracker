@@ -1,14 +1,10 @@
 function checkBox(index) {
-    var checkbox = document.getElementById("checkbox"+index);
-    if(checkbox.checked == true){
-        checkbox.checked = false;
-    } else{
-        checkbox.checked = true;
-    }
+    var checkbox = $("#checkbox"+index);
+    checkbox.prop("checked",checkbox.prop("checked") ? 0 : 1);
 }
 
 function selectAll() {
-    $('input[type=checkbox]').prop('checked', true);
+    $('.checkbox').prop('checked', true);
 }
 
 function prevStep() {

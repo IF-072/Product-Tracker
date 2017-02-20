@@ -5,21 +5,24 @@ import org.springframework.security.core.GrantedAuthority;
 
 import java.util.Collection;
 
+/**
+ * The CustomAuthenticationToken class is simple data transfer class which stores token string
+ * and decoded token components. Instances may be not used for authentication, so all the implemented
+ * methods returns null or false.
+ *
+ * @author Igor Parada
+ */
 public class CustomAuthenticationToken implements Authentication {
 
     private String token;
     private String userName;
-    private long expirateinDate;
+    private long expirationDate;
     private String confirmationKey;
     private boolean isValid;
 
     public CustomAuthenticationToken(String token) {
         this.token = token;
     }
-
-    /**
-     * Getters and Setters
-     */
 
     public String getToken() {
         return token;
@@ -37,12 +40,12 @@ public class CustomAuthenticationToken implements Authentication {
         this.userName = userName;
     }
 
-    public long getExpirateinDate() {
-        return expirateinDate;
+    public long getExpirationDate() {
+        return expirationDate;
     }
 
-    public void setExpirateinDate(long expirateinDate) {
-        this.expirateinDate = expirateinDate;
+    public void setExpirationDate(long expirateinDate) {
+        this.expirationDate = expirateinDate;
     }
 
     public String getConfirmationKey() {
@@ -61,7 +64,7 @@ public class CustomAuthenticationToken implements Authentication {
         isValid = valid;
     }
 
-    /**
+    /*
      * Implementation of methods inherited from Authentication interface.
      */
 
@@ -102,5 +105,6 @@ public class CustomAuthenticationToken implements Authentication {
 
     @Override
     public void setAuthenticated(boolean b) throws IllegalArgumentException {
+        throw new IllegalArgumentException("This operation is not supported for this object type");
     }
 }

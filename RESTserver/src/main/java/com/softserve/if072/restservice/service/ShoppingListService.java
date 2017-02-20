@@ -11,7 +11,9 @@ import org.springframework.util.CollectionUtils;
 import java.util.List;
 
 /**
- * Created by dyndyn on 21.01.2017.
+ * The ShoppingListService class is used to hold business logic for working with the ShoppingList DAO
+ *
+ * @author Roman Dyndyn
  */
 @Service
 public class ShoppingListService {

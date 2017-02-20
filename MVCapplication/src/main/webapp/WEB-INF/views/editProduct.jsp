@@ -42,6 +42,7 @@
                             <sf:option label="${product.category.name}" value="${product.category.id}"/>
                             <sf:options items="${categories}" itemLabel="name" itemValue="id"/>
                         </sf:select>
+                        <sf:hidden path="image.id"/>
                     </div>
                     <input type="submit" class="btn btn-lg btn-success btn-block" value="Edit product"/>
                 </fieldset>

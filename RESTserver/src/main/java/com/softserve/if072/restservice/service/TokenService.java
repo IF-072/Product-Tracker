@@ -18,6 +18,12 @@ import java.security.MessageDigest;
 import static org.apache.commons.codec.binary.StringUtils.getBytesUtf8;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
+
+/**
+ * TokenService is utility class which contains methods to operate with {@link CustomAuthenticationToken} class
+ *
+ * @author Igor Parada
+ */
 @Service
 @PropertySource(value = {"classpath:security.properties"})
 public class TokenService {
@@ -44,25 +50,31 @@ public class TokenService {
         this.TOKEN_VALIDITY_TIME = Integer.parseInt(environment.getProperty("security.tokenValidityTimeInSeconds"));
     }
 
+    /**
+     * Perform decoding and validating of input token and if it's valid, fills its fields with parsed values.
+     * If validation were successful, sets {@code isValid} value of token to true.
+     *
+     * @param token an {@link CustomAuthenticationToken} instance
+     */
     public void validate(CustomAuthenticationToken token) {
         String[] tokenParts = decodeToken(token.getToken());
         if (tokenParts != null) {
             token.setUserName(tokenParts[0]);
 
             try {
-                token.setExpirateinDate(Long.parseLong(tokenParts[1]));
+                token.setExpirationDate(Long.parseLong(tokenParts[1]));
             } catch (NumberFormatException e) {
                 LOGGER.warn("Can't parse token expiration data. Date format is incorrect");
                 return;
             }
 
-            if (new DateTime(token.getExpirateinDate()).isBeforeNow()) {
+            if (new DateTime(token.getExpirationDate()).isBeforeNow()) {
                 LOGGER.info("Token's validity time expired, new token must be generated");
                 return;
             }
 
             token.setConfirmationKey(tokenParts[2]);
-            String expectedKey = buildTokenConfirmationKey(token.getUserName(), token.getExpirateinDate());
+            String expectedKey = buildTokenConfirmationKey(token.getUserName(), token.getExpirationDate());
             if (!expectedKey.equals(token.getConfirmationKey())) {
                 LOGGER.warn("Received key does not match the expected one: " + token.getConfirmationKey() + " <> " + expectedKey);
                 return;
@@ -73,16 +85,33 @@ public class TokenService {
         }
     }
 
+    /**
+     * Retrieves {@link User} instance from DB by given token
+     *
+     * @param token valid {@link CustomAuthenticationToken} instance
+     * @return instance of {@link User} class retrieved from DB or null if such user not found
+     */
     public User getUserByToken(CustomAuthenticationToken token) {
-        return userDAO.getByUsername(token.getUserName());
+        return token.isValid() ? userDAO.getByUsername(token.getUserName()) : null;
     }
 
+    /**
+     * Generates token string for given username
+     *
+     * @return string with token value
+     */
     public String generateTokenFor(String username) {
         long expirationDate = DateTime.now().plusSeconds(TOKEN_VALIDITY_TIME).getMillis();
         String tokenString = buildToken(username, expirationDate);
         return new String(Base64.encodeBase64(tokenString.getBytes()));
     }
 
+    /**
+     * Decodes input token string and splits result into array contains token's parts
+     *
+     * @param tokenString an Base64 string which contains token
+     * @return array with decoded token parts or null if decoding fails
+     */
     private String[] decodeToken(String tokenString) {
         if (isBlank(tokenString) || !Base64.isBase64(tokenString)) {
             return null;
@@ -102,6 +131,15 @@ public class TokenService {
         return tokenParts;
     }
 
+    /**
+     * Generates token string based and signs it with confirmation key
+     *
+     * @see TokenService#buildTokenConfirmationKey
+     *
+     * @param username given user's name
+     * @param expirationDate token expirration date
+     * @return token string
+     */
     private String buildToken(String username, long expirationDate) {
         String tokenConfirmationKey = buildTokenConfirmationKey(username, expirationDate);
         String token = new StringBuilder()
@@ -115,6 +153,11 @@ public class TokenService {
         return token;
     }
 
+    /**
+     * Generates encrypted confirmation key for token based on user's name and expiration date.
+     *
+     * @return built token confirmation key as UTF-8 string
+     */
     private String buildTokenConfirmationKey(String username, long expirationDate) {
         StringBuilder tokenBuilder = new StringBuilder();
         String token = tokenBuilder

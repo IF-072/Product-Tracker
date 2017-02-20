@@ -10,7 +10,7 @@
 --%>
 
 <style>
-    #edit,#delete, #goStores, #addImage, #addImage {text-align:center; cursor: pointer}
+    #image, #edit,#delete, #goStores, #addImage, #addImage, #addToShoppingList {text-align:center; cursor: pointer}
     #image {text-align:center}
 </style>
 
@@ -35,6 +35,7 @@
                             <th>Unit</th>
                             <th>Image</th>
                             <th>Stores</th>
+                            <th>ShopList</th>
                             <th>Edit</th>
                             <th>Delete</th>
                         </tr>
@@ -60,6 +61,10 @@
                                 <td>
                                     <p onclick="document.location.href='/product/stores?productId=${product.id}'"
                                        id="goStores">Stores</p>
+                                </td>
+                                <td onclick="addProductToShoppingList(${product.id});"
+                                id="addToShoppingList">
+                                    <p class="fa fa-plus fa-lg"></p>
                                 </td>
                                 <td id="edit">
                                     <p onclick="document.location.href='/product/editProduct?id=${product.id}'"
