@@ -31,6 +31,8 @@
                             <form:input path="address" class="form-control" placeholder="Address" type="text"/>
                         </div>
                         <input type="submit" class="btn btn-lg btn-success btn-default" value="Submit"/>
+                        <input type="hidden" name="storeId" value="${store.id}" />
+
                     </fieldset>
                 </form:form>
             </div>

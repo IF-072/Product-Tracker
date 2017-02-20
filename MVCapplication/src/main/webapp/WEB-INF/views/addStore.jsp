@@ -22,11 +22,12 @@
                     <fieldset>
 
                         <div class="form-group">
-                            <label class="control-label" for="inputWarning">Input with warning</label>
+                            <label class="control-label" for="inputWarning">Store Name</label>
                             <form:input path="name" class="form-control" id="inputWarning"
                                         placeholder="Store Name" type="text"/>
                         </div>
                         <div class="form-group">
+                            <label class="control-label" for="inputWarning">Store Address</label>
                             <form:input path="address" class="form-control" placeholder="Address" type="text"/>
                         </div>
 
