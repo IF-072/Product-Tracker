@@ -150,9 +150,6 @@ public interface ProductDAO extends DAO<Product> {
     @Insert("INSERT INTO stores_products(store_id, product_id) VALUES(#{storeId}, #{productId})")
     void addStoreToProduct(@Param("storeId") Integer storeId, @Param("productId") Integer productId);
 
-    @Insert("INSERT INTO stores_products(store_id, product_id) VALUES(#{store.id}, #{product.id})")
-    void addStoreToProduct(Store store, Product product);
-
     @Select("SELECT id, name, description, image_id, user_id, category_id, unit_id, is_enabled FROM product WHERE " +
             "user_id = #{userId} and is_enabled =1 ")
     @Results(value = {

@@ -19,10 +19,12 @@
     <div class="panel-body">
 
         <c:url var="addAction" value="/addProductsToStore"/>
-        <form:form role="form" action="${addAction}" modelAttribute="myStore" method="post">
+        <form:form role="form" action="${addAction}" modelAttribute="wrapedProducts" method="post">
 
             <%--<form:errors path="*" cssClass="errorblock" element="div"/>--%>
             <table width="100%" class="table table-striped" id="storeTab">
+
+
                 <thead>
                 <tr>
                     <th>Name</th>
@@ -36,12 +38,13 @@
                         <td>${product.name}</td>
                         <td>${product.description}</td>
                         <td><form:checkbox path="products" value="${product.id}"/></td>
-                    </tr>
+                          </tr>
                 </c:forEach>
                 </tbody>
             </table>
             <input type="submit" class="btn btn-lg btn-success btn-block"
                    value="Submit adding"/>
+            <input type="hidden" name="storeId" value="${myStore.id}" />
         </form:form>
     </div>
 </div>

@@ -165,6 +165,13 @@ public class StoreController {
         LOGGER.info(String.format("Product %d was added to Store %d", product.getId(), store.getId()));
     }
 
+    @PostMapping("/manyProducts/")
+    @ResponseStatus(value = HttpStatus.CREATED)
+    public void addProducstToStore(@RequestBody Store store, Product product) {
+        storeService.addProductToStore(store, product);
+        LOGGER.info(String.format("Product %d was added to Store %d", product.getId(), store.getId()));
+    }
+
     @GetMapping("/{storeId}/notMappedProducts/{userId}")
     @ResponseBody
     @ResponseStatus(value = HttpStatus.OK)

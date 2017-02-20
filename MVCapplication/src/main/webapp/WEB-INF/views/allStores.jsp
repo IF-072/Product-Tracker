@@ -52,7 +52,7 @@
                         </td>
                         <td>
                             <button type="button" class="btn btn-outline btn-primary" onclick=
-                                    "location.href='/addProductsToStore?storeId=${store.id}&name=${store.name}&adr=${store.address}'"
+                                    "location.href='/addProductsToStore?storeId=${store.id}'"
                                     id="addProductButton">AddProducts
                             </button>
                         </td>

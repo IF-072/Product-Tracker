@@ -3,6 +3,7 @@ package com.softserve.if072.mvcapp.controller;
 import com.softserve.if072.common.model.Product;
 import com.softserve.if072.common.model.Store;
 import com.softserve.if072.common.model.User;
+import com.softserve.if072.mvcapp.dto.ProductsWrapper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
@@ -10,12 +11,14 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -117,29 +120,39 @@ public class StorePageController extends BaseController {
     }
 
     @GetMapping("/addProductsToStore")
-    public String addProductsToStore(@RequestParam("storeId") String storeId, @RequestParam("name") String name,
-                                     @RequestParam("adr") String adr, ModelMap model, ModelMap model2 ) {
-        final String storeUri = storeUrl + "/{storeId}/notMappedProducts/{userId}";
+    public String addProductsToStore(@RequestParam("storeId") String storeId, ModelMap model) {
+
+        final String productsUri = storeUrl + "/{storeId}/notMappedProducts/{userId}";
+        final String storeUri = storeUrl + "/{storeId}";
+
         RestTemplate restTemplate = getRestTemplate();
         User user = restTemplate.getForObject(getCurrentUser, User.class);
         int userId = user.getId();
         int returnedStoreId = Integer.parseInt(storeId);
-   System.out.println(adr + name +" ++++++++++++++++++++++++++++=+++");
+
         try {
             Map<String, Integer> param = new HashMap<>();
             param.put("storeId", returnedStoreId);
+            Store myStore = restTemplate.getForObject(storeUri, Store.class, param);
+
+            param.clear();
+            param.put("storeId", returnedStoreId);
             param.put("userId", userId);
-            Product[] productResult = restTemplate.getForObject(storeUri, Product[].class, param);
+            Product[] productResult = restTemplate.getForObject(productsUri, Product[].class, param);
             List<Product> products = Arrays.asList(productResult);
 
-            Store myStore = new Store();
-            myStore.setId(returnedStoreId);
-            myStore.setName(name);
-            myStore.setAddress(adr);
-//            myStore.setProducts(products);
             model.addAttribute("myStore", myStore);
-            model2.addAttribute("products", products);
 
+            List<Integer> listProductID = new ArrayList<>();
+            for (Product prod : products) {
+                listProductID.add(prod.getId());
+            }
+
+            ProductsWrapper productsWrapper = new ProductsWrapper();
+            productsWrapper.setProducts(listProductID);
+
+            model.addAttribute("products", products);
+            model.addAttribute("wrapedProducts", productsWrapper);
             LOGGER.info(String.format("Products of user %d in store %s found", userId, storeId));
 
             return "addProductsToStore";
@@ -150,14 +163,15 @@ public class StorePageController extends BaseController {
         }
     }
 
-    @PostMapping(value = "/addProductsToStore")
-    public String addProductsToStore(@ModelAttribute("myStore") Store myStore, @ModelAttribute("products")
-                                     List<Product> products ) {
+    @PostMapping("/addProductsToStore")
+    public String addProductsToStore(@RequestParam("storeId") String storeId,
+                                     @ModelAttribute("wrapedProducts") ProductsWrapper wrapedProducts, BindingResult
+                                                 result) {
 
-            final String uri = storeUrl + "/{storeId}";
-            try {
-                RestTemplate restTemplate = getRestTemplate();
-         
+        final String uri = storeUrl + "/manyProducts/";
+        try {
+            RestTemplate restTemplate = getRestTemplate();
+            List<Integer> products = wrapedProducts.getProducts();
 
             return "redirect:/stores/";
         } catch (Exception e) {
@@ -197,7 +211,7 @@ public class StorePageController extends BaseController {
             param.put("storeId", Integer.parseInt(storeId));
             Store store = restTemplate.getForObject(uri, Store.class, param);
             model.addAttribute("store", store);
-            LOGGER.info("Editing Store         " + idStore);
+            LOGGER.info("Editing Store" + idStore);
             return "editStore";
 
         } catch (Exception e) {
