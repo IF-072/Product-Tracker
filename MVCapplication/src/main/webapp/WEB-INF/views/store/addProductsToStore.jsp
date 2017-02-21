@@ -44,8 +44,10 @@
                 </c:forEach>
                 </tbody>
             </table>
-            <input type="submit" class="btn btn-lg btn-success btn-default"
+            <input type="submit" class="btn btn-lg btn-success btn-custom"
                    value="Submit adding"/>
+            <input type="reset" class="btn btn-lg btn-reset-custom btn-reset-custom"
+                   onclick="document.location.href='/'" value="Cancel" />
             <input type="hidden" name="storeId" value="${myStore.id}" />
         </form:form>
     </div>

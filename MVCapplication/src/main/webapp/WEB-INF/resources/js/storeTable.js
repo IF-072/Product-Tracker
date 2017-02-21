@@ -2,7 +2,6 @@
  * Created by Nazar Vynnyk
  */
 
- // var table = $('#storeTab').DataTable();
 
 var Id;
 function deleteStore(storeId) {
@@ -13,7 +12,7 @@ function deleteStore(storeId) {
 $("#dialog").dialog({autoOpen:false,buttons:{
     Delete:function(){
         $.ajax({
-            url : "http://localhost:8080/stores/delStore",
+            url : "/stores/delStore",
             method : "POST",
             data : {storeId: Id}
         });

@@ -45,15 +45,13 @@ public class StoreController {
      * Returns all user stores
      *
      * @param userId user whose stores will be returned
-     * @return list of user stores
-     * @throws DataNotFoundException - if stores not found
+     * @return list of user stores or null if current user don`t has stores
      */
     @PreAuthorize("#userId == authentication.user.id")
     @GetMapping("/user/{userId}")
     @ResponseBody
     @ResponseStatus(value = HttpStatus.OK)
-    public List<Store> getAllStoresByUserId(@PathVariable int userId)
-            throws DataNotFoundException {
+    public List<Store> getAllStoresByUserId(@PathVariable int userId) {
         List<Store> stores = storeService.getAllStores(userId);
         LOGGER.info("All Stores were found");
         return stores;

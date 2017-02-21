@@ -24,7 +24,7 @@
         <div class="panel panel-default">
             <div class="panel-body">
 
-                <button type="button" class="btn btn-outline btn-primary" onclick="location.href='/addStore/';"
+                <button type="button" class="btn btn-outline btn-primary" onclick="location.href='/';"
                         id="addStoreButton">AddStore
                 </button>
                 <br>
