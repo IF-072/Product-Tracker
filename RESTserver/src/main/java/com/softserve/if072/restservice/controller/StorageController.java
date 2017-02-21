@@ -72,15 +72,11 @@ public class StorageController {
     @ResponseBody
     @ResponseStatus(value = HttpStatus.OK)
     public Storage getByProductId(@PathVariable int user_id, @PathVariable int product_id, HttpServletResponse response) {
-        try {
-            Storage store = storageService.getByProductId(product_id);
-            LOGGER.info(String.format("Storage with id %d was found", product_id));
-            return store;
-        } catch (DataNotFoundException e) {
-            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-            LOGGER.error(String.format("Storage with id %d was not found", product_id), e);
-            return null;
-        }
+
+        Storage store = storageService.getByProductId(product_id);
+        LOGGER.info(String.format("Storage with id %d was found", product_id));
+        return store;
+
     }
 
     @PreAuthorize("#storage.user != null && #storage.user.id == authentication.user.id")
