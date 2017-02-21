@@ -24,9 +24,9 @@
     <div class="col-lg-12">
         <div class="panel panel-default">
             <div class="panel-body">
-                <input type="button" class="btn btn-outline btn-primary" onClick="window.location.href = 'addProduct'"
+                <input type="button" class="btn btn-outline btn-primary" onClick="window.location.href = '/product/addProduct'"
                        value="Add new product">
-                    <table width="100%" class="table table-striped" id="productData">
+                    <table width="100%" class="table table-striped table-bordered table-hover" id="productData">
                         <thead>
                         <tr>
                             <th>Name</th>
