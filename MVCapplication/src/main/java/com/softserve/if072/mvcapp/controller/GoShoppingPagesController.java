@@ -1,7 +1,7 @@
 package com.softserve.if072.mvcapp.controller;
 
 import com.softserve.if072.common.model.FormForCart;
-import com.softserve.if072.common.model.Product;
+import com.softserve.if072.common.model.ShoppingList;
 import com.softserve.if072.common.model.Store;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -10,8 +10,6 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.util.CollectionUtils;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -40,23 +38,20 @@ public class GoShoppingPagesController extends BaseController {
         RestTemplate restTemplate = getRestTemplate();
         List<Store> list = restTemplate.getForObject(uri, List.class);
 
-        model.addAttribute("list", list);
+        model.addAttribute("stores", list);
         return "goShoppingStores";
 
     }
 
 
     @PostMapping("/goShoppingProducts")
-    public String getProductList(ModelMap model, @RequestParam("stores") Integer stores[]) {
+    public String getProductList(ModelMap model, @RequestParam("stores") Integer stores) {
 
         int userId = getCurrentUser().getId();
 
-        MultiValueMap<String, Integer[]> params = new LinkedMultiValueMap<String, Integer[]>();
-        params.set("stores", stores);
-
-        final String uri = goShoppingURL + "/products/" + userId;
+        final String uri = goShoppingURL + "/" + stores + "/products/" + userId;
         RestTemplate restTemplate = getRestTemplate();
-        Map<String, List<Product>> map = restTemplate.postForEntity(uri, params, Map.class).getBody();
+        Map<String, List<ShoppingList>> map = restTemplate.getForObject(uri, Map.class);
         if (!CollectionUtils.isEmpty(map)) {
             model.addAllAttributes(map);
         }
@@ -73,7 +68,7 @@ public class GoShoppingPagesController extends BaseController {
         final String uri = goShoppingURL + "/cart";
         RestTemplate restTemplate = getRestTemplate();
         restTemplate.postForObject(uri, form, FormForCart.class);
-        return "redirect:/storage";
+        return "redirect:/cart";
     }
 
 }
