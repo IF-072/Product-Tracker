@@ -22,6 +22,10 @@ $(document).ready(function () {
         }
     });
 
+
+    //todo implement behavior when user input incorrect date to the number field
+
+
     /**
      * This function is used to show modal dialog window
      * for user to confirm or cancel deleting product
