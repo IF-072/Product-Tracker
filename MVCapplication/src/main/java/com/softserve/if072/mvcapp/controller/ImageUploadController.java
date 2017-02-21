@@ -19,6 +19,13 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * The class contains methods to send data to the REST Service for upload,
+ * get, edit and delete image from DataBase
+ *
+ * @author Vitaliy Malisevych
+ */
+
 @Controller
 @RequestMapping("/image")
 public class ImageUploadController extends BaseController {
@@ -29,8 +36,16 @@ public class ImageUploadController extends BaseController {
     @Value("${application.restProductURL}")
     private String productUrl;
 
+    /**
+     * Method sends data to REST service for uploading image to DataBase
+     *
+     * @param productId product for load the image
+     * @param image image
+     * @return redirect to product's page
+     */
+
     @RequestMapping(value =  "/upload", method = RequestMethod.POST)
-    public String uploadImage(@ModelAttribute Image image, @RequestParam int productId, final RedirectAttributes redirectAttrs) throws IOException {
+    public String uploadImage(@ModelAttribute Image image, @RequestParam int productId) throws IOException {
 
         User user = getCurrentUser();
 
@@ -46,16 +61,13 @@ public class ImageUploadController extends BaseController {
         param.put("userId", user.getId());
         restTemplate.postForObject(uri, image, Image.class, param);
 
-        redirectAttrs.addFlashAttribute("message", "Your image succesfully uploaded");
-
         final String getLastIdUri = imageUrl + "/getLastId/{userId}";
         int imageId = restTemplate.getForObject(getLastIdUri, Integer.class, param);
 
-        final String getProductUri = productUrl + "/{userId}/{productId}";
+        final String getProductUri = productUrl + "/{productId}";
 
         param.clear();
         param.put("productId", productId);
-        param.put("userId", user.getId());
         Product product = restTemplate.getForObject(getProductUri, Product.class, param);
 
         Image getImage = new Image();
@@ -68,16 +80,23 @@ public class ImageUploadController extends BaseController {
         return "redirect:/product/";
     }
 
+    /**
+     * Method returns page fo uploading the image
+     *
+     * @param productId product for load the image
+     * @param model model with data represented on page
+     * @return addImage
+     */
+
     @RequestMapping(value = "/upload", method = RequestMethod.GET)
     public String getUploadPage(@RequestParam int productId, Model model) {
 
         User user = getCurrentUser();
         RestTemplate restTemplate = getRestTemplate();
 
-        final String uri = productUrl + "/{userId}/{productId}";
+        final String uri = productUrl + "/{productId}";
         Map<String, Integer> param = new HashMap<>();
         param.put("productId", productId);
-        param.put("userId", user.getId());
 
         Product product = restTemplate.getForObject(uri, Product.class, param);
 
@@ -89,6 +108,13 @@ public class ImageUploadController extends BaseController {
         return "addImage";
 
     }
+
+    /**
+     * Method returns image by id
+     *
+     * @param id of image
+     * @param response contains image's data
+     */
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     @ResponseBody
@@ -112,10 +138,18 @@ public class ImageUploadController extends BaseController {
         }
     }
 
+    /**
+     * Method returns page for updating the image
+     *
+     * @param productId product for which image will be edited
+     * @param model model with data represented on page
+     * @return editImage
+     */
+
     @RequestMapping(value = "/edit", method = RequestMethod.GET)
     public String getEditPage(@RequestParam int productId, Model model) {
 
-        final String uri = productUrl + "/{userId}/{productId}";
+        final String uri = productUrl + "/{productId}";
 
         User user = getCurrentUser();
 
@@ -123,7 +157,6 @@ public class ImageUploadController extends BaseController {
 
         Map<String, Integer> param = new HashMap<>();
         param.put("productId", productId);
-        param.put("userId", user.getId());
 
         Product product = restTemplate.getForObject(uri, Product.class, param);
 
@@ -134,6 +167,14 @@ public class ImageUploadController extends BaseController {
         return "editImage";
 
     }
+
+    /**
+     * Method sends data to REST service for updating the image
+     *
+     * @param productId product for which image will be edited
+     * @param image image for editing
+     * @return redirect to product's page
+     */
 
     @RequestMapping(value =  "/edit", method = RequestMethod.POST)
     public String editImage(@ModelAttribute Image image, @RequestParam int productId) throws IOException {
@@ -148,11 +189,10 @@ public class ImageUploadController extends BaseController {
         image.setImageData(multipartFile.getBytes());
 
         final String uri = imageUrl + "/{userId}";
-        final String getProductUri = productUrl + "/{userId}/{productId}";
+        final String getProductUri = productUrl + "/{productId}";
 
         Map<String, Integer> param = new HashMap<>();
         param.put("productId", productId);
-        param.put("userId", user.getId());
 
         Product product = restTemplate.getForObject(getProductUri, Product.class, param);
 
@@ -166,6 +206,13 @@ public class ImageUploadController extends BaseController {
         return "redirect:/product/";
 
     }
+
+    /**
+     * Method sends data to REST service for deleting the image
+     *
+     * @param id image to be deleted
+     * @return redirect to product's page
+     */
 
     @RequestMapping(value = "/delete", method = RequestMethod.GET)
     public String deleteImage(@RequestParam int id) {
