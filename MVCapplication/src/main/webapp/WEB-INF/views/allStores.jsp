@@ -22,17 +22,15 @@
 <div class="row">
     <div class="col-lg-12">
         <div class="panel panel-default">
-
             <div class="panel-body">
 
                 <button type="button" class="btn btn-outline btn-primary" onclick="location.href='/addStore/';"
                         id="addStoreButton">AddStore
                 </button>
-                <%--<button type="button" class="btn btn-outline btn-primary" onclick=--%>
-                <%--"location.href='/addProductsToStore/';" id="addProductButton">AddProducts--%>
-                <%--</button>--%>
+                <br>
+                <br>
 
-                <table width="100%" class="table table-striped table-bordered table-hover" id="storeTab">
+                <table class="table table-striped table-bordered table-hover" id="storeTab">
                     <thead>
                     <tr>
                         <th>Name</th>
@@ -56,8 +54,8 @@
                                     id="addProductButton">AddProducts
                             </button>
                         </td>
-                        <td id="edit"> <a href="<c:url value='/editStore?storeId=${store.id}'/>"
-                                          class="fa fa-pencil fa-lg"></a></td>
+                        <td id="edit"><a href="<c:url value='/editStore?storeId=${store.id}'/>"
+                                         class="fa fa-pencil fa-lg"></a></td>
                         <td onclick="deleteStore(${store.id});" id="delete">
                             <p class="fa fa-times fa-lg"></p>
                         </td>

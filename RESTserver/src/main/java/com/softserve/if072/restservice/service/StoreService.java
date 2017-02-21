@@ -77,10 +77,14 @@ public class StoreService {
      * Adds new store to DataBase
      *
      * @param store - will be written to DataBase
+     * @throws IllegalArgumentException - if the passed store is null or has empty name
+     * not found
      */
     @Transactional
-    public void addStore(Store store) {
-        storeDAO.insert(store);
+    public void addStore(Store store) throws IllegalArgumentException {
+        if (store != null && store.getName() != null && store.getName() != "") {
+            storeDAO.insert(store);
+        } else throw new IllegalArgumentException("Illegal arguments!");
     }
 
     /**
@@ -93,7 +97,7 @@ public class StoreService {
     public void updateStore(Store store) throws IllegalArgumentException {
         Store oldStore = storeDAO.getByID(store.getId());
         if (oldStore == null || store.getName().isEmpty() || store.getName() == "") {
-            throw new IllegalArgumentException("illegal arguments!");
+            throw new IllegalArgumentException("Illegal arguments!");
         }
         storeDAO.update(store);
     }
@@ -152,7 +156,7 @@ public class StoreService {
     /**
      * This method add product to store
      *
-     * @param storeId    - store where product will be added
+     * @param storeId   - store where product will be added
      * @param productId - product that will be added to store
      * @throws DataNotFoundException - if product or store is not found
      */
