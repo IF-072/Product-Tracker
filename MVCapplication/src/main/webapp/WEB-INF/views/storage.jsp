@@ -14,7 +14,7 @@
                     <th>Product</th>
                     <th>End date</th>
                     <th>Amount</th>
-                    <th>Add to sopping list</th>
+                    <th>Add to shopping list</th>
                 </tr>
                 </thead>
                 <tbody>
