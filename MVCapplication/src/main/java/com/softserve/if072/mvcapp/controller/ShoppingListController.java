@@ -1,5 +1,6 @@
 package com.softserve.if072.mvcapp.controller;
 
+import com.fasterxml.jackson.core.JsonpCharacterEscapes;
 import com.softserve.if072.common.model.Product;
 import com.softserve.if072.common.model.ShoppingList;
 import org.apache.commons.collections.CollectionUtils;
@@ -14,6 +15,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
@@ -38,8 +40,8 @@ public class ShoppingListController extends BaseController {
     @Value("${service.shoppingList.byUserAndProduct}")
     private String shoppingListByUserAndProductUrl;
 
-    @Value("${service.product.byId}")
-    private String productById;
+    @Value("${service.product.byUserIdAndProductId}")
+    private String productByUserIdAndProductId;
 
     /**
      * This method extracts a shopping list model for th shopping list's view.
@@ -75,6 +77,7 @@ public class ShoppingListController extends BaseController {
      * @return redirect to shopping list's view url
      */
     @RequestMapping(value = "/shopping_list/edit", method = RequestMethod.POST)
+    @ResponseBody
     public String editShoppingList(@RequestParam("prodId") int prodId,
                                    @RequestParam("val") int value) {
         RestTemplate restTemplate = new RestTemplate();
@@ -88,7 +91,7 @@ public class ShoppingListController extends BaseController {
         LOG.info(String.format(INFO_LOG_TEMPLATE,
                 shoppingList.getUser().getId(), shoppingList.getProduct().getId(), "updated"));
 
-        return "redirect:/shopping_list/";
+        return String.format("%d %s", shoppingList.getAmount(), shoppingList.getProduct().getUnit().getName());
     }
 
     /**
@@ -119,13 +122,14 @@ public class ShoppingListController extends BaseController {
      */
     @RequestMapping(value = "/shopping_list/add", method = RequestMethod.POST)
     public String addProductToShoppingList(@RequestParam("productId") int productId) {
-        RestTemplate restTemplate = new RestTemplate();
+        RestTemplate restTemplate = getRestTemplate();
         ShoppingList shoppingList = restTemplate.getForObject(
                 String.format(shoppingListByUserAndProductUrl, getCurrentUser().getId(), productId), ShoppingList.class);
 
         if (shoppingList == null) {
             shoppingList = new ShoppingList();
-            Product product = restTemplate.getForObject(String.format(productById, productId), Product.class);
+            Product product = restTemplate.getForObject(
+                    String.format(productByUserIdAndProductId, getCurrentUser().getId(), productId), Product.class);
 
             shoppingList.setUser(getCurrentUser());
             shoppingList.setProduct(product);

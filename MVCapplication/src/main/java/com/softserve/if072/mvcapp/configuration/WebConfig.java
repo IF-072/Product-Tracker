@@ -5,13 +5,21 @@ import com.softserve.if072.mvcapp.interceptor.AddTokenHeaderInterceptor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.MediaType;
+import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
+import java.nio.charset.Charset;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
+
+import static com.fasterxml.jackson.core.JsonEncoding.UTF8;
 
 /**
  * Configuration class for Spring MVC framework
@@ -66,5 +74,12 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         RestTemplate template = new RestTemplate();
         template.setInterceptors(Collections.singletonList(addTokenHeaderInterceptor()));
         return template;
+    }
+
+    @Override
+    public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
+        StringHttpMessageConverter stringConverter = new StringHttpMessageConverter();
+        stringConverter.setSupportedMediaTypes(Arrays.asList(new MediaType("text", "plain", Charset.forName("UTF-8"))));
+        converters.add(stringConverter);
     }
 }
