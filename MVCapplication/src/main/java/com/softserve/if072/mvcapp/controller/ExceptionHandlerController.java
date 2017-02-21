@@ -45,8 +45,8 @@ public class ExceptionHandlerController {
             return "redirect:/login";
         }
 
-        redirectAttributes.addFlashAttribute("informationMessage", generalError);
-        return "redirect:/login";
+        //by default, return general error page
+        return "generalError";
     }
 
     @ExceptionHandler(HttpServerErrorException.class)
