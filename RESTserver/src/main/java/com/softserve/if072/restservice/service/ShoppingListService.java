@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -35,7 +36,7 @@ public class ShoppingListService {
 
     public ShoppingList getByUserAndProductId(int user_id, int product_id) throws DataNotFoundException {
         ShoppingList list = shoppingListDAO.getByUserAndProductId(user_id, product_id);
-        if (list != null) {
+        if (!CollectionUtils.isEmpty((Collection<?>) list)) {
             return list;
         } else {
             throw new DataNotFoundException("ShoppingList not found");
