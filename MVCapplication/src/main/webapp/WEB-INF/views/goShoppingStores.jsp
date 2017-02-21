@@ -1,11 +1,11 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <c:if test="${empty stores}">
-    <div class="container">
+    <div class="container-fluid">
         <div class="row">
             <div class="col-lg-4 col-lg-offset-4">
                 <div class="panel panel-primary">
                     <div class="panel-heading text-center">
-                        <h4>Your can't go shopping!</h4>
+                        <h4>You can't go shopping!</h4>
                     </div>
                     <div class="panel-body text-center">
                         <p> Maybe you haven't confirmed previous shopping yet or your shopping list is empty</p>
