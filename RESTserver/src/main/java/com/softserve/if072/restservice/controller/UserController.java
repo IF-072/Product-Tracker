@@ -8,11 +8,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -37,13 +33,9 @@ public class UserController {
      * Allows to obtain all users.
      */
     @RequestMapping(value = "/user/", method = RequestMethod.GET)
-    public ResponseEntity<List<User>> getAllUsers() {
-        List<User> users = null;
-        try {
-            users = userService.getAll();
-        } catch (DataNotFoundException e) {
-            LOG.warn(e.getMessage());
-        }
+    public ResponseEntity<List<User>> getAllUsers() throws DataNotFoundException {
+        LOG.debug("Fetching list of all users...");
+        List<User> users = userService.getAll();
 
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
@@ -55,21 +47,10 @@ public class UserController {
      */
     @PreAuthorize("#id == authentication.user.id")
     @RequestMapping(value = "/user/{id}", method = RequestMethod.GET)
-    public ResponseEntity<User> getUserById(@PathVariable("id") int id) {
-        LOG.debug("Fetching User with id " + id);
-        User user = null;
-        try {
-            user = userService.getById(id);
-        } catch (DataNotFoundException e) {
-            LOG.warn(e.getMessage());
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+    public ResponseEntity<User> getUserById(@PathVariable("id") int id) throws DataNotFoundException {
+        LOG.debug(String.format("Fetching User with %d...", id));
+        User user = userService.getById(id);
 
         return new ResponseEntity<>(user, HttpStatus.OK);
-    }
-
-    @ExceptionHandler(AccessDeniedException.class)
-    public ResponseEntity<String> sendAccessDeniedStatus(){
-        return new ResponseEntity(HttpStatus.FORBIDDEN);
     }
 }

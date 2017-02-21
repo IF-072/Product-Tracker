@@ -1,5 +1,6 @@
 package com.softserve.if072.mvcapp.controller;
 
+import com.softserve.if072.common.model.Product;
 import com.softserve.if072.common.model.ShoppingList;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -25,6 +26,7 @@ import java.util.List;
 @PropertySource(value = {"classpath:application.properties"})
 public class ShoppingListController extends BaseController {
     private static final Logger LOG = LogManager.getLogger(ShoppingListController.class);
+    private static final String INFO_LOG_TEMPLATE = "Shopping list element (userId: %d, productId: %d) has been %s.";
 
     @Value("${service.shoppingList}")
     private String shoppingListUrl;
@@ -35,9 +37,13 @@ public class ShoppingListController extends BaseController {
     @Value("${service.shoppingList.byUserAndProduct}")
     private String shoppingListByUserAndProductUrl;
 
+    @Value("${service.product.byId}")
+    private String productById;
+
     /**
      * This method extracts a shopping list model for th shopping list's view.
      *
+     * @param model model for view where shopping is put
      * @return shopping list's view url
      */
     @RequestMapping("/shopping_list")
@@ -48,6 +54,7 @@ public class ShoppingListController extends BaseController {
 
         List<ShoppingList> shoppingList = restTemplate.getForObject(String.format(shoppingListByUserUrl, id), List.class);
         model.addAttribute("shoppingList", shoppingList);
+        LOG.info(String.format("Shopping list with %d elements has been put into model.", shoppingList.size()));
 
         return "shopping_list";
     }
@@ -56,28 +63,44 @@ public class ShoppingListController extends BaseController {
      * This method allows to change product amount in the shopping list and delete
      * element from the shopping list.
      *
-     * @param userId
-     * @param productId
-     * @param value if value is positive product amount is increased by val,
-     *            if value is positive product amount is decreased by val,
-     *            if value equals 0 product is removed from a shopping list.
+     * @param prodId if of the product to be edited
+     * @param value  if value is positive product amount is increased by val,
+     *               if value is positive product amount is decreased by val.
      * @return redirect to shopping list's view url
      */
     @RequestMapping(value = "/shopping_list/edit", method = RequestMethod.POST)
-    public String editShoppingList(@RequestParam("userId") int userId,
-                                   @RequestParam("productId") int productId,
+    public String editShoppingList(@RequestParam("prodId") int prodId,
                                    @RequestParam("val") int value) {
         RestTemplate restTemplate = new RestTemplate();
-        ShoppingList shoppingList = restTemplate.getForObject(String.format(shoppingListByUserAndProductUrl, userId, productId), ShoppingList.class);
+        ShoppingList shoppingList = restTemplate.getForObject(
+                String.format(shoppingListByUserAndProductUrl, getCurrentUser().getId(), prodId), ShoppingList.class);
 
         HttpEntity<ShoppingList> entity = new HttpEntity<>(shoppingList);
 
-        if (value == 0) {
-            restTemplate.exchange(shoppingListUrl, HttpMethod.DELETE, entity, ShoppingList.class);
-        } else {
-            shoppingList.setAmount(shoppingList.getAmount() + value);
-            restTemplate.exchange(shoppingListUrl, HttpMethod.PUT, entity, ShoppingList.class);
-        }
+        shoppingList.setAmount(shoppingList.getAmount() + value);
+        restTemplate.exchange(shoppingListUrl, HttpMethod.PUT, entity, ShoppingList.class);
+        LOG.info(String.format(INFO_LOG_TEMPLATE,
+                shoppingList.getUser().getId(), shoppingList.getProduct().getId(), "updated"));
+
+        return "redirect:/shopping_list/";
+    }
+
+    /**
+     * This method allows to delete product from the shopping list.
+     *
+     * @param prodId id of the product to be deleted
+     * @return redirect to shopping list's view url
+     */
+    @RequestMapping(value = "/shopping_list/delete", method = RequestMethod.GET)
+    public String deleteProductFromShoppingList(@RequestParam("prodId") int prodId) {
+        RestTemplate restTemplate = new RestTemplate();
+        ShoppingList shoppingList = restTemplate.getForObject(
+                String.format(shoppingListByUserAndProductUrl, getCurrentUser().getId(), prodId), ShoppingList.class);
+        HttpEntity<ShoppingList> entity = new HttpEntity<>(shoppingList);
+
+        restTemplate.exchange(shoppingListUrl, HttpMethod.DELETE, entity, ShoppingList.class);
+        LOG.info(String.format(INFO_LOG_TEMPLATE,
+                shoppingList.getUser().getId(), shoppingList.getProduct().getId(), "deleted"));
 
         return "redirect:/shopping_list/";
     }
@@ -85,25 +108,27 @@ public class ShoppingListController extends BaseController {
     /**
      * This method allows to add product to the shopping list.
      *
-     * @param userId
-     * @param productId
+     * @param productId if of the product to be added
      * @return redirect to shopping list's view url
      */
-    @RequestMapping(value = "shopping_list/add", method = RequestMethod.POST)
-    public String addProductToShoppingList(@RequestParam("userId") int userId,
-                                           @RequestParam("productId") int productId) {
+    @RequestMapping(value = "/shopping_list/add", method = RequestMethod.POST)
+    public String addProductToShoppingList(@RequestParam("productId") int productId) {
         RestTemplate restTemplate = new RestTemplate();
-        ShoppingList shoppingList = restTemplate.getForObject(String.format(shoppingListByUserAndProductUrl, userId, productId), ShoppingList.class);
+        ShoppingList shoppingList = restTemplate.getForObject(
+                String.format(shoppingListByUserAndProductUrl, getCurrentUser().getId(), productId), ShoppingList.class);
 
         if (shoppingList == null) {
             shoppingList = new ShoppingList();
+            Product product = restTemplate.getForObject(String.format(productById, productId), Product.class);
 
             shoppingList.setUser(getCurrentUser());
-            shoppingList.setProduct(null);
+            shoppingList.setProduct(product);
             shoppingList.setAmount(1);
 
             HttpEntity<ShoppingList> entity = new HttpEntity<>(shoppingList);
             restTemplate.exchange(shoppingListUrl, HttpMethod.POST, entity, ShoppingList.class);
+            LOG.info(String.format(INFO_LOG_TEMPLATE,
+                    shoppingList.getUser().getId(), shoppingList.getProduct().getId(), "added"));
         }
 
         return "redirect:/product/";
