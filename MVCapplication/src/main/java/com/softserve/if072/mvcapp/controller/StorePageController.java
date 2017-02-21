@@ -22,7 +22,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -55,7 +54,7 @@ public class StorePageController extends BaseController {
         User user = restTemplate.getForObject(getCurrentUser, User.class);
         int userId = user.getId();
 
-        try {
+//        try {
             Map<String, Integer> param = new HashMap<>();
             param.put("userId", userId);
             List stores = restTemplate.getForObject(uri, List.class, param);
@@ -64,10 +63,10 @@ public class StorePageController extends BaseController {
 
             return "allStores";
 
-        } catch (Exception e) {
-            LOGGER.error(Arrays.toString(e.getStackTrace()));
-            return "redirect:/home";
-        }
+//        } catch (Exception e) {
+//            LOGGER.error(Arrays.toString(e.getStackTrace()));
+//            return "redirect:/home";
+//        }
     }
 
     @GetMapping("/addStore")
@@ -84,7 +83,7 @@ public class StorePageController extends BaseController {
         User user = restTemplate.getForObject(getCurrentUser, User.class);
         int userId = user.getId();
 
-        try {
+//        try {
             store.setUser(user);
             store.setEnabled(true);
             restTemplate.postForObject(uri, store, Store.class);
@@ -92,10 +91,10 @@ public class StorePageController extends BaseController {
 
             return "redirect:/stores/";
 
-        } catch (Exception e) {
-            LOGGER.error("Stores not added");
-            return "addStore";
-        }
+//        } catch (Exception e) {
+//            LOGGER.error("Stores not added");
+//            return "addStore";
+//        }
     }
 
     @GetMapping("/stores/storeProducts")
@@ -105,7 +104,7 @@ public class StorePageController extends BaseController {
         User user = restTemplate.getForObject(getCurrentUser, User.class);
         int userId = user.getId();
 
-        try {
+//        try {
             Map<String, Integer> param = new HashMap<>();
             param.put("storeId", Integer.parseInt(storeId));
             param.put("userId", userId);
@@ -115,10 +114,10 @@ public class StorePageController extends BaseController {
 
             return "product";
 
-        } catch (Exception e) {
-            LOGGER.error(String.format("Products user %d from store %s were not found", userId, storeId));
-            return "redirect:/stores/";
-        }
+//        } catch (Exception e) {
+//            LOGGER.error(String.format("Products user %d from store %s were not found", userId, storeId));
+//            return "redirect:/stores/";
+//        }
     }
 
     @GetMapping("/addProductsToStore")
@@ -132,7 +131,7 @@ public class StorePageController extends BaseController {
         int userId = user.getId();
         int returnedStoreId = Integer.parseInt(storeId);
 
-        try {
+//        try {
             Map<String, Integer> param = new HashMap<>();
             param.put("storeId", returnedStoreId);
             Store myStore = restTemplate.getForObject(storeUri, Store.class, param);
@@ -142,8 +141,7 @@ public class StorePageController extends BaseController {
 //            List<Product> products = Arrays.asList(productResult);
 
             ResponseEntity<List<Product>> productResult = restTemplate.exchange(productsUri, HttpMethod.GET, null,
-                    new ParameterizedTypeReference<List<Product>>() {
-                    }, param);
+                    new ParameterizedTypeReference<List<Product>>() {}, param);
             List<Product> products = productResult.getBody();
 
             model.addAttribute("myStore", myStore);
@@ -155,16 +153,16 @@ public class StorePageController extends BaseController {
 
             return "addProductsToStore";
 
-        } catch (Exception e) {
-            LOGGER.error("Stores and products not found");
-            return "redirect:/stores/";
-        }
+//        } catch (Exception e) {
+//            LOGGER.error("Stores and products not found");
+//            return "redirect:/stores/";
+//        }
     }
 
     @PostMapping("/addProductsToStore")
     public String addProductsToStore(@RequestParam("storeId") String storeId, @ModelAttribute("wrapedProducts")
             ProductsWrapper wrapedProducts, BindingResult result) {
-        try {
+//        try {
             RestTemplate restTemplate = getRestTemplate();
             User user = restTemplate.getForObject(getCurrentUser, User.class);
             int userId = user.getId();
@@ -178,29 +176,34 @@ public class StorePageController extends BaseController {
             LOGGER.info(String.format("Products of user %d added in store %s ", userId, storeId));
 
             return "redirect:/stores/";
-        } catch (Exception e) {
-            LOGGER.error(" products in Store not found");
-            return "redirect:/stores/";
-        }
+//        } catch (Exception e) {
+//            LOGGER.error(" products in Store not found");
+//            return "redirect:/stores/";
+//        }
     }
 
     @PostMapping(value = "/stores/delStore")
     public String deleteStore(@RequestParam("storeId") int storeId) {
         final String uri = storeUrl + "/{storeId}";
+        final String delUri = storeUrl + "/delStore";
+
         RestTemplate restTemplate = getRestTemplate();
 
-        try {
-            Map<String, Integer> param = new HashMap<>();
-            param.put("storeId", storeId);
-            restTemplate.put(uri, Store.class, param);
+//        try {
+
+        Map<String, Integer> param = new HashMap<>();
+        param.put("storeId",storeId);
+        Store store = restTemplate.getForObject(uri, Store.class, param);
+
+        restTemplate.put(delUri, store, Store.class);
             LOGGER.info(String.format("Store with id %d was deleted", storeId));
 
             return "redirect:/stores/";
 
-        } catch (Exception e) {
-            LOGGER.error(String.format("Store with id %d was not deleted", storeId));
-            return "redirect:/stores/";
-        }
+//        } catch (Exception e) {
+//            LOGGER.error(String.format("Store with id %d was not deleted", storeId));
+//            return "redirect:/stores/";
+//        }
     }
 
     @GetMapping("/editStore")
@@ -208,7 +211,7 @@ public class StorePageController extends BaseController {
         final String uri = storeUrl + "/{storeId}";
         RestTemplate restTemplate = getRestTemplate();
         int idStore = Integer.parseInt(storeId);
-        try {
+//        try {
             Map<String, Integer> param = new HashMap<>();
             param.put("storeId", idStore);
             Store store = restTemplate.getForObject(uri, Store.class, param);
@@ -216,10 +219,10 @@ public class StorePageController extends BaseController {
             LOGGER.info("Editing Store" + idStore);
             return "editStore";
 
-        } catch (Exception e) {
-            LOGGER.error(String.format("Store with id %d is not possible to edit", storeId));
-            return "redirect:/stores/";
-        }
+//        } catch (Exception e) {
+//            LOGGER.error(String.format("Store with id %d is not possible to edit", storeId));
+//            return "redirect:/stores/";
+//        }
     }
 
     @PostMapping("/editStore")
@@ -230,15 +233,15 @@ public class StorePageController extends BaseController {
         RestTemplate restTemplate = getRestTemplate();
         User user = restTemplate.getForObject(getCurrentUser, User.class);
         store.setUser(user);
-        try {
+//        try {
             restTemplate.put(uri, store, Store.class);
             LOGGER.info(String.format("Store with id %d was updated", store.getId()));
             return "redirect:/stores/";
 
-        } catch (Exception e) {
-            LOGGER.error(String.format("Store with id %d was not updated", store.getId()));
-            return "redirect:/stores/";
-        }
+//        } catch (Exception e) {
+//            LOGGER.error(String.format("Store with id %d was not updated", store.getId()));
+//            return "redirect:/stores/";
+//        }
     }
 
 }
