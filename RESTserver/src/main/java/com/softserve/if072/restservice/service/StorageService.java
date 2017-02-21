@@ -4,6 +4,8 @@ import com.softserve.if072.common.model.ShoppingList;
 import com.softserve.if072.common.model.Storage;
 import com.softserve.if072.restservice.exception.DataNotFoundException;
 import com.softserve.if072.restservice.dao.mybatisdao.StorageDAO;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -17,6 +19,7 @@ import java.util.List;
  */
 @Service
 public class StorageService{
+    public static final Logger LOGGER = LogManager.getLogger(StorageService.class);
     private StorageDAO storageDAO;
     private ShoppingListService shoppingListService;
 
@@ -47,9 +50,10 @@ public class StorageService{
         storageDAO.insertInParts(userId,productId,amount);
     }
 
-    public void update(Storage storage) throws DataNotFoundException {
+    public void update(Storage storage) {
         if(storage.getAmount() < 0){
-            throw new DataNotFoundException("illegal arguments!");
+            LOGGER.error("Illegal argument: amount < 0");
+            return;
         }
 
         if (storage.getEndDate() != null) {
@@ -62,11 +66,12 @@ public class StorageService{
         }
     }
 
-    public void delete(Storage storage) throws DataNotFoundException {
+    public void delete(Storage storage){
         if (storage != null) {
             storageDAO.delete(storage);
         } else {
-            throw new DataNotFoundException("Illegal argument");
+            LOGGER.error("Illegal argument: storage == null");
+            return;
         }
     }
 }
