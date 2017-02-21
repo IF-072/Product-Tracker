@@ -112,7 +112,7 @@ public class ProductService {
     }
 
     @Transactional
-    public void addStoreToProduct(Product product) {
+    public void addStoresToProduct(Product product) {
 
         for(Store s : product.getStores()) {
             productDAO.addStoreToProduct(s.getId(), product.getId());

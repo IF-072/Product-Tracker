@@ -50,7 +50,7 @@ public class ExceptionHandlerController {
     }
 
     @ExceptionHandler(HttpServerErrorException.class)
-    public String handleRestServerException(HttpClientErrorException e) {
+    public String handleRestServerException(HttpServerErrorException e) {
         LOGGER.error(e.getMessage());
         return "generalError";
     }

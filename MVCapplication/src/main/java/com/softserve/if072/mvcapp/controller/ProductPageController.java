@@ -207,18 +207,26 @@ public class ProductPageController extends BaseController {
             return "editProduct";
         }
 
-        Map<String, Integer> param = new HashMap<String, Integer>();
-        param.put("categoryId", newProduct.getCategory().getId());
-        Category category = restTemplate.getForObject(categoryByIdUri, Category.class, param);
+        Map<String, Integer> param = new HashMap<>();
+        if(newProduct.getCategory().getId() > 0) {
+            param.put("categoryId", newProduct.getCategory().getId());
+            Category category = restTemplate.getForObject(categoryByIdUri, Category.class, param);
+            newProduct.setCategory(category);
+        } else {
+            newProduct.setCategory(null);
+        }
 
-        param.clear();
-        param.put("unitId", newProduct.getUnit().getId());
-        Unit unit = restTemplate.getForObject(UnitByIdUri, Unit.class, param);
+        if(newProduct.getUnit().getId() > 0) {
+            param.clear();
+            param.put("unitId", newProduct.getUnit().getId());
+            Unit unit = restTemplate.getForObject(UnitByIdUri, Unit.class, param);
+            newProduct.setUnit(unit);
+        } else {
+            newProduct.setUnit(null);
+        }
 
         newProduct.setUser(user);
         newProduct.setEnabled(true);
-        newProduct.setCategory(category);
-        newProduct.setUnit(unit);
 
         restTemplate.put(uri, newProduct, Product.class);
         return "redirect:/product/";

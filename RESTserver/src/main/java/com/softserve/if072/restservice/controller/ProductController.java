@@ -39,37 +39,55 @@ public class ProductController {
     @Value("${product.notFound}")
     private String productNotFound;
 
+    /**
+     * Returns all user's products
+     *
+     * @param userId user whose products will be returned
+     * @return list of user's products
+     * @throws DataNotFoundException - if products not found
+     */
+
     @PreAuthorize("#userId == authentication.user.id")
     @GetMapping(value = "/user/{userId}")
     @ResponseBody
     @ResponseStatus(value = HttpStatus.OK)
-    public List<Product> getAllProductsByUserId(@PathVariable int userId, HttpServletResponse response) {
-        try {
-            List<Product> products = productService.getAllProducts(userId);
-            LOGGER.info("All products were found");
-            return products;
-        } catch (DataNotFoundException e) {
-            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-            LOGGER.error(e.getMessage(), e);
-            return null;
-        }
+    public List<Product> getAllProductsByUserId(@PathVariable int userId,
+                                                HttpServletResponse response) throws DataNotFoundException {
+
+        List<Product> products = productService.getAllProducts(userId);
+        LOGGER.info("All products were found");
+        return products;
+
     }
+
+    /**
+     * Returns product by id
+     *
+     * @param userId user whose product will be returned
+     * @param productId product that will be returned
+     * @return product
+     * @throws DataNotFoundException - if product is not found
+     */
 
     @PreAuthorize("#userId == authentication.user.id")
     @GetMapping(value = "/{userId}/{productId}")
     @ResponseBody
     @ResponseStatus(value = HttpStatus.OK)
-    public Product getProductById(@PathVariable int userId, @PathVariable int productId, HttpServletResponse response) {
-        try {
-            Product product = productService.getProductById(productId);
-            LOGGER.info(String.format("Product with id %d was retrieved", productId));
-            return product;
-        } catch (DataNotFoundException e) {
-            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-            LOGGER.error(String.format(productNotFound, productId), e);
-            return null;
-        }
+    public Product getProductById(@PathVariable int userId, @PathVariable int productId,
+                                  HttpServletResponse response) throws DataNotFoundException {
+
+        Product product = productService.getProductById(productId);
+        LOGGER.info(String.format("Product with id %d was retrieved", productId));
+        return product;
+
     }
+
+    /**
+     * Adds new product
+     *
+     * @param product that must be saved
+     *
+     */
 
     @PreAuthorize("#product.user != null && #product.user.id == authentication.user.id")
     @PostMapping(value = "/")
@@ -79,85 +97,120 @@ public class ProductController {
         LOGGER.info("New product was created");
     }
 
+    /**
+     * Updates product that is in DataBase
+     *
+     * @param product will be updated
+     *
+     */
+
     @PreAuthorize("#product.user != null && #product.user.id == authentication.user.id")
     @PutMapping(value = "/")
     @ResponseStatus(value = HttpStatus.OK)
-    public void update(@RequestBody Product product, HttpServletResponse response) {
+    public void update(@RequestBody Product product, HttpServletResponse response) throws DataNotFoundException {
+
         int id = product.getId();
-        try {
-            productService.updateProduct(product);
-            LOGGER.info(String.format("Product with id %d was updated", id));
-        } catch (DataNotFoundException e) {
-            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-            LOGGER.error(String.format("Cannot update Product with id %d", id), e);
-        }
+        productService.updateProduct(product);
+        LOGGER.info(String.format("Product with id %d was updated", id));
+
     }
+
+    /**
+     * Updates product that is in DataBase with new imageId
+     *
+     * @param product will be updated
+     *
+     */
 
     @PreAuthorize("#product.user != null && #product.user.id == authentication.user.id")
     @PutMapping(value = "/image")
     @ResponseStatus(value = HttpStatus.OK)
-    public void updateByImage(@RequestBody Product product, HttpServletResponse response) {
+    public void updateByImage(@RequestBody Product product,
+                              HttpServletResponse response) throws DataNotFoundException {
+
         int id = product.getId();
-        try {
-            productService.updateProductByImage(product);
-            LOGGER.info(String.format("Product with id %d was updated with new image", id));
-        } catch (DataNotFoundException e) {
-            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-            LOGGER.error(String.format("Cannot update Product with id %d with new image", id), e);
-        }
+        productService.updateProductByImage(product);
+        LOGGER.info(String.format("Product with id %d was updated with new image", id));
+
     }
+
+    /**
+     * Rremoves product
+     *
+     * @param userId user whose product will be removed
+     * @param productId product which will be removed
+     * @throws DataNotFoundException if the product is not found
+     */
 
     @PreAuthorize("#userId == authentication.user.id")
     @DeleteMapping(value = "/{userId}/{productId}")
     @ResponseStatus(value = HttpStatus.OK)
-    public void delete(@PathVariable int productId, @PathVariable int userId, HttpServletResponse response) {
-        try {
-            productService.deleteProduct(productId);
-            LOGGER.info(String.format("Product with id %d was deleted", productId));
-        } catch (DataNotFoundException e) {
-            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-            LOGGER.error(String.format(productNotFound, productId), e);
-        }
+    public void delete(@PathVariable int productId, @PathVariable int userId,
+                       HttpServletResponse response) throws DataNotFoundException {
+
+        productService.deleteProduct(productId);
+        LOGGER.info(String.format("Product with id %d was deleted", productId));
+
     }
+
+    /**
+     * Returns all stores from the current product
+     *
+     * @param productId product which we can by in stores
+     * @param userId  user whose stores will be returned
+     * @return list of stores of current product
+     * @throws DataNotFoundException if stores are not found
+     */
 
     @PreAuthorize("#userId == authentication.user.id")
     @GetMapping("/{productId}/productStores/{userId}")
     @ResponseBody
     @ResponseStatus(value = HttpStatus.OK)
-    public List<Store> getAllStoresFromProduct(@PathVariable int productId,
-                                               @PathVariable int userId, HttpServletResponse response) {
+    public List<Store> getAllStoresFromProduct(@PathVariable int productId, @PathVariable int userId,
+                                               HttpServletResponse response) {
         try {
             List<Store> stores = productService.getStoresByProductId(productId, userId);
             LOGGER.info("All Stores were found");
             return stores;
         } catch (DataNotFoundException e) {
-            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-            LOGGER.error(e.getMessage(), e);
-            return null;
+            LOGGER.error(e.getMessage());
+            return new ArrayList<Store>();
         }
+
     }
+
+    /**
+     * Adds store to product
+     *
+     * @param product   product which stores will be added
+     */
 
     @PreAuthorize("#product.user != null && #product.user.id == authentication.user.id")
     @PostMapping("/stores/")
     @ResponseStatus(value = HttpStatus.OK)
-    public void addStoreToProduct(@RequestBody Product product) {
+    public void addStoresToProduct(@RequestBody Product product) {
 
-        productService.addStoreToProduct(product);
+        productService.addStoresToProduct(product);
         LOGGER.info(String.format("Stores were added to product %d", product.getId()));
 
     }
 
+    /**
+     * This method removes stores that is presented in the product
+     *
+     * @param product product which stores will be deleted
+     * @throws DataNotFoundException if the store is not presented in this product
+     */
+
     @PreAuthorize("#product.user != null && #product.user.id == authentication.user.id")
     @PostMapping("/deleteStores/")
     @ResponseStatus(value = HttpStatus.OK)
-    public void deleteStoreFromProduct(@RequestBody Product product, HttpServletResponse response) {
-        try {
-            productService.deleteStoreFromProductById(product);
-            LOGGER.info(String.format("Stores were deleted from product %d", product.getId()));
-        } catch (DataNotFoundException e) {
-            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-            LOGGER.error(e.getMessage());
-        }
+    public void deleteStoreFromProduct(@RequestBody Product product,
+                                       HttpServletResponse response) throws DataNotFoundException {
+
+        productService.deleteStoreFromProductById(product);
+        LOGGER.info(String.format("Stores were deleted from product %d", product.getId()));
+
     }
 
 }
