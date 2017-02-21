@@ -7,9 +7,23 @@
  * @param prodId
  * @param val if val is positive product amount is increased by val,
  *            if val is positive product amount is decreased by val.
+ * @param index index of updating element
  */
-function edit(prodId, val) {
-    $("#product").val(prodId);
-    $("#val").val(val);
-    $("#edit").submit();
+function edit(prodId, val, index) {
+    $.ajax({
+        url: "/shopping_list/edit",
+        method: "POST",
+        data: {
+            prodId: prodId,
+            val: val
+        },
+        success: function (data) {
+            var amount = $("#am" + index);
+            amount.text(data);
+        },
+        error: function (jqXHR, exception) {
+            console.log(exception);
+            console.log(jqXHR);
+        }
+    })
 }
