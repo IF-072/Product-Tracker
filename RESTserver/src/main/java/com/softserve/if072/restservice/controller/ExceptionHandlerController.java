@@ -39,4 +39,12 @@ public class ExceptionHandlerController {
         LOGGER.error(e.getMessage());
         return e.getMessage();
     }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    @ResponseStatus(HttpStatus.EXPECTATION_FAILED)
+    public String IllegaArgumentException(IllegalArgumentException e) {
+        LOGGER.error(e.getMessage());
+        return e.getMessage();
+    }
+
 }

@@ -17,9 +17,8 @@
                         <th colspan="2">Edit</th>
                         <th>Delete</th>
                     </tr>
-                    <form action="/shopping_list/edit" id="edit" method="post">
-                        <input type="hidden" name="userId" id="user">
-                        <input type="hidden" name="productId" id="product">
+                    <form action="<c:url value="/shopping_list/edit"/>" id="edit" method="post">
+                        <input type="hidden" name="prodId" id="product">
                         <input type="hidden" name="val" id="val">
                         <c:forEach items="${shoppingList}" var="elem">
                             <tr>
@@ -27,9 +26,9 @@
                                 <td>${elem.amount} ${elem.product.unit.name}</td>
                                 <td><img src="<c:url value="/image/${elem.product.image.id}"/>" width="50" height="50" id="editImage"></td>
 
-                                <td><a onclick="edit(${elem.user.id}, ${elem.product.id}, -1)" class="fa fa-minus-square fa-lg"/></td>
-                                <td><a onclick="edit(${elem.user.id}, ${elem.product.id}, 1)" class="fa fa-plus-square fa-lg"/></td>
-                                <td><a onclick="edit(${elem.user.id}, ${elem.product.id}, 0)" class="fa fa-times fa-lg"/></td>
+                                <td><a onclick="edit(${elem.product.id}, -1)" class="fa fa-minus-square fa-lg"/></td>
+                                <td><a onclick="edit(${elem.product.id}, 1)" class="fa fa-plus-square fa-lg"/></td>
+                                <td><a href="<c:url value="/shopping_list/delete?prodId=${elem.product.id}"/> " class="fa fa-times fa-lg"/></td>
                             </tr>
                         </c:forEach>
                     </form>

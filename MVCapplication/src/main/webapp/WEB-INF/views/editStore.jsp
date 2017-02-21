@@ -11,7 +11,7 @@
     <div class="col-lg-6">
         <div class="form-group has-warning">
             <div class="panel-heading">
-                <h3 class="panel-title">Edit Store</h3>
+                <h1 class="page-header">Edit Store</h1>
             </div>
 
             <div class="panel-body">
@@ -30,14 +30,12 @@
                             <label class="control-label" for="inputWarning">Store Address</label>
                             <form:input path="address" class="form-control" placeholder="Address" type="text"/>
                         </div>
-
-
                         <input type="submit" class="btn btn-lg btn-success btn-default" value="Submit"/>
-                        <input type="reset" class="btn btn-lg btn-warning btn-default" value="Cancel"/>
+                        <input type="hidden" name="storeId" value="${store.id}" />
+
                     </fieldset>
                 </form:form>
             </div>
         </div>
     </div>
 </div>
-

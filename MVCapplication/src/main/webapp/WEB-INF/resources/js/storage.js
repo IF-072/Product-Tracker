@@ -39,6 +39,12 @@ function addToShoppingList(userId, productId) {
             productId: productId
         },
         success: function () {
+            $("#success").modal('show');
+
+            $(".btn-confirm").click(function () {
+
+                $("#success").modal('hide');
+            });
         },
         error: function (jqXHR, exception) {
             console.log(jqXHR);

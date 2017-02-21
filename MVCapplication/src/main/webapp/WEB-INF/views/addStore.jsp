@@ -11,7 +11,7 @@
     <div class="col-lg-6">
         <div class="form-group has-warning">
             <div class="panel-heading">
-                <h3 class="panel-title">Add new Store</h3>
+                <h1 class="page-header">Add new Store</h1>
             </div>
 
             <div class="panel-body">
@@ -22,16 +22,17 @@
                     <fieldset>
 
                         <div class="form-group">
-                            <label class="control-label" for="inputWarning">Input with warning</label>
+                            <label class="control-label" for="inputWarning">Store Name</label>
                             <form:input path="name" class="form-control" id="inputWarning"
                                         placeholder="Store Name" type="text"/>
                         </div>
                         <div class="form-group">
+                            <label class="control-label" for="inputWarning">Store Address</label>
                             <form:input path="address" class="form-control" placeholder="Address" type="text"/>
                         </div>
 
 
-                        <input type="submit" class="btn btn-lg btn-success btn-block" value="Add Store"/>
+                        <input type="submit" class="btn btn-lg btn-success btn-default" value="Add Store"/>
                     </fieldset>
                 </form:form>
             </div>
