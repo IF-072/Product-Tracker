@@ -77,10 +77,12 @@ public class StoreController {
      * Adds new store
      *
      * @param store will be saved
+     * @throws IllegalArgumentException - if the passed store is null or has empty name
+     * not found
      */
     @PostMapping("/")
     @ResponseStatus(value = HttpStatus.CREATED)
-    public void addStore(@RequestBody Store store) {
+    public void addStore(@RequestBody Store store) throws IllegalArgumentException {
         storeService.addStore(store);
         LOGGER.info("New Store was created");
     }

@@ -11,7 +11,7 @@
     <div class="col-lg-6">
         <div class="form-group has-warning">
             <div class="panel-heading">
-                <h3 class="panel-title">Add new Store</h3>
+                <h1 class="page-header">Add new Store</h1>
             </div>
 
             <div class="panel-body">
@@ -32,7 +32,7 @@
                         </div>
 
 
-                        <input type="submit" class="btn btn-lg btn-success btn-block" value="Add Store"/>
+                        <input type="submit" class="btn btn-lg btn-success btn-default" value="Add Store"/>
                     </fieldset>
                 </form:form>
             </div>

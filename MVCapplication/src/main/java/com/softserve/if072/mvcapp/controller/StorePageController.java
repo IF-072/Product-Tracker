@@ -8,6 +8,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -135,12 +138,17 @@ public class StorePageController extends BaseController {
             Store myStore = restTemplate.getForObject(storeUri, Store.class, param);
 
             param.put("userId", userId);
-            Product[] productResult = restTemplate.getForObject(productsUri, Product[].class, param);
-            List<Product> products = Arrays.asList(productResult);
+//            Product[] productResult = restTemplate.getForObject(productsUri, Product[].class, param);
+//            List<Product> products = Arrays.asList(productResult);
+
+            ResponseEntity<List<Product>> productResult = restTemplate.exchange(productsUri, HttpMethod.GET, null,
+                    new ParameterizedTypeReference<List<Product>>() {
+                    }, param);
+            List<Product> products = productResult.getBody();
+
             model.addAttribute("myStore", myStore);
 
             ProductsWrapper productsWrapper = new ProductsWrapper(new ArrayList<>(products.size()));
-
             model.addAttribute("products", products);
             model.addAttribute("wrapedProducts", productsWrapper);
             LOGGER.info(String.format("Products of user %d in store %s found", userId, storeId));
@@ -163,9 +171,10 @@ public class StorePageController extends BaseController {
             final String uri = storeUrl + "/manyProducts/" + userId + "/" + storeId;
 
             List<Integer> productsId = wrapedProducts.getProducts();
+            if (productsId.isEmpty()){
+                return "redirect:/stores/";
+            }
             restTemplate.postForObject(uri, productsId, List.class);
-            System.out.println(Arrays.asList(productsId).toString());
-
             LOGGER.info(String.format("Products of user %d added in store %s ", userId, storeId));
 
             return "redirect:/stores/";
