@@ -2,6 +2,7 @@ package com.softserve.if072.mvcapp.controller;
 
 import com.softserve.if072.common.model.Product;
 import com.softserve.if072.common.model.ShoppingList;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
@@ -53,8 +54,13 @@ public class ShoppingListController extends BaseController {
         int id = getCurrentUser().getId();
 
         List<ShoppingList> shoppingList = restTemplate.getForObject(String.format(shoppingListByUserUrl, id), List.class);
-        model.addAttribute("shoppingList", shoppingList);
-        LOG.info(String.format("Shopping list with %d elements has been put into model.", shoppingList.size()));
+
+        if (CollectionUtils.isNotEmpty(shoppingList)) {
+            model.addAttribute("shoppingList", shoppingList);
+            LOG.info(String.format("Shopping list with %d elements has been put into model.", shoppingList.size()));
+        } else {
+            LOG.info("Shopping list has't got any elements yet.");
+        }
 
         return "shopping_list";
     }

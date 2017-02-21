@@ -28,6 +28,8 @@ public class CartController extends BaseController {
     private static final Logger LOGGER = LogManager.getLogger();
     @Value("${application.restCartURL}")
     private String restCartURL;
+    @Value("${application.restCartBouthtURL}")
+    private String restCartBoughtURL;
     @Value("${application.restCartDeleteURL}")
     private String restCartDeleteURL;
     @Value("${cart.found}")
@@ -72,7 +74,7 @@ public class CartController extends BaseController {
             // todo: implement inserting new product to the storage
         }
 
-        template.delete(String.format(restCartDeleteURL, getCurrentUser().getId(), productId));
+        template.put(String.format(restCartBoughtURL, getCurrentUser().getId()), cartDTO);
         LOGGER.info(String.format(successfullyOperation, userId, "bought", amount, productId));
         return "redirect: /cart/";
     }

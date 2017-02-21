@@ -14,7 +14,7 @@
                     <th>Product</th>
                     <th>End date</th>
                     <th>Amount</th>
-                    <th>Add to sopping list</th>
+                    <th>Add to shopping list</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -52,7 +52,7 @@
                 <h4 class="modal-title">Info</h4>
             </div>
             <div class="modal-body text-center">
-                Product added to shopping list
+                Product was added to shopping list
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary btn-confirm">Ok</button>

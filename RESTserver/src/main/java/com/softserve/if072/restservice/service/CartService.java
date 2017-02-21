@@ -1,6 +1,10 @@
 package com.softserve.if072.restservice.service;
 
 import com.softserve.if072.common.model.Cart;
+import com.softserve.if072.common.model.Product;
+import com.softserve.if072.common.model.Storage;
+import com.softserve.if072.common.model.User;
+import com.softserve.if072.common.model.dto.CartDTO;
 import com.softserve.if072.restservice.dao.mybatisdao.CartDAO;
 import com.softserve.if072.restservice.exception.DataNotFoundException;
 import org.apache.logging.log4j.LogManager;
@@ -23,6 +27,8 @@ public class CartService {
     private static final Logger LOGGER = LogManager.getLogger(CartService.class);
     @Autowired
     private CartDAO cartDAO;
+    @Autowired
+    private StorageService storageService;
     @Value("${cart.notFound}")
     private String cartNotFound;
     @Value("${cart.found}")
@@ -39,7 +45,7 @@ public class CartService {
     }
 
     public Cart getByProductId(int productId) {
-        Cart cart=cartDAO.getByProductId(productId);
+        Cart cart = cartDAO.getByProductId(productId);
         LOGGER.info(String.format(cartFoundProductId, productId));
         return cart;
     }
@@ -68,6 +74,31 @@ public class CartService {
             throw new DataNotFoundException(String.format(cartNotFound, "invalid DELETE operation", productId));
         }
         LOGGER.info(String.format(successfullyOperation, productId, "deleted from"));
+    }
+
+    public void productBuying(CartDTO cartDTO) {
+        LOGGER.info(String.format("Submint for buying product with id %d form user with id %d has benn receive." +
+                " An operation is in process.", cartDTO.getProductId(), cartDTO.getUserId()));
+        cartDAO.deleteByProductId(cartDTO.getProductId());
+        LOGGER.info(String.format("Product with id %d has been deleted" +
+                " from user with id %d cart successfully.", cartDTO.getProductId(), cartDTO.getUserId()));
+        Storage storage = null;
+        try {
+            storage = storageService.getByProductId(cartDTO.getProductId());
+            storage.setAmount(storage.getAmount() + cartDTO.getAmount());
+            storageService.update(storage);
+            LOGGER.info(String.format("Product amount with id %d has been updated" +
+                    " in user with id %d storage successfully.", cartDTO.getProductId(), cartDTO.getUserId()));
+        } catch (DataNotFoundException e) {
+            User user = new User();
+            user.setId(cartDTO.getUserId());
+            Product product = new Product();
+            product.setId(cartDTO.getProductId());
+            storage = new Storage(user, product, cartDTO.getAmount(), null);
+            storageService.insert(storage);
+            LOGGER.info(String.format("%d unit(s) of product with id %d has been inserted" +
+                    " into user with id %d storage successfully.", cartDTO.getAmount(), cartDTO.getProductId(), cartDTO.getUserId()));
+        }
     }
 }
 

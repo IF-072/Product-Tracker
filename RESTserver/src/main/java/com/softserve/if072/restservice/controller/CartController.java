@@ -1,6 +1,7 @@
 package com.softserve.if072.restservice.controller;
 
 import com.softserve.if072.common.model.Cart;
+import com.softserve.if072.common.model.dto.CartDTO;
 import com.softserve.if072.restservice.exception.DataNotFoundException;
 import com.softserve.if072.restservice.service.CartService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +25,7 @@ import java.util.List;
  * @author Igor Kryviuk
  */
 @RestController
-@RequestMapping("/users/{userId}/carts")
+@RequestMapping("api/users/{userId}/carts")
 public class CartController {
     @Autowired
     private CartService cartService;
@@ -64,4 +65,11 @@ public class CartController {
     public void deleteByProductId(@PathVariable int productId) throws DataNotFoundException {
         cartService.delete(productId);
     }
+
+    @PutMapping("/bought")
+    @ResponseStatus(value = HttpStatus.OK)
+    public void  productBuying(@RequestBody CartDTO cartDTO) {
+        cartService.productBuying(cartDTO);
+    }
+
 }
