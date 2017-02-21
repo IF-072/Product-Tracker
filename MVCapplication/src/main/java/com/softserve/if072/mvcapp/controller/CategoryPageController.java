@@ -79,17 +79,9 @@ public class CategoryPageController extends BaseController{
         RestTemplate restTemplate = getRestTemplate();
         User user = getCurrentUser();
         category.setUser(user);
-        LOGGER.info("Category IS: " + category);
-
-        try {
-            restTemplate.put(restCategoryURL, category, Category.class);
-            LOGGER.info("Category " + category.getName() + " was updated");
-            return "redirect:/categories/";
-        } catch (Exception e) {
-            LOGGER.error("Category " + category.getName() + " was not updated");
-            LOGGER.error(e);
-            return "redirect:/categories";
-        }
+        restTemplate.put(restCategoryURL, category, Category.class);
+        LOGGER.info("Category " + category.getName() + " was updated");
+        return "redirect:/categories/";
     }
 
     /**
