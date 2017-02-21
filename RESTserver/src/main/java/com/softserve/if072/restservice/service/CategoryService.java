@@ -65,8 +65,6 @@ public class CategoryService {
     public void update(Category category) throws IllegalArgumentException {
         if (category.getName() != null && category.getUser() != null) {
             categoryDAO.update(category);
-        } else {
-            throw new IllegalArgumentException("Incorrect fields for category");
         }
     }
 

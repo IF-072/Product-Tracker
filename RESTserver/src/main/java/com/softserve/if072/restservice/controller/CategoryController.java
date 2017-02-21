@@ -20,10 +20,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.xml.crypto.Data;
 import java.util.List;
 
 @Controller
-@RequestMapping(value = "/category")
+@RequestMapping(value = "api/category")
 @PropertySource("classpath:message.properties")
 public class CategoryController {
 
@@ -38,31 +39,21 @@ public class CategoryController {
     @GetMapping(value = "/{userID}")
     @ResponseBody
     @ResponseStatus(value = HttpStatus.OK)
-    public List<Category> getAllCategoriesByUserID(@PathVariable("userID") int userID, HttpServletResponse response) {
-        try {
-            List<Category> categories = categoryService.getByUserID(userID);
-            LOGGER.info("All categories were found");
-            return categories;
-        } catch (DataNotFoundException e) {
-            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-            LOGGER.error("Categories were not found", e);
-            return null;
-        }
+    public List<Category> getAllCategoriesByUserID(@PathVariable("userID") int userID, HttpServletResponse response) throws DataNotFoundException {
+
+        List<Category> categories = categoryService.getByUserID(userID);
+         LOGGER.info("All categories were found");
+         return categories;
     }
 
     @GetMapping(value = "/id/{categoryID}")
     @ResponseBody
     @ResponseStatus(value = HttpStatus.OK)
-    public Category getCategoryByID(@PathVariable("categoryID") int categoryID, HttpServletResponse response) {
-        try {
-            Category category = categoryService.getById(categoryID);
-            LOGGER.info(String.format("Category with id %d was found", categoryID));
-            return category;
-        } catch (DataNotFoundException e) {
-            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-            LOGGER.error(("Category wasn't found"));
-            return null;
-        }
+    public Category getCategoryByID(@PathVariable("categoryID") int categoryID, HttpServletResponse response) throws DataNotFoundException {
+
+        Category category = categoryService.getById(categoryID);
+        LOGGER.info(String.format("Category with id %d was found", categoryID));
+        return category;
     }
 
     @PostMapping(value = "/")
@@ -75,15 +66,9 @@ public class CategoryController {
     @PutMapping(value = "/")
     @ResponseStatus(value = HttpStatus.OK)
     public void update(@RequestBody Category category, HttpServletResponse response) {
-        int id = category.getId();
 
-        try {
-            categoryService.update(category);
-            LOGGER.info(String.format("Category with id %d was updated", id));
-        } catch (IllegalArgumentException e) {
-            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-            LOGGER.error(String.format("Cannot update category with id %d", id), e);
-        }
+        categoryService.update(category);
+        LOGGER.info(String.format("Category with id %d was updated", category.getId()));
     }
 
     @DeleteMapping(value = "/{id}")
