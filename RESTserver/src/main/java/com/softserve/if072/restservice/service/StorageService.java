@@ -19,7 +19,7 @@ import java.util.List;
  */
 @Service
 public class StorageService{
-    public static final Logger LOGGER = LogManager.getLogger(StorageService.class);
+    private static final Logger LOGGER = LogManager.getLogger(StorageService.class);
     private StorageDAO storageDAO;
     private ShoppingListService shoppingListService;
 
