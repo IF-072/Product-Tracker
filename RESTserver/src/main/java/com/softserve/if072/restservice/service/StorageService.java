@@ -35,17 +35,16 @@ public class StorageService{
         }
     }
 
-    public Storage getByProductId(int product_id) throws DataNotFoundException {
-        Storage storage = storageDAO.getByProductID(product_id);
-        if (storage != null) {
-            return storage;
-        } else {
-            throw new DataNotFoundException(String.format("Storage of product with id %d not found", product_id));
-        }
+    public Storage getByProductId(int product_id){
+        return storageDAO.getByProductID(product_id);
     }
 
     public void insert(Storage storage) {
         storageDAO.insert(storage);
+    }
+
+    public void insert(int userId, int productId, int amount) {
+        storageDAO.insert(userId,productId,amount);
     }
 
     public void update(Storage storage) throws DataNotFoundException {
@@ -67,7 +66,7 @@ public class StorageService{
         if (storage != null) {
             storageDAO.delete(storage);
         } else {
-            throw new DataNotFoundException(String.format("Storage with user's id %d and product's id %d was not found", storage.getUser().getId(), storage.getProduct().getId()));
+            throw new DataNotFoundException("Illegal argument");
         }
     }
 }
