@@ -128,8 +128,7 @@ public class StorePageController extends BaseController {
 
         param.put("userId", userId);
         ResponseEntity<List<Product>> productResult = restTemplate.exchange(productsUri, HttpMethod.GET, null,
-                new ParameterizedTypeReference<List<Product>>() {
-                }, param);
+                new ParameterizedTypeReference<List<Product>>() {}, param);
         List<Product> products = productResult.getBody();
 
         model.addAttribute("myStore", myStore);
@@ -189,9 +188,19 @@ public class StorePageController extends BaseController {
         return "editStore";
     }
 
+    /**
+     * This method allows to change store fields (name and address) in DataBase table store
+     *
+     * @param store
+     * @param result
+     * @param storeId
+     * @param model
+     * @param httpServletResponse
+     * @return redirect to store view url
+     */
     @PostMapping("/editStore")
-    public String editStore(@Validated @ModelAttribute("store") Store store, @RequestParam("storeId") String storeId,
-                            BindingResult result, Model model, HttpServletResponse httpServletResponse) {
+    public String editStore(@Validated @ModelAttribute("store") Store store, BindingResult result, @RequestParam
+            ("storeId") String storeId, Model model, HttpServletResponse httpServletResponse) {
 
         if (result.hasErrors()) {
             model.addAttribute("errorMessages", result.getFieldErrors());
