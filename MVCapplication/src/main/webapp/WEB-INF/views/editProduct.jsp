@@ -23,6 +23,14 @@
         <div class="panel-body">
             <sf:form role="form" modelAttribute="product" method="post">
                 <fieldset>
+                    <c:if test="${not empty errorMessages}">
+                        <div class="alert alert-danger">
+                            <c:forEach items="${errorMessages}" var="errorItem">
+                                <p><span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                                        ${errorItem.getDefaultMessage()}</p>
+                            </c:forEach>
+                        </div>
+                    </c:if>
                     <div class="form-group">
                         <label class="control-label" for="inputWarning">Input with warning</label>
                         <sf:input path="name" class="form-control" id="inputWarning"

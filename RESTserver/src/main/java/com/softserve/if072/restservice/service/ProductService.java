@@ -59,13 +59,13 @@ public class ProductService {
     }
 
     @Transactional
-    public void addProduct(Product product) {productDAO.insert(product);}
+    public void addProduct(Product product) { productDAO.insert(product); }
 
     @Transactional
-    public void updateProduct(Product product) throws DataNotFoundException {productDAO.update(product);}
+    public void updateProduct(Product product) throws DataNotFoundException { productDAO.update(product); }
 
     @Transactional
-    public void updateProductByImage(Product product) throws DataNotFoundException {productDAO.updateImage(product);}
+    public void updateProductByImage(Product product) throws DataNotFoundException { productDAO.updateImage(product); }
 
     @Transactional
     public void deleteProduct(int id) throws DataNotFoundException {
@@ -112,7 +112,7 @@ public class ProductService {
     }
 
     @Transactional
-    public void addStoreToProduct(Product product) {
+    public void addStoresToProduct(Product product) {
 
         for(Store s : product.getStores()) {
             productDAO.addStoreToProduct(s.getId(), product.getId());

@@ -68,7 +68,7 @@ public class GoShoppingPagesController extends BaseController {
         final String uri = goShoppingURL + "/cart";
         RestTemplate restTemplate = getRestTemplate();
         restTemplate.postForObject(uri, form, FormForCart.class);
-        return "redirect:/cart";
+        return "redirect:/cart/";
     }
 
 }

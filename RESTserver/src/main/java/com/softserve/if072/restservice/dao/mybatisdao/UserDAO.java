@@ -2,11 +2,9 @@ package com.softserve.if072.restservice.dao.mybatisdao;
 
 import com.softserve.if072.common.model.Role;
 import com.softserve.if072.common.model.User;
-import com.softserve.if072.restservice.dao.DAO;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Many;
 import org.apache.ibatis.annotations.One;
-import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Result;
 import org.apache.ibatis.annotations.Results;
@@ -84,7 +82,7 @@ public interface UserDAO {
     void insert(User user);
 
     /**
-     * Update information about user in the database.
+     * Updates information about user in the database.
      *
      * @param user model you want to put to the database
      */

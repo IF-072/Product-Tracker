@@ -26,7 +26,7 @@ import java.util.List;
  * @author Igor Kryviuk
  */
 @RestController
-@RequestMapping("/users/{userID}/histories")
+@RequestMapping("api/users/{userID}/histories")
 public class HistoryController {
     @Autowired
     private HistoryService historyService;
