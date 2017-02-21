@@ -85,7 +85,9 @@ public interface StoreDAO extends DAO<Store> {
             @Result(property = "user", column = "user_id", javaType = User.class,
                     one = @One(select = "com.softserve.if072.restservice.dao.mybatisdao.UserDAO.getByID")),
             @Result(property = "isEnabled", column = "is_enabled"),
-
+            @Result(property = "products", column = "id", javaType = List.class,
+                    many = @Many(select = "com.softserve.if072.restservice.dao.mybatisdao.StoreDAO" +
+                            ".getProductsOnlyByStoreId"))
     })
     Store getByID(int id);
 
@@ -133,7 +135,7 @@ public interface StoreDAO extends DAO<Store> {
     })
     List<Product> getProductsByStoreId(@Param("storeId") Integer storeId, @Param("userId") Integer userId);
 
-    @Select("SELECT id, name, is_enabled FROM product  JOIN " +
+    @Select("SELECT id, name, description, is_enabled FROM product  JOIN " +
             "stores_products ON product.id = stores_products.product_id WHERE store_id = #{storeId} " +
             "AND is_enabled = 1")
     @Results(value = {

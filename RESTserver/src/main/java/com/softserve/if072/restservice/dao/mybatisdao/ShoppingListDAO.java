@@ -41,7 +41,7 @@ public interface ShoppingListDAO extends DAO<ShoppingList> {
             @Result(property = "product", column = "product_id", javaType = Product.class,
                     one = @One(select = "com.softserve.if072.restservice.dao.mybatisdao.ProductDAO.getByID"))
     })
-    public List<ShoppingList> getByUserID(int userId);
+    List<ShoppingList> getByUserID(int userId);
 
     /**
      * Select record from the shopping_list table that belong to specific user and product
@@ -58,7 +58,7 @@ public interface ShoppingListDAO extends DAO<ShoppingList> {
             @Result(property = "product", column = "product_id", javaType = Product.class,
                     one = @One(select = "com.softserve.if072.restservice.dao.mybatisdao.ProductDAO.getByID"))
     })
-    public ShoppingList getByUserAndProductId(@Param("userId") Integer userId, @Param("productId") Integer productId);
+    ShoppingList getByUserAndProductId(@Param("userId") Integer userId, @Param("productId") Integer productId);
 
     /**
      * Select all products from the product table that belong to specific user's rows of shopping_list table
@@ -93,7 +93,7 @@ public interface ShoppingListDAO extends DAO<ShoppingList> {
             @Result(property = "product", column = "product_id", javaType = Product.class,
                     one = @One(select = "com.softserve.if072.restservice.dao.mybatisdao.ProductDAO.getByID"))
     })
-    public ShoppingList getByClass(ShoppingList shoppingList);
+    ShoppingList getByClass(ShoppingList shoppingList);
 
     /**
      * Insert new record into the shopping_list table
@@ -103,7 +103,7 @@ public interface ShoppingListDAO extends DAO<ShoppingList> {
     @Override
     @Insert("INSERT INTO shopping_list (user_id, product_id, amount) VALUES (#{user.id}, #{product.id}, #{amount})")
     @Options(useGeneratedKeys = true)
-    public void insert(ShoppingList shoppingList);
+    void insert(ShoppingList shoppingList);
 
     /**
      * Update amount for current shoppingList.
@@ -112,7 +112,7 @@ public interface ShoppingListDAO extends DAO<ShoppingList> {
      */
     @Override
     @Update("UPDATE shopping_list SET amount=#{amount} WHERE user_id=#{user.id} AND product_id=#{product.id}")
-    public void update(ShoppingList shoppingList);
+    void update(ShoppingList shoppingList);
 
     /**
      * Delete current shoppingList from the shopping_list table
@@ -120,6 +120,6 @@ public interface ShoppingListDAO extends DAO<ShoppingList> {
      * @param shoppingList item to be deleted from the shopping_list table
      */
     @Delete("DELETE FROM shopping_list WHERE user_id=#{user.id} AND product_id=#{product.id}")
-    public void delete(ShoppingList shoppingList);
+    void delete(ShoppingList shoppingList);
 }
 

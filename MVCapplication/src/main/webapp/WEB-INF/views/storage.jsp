@@ -27,16 +27,36 @@
                             <form method="post" action="update">
                                 <input type="hidden" name="userId" value="${storage.user.id}">
                                 <input type="hidden" name="productId" value="${storage.product.id}">
-                                <input type="number" name="amount" min="0" value="${storage.amount}" class="form-control" onchange="allowBtn(${loop.count}, ${storage.amount})">
+                                <input type="number" name="amount" min="0" value="${storage.amount}"
+                                       class="form-control" onchange="allowBtn(${loop.count}, ${storage.amount})">
                                 <input type="submit" class="btn disabled btn-default" value="confirm">
                             </form>
                         </td>
-                        <td onclick="addToShoppingList(${storage.user.id}, ${storage.product.id});">
-                            <p class="fa fa-check"></p></td>
+                        <td>
+                            <button type="button" class="btn btn-default btn-success"
+                                    onclick="addToShoppingList(${storage.user.id}, ${storage.product.id});">
+                                Add
+                            </button>
                     </tr>
                 </c:forEach>
                 </tbody>
             </table>
+        </div>
+    </div>
+</div>
+<div id="success" class="modal fade" tabindex="-1">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header alert alert-success" role="alert">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Info</h4>
+            </div>
+            <div class="modal-body text-center">
+                Product added to shopping list
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary btn-confirm">Ok</button>
+            </div>
         </div>
     </div>
 </div>

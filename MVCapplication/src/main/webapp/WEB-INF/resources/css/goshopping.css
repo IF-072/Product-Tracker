@@ -1,0 +1,6 @@
+.product{
+    margin-bottom: 0;
+}
+.product:last-child{
+    margin-bottom: 10px;
+}
