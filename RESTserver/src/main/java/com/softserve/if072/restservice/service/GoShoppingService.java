@@ -1,9 +1,10 @@
 package com.softserve.if072.restservice.service;
 
-import com.softserve.if072.common.model.Cart;
 import com.softserve.if072.common.model.FormForCart;
 import com.softserve.if072.common.model.Product;
+import com.softserve.if072.common.model.ShoppingList;
 import com.softserve.if072.common.model.Store;
+import com.softserve.if072.common.model.Cart;
 import com.softserve.if072.restservice.dao.mybatisdao.CartDAO;
 import com.softserve.if072.restservice.dao.mybatisdao.ShoppingListDAO;
 import com.softserve.if072.restservice.dao.mybatisdao.StoreDAO;
@@ -47,6 +48,10 @@ public class GoShoppingService {
      * @return list of store item that belong to specific user
      */
     public List<Store> getStoreByUserId(int userId) throws DataNotFoundException {
+        if (!CollectionUtils.isEmpty(cartDAO.getByUserId(userId))) {
+            return null;
+        }
+
         List<Product> shoppingList = shoppingListDAO.getProductsByUserId(userId);
         if (CollectionUtils.isEmpty(shoppingList)) {
             throw new DataNotFoundException(String.format("Shopping list of user with id %d is empty", userId));
@@ -56,58 +61,49 @@ public class GoShoppingService {
             throw new DataNotFoundException(String.format("Store list of user with id %d is empty", userId));
         }
 
-        return retainProductFormShoppingList(storeList, shoppingList);
+        return retainProductFromShoppingList(storeList, shoppingList);
     }
 
     /**
-     * Select products from the stores that user chose and contained in the shopping list ("selected"), and products
+     * Select products from the store that user chose and contained in the shopping list ("selected"), and products
      * that are remained in shoppinglist.
      *
-     * @param userId unique user's identifier
-     * @param storesIds unique store's identifier
+     * @param userId  unique user's identifier
+     * @param storeId unique store's identifier
      * @return two lists of products item that belong to specific user
      */
-    public Map<String, List<Product>> getProducts(Integer userId, int[] storesIds) throws DataNotFoundException {
-        Map<String, List<Product>> productsMap = new HashMap<String, List<Product>>();
-        List<Product> productsFromSelectedStore = new ArrayList<Product>();
+    public Map<String, List<ShoppingList>> getProducts(Integer userId, int storeId) throws DataNotFoundException {
+        Map<String, List<ShoppingList>> productsMap = new HashMap<String, List<ShoppingList>>();
 
-        Set<Product> set = new HashSet<Product>(shoppingListDAO.getProductsByUserId(userId));
-        for (int i : storesIds) {
-            Store store = storeDAO.getByID(i);
-            for (Product product : storeDAO.getProductsOnlyByStoreId(i)) {
-                if (set.contains(product)) {
-                    int index;
-                    if ((index = productsFromSelectedStore.indexOf(product)) != -1) {
-                        productsFromSelectedStore.get(index).getStores().add(store);
-                    } else {
-                        product.setStores(new ArrayList<Store>());
-                        product.getStores().add(store);
-                        productsFromSelectedStore.add(product);
-                    }
-                }
+        List<ShoppingList> shoppinList = shoppingListDAO.getByUserID(userId);
+        List<Product> productsFromSelectedStore = storeDAO.getProductsByStoreId(storeId, userId);
+        List<Store> store = new ArrayList<Store>();
+        store.add(storeDAO.getByID(storeId));
+
+        if (CollectionUtils.isEmpty(productsFromSelectedStore)) {
+            throw new DataNotFoundException(String.format("Products of user with id %d, store with id %d is empty", userId, storeId));
+        }
+
+        List<ShoppingList> productsToBuy = new ArrayList<ShoppingList>();
+
+        for (Iterator<ShoppingList> iterator = shoppinList.iterator(); iterator.hasNext(); ) {
+            ShoppingList element = iterator.next();
+            if (productsFromSelectedStore.contains(element.getProduct())) {
+                element.getProduct().setStores(store);
+                productsToBuy.add(element);
+                iterator.remove();
             }
         }
 
-
-        if (CollectionUtils.isEmpty(productsFromSelectedStore)) {
-            throw new DataNotFoundException(String.format("Shopping list of user with id %d is empty", userId));
-        }
-
-        set.removeAll(productsFromSelectedStore);
-
-        productsMap.put("selected", productsFromSelectedStore);
-        productsMap.put("remained", new ArrayList<Product>(set));
+        productsMap.put("selected", productsToBuy);
+        productsMap.put("remained", shoppinList);
         return productsMap;
     }
 
     public void insertCart(FormForCart carts) {
         carts.removeUncheked();
         for (Cart cart : carts.getCarts()) {
-            try {
-                cartDAO.insert(cart);
-            } catch (Exception e) {
-
-            }
+            cartDAO.insert(cart);
         }
     }
 
@@ -116,10 +112,10 @@ public class GoShoppingService {
      * products from shopping list, it will be removed.
      *
      * @param shoppingList list of products from shoppinglist
-     * @param storeList list of stores
+     * @param storeList    list of stores
      * @return storage item that belong to specific product
      */
-    private List<Store> retainProductFormShoppingList(List<Store> storeList, List<Product> shoppingList){
+    private List<Store> retainProductFromShoppingList(List<Store> storeList, List<Product> shoppingList) {
         Iterator<Store> iterator = storeList.iterator();
         while (iterator.hasNext()) {
             Store store = iterator.next();
@@ -136,7 +132,6 @@ public class GoShoppingService {
             }
 
         }
-
         return storeList;
     }
 }

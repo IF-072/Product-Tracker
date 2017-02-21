@@ -2,6 +2,7 @@ package com.softserve.if072.restservice.controller;
 
 import com.softserve.if072.common.model.FormForCart;
 import com.softserve.if072.common.model.Product;
+import com.softserve.if072.common.model.ShoppingList;
 import com.softserve.if072.common.model.Store;
 import com.softserve.if072.restservice.exception.DataNotFoundException;
 import com.softserve.if072.restservice.service.GoShoppingService;
@@ -14,14 +15,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletResponse;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -58,13 +57,12 @@ public class GoShoppingController {
     }
 
     @PreAuthorize("#userId == authentication.user.id")
-    @PostMapping("/products/{userId}")
+    @GetMapping("/{storeId}/products/{userId}")
     @ResponseBody
     @ResponseStatus(value = HttpStatus.OK)
-    public Map<String, List<Product>> getProducts(@PathVariable int userId, @RequestParam String stores, HttpServletResponse response) {
+    public Map<String, List<ShoppingList>> getProducts(@PathVariable int userId, @PathVariable int storeId, HttpServletResponse response) {
         try {
-            String[] arr = stores.trim().replaceAll("\\[", "").replaceAll("\\]", "").split(",");
-            Map<String, List<Product>> map = goShoppingService.getProducts(userId, Arrays.asList(arr).stream().mapToInt(Integer::parseInt).toArray());
+            Map<String, List<ShoppingList>> map = goShoppingService.getProducts(userId, storeId);
             LOGGER.info(String.format("Product of user id %d was found ", userId));
             return map;
         } catch (DataNotFoundException e) {

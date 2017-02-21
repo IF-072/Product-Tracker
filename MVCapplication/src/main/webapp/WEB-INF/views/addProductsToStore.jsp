@@ -11,7 +11,9 @@
 
     <div class="col-lg-6">
         <h1 class="page-header">
-            <b>Add products to Store ${myStore.name} (${myStore.address})</b>
+            <b>Add products to Store</b>
+            <br>
+             <b> ${myStore.name} (${myStore.address})</b>
         </h1>
     </div>
 </div>
@@ -22,7 +24,7 @@
         <form:form role="form" action="${addAction}" modelAttribute="wrapedProducts" method="post">
 
             <%--<form:errors path="*" cssClass="errorblock" element="div"/>--%>
-            <table width="100%" class="table table-striped" id="storeTab">
+            <table class="table table-striped" id="storeTab">
 
 
                 <thead>
@@ -42,7 +44,7 @@
                 </c:forEach>
                 </tbody>
             </table>
-            <input type="submit" class="btn btn-lg btn-success btn-block"
+            <input type="submit" class="btn btn-lg btn-success btn-default"
                    value="Submit adding"/>
             <input type="hidden" name="storeId" value="${myStore.id}" />
         </form:form>
