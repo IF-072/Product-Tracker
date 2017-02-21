@@ -82,6 +82,6 @@ public class ShoppingListService {
     }
 
     public void delete(int productId) {
-        shoppingListDAO.delete(productId);
+        shoppingListDAO.deleteByProductId(productId);
     }
 }

@@ -79,7 +79,7 @@ public interface StorageDAO extends DAO<Storage> {
      */
     @Insert("INSERT INTO storage (user_id, product_id, amount) VALUES (#{userId}, #{productId}, #{amount})")
     @Options(useGeneratedKeys = true)
-    void insert(@Param("userId") int userId, @Param("productId") int productId, @Param("amount") int amount);
+    void insertInParts(@Param("userId") int userId, @Param("productId") int productId, @Param("amount") int amount);
 
     /**
      * Update amount and endDate for current storage.

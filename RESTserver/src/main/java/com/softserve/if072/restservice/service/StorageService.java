@@ -44,7 +44,7 @@ public class StorageService{
     }
 
     public void insert(int userId, int productId, int amount) {
-        storageDAO.insert(userId,productId,amount);
+        storageDAO.insertInParts(userId,productId,amount);
     }
 
     public void update(Storage storage) throws DataNotFoundException {

@@ -144,6 +144,6 @@ public interface ShoppingListDAO extends DAO<ShoppingList> {
      * @param productId unique product's identifier
      */
     @Delete("DELETE FROM shopping_list WHERE user_id=#{user.id} AND product_id=#{productId}")
-    void delete(@Param("productId") Integer productId);
+    void deleteByProductId(@Param("productId") Integer productId);
 }
 
