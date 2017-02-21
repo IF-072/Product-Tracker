@@ -64,27 +64,12 @@ public class CartController extends BaseController {
      * @return string with appropriate redirect statement
      */
     @PostMapping("/bought")
-    public String productBuying(@RequestParam int userId, int storeId, int productId, int amount) {
-        CartDTO cartDTO = new CartDTO(userId, storeId, productId, amount);
-        LOGGER.info(String.format(cartBoughtSubmint, productId));
-
-        if (isProductInStorage(productId)) {
-            // todo: implement updating existing product in the storage
-        } else {
-            // todo: implement inserting new product to the storage
-        }
-
+    public String productBuying(@RequestParam int userId, int storeId, int productId, int amount, int initialAmount) {
+        CartDTO cartDTO = new CartDTO(userId, storeId, productId, amount, initialAmount);
+        LOGGER.info(String.format(cartBoughtSubmint, productId, userId));
         template.put(String.format(restCartBoughtURL, getCurrentUser().getId()), cartDTO);
         LOGGER.info(String.format(successfullyOperation, userId, "bought", amount, productId));
         return "redirect: /cart/";
-    }
-
-// todo: implementing this method require:
-//    1) implement method public Storage getByProductId(int productId) in the StorageController;
-
-    private boolean isProductInStorage(int productId) {
-
-        return true;
     }
 
     @GetMapping("/delete")

@@ -2,11 +2,7 @@
  *   Created by Igor Kryviuk
  */
 
-
 $(document).ready(function () {
-    // todo: implement behavior when user bought less product amount
-    // that he/she had planned. What program should do in this case: delete current product
-    // form the shopping list or update it with new amount
     $("form[action='bought'] :button").click(function () {
         $(this).parent().submit();
     });
@@ -21,10 +17,6 @@ $(document).ready(function () {
             return false;
         }
     });
-
-
-    //todo implement behavior when user input incorrect date to the number field
-
 
     /**
      * This function is used to show modal dialog window
@@ -43,7 +35,6 @@ $(document).ready(function () {
         });
         event.preventDefault();
     });
-
 
 });
 
