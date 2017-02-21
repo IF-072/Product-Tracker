@@ -41,7 +41,7 @@ public interface StorageDAO extends DAO<Storage> {
             @Result(property = "product", column = "product_id", javaType=Product.class,
                     one=@One(select="com.softserve.if072.restservice.dao.mybatisdao.ProductDAO.getByID"))
     })
-    public List<Storage> getByUserID(int userId);
+    List<Storage> getByUserID(int userId);
 
     /**
      * Select record from the storage table that belong to specific product
@@ -58,7 +58,7 @@ public interface StorageDAO extends DAO<Storage> {
             @Result(property = "product", column = "product_id", javaType=Product.class,
                     one=@One(select="com.softserve.if072.restservice.dao.mybatisdao.ProductDAO.getByID"))
     })
-    public Storage getByProductID(int productId);
+    Storage getByProductID(int productId);
 
     /**
      * Insert new record into the storage table
@@ -68,7 +68,18 @@ public interface StorageDAO extends DAO<Storage> {
     @Override
     @Insert("INSERT INTO storage (user_id, product_id, amount, end_date) VALUES (#{user.id}, #{product.id}, #{amount}, #{endDate})")
     @Options(useGeneratedKeys = true)
-    public void insert(Storage storage);
+    void insert(Storage storage);
+
+    /**
+     * Insert new record into the storage table
+     *
+     * @param userId unique user's identifier
+     * @param productId unique product's identifier
+     * @param amount amount of product in storage
+     */
+    @Insert("INSERT INTO storage (user_id, product_id, amount) VALUES (#{userId}, #{productId}, #{amount})")
+    @Options(useGeneratedKeys = true)
+    void insertInParts(@Param("userId") int userId, @Param("productId") int productId, @Param("amount") int amount);
 
     /**
      * Update amount and endDate for current storage.
@@ -77,7 +88,7 @@ public interface StorageDAO extends DAO<Storage> {
      */
     @Override
     @Update("UPDATE storage SET end_date=#{endDate}, amount=#{amount} WHERE user_id=#{user.id} AND product_id=#{product.id}")
-    public void update(Storage storage);
+    void update(Storage storage);
 
     /**
      * Update amount for current storage.
@@ -85,7 +96,7 @@ public interface StorageDAO extends DAO<Storage> {
      * @param storage item to be updated in the storage table
      */
     @Update("UPDATE storage SET amount=#{amount} WHERE user_id=#{user.id} AND product_id=#{product.id}")
-    public void updateAmount(Storage storage);
+    void updateAmount(Storage storage);
 
     /**
      * Delete current storage from the storage table
@@ -93,5 +104,5 @@ public interface StorageDAO extends DAO<Storage> {
      * @param storage item to be deleted from the storage table
      */
     @Delete("DELETE FROM storage WHERE user_id=#{user.id} AND product_id=#{product.id}")
-    public void delete(Storage storage) ;
+    void delete(Storage storage) ;
 }

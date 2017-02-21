@@ -23,28 +23,29 @@ public class ExceptionHandlerController {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public String dataNotFound(DataNotFoundException e) {
         LOGGER.error(e.getMessage());
-        return e.getMessage();
+        return null;
     }
 
     @ExceptionHandler(DataAccessException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public String dataAccessException(DataAccessException e) {
         LOGGER.error(e.getMessage());
-        return e.getMessage();
+        return null;
     }
+
 
     @ExceptionHandler(AccessDeniedException.class)
     @ResponseStatus(HttpStatus.FORBIDDEN)
     public String accessDeniedException(AccessDeniedException e) {
         LOGGER.error(e.getMessage());
-        return e.getMessage();
+        return null;
     }
+
 
     @ExceptionHandler(IllegalArgumentException.class)
     @ResponseStatus(HttpStatus.EXPECTATION_FAILED)
     public String IllegaArgumentException(IllegalArgumentException e) {
         LOGGER.error(e.getMessage());
-        return e.getMessage();
+        return null;
     }
-
 }
