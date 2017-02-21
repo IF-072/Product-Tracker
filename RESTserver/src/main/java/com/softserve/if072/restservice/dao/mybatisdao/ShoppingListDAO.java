@@ -28,6 +28,22 @@ import java.util.List;
 public interface ShoppingListDAO extends DAO<ShoppingList> {
 
     /**
+     * Select record from the shopping_list table that belong to specific product
+     *
+     * @param productId unique product's identifier
+     * @return ShoppingList item that belong to specific product
+     */
+    @Select("SELECT amount, user_id, product_id FROM shopping_list WHERE product_id = #{productId}")
+    @Results(value = {
+            @Result(property = "amount", column = "amount"),
+            @Result(property = "user", column = "user_id", javaType=User.class,
+                    one=@One(select="com.softserve.if072.restservice.dao.mybatisdao.UserDAO.getByID")),
+            @Result(property = "product", column = "product_id", javaType=Product.class,
+                    one=@One(select="com.softserve.if072.restservice.dao.mybatisdao.ProductDAO.getByID"))
+    })
+    ShoppingList getByProductId(int productId);
+
+    /**
      * Select all records from the shopping_list table that belong to specific user
      *
      * @param userId unique user's identifier
@@ -121,5 +137,13 @@ public interface ShoppingListDAO extends DAO<ShoppingList> {
      */
     @Delete("DELETE FROM shopping_list WHERE user_id=#{user.id} AND product_id=#{product.id}")
     void delete(ShoppingList shoppingList);
+
+    /**
+     * Delete shoppingList with current product from the shopping_list table
+     *
+     * @param productId unique product's identifier
+     */
+    @Delete("DELETE FROM shopping_list WHERE product_id=#{productId}")
+    void deleteByProductId(@Param("productId") Integer productId);
 }
 

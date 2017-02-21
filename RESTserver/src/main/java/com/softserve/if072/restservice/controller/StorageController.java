@@ -42,13 +42,9 @@ public class StorageController {
     @DeleteMapping()
     @ResponseStatus(value = HttpStatus.OK)
     public void delete(@RequestBody Storage storage, HttpServletResponse response) {
-        try {
-            storageService.delete(storage);
-            LOGGER.info(String.format("Storage with user's id %d and product's id %d was deleted", storage.getUser().getId(), storage.getProduct().getId()));
-        } catch (DataNotFoundException e) {
-            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-            LOGGER.error(String.format("Cannot delete Storage with user's id %d and product's id %d", storage.getUser().getId(), storage.getProduct().getId()), e);
-        }
+        storageService.delete(storage);
+        LOGGER.info(String.format("Storage with user's id %d and product's id %d was deleted",
+                storage.getUser().getId(), storage.getProduct().getId()));
     }
 
     @PreAuthorize("#user_id == authentication.user.id")
@@ -57,9 +53,9 @@ public class StorageController {
     @ResponseStatus(value = HttpStatus.OK)
     public List<Storage> getByUserId(@PathVariable int user_id, HttpServletResponse response) {
         try {
-            List<Storage> stores = storageService.getByUserId(user_id);
+            List<Storage> storage = storageService.getByUserId(user_id);
             LOGGER.info(String.format("All Storages of user with id %d were found", user_id));
-            return stores;
+            return storage;
         } catch (DataNotFoundException e) {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             LOGGER.error(String.format("Storages of user with id %d were not found", user_id), e);
@@ -71,16 +67,13 @@ public class StorageController {
     @GetMapping(value = "/{user_id}/{product_id}")
     @ResponseBody
     @ResponseStatus(value = HttpStatus.OK)
-    public Storage getByProductId(@PathVariable int user_id, @PathVariable int product_id, HttpServletResponse response) {
-        try {
-            Storage store = storageService.getByProductId(product_id);
-            LOGGER.info(String.format("Storage with id %d was found", product_id));
-            return store;
-        } catch (DataNotFoundException e) {
-            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-            LOGGER.error(String.format("Storage with id %d was not found", product_id), e);
-            return null;
-        }
+    public Storage getByProductId(@PathVariable int user_id, @PathVariable int product_id,
+                                  HttpServletResponse response) {
+
+        Storage storage = storageService.getByProductId(product_id);
+        LOGGER.info(String.format("Storage with id %d was found", product_id));
+        return storage;
+
     }
 
     @PreAuthorize("#storage.user != null && #storage.user.id == authentication.user.id")
@@ -95,12 +88,8 @@ public class StorageController {
     @PutMapping(value = "/")
     @ResponseStatus(value = HttpStatus.OK)
     public void update(@RequestBody Storage storage, HttpServletResponse response) {
-        try {
-            storageService.update(storage);
-            LOGGER.info(String.format("Storage with user's id %d and product's id %d was updated", storage.getUser().getId(), storage.getProduct().getId()));
-        } catch (DataNotFoundException e) {
-            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-            LOGGER.error(String.format("Cannot update Storage with user's id %d and product's id %d", storage.getUser().getId(), storage.getProduct().getId()), e);
-        }
+        storageService.update(storage);
+        LOGGER.info(String.format("Storage with user's id %d and product's id %d was updated",
+                storage.getUser().getId(), storage.getProduct().getId()));
     }
 }
