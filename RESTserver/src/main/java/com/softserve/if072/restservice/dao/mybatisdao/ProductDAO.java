@@ -51,7 +51,7 @@ public interface ProductDAO extends DAO<Product> {
     List<Product> getAll();
 
     @Select("SELECT id, name, description, image_id, user_id, category_id, unit_id, is_enabled FROM product WHERE " +
-            "user_id = #{userId}")
+            "user_id = #{userId} AND is_enabled = 1")
     @Results(value = {
             @Result(property = "id", column = "id"),
             @Result(property = "name", column = "name"),
@@ -129,13 +129,23 @@ public interface ProductDAO extends DAO<Product> {
 
     @Select("SELECT store.id, store.name, address, latitude, longitude, store.is_enabled " +
             "FROM store JOIN stores_products ON store.id = stores_products.store_id " +
+            "WHERE product_id = #{productId}")
+    @Results(value = {
+            @Result(property = "user", column = "user_id", javaType = User.class,
+                    one = @One(select = "com.softserve.if072.restservice.dao.mybatisdao.UserDAO.getByID")),
+            @Result(property = "isEnabled", column = "is_enabled")
+    })
+    List<Store> getStoresByProductId(int productId);
+
+    @Select("SELECT store.id, store.name, address, latitude, longitude, store.is_enabled " +
+            "FROM store JOIN stores_products ON store.id = stores_products.store_id " +
             "WHERE product_id = #{productId} and user_id = #{userId}")
     @Results(value = {
             @Result(property = "user", column = "user_id", javaType = User.class,
                     one = @One(select = "com.softserve.if072.restservice.dao.mybatisdao.UserDAO.getByID")),
             @Result(property = "isEnabled", column = "is_enabled")
     })
-    List<Store> getStoresByProductId(@Param("productId") int productId, @Param("userId") int userId);
+    List<Store> getStoresByProductIdAndUserId(@Param("productId") int productId, @Param("userId") int userId);
 
     @Select("SELECT store.id, store.name, address, latitude, longitude, store.is_enabled " +
             "FROM store JOIN stores_products ON store.id = stores_products.store_id " +
@@ -151,7 +161,7 @@ public interface ProductDAO extends DAO<Product> {
     void addStoreToProduct(@Param("storeId") Integer storeId, @Param("productId") Integer productId);
 
     @Select("SELECT id, name, description, image_id, user_id, category_id, unit_id, is_enabled FROM product WHERE " +
-            "user_id = #{userId} and is_enabled =1 ")
+            "user_id = #{userId} and is_enabled = 1 ")
     @Results(value = {
             @Result(property = "id", column = "id"),
             @Result(property = "name", column = "name"),

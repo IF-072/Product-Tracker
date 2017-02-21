@@ -67,7 +67,7 @@
                                     <p class="fa fa-plus fa-lg"></p>
                                 </td>
                                 <td id="edit">
-                                    <p onclick="document.location.href='/product/editProduct?id=${product.id}'"
+                                    <p onclick="document.location.href='/product/editProduct?productId=${product.id}'"
                                        class="fa fa-pencil fa-lg"></p>
                                 </td>
                                 <td onclick="deleteProduct(${product.id});" id="delete">

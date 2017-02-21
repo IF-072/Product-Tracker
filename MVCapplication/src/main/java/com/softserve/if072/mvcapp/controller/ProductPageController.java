@@ -53,7 +53,14 @@ public class ProductPageController extends BaseController {
     @Value("${application.restStoreURL}")
     private String storeUrl;
 
-    @RequestMapping("/")
+    /**
+     * Method returns product's page
+     *
+     * @param model model with data represented on page
+     * @return product
+     */
+
+    @RequestMapping(value = "/", method = RequestMethod.GET)
     public String getProductPage(ModelMap model) {
 
         int userId = getCurrentUser().getId();
@@ -70,8 +77,14 @@ public class ProductPageController extends BaseController {
         return "product";
     }
 
+    /**
+     * Method returns page for adding a product
+     *
+     * @param model model with data represented on page
+     * @return addProduct
+     */
 
-    @GetMapping("/addProduct")
+    @RequestMapping(value = "/addProduct", method = RequestMethod.GET)
     public String addProduct(Model model){
 
         int userId = getCurrentUser().getId();
@@ -96,6 +109,13 @@ public class ProductPageController extends BaseController {
 
         return "addProduct";
     }
+
+    /**
+     * Method sends new product's data to REST service for adding product in DataBase
+     *
+     * @param model model with data represented on page
+     * @return product
+     */
 
     @RequestMapping(value = "/addProduct", method = RequestMethod.POST)
     public String addProduct(@Validated @ModelAttribute("product") Product product, BindingResult result,
@@ -154,8 +174,16 @@ public class ProductPageController extends BaseController {
         return "redirect:/product/";
     }
 
+    /**
+     * Method returns page for editing product
+     *
+     * @param productId product to be edited
+     * @param model model with data represented on page
+     * @return editProduct
+     */
+
     @RequestMapping(value = "/editProduct", method = RequestMethod.GET)
-    public String editProduct(@RequestParam int id, Model model) {
+    public String editProduct(@RequestParam int productId, Model model) {
 
         int userId = getCurrentUser().getId();
 
@@ -166,7 +194,7 @@ public class ProductPageController extends BaseController {
         RestTemplate restTemplate = getRestTemplate();
 
         Map<String, Integer> param = new HashMap<>();
-        param.put("productId", id);
+        param.put("productId", productId);
         Product product = restTemplate.getForObject(uri, Product.class, param);
 
         ResponseEntity<List<Unit>> unitsResponse = restTemplate.exchange(unitUri, HttpMethod.GET, null, new ParameterizedTypeReference<List<Unit>>(){});
@@ -184,9 +212,18 @@ public class ProductPageController extends BaseController {
         return "editProduct";
     }
 
+    /**
+     * Method sends editing product's data to REST service for adding product in DataBase
+     *
+     * @param newProduct product to be edited
+     * @param result contents errors for validation
+     * @param model model with data represented on page
+     * @return redirect to product's page
+     */
+
     @RequestMapping(value = "/editProduct", method = RequestMethod.POST)
     public String editProduct(@Validated @ModelAttribute("product") Product newProduct, BindingResult result,
-                              Model model, HttpServletResponse httpServletResponse) {
+                              Model model) {
 
         User user = getCurrentUser();
 
@@ -239,6 +276,13 @@ public class ProductPageController extends BaseController {
         return "redirect:/product/";
     }
 
+    /**
+     * Method sends data to REST service for deleting product
+     *
+     * @param productId product to be deleted
+     * @return redirect to product's page
+     */
+
     @RequestMapping(value = "/delProduct", method = RequestMethod.POST)
     public String delProduct(@RequestParam int productId){
 
@@ -255,6 +299,14 @@ public class ProductPageController extends BaseController {
         return "redirect:/product/";
 
     }
+
+    /**
+     * Method returns page to represent stores where user can by this product
+     *
+     * @param productId product which user can buy in stores
+     * @param model model with data represented on page
+     * @return productInStores
+     */
 
     @RequestMapping(value = "/stores", method = RequestMethod.GET)
     public String getStoresByProductId(@RequestParam int productId, ModelMap model) {
@@ -310,8 +362,18 @@ public class ProductPageController extends BaseController {
 
     }
 
+    /**
+     * Method sends data about stores where user can buy this product to the REST service
+     * to write them into DataBase
+     *
+     * @param storesInProduct DTO that contains list of ids of checked stores
+     * @param productId product which user can buy in checked stores
+     * @return redirect to product's page
+     */
+
     @RequestMapping(value = "/stores", method = RequestMethod.POST)
-    public String getStoresByProductId(@ModelAttribute("storesInProduct") StoresInProduct storesInProduct, @RequestParam int productId) {
+    public String getStoresByProductId(@ModelAttribute("storesInProduct") StoresInProduct storesInProduct,
+                                       @RequestParam int productId) {
 
         final String getStoresUri = productUrl + "/{productId}/productStores/{userId}";
         final String getStoreByIdUri = storeUrl + "/{storeId}";
@@ -323,6 +385,7 @@ public class ProductPageController extends BaseController {
 
         Map<String, Integer> param = new HashMap<>();
         param.put("productId", productId);
+        param.put("userId", userId);
 
         RestTemplate restTemplate = getRestTemplate();
 
@@ -330,8 +393,6 @@ public class ProductPageController extends BaseController {
         List<Store> oldStores = oldStoresResponse.getBody();
 
         Product product = restTemplate.getForObject(getProductByIdUri, Product.class, param);
-
-        //Get list of stores named "newStores", that had been checked in the form
 
         List<Store> newStores = new ArrayList<>();
 
