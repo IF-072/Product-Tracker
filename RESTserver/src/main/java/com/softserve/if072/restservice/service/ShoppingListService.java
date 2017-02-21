@@ -36,7 +36,7 @@ public class ShoppingListService {
 
     public ShoppingList getByUserAndProductId(int user_id, int product_id) throws DataNotFoundException {
         ShoppingList list = shoppingListDAO.getByUserAndProductId(user_id, product_id);
-        if (!CollectionUtils.isEmpty((Collection<?>) list)) {
+        if (list != null) {
             return list;
         } else {
             throw new DataNotFoundException("ShoppingList not found");
