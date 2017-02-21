@@ -128,18 +128,26 @@ public class ProductPageController extends BaseController {
         }
 
         Map<String, Integer> param = new HashMap<>();
-        param.put("categoryId", product.getCategory().getId());
-        Category category = restTemplate.getForObject(categoryByIdUri, Category.class, param);
+        if(product.getCategory().getId() > 0) {
+            param.put("categoryId", product.getCategory().getId());
+            Category category = restTemplate.getForObject(categoryByIdUri, Category.class, param);
+            product.setCategory(category);
+        } else {
+            product.setCategory(null);
+        }
 
-        param.clear();
-        param.put("unitId", product.getUnit().getId());
-        Unit unit = restTemplate.getForObject(UnitByIdUri, Unit.class, param);
+        if(product.getUnit().getId() > 0) {
+            param.clear();
+            param.put("unitId", product.getUnit().getId());
+            Unit unit = restTemplate.getForObject(UnitByIdUri, Unit.class, param);
+            product.setUnit(unit);
+        } else {
+            product.setUnit(null);
+        }
 
         product.setUser(user);
         product.setEnabled(true);
-        product.setCategory(category);
         product.setImage(null);
-        product.setUnit(unit);
 
         restTemplate.postForObject(uri, product, Product.class);
 
@@ -151,7 +159,7 @@ public class ProductPageController extends BaseController {
 
         int userId = getCurrentUser().getId();
 
-        final String uri = productUrl + "/{userId}/{productId}";
+        final String uri = productUrl + "/{productId}";
         final String unitUri = unitUrl + "/";
         final String categoryUri = categoryUrl + "{userId}";
 
@@ -159,7 +167,6 @@ public class ProductPageController extends BaseController {
 
         Map<String, Integer> param = new HashMap<>();
         param.put("productId", id);
-        param.put("userId", userId);
         Product product = restTemplate.getForObject(uri, Product.class, param);
 
         ResponseEntity<List<Unit>> unitsResponse = restTemplate.exchange(unitUri, HttpMethod.GET, null, new ParameterizedTypeReference<List<Unit>>(){});
@@ -255,14 +262,13 @@ public class ProductPageController extends BaseController {
         int userId = getCurrentUser().getId();
 
         final String getStoresUri = productUrl + "/{productId}/productStores/{userId}";
-        final String getProductUri = productUrl + "/{userId}/{productId}";
+        final String getProductUri = productUrl + "/{productId}";
         final String getAllStoresUri = storeUrl + "/user/{userId}";
 
         RestTemplate restTemplate = getRestTemplate();
 
         Map<String, Integer> param = new HashMap<>();
         param.put("productId", productId);
-        param.put("userId", userId);
         Product product = restTemplate.getForObject(getProductUri, Product.class, param);
 
         param.clear();
@@ -309,7 +315,7 @@ public class ProductPageController extends BaseController {
 
         final String getStoresUri = productUrl + "/{productId}/productStores/{userId}";
         final String getStoreByIdUri = storeUrl + "/{storeId}";
-        final String getProductByIdUri = productUrl + "/{userId}/{productId}";
+        final String getProductByIdUri = productUrl + "/{productId}";
         final String addStoreToProductUri = productUrl + "/stores/";
         final String deleteStoreFromProductUri = productUrl + "/deleteStores/";
 
@@ -317,7 +323,6 @@ public class ProductPageController extends BaseController {
 
         Map<String, Integer> param = new HashMap<>();
         param.put("productId", productId);
-        param.put("userId", userId);
 
         RestTemplate restTemplate = getRestTemplate();
 
