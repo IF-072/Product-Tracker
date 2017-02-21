@@ -1,5 +1,6 @@
 package com.softserve.if072.mvcapp.controller;
 
+import com.softserve.if072.common.model.Product;
 import com.softserve.if072.common.model.ShoppingList;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -35,6 +36,9 @@ public class ShoppingListController extends BaseController {
     @Value("${service.shoppingList.byUserAndProduct}")
     private String shoppingListByUserAndProductUrl;
 
+    @Value("${service.product.byId}")
+    private String productById;
+
     /**
      * This method extracts a shopping list model for th shopping list's view.
      *
@@ -56,7 +60,6 @@ public class ShoppingListController extends BaseController {
      * This method allows to change product amount in the shopping list and delete
      * element from the shopping list.
      *
-     * @param userId
      * @param productId
      * @param value if value is positive product amount is increased by val,
      *            if value is positive product amount is decreased by val,
@@ -64,11 +67,11 @@ public class ShoppingListController extends BaseController {
      * @return redirect to shopping list's view url
      */
     @RequestMapping(value = "/shopping_list/edit", method = RequestMethod.POST)
-    public String editShoppingList(@RequestParam("userId") int userId,
-                                   @RequestParam("productId") int productId,
+    public String editShoppingList(@RequestParam("productId") int productId,
                                    @RequestParam("val") int value) {
         RestTemplate restTemplate = new RestTemplate();
-        ShoppingList shoppingList = restTemplate.getForObject(String.format(shoppingListByUserAndProductUrl, userId, productId), ShoppingList.class);
+        ShoppingList shoppingList = restTemplate.getForObject(
+                String.format(shoppingListByUserAndProductUrl, getCurrentUser().getId(), productId), ShoppingList.class);
 
         HttpEntity<ShoppingList> entity = new HttpEntity<>(shoppingList);
 
@@ -85,21 +88,21 @@ public class ShoppingListController extends BaseController {
     /**
      * This method allows to add product to the shopping list.
      *
-     * @param userId
      * @param productId
      * @return redirect to shopping list's view url
      */
     @RequestMapping(value = "shopping_list/add", method = RequestMethod.POST)
-    public String addProductToShoppingList(@RequestParam("userId") int userId,
-                                           @RequestParam("productId") int productId) {
+    public String addProductToShoppingList(@RequestParam("productId") int productId) {
         RestTemplate restTemplate = new RestTemplate();
-        ShoppingList shoppingList = restTemplate.getForObject(String.format(shoppingListByUserAndProductUrl, userId, productId), ShoppingList.class);
+        ShoppingList shoppingList = restTemplate.getForObject(
+                String.format(shoppingListByUserAndProductUrl, getCurrentUser().getId(), productId), ShoppingList.class);
 
         if (shoppingList == null) {
             shoppingList = new ShoppingList();
+            Product product = restTemplate.getForObject(String.format(productById, productId), Product.class);
 
             shoppingList.setUser(getCurrentUser());
-            shoppingList.setProduct(null);
+            shoppingList.setProduct(product);
             shoppingList.setAmount(1);
 
             HttpEntity<ShoppingList> entity = new HttpEntity<>(shoppingList);
