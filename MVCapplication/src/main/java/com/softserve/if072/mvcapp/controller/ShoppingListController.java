@@ -1,6 +1,5 @@
 package com.softserve.if072.mvcapp.controller;
 
-import com.fasterxml.jackson.core.JsonpCharacterEscapes;
 import com.softserve.if072.common.model.Product;
 import com.softserve.if072.common.model.ShoppingList;
 import org.apache.commons.collections.CollectionUtils;
@@ -40,8 +39,8 @@ public class ShoppingListController extends BaseController {
     @Value("${service.shoppingList.byUserAndProduct}")
     private String shoppingListByUserAndProductUrl;
 
-    @Value("${service.product.byUserIdAndProductId}")
-    private String productByUserIdAndProductId;
+    @Value("${service.product.id}")
+    private String productById;
 
     /**
      * This method extracts a shopping list model for th shopping list's view.
@@ -129,7 +128,7 @@ public class ShoppingListController extends BaseController {
         if (shoppingList == null) {
             shoppingList = new ShoppingList();
             Product product = restTemplate.getForObject(
-                    String.format(productByUserIdAndProductId, getCurrentUser().getId(), productId), Product.class);
+                    String.format(productById, productId), Product.class);
 
             shoppingList.setUser(getCurrentUser());
             shoppingList.setProduct(product);
