@@ -33,7 +33,7 @@ public interface ShoppingListDAO extends DAO<ShoppingList> {
      * @param productId unique product's identifier
      * @return ShoppingList item that belong to specific product
      */
-    @Select("SELECT end_date, amount, user_id, product_id FROM shopping_list WHERE product_id = #{productId}")
+    @Select("SELECT amount, user_id, product_id FROM shopping_list WHERE product_id = #{productId}")
     @Results(value = {
             @Result(property = "amount", column = "amount"),
             @Result(property = "user", column = "user_id", javaType=User.class,
@@ -143,7 +143,7 @@ public interface ShoppingListDAO extends DAO<ShoppingList> {
      *
      * @param productId unique product's identifier
      */
-    @Delete("DELETE FROM shopping_list WHERE user_id=#{user.id} AND product_id=#{productId}")
+    @Delete("DELETE FROM shopping_list WHERE product_id=#{productId}")
     void deleteByProductId(@Param("productId") Integer productId);
 }
 
