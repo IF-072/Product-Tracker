@@ -92,7 +92,7 @@
                 <h4 class="modal-title">Info</h4>
             </div>
             <div class="modal-body text-center">
-                You need chose at least one product
+                You need to choose at least one product
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary btn-confirm">Ok</button>
