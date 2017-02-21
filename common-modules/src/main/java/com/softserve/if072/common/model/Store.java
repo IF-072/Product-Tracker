@@ -1,5 +1,7 @@
 package com.softserve.if072.common.model;
 
+import org.hibernate.validator.constraints.NotEmpty;
+
 import java.util.List;
 
 /**
@@ -11,6 +13,8 @@ import java.util.List;
 public class Store {
 
     private int id;
+
+    @NotEmpty(message = "{error.name.notnull}")
     private String name;
     private String address;
     private User user;

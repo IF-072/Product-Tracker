@@ -8,6 +8,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,8 +21,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -31,7 +31,7 @@ import java.util.Set;
  */
 
 @RestController
-@RequestMapping("/stores")
+@RequestMapping("/api/stores")
 public class StoreController {
     public static final Logger LOGGER = LogManager.getLogger(StoreController.class);
     private StoreService storeService;
@@ -48,6 +48,7 @@ public class StoreController {
      * @return list of user stores
      * @throws DataNotFoundException - if stores not found
      */
+    @PreAuthorize("#userId == authentication.user.id")
     @GetMapping("/user/{userId}")
     @ResponseBody
     @ResponseStatus(value = HttpStatus.OK)
@@ -65,6 +66,7 @@ public class StoreController {
      * @return store
      * @throws DataNotFoundException - if the store is not found
      */
+    @PostAuthorize("returnObject != null && returnObject.user.id == authentication.user.id")
     @GetMapping("/{id}")
     @ResponseBody
     @ResponseStatus(value = HttpStatus.OK)
@@ -79,8 +81,9 @@ public class StoreController {
      *
      * @param store will be saved
      * @throws IllegalArgumentException - if the passed store is null or has empty name
-     * not found
+     *                                  not found
      */
+    @PreAuthorize("#store != null && #store.user != null && #store.user.id == authentication.user.id")
     @PostMapping("/")
     @ResponseStatus(value = HttpStatus.CREATED)
     public void addStore(@RequestBody Store store) throws IllegalArgumentException {
@@ -94,6 +97,7 @@ public class StoreController {
      * @param store will be saved
      * @throws IllegalArgumentException - if the passed store has empty name field or the updated store is not found
      */
+    @PreAuthorize("#store != null && #store.user != null && #store.user.id == authentication.user.id")
     @PutMapping("/update")
     @ResponseBody
     @ResponseStatus(value = HttpStatus.OK)
@@ -104,13 +108,15 @@ public class StoreController {
     /**
      * This method removes store
      *
-     * @param storeId store which will be removed
+     * @param store will be removed
      * @throws DataNotFoundException if the store is not found
      */
-    @PutMapping("/{storeId}")
+    @PreAuthorize("#store != null && #store.user != null && #store.user.id == authentication.user.id")
+    @PutMapping("/delStore")
     @ResponseStatus(value = HttpStatus.OK)
     @ResponseBody
-    public void deleteStore(@PathVariable int storeId) throws DataNotFoundException {
+    public void deleteStore(@RequestBody Store store) throws DataNotFoundException {
+        int storeId = store.getId();
         storeService.deleteStore(storeId);
         LOGGER.info(String.format("Store with id %d was deleted", storeId));
     }
@@ -122,6 +128,7 @@ public class StoreController {
      * @param userId  user whose products will be returned
      * @return list of products of current store
      */
+    @PreAuthorize("#userId == authentication.user.id")
     @GetMapping("/{storeId}/storeProducts/{userId}")
     @ResponseBody
     @ResponseStatus(value = HttpStatus.OK)
@@ -130,7 +137,6 @@ public class StoreController {
         List<Product> products = storeService.getProductsByStoreId(storeId, userId);
         LOGGER.info("All Products were found");
         return products;
-
     }
 
     /**
@@ -141,6 +147,7 @@ public class StoreController {
      * @return product
      * @throws DataNotFoundException if result set is empty
      */
+    @PostAuthorize("returnObject != null && returnObject.user.id == authentication.user.id")
     @GetMapping("/{storeId}/products/{productId}")
     @ResponseBody
     @ResponseStatus(value = HttpStatus.OK)
@@ -149,7 +156,6 @@ public class StoreController {
         Product product = storeService.getProductFromStoreById(storeId, productId);
         LOGGER.info("Product was found");
         return product;
-
     }
 
     /**
@@ -159,10 +165,11 @@ public class StoreController {
      * @param productId product from this store which will be deleted
      * @throws DataNotFoundException if the product is not presented in this store
      */
+    @PreAuthorize("#product != null && #product.user != null && #product.user.id == authentication.user.id")
     @DeleteMapping("/{storeId}/products/{productId}")
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
-    public void deleteProductFromStore(@PathVariable Integer storeId, @PathVariable Integer productId)
-            throws DataNotFoundException {
+    public void deleteProductFromStore(@RequestBody Product product, @PathVariable Integer storeId,
+                                       @PathVariable Integer productId) throws DataNotFoundException {
         storeService.deleteProductFromStoreById(storeId, productId);
         LOGGER.info(String.format("Product %d from Store %d was deleted", productId, storeId));
     }
@@ -174,9 +181,11 @@ public class StoreController {
      * @param productId product that will be added to store
      * @throws DataNotFoundException - if product or store is not found
      */
+    @PreAuthorize("#userId == authentication.user.id")
     @PostMapping("/products/")
     @ResponseStatus(value = HttpStatus.CREATED)
-    public void addProductToStore(@PathVariable Integer storeId, @PathVariable Integer productId)
+    public void addProductToStore(@PathVariable Integer storeId, @PathVariable Integer productId,
+                                  @PathVariable Integer userId)
             throws DataNotFoundException {
         storeService.addProductToStore(storeId, productId);
         LOGGER.info(String.format("Product %d was added to Store %d", productId, storeId));
@@ -189,6 +198,7 @@ public class StoreController {
      * @param storeId    store where products will be added
      * @throws DataNotFoundException if list of productId is empty, or store is not found
      */
+    @PreAuthorize("#userId == authentication.user.id")
     @PostMapping("/manyProducts/{userId}/{storeId}")
     @ResponseStatus(value = HttpStatus.OK)
     public void addProductsToStore(@RequestBody List<Integer> productsId, @PathVariable Integer storeId,
@@ -197,7 +207,6 @@ public class StoreController {
         storeService.addProductsToStore(productsId, storeId);
         LOGGER.info(String.format("Products  where added to Store %d", storeId));
     }
-
 
     /**
      * This method retrieves products that are not presented in the store. This
@@ -208,11 +217,12 @@ public class StoreController {
      * @return - set of products that are not added to store
      * @throws DataNotFoundException - if result set is empty
      */
+    @PreAuthorize("#userId == authentication.user.id")
     @GetMapping("/{storeId}/notMappedProducts/{userId}")
     @ResponseBody
     @ResponseStatus(value = HttpStatus.OK)
-    public Set<Product> getNotMappedProducts(@PathVariable Integer storeId, @PathVariable Integer userId,
-                                             HttpServletResponse response) throws DataNotFoundException {
+    public Set<Product> getNotMappedProducts(@PathVariable Integer storeId, @PathVariable Integer userId) throws
+            DataNotFoundException {
 
         Set<Product> notMappedProducts = storeService.getNotMappedProducts(storeId, userId);
 

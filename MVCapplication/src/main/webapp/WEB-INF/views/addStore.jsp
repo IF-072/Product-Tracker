@@ -21,6 +21,15 @@
                 <form:form role="form" action="${addAction}" method="POST" modelAttribute="store">
                     <fieldset>
 
+                        <c:if test="${not empty errorMessages}">
+                            <div class="alert alert-danger">
+                                <c:forEach items="${errorMessages}" var="errorItem">
+                                    <p><span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                                            ${errorItem.getDefaultMessage()}</p>
+                                </c:forEach>
+                            </div>
+                        </c:if>
+
                         <div class="form-group">
                             <label class="control-label" for="inputWarning">Store Name</label>
                             <form:input path="name" class="form-control" id="inputWarning"
