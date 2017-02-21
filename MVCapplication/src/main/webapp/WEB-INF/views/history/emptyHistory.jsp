@@ -10,9 +10,9 @@
     </div>
 </div>
 
-<div class="container">
+<div class="container-fluid">
     <div class="row">
-        <div class="col-lg-4 col-md-offset-4">
+        <div class="col-lg-4 col-lg-offset-4">
             <div class="panel panel-primary">
                 <div class="panel-heading text-center">
                     <h4>Your History is Empty!</h4>
