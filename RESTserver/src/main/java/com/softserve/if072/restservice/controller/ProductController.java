@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -63,17 +64,16 @@ public class ProductController {
     /**
      * Returns product by id
      *
-     * @param userId user whose product will be returned
      * @param productId product that will be returned
      * @return product
      * @throws DataNotFoundException - if product is not found
      */
 
-    @PreAuthorize("#userId == authentication.user.id")
-    @GetMapping(value = "/{userId}/{productId}")
+    @PostAuthorize("returnObject != null && returnObject.user != null && returnObject.user.id == authentication.user.id")
+    @GetMapping(value = "/{productId}")
     @ResponseBody
     @ResponseStatus(value = HttpStatus.OK)
-    public Product getProductById(@PathVariable int userId, @PathVariable int productId,
+    public Product getProductById(@PathVariable int productId,
                                   HttpServletResponse response) throws DataNotFoundException {
 
         Product product = productService.getProductById(productId);
