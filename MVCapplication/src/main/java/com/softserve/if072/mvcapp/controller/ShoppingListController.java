@@ -26,6 +26,7 @@ import java.util.List;
 @PropertySource(value = {"classpath:application.properties"})
 public class ShoppingListController extends BaseController {
     private static final Logger LOG = LogManager.getLogger(ShoppingListController.class);
+    private static final String INFO_LOG_TEMPLATE = "Shopping list element (userId: %d, productId: %d) has been %s.";
 
     @Value("${service.shoppingList}")
     private String shoppingListUrl;
@@ -78,6 +79,8 @@ public class ShoppingListController extends BaseController {
 
         shoppingList.setAmount(shoppingList.getAmount() + value);
         restTemplate.exchange(shoppingListUrl, HttpMethod.PUT, entity, ShoppingList.class);
+        LOG.info(String.format(INFO_LOG_TEMPLATE,
+                shoppingList.getUser().getId(), shoppingList.getProduct().getId(), "updated"));
 
         return "redirect:/shopping_list/";
     }
@@ -96,6 +99,8 @@ public class ShoppingListController extends BaseController {
         HttpEntity<ShoppingList> entity = new HttpEntity<>(shoppingList);
 
         restTemplate.exchange(shoppingListUrl, HttpMethod.DELETE, entity, ShoppingList.class);
+        LOG.info(String.format(INFO_LOG_TEMPLATE,
+                shoppingList.getUser().getId(), shoppingList.getProduct().getId(), "deleted"));
 
         return "redirect:/shopping_list/";
     }
@@ -103,7 +108,7 @@ public class ShoppingListController extends BaseController {
     /**
      * This method allows to add product to the shopping list.
      *
-     * @param productId
+     * @param productId if of the product to be added
      * @return redirect to shopping list's view url
      */
     @RequestMapping(value = "/shopping_list/add", method = RequestMethod.POST)
@@ -122,6 +127,8 @@ public class ShoppingListController extends BaseController {
 
             HttpEntity<ShoppingList> entity = new HttpEntity<>(shoppingList);
             restTemplate.exchange(shoppingListUrl, HttpMethod.POST, entity, ShoppingList.class);
+            LOG.info(String.format(INFO_LOG_TEMPLATE,
+                    shoppingList.getUser().getId(), shoppingList.getProduct().getId(), "added"));
         }
 
         return "redirect:/product/";
