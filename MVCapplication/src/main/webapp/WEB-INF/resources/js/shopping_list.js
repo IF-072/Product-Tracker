@@ -6,8 +6,7 @@
  *
  * @param prodId
  * @param val if val is positive product amount is increased by val,
- *            if val is positive product amount is decreased by val,
- *            if val equals 0 product is removed from a shopping list.
+ *            if val is positive product amount is decreased by val.
  */
 function edit(prodId, val) {
     $("#product").val(prodId);

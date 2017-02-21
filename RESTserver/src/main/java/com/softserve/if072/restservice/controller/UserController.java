@@ -37,13 +37,8 @@ public class UserController {
      * Allows to obtain all users.
      */
     @RequestMapping(value = "/user/", method = RequestMethod.GET)
-    public ResponseEntity<List<User>> getAllUsers() {
-        List<User> users = null;
-        try {
-            users = userService.getAll();
-        } catch (DataNotFoundException e) {
-            LOG.warn(e.getMessage());
-        }
+    public ResponseEntity<List<User>> getAllUsers() throws DataNotFoundException {
+        List<User> users = userService.getAll();
 
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
@@ -55,21 +50,15 @@ public class UserController {
      */
     @PreAuthorize("#id == authentication.user.id")
     @RequestMapping(value = "/user/{id}", method = RequestMethod.GET)
-    public ResponseEntity<User> getUserById(@PathVariable("id") int id) {
+    public ResponseEntity<User> getUserById(@PathVariable("id") int id) throws DataNotFoundException {
         LOG.debug("Fetching User with id " + id);
-        User user = null;
-        try {
-            user = userService.getById(id);
-        } catch (DataNotFoundException e) {
-            LOG.warn(e.getMessage());
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        User user = user = userService.getById(id);
 
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
     @ExceptionHandler(AccessDeniedException.class)
-    public ResponseEntity<String> sendAccessDeniedStatus(){
+    public ResponseEntity<String> sendAccessDeniedStatus() {
         return new ResponseEntity(HttpStatus.FORBIDDEN);
     }
 }
