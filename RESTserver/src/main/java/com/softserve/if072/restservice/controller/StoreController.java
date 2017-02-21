@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -50,7 +51,7 @@ public class StoreController {
         } catch (DataNotFoundException e) {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             LOGGER.error(e.getMessage());
-            return null;
+            return new ArrayList<Store>();
         }
     }
 

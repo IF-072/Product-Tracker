@@ -99,6 +99,26 @@ public class Store {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Store store = (Store) o;
+
+        if (id != store.id) return false;
+        if (!name.equals(store.name)) return false;
+        return address != null ? address.equals(store.address) : store.address == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id;
+        result = 31 * result + name.hashCode();
+        result = 31 * result + (address != null ? address.hashCode() : 0);
+        return result;
+    }
+
+    @Override
     public String toString() {
         return "Store{" +
                 "id=" + id +

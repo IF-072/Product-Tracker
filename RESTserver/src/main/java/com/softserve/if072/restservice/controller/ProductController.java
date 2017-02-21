@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -23,7 +24,7 @@ import java.util.List;
  */
 
 @RestController
-@RequestMapping(value = "/product")
+@RequestMapping(value = "/api/product")
 @PropertySource(value = {"classpath:message.properties"})
 public class ProductController {
 
@@ -38,6 +39,7 @@ public class ProductController {
     @Value("${product.notFound}")
     private String productNotFound;
 
+    @PreAuthorize("#userId == authentication.user.id")
     @GetMapping(value = "/user/{userId}")
     @ResponseBody
     @ResponseStatus(value = HttpStatus.OK)
@@ -53,21 +55,23 @@ public class ProductController {
         }
     }
 
-    @GetMapping(value = "/{id}")
+    @PreAuthorize("#userId == authentication.user.id")
+    @GetMapping(value = "/{userId}/{productId}")
     @ResponseBody
     @ResponseStatus(value = HttpStatus.OK)
-    public Product getProductById(@PathVariable int id, HttpServletResponse response) {
+    public Product getProductById(@PathVariable int userId, @PathVariable int productId, HttpServletResponse response) {
         try {
-            Product product = productService.getProductById(id);
-            LOGGER.info(String.format("Product with id %d was retrieved", id));
+            Product product = productService.getProductById(productId);
+            LOGGER.info(String.format("Product with id %d was retrieved", productId));
             return product;
         } catch (DataNotFoundException e) {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-            LOGGER.error(String.format(productNotFound, id), e);
+            LOGGER.error(String.format(productNotFound, productId), e);
             return null;
         }
     }
 
+    @PreAuthorize("#product.user != null && #product.user.id == authentication.user.id")
     @PostMapping(value = "/")
     @ResponseStatus(value = HttpStatus.CREATED)
     public void addProduct(@RequestBody Product product) {
@@ -75,6 +79,7 @@ public class ProductController {
         LOGGER.info("New product was created");
     }
 
+    @PreAuthorize("#product.user != null && #product.user.id == authentication.user.id")
     @PutMapping(value = "/")
     @ResponseStatus(value = HttpStatus.OK)
     public void update(@RequestBody Product product, HttpServletResponse response) {
@@ -88,6 +93,7 @@ public class ProductController {
         }
     }
 
+    @PreAuthorize("#product.user != null && #product.user.id == authentication.user.id")
     @PutMapping(value = "/image")
     @ResponseStatus(value = HttpStatus.OK)
     public void updateByImage(@RequestBody Product product, HttpServletResponse response) {
@@ -101,18 +107,20 @@ public class ProductController {
         }
     }
 
-    @DeleteMapping(value = "/{id}")
+    @PreAuthorize("#userId == authentication.user.id")
+    @DeleteMapping(value = "/{userId}/{productId}")
     @ResponseStatus(value = HttpStatus.OK)
-    public void delete(@PathVariable int id, HttpServletResponse response) {
+    public void delete(@PathVariable int productId, @PathVariable int userId, HttpServletResponse response) {
         try {
-            productService.deleteProduct(id);
-            LOGGER.info(String.format("Product with id %d was deleted", id));
+            productService.deleteProduct(productId);
+            LOGGER.info(String.format("Product with id %d was deleted", productId));
         } catch (DataNotFoundException e) {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-            LOGGER.error(String.format(productNotFound, id), e);
+            LOGGER.error(String.format(productNotFound, productId), e);
         }
     }
 
+    @PreAuthorize("#userId == authentication.user.id")
     @GetMapping("/{productId}/productStores/{userId}")
     @ResponseBody
     @ResponseStatus(value = HttpStatus.OK)
@@ -125,10 +133,11 @@ public class ProductController {
         } catch (DataNotFoundException e) {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             LOGGER.error(e.getMessage(), e);
-            return new ArrayList<Store>();
+            return null;
         }
     }
 
+    @PreAuthorize("#product.user != null && #product.user.id == authentication.user.id")
     @PostMapping("/stores/")
     @ResponseStatus(value = HttpStatus.OK)
     public void addStoreToProduct(@RequestBody Product product) {
@@ -138,6 +147,7 @@ public class ProductController {
 
     }
 
+    @PreAuthorize("#product.user != null && #product.user.id == authentication.user.id")
     @PostMapping("/deleteStores/")
     @ResponseStatus(value = HttpStatus.OK)
     public void deleteStoreFromProduct(@RequestBody Product product, HttpServletResponse response) {

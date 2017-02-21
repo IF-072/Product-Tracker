@@ -9,6 +9,9 @@ import com.softserve.if072.common.model.Store;
 import com.softserve.if072.mvcapp.dto.StoresInProduct;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -62,7 +65,7 @@ public class ProductPageController extends BaseController {
 
 
     @GetMapping("/addProduct")
-    public String addProduct(ModelMap model){
+    public String addProduct(Model model){
 
         int userId = getCurrentUser().getId();
 
@@ -73,13 +76,13 @@ public class ProductPageController extends BaseController {
 
         RestTemplate restTemplate = getRestTemplate();
 
-        Unit[] unitResult = restTemplate.getForObject(unitUri, Unit[].class);
-        List<Unit> units = Arrays.asList(unitResult);
+        ResponseEntity<List<Unit>> unitsResponse = restTemplate.exchange(unitUri, HttpMethod.GET, null, new ParameterizedTypeReference<List<Unit>>(){});
+        List<Unit> units = unitsResponse.getBody();
 
         Map<String, Integer> param = new HashMap<>();
         param.put("userId", userId);
-        Category[] categoryResult = restTemplate.getForObject(categoryUri, Category[].class, param);
-        List<Category> categories = Arrays.asList(categoryResult);
+        ResponseEntity<List<Category>> categoriesResponse = restTemplate.exchange(categoryUri, HttpMethod.GET, null, new ParameterizedTypeReference<List<Category>>(){}, param);
+        List<Category> categories = categoriesResponse.getBody();
 
         model.addAttribute("units", units);
         model.addAttribute("categories", categories);
@@ -91,18 +94,31 @@ public class ProductPageController extends BaseController {
     public String addProduct(@Validated @ModelAttribute("product") Product product, BindingResult result,
                              Model model, HttpServletResponse httpServletResponse) {
 
-        if (result.hasErrors()) {
-            model.addAttribute("errorMessages", result.getFieldErrors());
-            return "addProduct";
-        }
+        User user = getCurrentUser();
+
+        RestTemplate restTemplate = getRestTemplate();
 
         final String categoryByIdUri = categoryUrl + "/id/{categoryId}";
         final String UnitByIdUri = unitUrl + "/{unitId}";
         final String uri = productUrl +"/";
+        final String unitUri = unitUrl + "/";
+        final String categoryUri = categoryUrl + "{userId}";
 
-        User user = getCurrentUser();
+        if (result.hasErrors()) {
+            model.addAttribute("errorMessages", result.getFieldErrors());
 
-        RestTemplate restTemplate = getRestTemplate();
+            ResponseEntity<List<Unit>> unitsResponse = restTemplate.exchange(unitUri, HttpMethod.GET, null, new ParameterizedTypeReference<List<Unit>>(){});
+            List<Unit> units = unitsResponse.getBody();
+            model.addAttribute("units", units);
+
+            Map<String, Integer> param = new HashMap<>();
+            param.put("userId", user.getId());
+            ResponseEntity<List<Category>> categoriesResponse = restTemplate.exchange(categoryUri, HttpMethod.GET, null, new ParameterizedTypeReference<List<Category>>(){}, param);
+            List<Category> categories = categoriesResponse.getBody();
+            model.addAttribute("categories", categories);
+
+            return "addProduct";
+        }
 
         Map<String, Integer> param = new HashMap<>();
         param.put("categoryId", product.getCategory().getId());
@@ -124,27 +140,28 @@ public class ProductPageController extends BaseController {
     }
 
     @RequestMapping(value = "/editProduct", method = RequestMethod.GET)
-    public String editProduct(@RequestParam int id, ModelMap model) {
+    public String editProduct(@RequestParam int id, Model model) {
 
         int userId = getCurrentUser().getId();
 
-        final String uri = productUrl + "/{id}";
+        final String uri = productUrl + "/{userId}/{productId}";
         final String unitUri = unitUrl + "/";
         final String categoryUri = categoryUrl + "{userId}";
 
         RestTemplate restTemplate = getRestTemplate();
 
         Map<String, Integer> param = new HashMap<>();
-        param.put("id", id);
+        param.put("productId", id);
+        param.put("userId", userId);
         Product product = restTemplate.getForObject(uri, Product.class, param);
 
-        Unit[] unitResult = restTemplate.getForObject(unitUri, Unit[].class);
-        List<Unit> units = Arrays.asList(unitResult);
+        ResponseEntity<List<Unit>> unitsResponse = restTemplate.exchange(unitUri, HttpMethod.GET, null, new ParameterizedTypeReference<List<Unit>>(){});
+        List<Unit> units = unitsResponse.getBody();
 
         param.clear();
         param.put("userId", userId);
-        Category[] categoryResult = restTemplate.getForObject(categoryUri, Category[].class, param);
-        List<Category> categories = Arrays.asList(categoryResult);
+        ResponseEntity<List<Category>> categoriesResponse = restTemplate.exchange(categoryUri, HttpMethod.GET, null, new ParameterizedTypeReference<List<Category>>(){}, param);
+        List<Category> categories = categoriesResponse.getBody();
 
         model.addAttribute("units", units);
         model.addAttribute("categories", categories);
@@ -154,15 +171,34 @@ public class ProductPageController extends BaseController {
     }
 
     @RequestMapping(value = "/editProduct", method = RequestMethod.POST)
-    public String editProduct(@ModelAttribute("product") Product newProduct) {
-
-        final String categoryByIdUri = categoryUrl + "/id/{categoryId}";
-        final String UnitByIdUri = unitUrl + "/{unitId}";
-        final String uri = productUrl +"/";
+    public String editProduct(@Validated @ModelAttribute("product") Product newProduct, BindingResult result,
+                              Model model, HttpServletResponse httpServletResponse) {
 
         User user = getCurrentUser();
 
         RestTemplate restTemplate = getRestTemplate();
+
+        final String categoryByIdUri = categoryUrl + "/id/{categoryId}";
+        final String UnitByIdUri = unitUrl + "/{unitId}";
+        final String uri = productUrl +"/";
+        final String unitUri = unitUrl + "/";
+        final String categoryUri = categoryUrl + "{userId}";
+
+        if (result.hasErrors()) {
+            model.addAttribute("errorMessages", result.getFieldErrors());
+
+            ResponseEntity<List<Unit>> unitsResponse = restTemplate.exchange(unitUri, HttpMethod.GET, null, new ParameterizedTypeReference<List<Unit>>(){});
+            List<Unit> units = unitsResponse.getBody();
+            model.addAttribute("units", units);
+
+            Map<String, Integer> param = new HashMap<>();
+            param.put("userId", user.getId());
+            ResponseEntity<List<Category>> categoriesResponse = restTemplate.exchange(categoryUri, HttpMethod.GET, null, new ParameterizedTypeReference<List<Category>>(){}, param);
+            List<Category> categories = categoriesResponse.getBody();
+            model.addAttribute("categories", categories);
+
+            return "editProduct";
+        }
 
         Map<String, Integer> param = new HashMap<String, Integer>();
         param.put("categoryId", newProduct.getCategory().getId());
@@ -184,9 +220,12 @@ public class ProductPageController extends BaseController {
     @RequestMapping(value = "/delProduct", method = RequestMethod.POST)
     public String delProduct(@RequestParam int productId){
 
-        final String uri = productUrl + "/{productId}";
+        User user = getCurrentUser();
+
+        final String uri = productUrl + "/{userId}/{productId}";
         Map<String, Integer> param = new HashMap<String, Integer>();
         param.put("productId", productId);
+        param.put("userId", user.getId());
 
         RestTemplate restTemplate = getRestTemplate();
         restTemplate.delete(uri,param);
@@ -201,40 +240,42 @@ public class ProductPageController extends BaseController {
         int userId = getCurrentUser().getId();
 
         final String getStoresUri = productUrl + "/{productId}/productStores/{userId}";
-        final String getProductUri = productUrl + "/{productId}";
+        final String getProductUri = productUrl + "/{userId}/{productId}";
         final String getAllStoresUri = storeUrl + "/user/{userId}";
 
         RestTemplate restTemplate = getRestTemplate();
 
         Map<String, Integer> param = new HashMap<>();
         param.put("productId", productId);
+        param.put("userId", userId);
         Product product = restTemplate.getForObject(getProductUri, Product.class, param);
 
         param.clear();
         param.put("productId", productId);
         param.put("userId", userId);
 
-        Store[] arrStores = restTemplate.getForObject(getStoresUri, Store[].class, param);
-        if(arrStores != null) {
-            List<Store> stores = Arrays.asList(arrStores);
-            product.setStores(stores);
-        } else {
-            product.setStores(null);
-        }
+        ResponseEntity<List<Store>> storeResponse = restTemplate.exchange(getStoresUri, HttpMethod.GET, null, new ParameterizedTypeReference<List<Store>>(){}, param);
+        List<Store> stores = storeResponse.getBody();
 
-        Store[] arrAllStores = restTemplate.getForObject(getAllStoresUri, Store[].class, param);
-        List<Store> allStores = Arrays.asList(arrAllStores);
+        product.setStores(stores);
+
+        ResponseEntity<List<Store>> rateResponse = restTemplate.exchange(getAllStoresUri, HttpMethod.GET, null, new ParameterizedTypeReference<List<Store>>(){}, param);
+        List<Store> allStores = rateResponse.getBody();
 
         Map<Integer,String> storesInProductById = new HashMap<>();
         List<Integer> listStoresInProductById = new ArrayList<>();
-        for(Store s : product.getStores()) {
-            storesInProductById.put(s.getId(),s.getName() + ", " + s.getAddress());
-            listStoresInProductById.add(s.getId());
+        if(product.getStores() != null){
+            for(Store s : product.getStores()) {
+                storesInProductById.put(s.getId(),s.getName() + ", " + s.getAddress());
+                listStoresInProductById.add(s.getId());
+            }
         }
 
         Map<Integer,String> allStoresById = new HashMap<>();
-        for(Store s : allStores) {
-            allStoresById.put(s.getId(),s.getName() + ", " + s.getAddress());
+        if(allStores != null) {
+            for(Store s : allStores) {
+                allStoresById.put(s.getId(),s.getName() + ", " + s.getAddress());
+            }
         }
 
         StoresInProduct storesInProduct = new StoresInProduct();
@@ -253,7 +294,7 @@ public class ProductPageController extends BaseController {
 
         final String getStoresUri = productUrl + "/{productId}/productStores/{userId}";
         final String getStoreByIdUri = storeUrl + "/{storeId}";
-        final String getProductByIdUri = productUrl + "/{productId}";
+        final String getProductByIdUri = productUrl + "/{userId}/{productId}";
         final String addStoreToProductUri = productUrl + "/stores/";
         final String deleteStoreFromProductUri = productUrl + "/deleteStores/";
 
@@ -265,8 +306,8 @@ public class ProductPageController extends BaseController {
 
         RestTemplate restTemplate = getRestTemplate();
 
-        Store[] result = restTemplate.getForObject(getStoresUri, Store[].class, param);
-        List<Store> oldStores = Arrays.asList(result);
+        ResponseEntity<List<Store>> oldStoresResponse = restTemplate.exchange(getStoresUri, HttpMethod.GET, null, new ParameterizedTypeReference<List<Store>>(){}, param);
+        List<Store> oldStores = oldStoresResponse.getBody();
 
         Product product = restTemplate.getForObject(getProductByIdUri, Product.class, param);
 
@@ -282,27 +323,17 @@ public class ProductPageController extends BaseController {
 
         List<Store> storesToAdd = new ArrayList<>();
         List<Store> storesToDelete = new ArrayList<>();
-
-        if(newStores != null) {
-            outer:for(Store ns : newStores) {
-                for(Store os : oldStores) {
-                    if(ns.getId() == os.getId()) {
-                        continue outer;
-                    }
-                }
-                storesToAdd.add(ns);
-            }
-
-            outer:for(Store os : oldStores) {
-                for(Store ns : newStores) {
-                    if(os.getId() == ns.getId()) {
-                        continue outer;
-                    }
-                }
-                storesToDelete.add(os);
+        if(oldStores != null) {
+            if(newStores != null) {
+                storesToAdd.addAll(newStores);
+                storesToDelete.addAll(oldStores);
+                storesToAdd.removeAll(oldStores);
+                storesToDelete.removeAll(newStores);
+            } else {
+                storesToDelete.addAll(oldStores);
             }
         } else {
-            storesToDelete.addAll(oldStores);
+            storesToAdd.addAll(newStores);
         }
 
         if(!storesToAdd.isEmpty()) {
