@@ -19,7 +19,7 @@ import java.util.List;
  */
 @Service
 public class ShoppingListService {
-    public static final Logger LOGGER = LogManager.getLogger(ShoppingListService.class);
+    private static final Logger LOGGER = LogManager.getLogger(ShoppingListService.class);
     private ShoppingListDAO shoppingListDAO;
 
     @Autowired
