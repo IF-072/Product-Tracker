@@ -50,7 +50,7 @@ public class ShoppingListController extends BaseController {
      */
     @RequestMapping("/shopping_list")
     public String getPage(Model model) {
-        RestTemplate restTemplate = new RestTemplate();
+        RestTemplate restTemplate = getRestTemplate();
 
         int id = getCurrentUser().getId();
 
@@ -79,7 +79,7 @@ public class ShoppingListController extends BaseController {
     @ResponseBody
     public String editShoppingList(@RequestParam("prodId") int prodId,
                                    @RequestParam("val") int value) {
-        RestTemplate restTemplate = new RestTemplate();
+        RestTemplate restTemplate = getRestTemplate();
         ShoppingList shoppingList = restTemplate.getForObject(
                 String.format(shoppingListByUserAndProductUrl, getCurrentUser().getId(), prodId), ShoppingList.class);
 
@@ -101,7 +101,7 @@ public class ShoppingListController extends BaseController {
      */
     @RequestMapping(value = "/shopping_list/delete", method = RequestMethod.GET)
     public String deleteProductFromShoppingList(@RequestParam("prodId") int prodId) {
-        RestTemplate restTemplate = new RestTemplate();
+        RestTemplate restTemplate = getRestTemplate();
         ShoppingList shoppingList = restTemplate.getForObject(
                 String.format(shoppingListByUserAndProductUrl, getCurrentUser().getId(), prodId), ShoppingList.class);
         HttpEntity<ShoppingList> entity = new HttpEntity<>(shoppingList);
