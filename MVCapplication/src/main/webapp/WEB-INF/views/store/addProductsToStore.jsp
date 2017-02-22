@@ -13,7 +13,7 @@
         <h1 class="page-header">
             <b>Add products to Store</b>
             <br>
-             <b> ${myStore.name} (${myStore.address})</b>
+            <b> ${myStore.name} (${myStore.address})</b>
         </h1>
     </div>
 </div>
@@ -23,9 +23,7 @@
         <c:url var="addAction" value="/addProductsToStore"/>
         <form:form role="form" action="${addAction}" modelAttribute="wrapedProducts" method="post">
 
-            <%--<form:errors path="*" cssClass="errorblock" element="div"/>--%>
             <table class="table table-striped" id="storeTab">
-
 
                 <thead>
                 <tr>
@@ -40,15 +38,15 @@
                         <td>${product.name}</td>
                         <td>${product.description}</td>
                         <td><form:checkbox path="products" value="${product.id}"/></td>
-                          </tr>
+                    </tr>
                 </c:forEach>
                 </tbody>
             </table>
             <input type="submit" class="btn btn-lg btn-success btn-custom"
                    value="Submit adding"/>
             <input type="reset" class="btn btn-lg btn-reset-custom btn-reset-custom"
-                   onclick="document.location.href='/'" value="Cancel" />
-            <input type="hidden" name="storeId" value="${myStore.id}" />
+                   onclick="document.location.href='<c:url value="/stores/"/>'" value="Cancel"/>
+            <input type="hidden" name="storeId" value="${myStore.id}"/>
         </form:form>
     </div>
 </div>

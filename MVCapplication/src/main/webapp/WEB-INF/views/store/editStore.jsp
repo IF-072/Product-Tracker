@@ -41,7 +41,7 @@
                         </div>
                         <input type="submit" class="btn btn-lg btn-success btn-success-custom" value="Submit"/>
                         <input type="reset" class="btn btn-lg btn-reset-custom btn-reset-custom"
-                               onclick="document.location.href='/'" value="Cancel" />
+                               onclick="document.location.href='<c:url value="/stores/"/>'" value="Cancel" />
                         <input type="hidden" name="storeId" value="${store.id}" />
 
                     </fieldset>
