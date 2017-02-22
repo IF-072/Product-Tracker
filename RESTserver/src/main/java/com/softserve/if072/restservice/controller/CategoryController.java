@@ -43,8 +43,8 @@ public class CategoryController {
     public List<Category> getAllCategoriesByUserID(@PathVariable("userID") int userID, HttpServletResponse response) throws DataNotFoundException {
 
         List<Category> categories = categoryService.getByUserID(userID);
-         LOGGER.info("All categories were found");
-         return categories;
+        LOGGER.info("All categories were found");
+        return categories;
     }
 
     @PreAuthorize("@categorySecurityService.hasPermissionToAccess(#categoryID)")
