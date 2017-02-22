@@ -69,9 +69,9 @@ public interface CategoryDAO extends DAO<Category> {
     void update(Category category);
 
     /**
+     * Provides soft-deleting of specified category
      *
-     *
-     * @param id
+     * @param id category's id
      */
 
     @Override
