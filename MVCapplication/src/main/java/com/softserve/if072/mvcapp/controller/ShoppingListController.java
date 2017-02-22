@@ -2,6 +2,7 @@ package com.softserve.if072.mvcapp.controller;
 
 import com.softserve.if072.common.model.Product;
 import com.softserve.if072.common.model.ShoppingList;
+import com.softserve.if072.common.model.Unit;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -90,7 +91,15 @@ public class ShoppingListController extends BaseController {
         LOG.info(String.format(INFO_LOG_TEMPLATE,
                 shoppingList.getUser().getId(), shoppingList.getProduct().getId(), "updated"));
 
-        return String.format("%d %s", shoppingList.getAmount(), shoppingList.getProduct().getUnit().getName());
+        StringBuilder response = new StringBuilder();
+        response.append(shoppingList.getAmount());
+
+        Unit unit = shoppingList.getProduct().getUnit();
+        if (unit != null) {
+            response.append(" ").append(unit.getName());
+        }
+
+        return response.toString();
     }
 
     /**
