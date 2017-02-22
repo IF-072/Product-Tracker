@@ -17,21 +17,20 @@
                         <th colspan="2">Edit</th>
                         <th>Delete</th>
                     </tr>
-                    <form action="<c:url value="/shopping_list/edit"/>" id="edit" method="post">
-                        <input type="hidden" name="prodId" id="product">
-                        <input type="hidden" name="val" id="val">
-                        <c:forEach items="${shoppingList}" var="elem">
-                            <tr>
-                                <td>${elem.product.name}</td>
-                                <td>${elem.amount} ${elem.product.unit.name}</td>
-                                <td><img src="<c:url value="/image/${elem.product.image.id}"/>" width="50" height="50" id="editImage"></td>
-
-                                <td><a onclick="edit(${elem.product.id}, -1)" class="fa fa-minus-square fa-lg"/></td>
-                                <td><a onclick="edit(${elem.product.id}, 1)" class="fa fa-plus-square fa-lg"/></td>
-                                <td><a href="<c:url value="/shopping_list/delete?prodId=${elem.product.id}"/> " class="fa fa-times fa-lg"/></td>
-                            </tr>
-                        </c:forEach>
-                    </form>
+                    <c:forEach items="${shoppingList}" var="elem" varStatus="loop">
+                        <tr>
+                            <td>${elem.product.name}</td>
+                            <td id="am${loop.count}">${elem.amount} ${elem.product.unit.name}</td>
+                            <td><img src="<c:url value="/image/${elem.product.image.id}"/>" width="50" height="50"
+                                     id="editImage"></td>
+                            <td><a onclick="edit(${elem.product.id}, -1, ${loop.count})"
+                                   class="fa fa-minus-square fa-lg"/></td>
+                            <td><a onclick="edit(${elem.product.id}, 1, ${loop.count})"
+                                   class="fa fa-plus-square fa-lg"/></td>
+                            <td><a href="<c:url value="/shopping_list/delete?prodId=${elem.product.id}"/> "
+                                   class="fa fa-times fa-lg"/></td>
+                        </tr>
+                    </c:forEach>
                     </tbody>
                 </table>
             </div>

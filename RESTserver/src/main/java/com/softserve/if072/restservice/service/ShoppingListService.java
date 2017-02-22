@@ -4,6 +4,8 @@ import com.softserve.if072.common.model.Product;
 import com.softserve.if072.common.model.ShoppingList;
 import com.softserve.if072.restservice.dao.mybatisdao.ShoppingListDAO;
 import com.softserve.if072.restservice.exception.DataNotFoundException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -17,6 +19,7 @@ import java.util.List;
  */
 @Service
 public class ShoppingListService {
+    private static final Logger LOGGER = LogManager.getLogger(ShoppingListService.class);
     private ShoppingListDAO shoppingListDAO;
 
     @Autowired
@@ -29,7 +32,7 @@ public class ShoppingListService {
         if (!CollectionUtils.isEmpty(list)) {
             return list;
         } else {
-            throw new DataNotFoundException("ShoppingLists not found");
+            throw new DataNotFoundException(String.format("ShoppingLists of user with id %d not found", user_id));
         }
     }
 
@@ -42,7 +45,7 @@ public class ShoppingListService {
         if (list != null) {
             return list;
         } else {
-            throw new DataNotFoundException("ShoppingList not found");
+            throw new DataNotFoundException(String.format("ShoppingLists of user with id %d not found", user_id));
         }
     }
 
@@ -77,7 +80,7 @@ public class ShoppingListService {
         if (shoppingList != null) {
             shoppingListDAO.delete(shoppingList);
         } else {
-            throw new DataNotFoundException("Illegal argument");
+            LOGGER.error("Illegal argument: shopppingList == null");
         }
     }
 

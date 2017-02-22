@@ -16,6 +16,12 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * The class contains methods to add, read and delete image from database using REST Service
+ *
+ * @author Vitaliy Malisevych
+ */
+
 @Controller
 @RequestMapping("/api/image")
 public class  ImageController {
@@ -30,6 +36,14 @@ public class  ImageController {
 
     @Value("${image.notFound}")
     private String imageNotFound;
+
+    /**
+     * Returns image by id
+     *
+     * @param userId user whose image will be returned
+     * @param imageId id of image
+     * @return image
+     */
 
     @PreAuthorize("#userId == authentication.user.id")
     @RequestMapping(value = "/{userId}/{imageId}", method = RequestMethod.GET)
@@ -48,6 +62,12 @@ public class  ImageController {
 
     }
 
+    /**
+     * Uploads image to DataBase
+     *
+     * @param userId user whose image will be uploaded
+     */
+
     @PreAuthorize("#userId == authentication.user.id")
     @RequestMapping(value = "/upload/{userId}", method = RequestMethod.POST)
     @ResponseBody
@@ -56,6 +76,13 @@ public class  ImageController {
             imageService.insert(image);
         }
     }
+
+    /**
+     * Deletes image from DataBase
+     *
+     * @param userId user whose image will be deleted
+     * @param imageId id of image
+     */
 
     @PreAuthorize("#userId == authentication.user.id")
     @RequestMapping(value = "/delete/{userId}/{imageId}", method = RequestMethod.DELETE)
@@ -73,6 +100,13 @@ public class  ImageController {
 
     }
 
+    /**
+     * Returns last inserted id
+     *
+     * @param userId user whose last inserted image's id will be returned
+     * @return id
+     */
+
     @PreAuthorize("#userId == authentication.user.id")
     @RequestMapping(value = "/getLastId/{userId}", method = RequestMethod.GET)
     @ResponseBody
@@ -89,6 +123,12 @@ public class  ImageController {
         }
 
     }
+
+    /**
+     * Updates image
+     *
+     * @param userId user whose image will be updated
+     */
 
     @PreAuthorize("#userId == authentication.user.id")
     @PutMapping(value = "/{userId}")

@@ -1,7 +1,6 @@
 package com.softserve.if072.restservice.controller;
 
 import com.softserve.if072.common.model.FormForCart;
-import com.softserve.if072.common.model.Product;
 import com.softserve.if072.common.model.ShoppingList;
 import com.softserve.if072.common.model.Store;
 import com.softserve.if072.restservice.exception.DataNotFoundException;
@@ -32,7 +31,7 @@ import java.util.Map;
 @RequestMapping("/api/goShopping")
 public class GoShoppingController {
 
-    public static final Logger LOGGER = LogManager.getLogger(GoShoppingController.class);
+    private static final Logger LOGGER = LogManager.getLogger(GoShoppingController.class);
     private GoShoppingService goShoppingService;
 
     @Autowired
@@ -60,7 +59,8 @@ public class GoShoppingController {
     @GetMapping("/{storeId}/products/{userId}")
     @ResponseBody
     @ResponseStatus(value = HttpStatus.OK)
-    public Map<String, List<ShoppingList>> getProducts(@PathVariable int userId, @PathVariable int storeId, HttpServletResponse response) {
+    public Map<String, List<ShoppingList>> getProducts(@PathVariable int userId, @PathVariable int storeId,
+                                                       HttpServletResponse response) {
         try {
             Map<String, List<ShoppingList>> map = goShoppingService.getProducts(userId, storeId);
             LOGGER.info(String.format("Product of user id %d was found ", userId));
@@ -72,7 +72,8 @@ public class GoShoppingController {
         }
     }
 
-    @PreAuthorize("#cart != null && #cart.carts != null && #cart.carts[0] != null && #cart.carts[0].user.id == authentication.user.id")
+    @PreAuthorize("#cart != null && #cart.carts != null && #cart.carts[0] != null && " +
+            "#cart.carts[0].user.id == authentication.user.id")
     @PostMapping("/cart")
     @ResponseBody
     @ResponseStatus(value = HttpStatus.OK)
