@@ -146,7 +146,7 @@
 
     <definition name="allStores" extends="mainLayout">
         <put-attribute name="title" value="Product Tracker"/>
-        <put-attribute name="body" value="/WEB-INF/views/allStores.jsp"/>
+        <put-attribute name="body" value="/WEB-INF/views/store/allStores.jsp"/>
         <put-list-attribute name="stylesheets" inherit="true">
             <add-attribute value="/css/dataTables.bootstrap.css"/>
             <add-attribute value="/css/dataTables.responsive.css"/>
@@ -179,7 +179,7 @@
 
     <definition name="addStore" extends="mainLayout">
         <put-attribute name="title" value="Product Tracker Project"/>
-        <put-attribute name="body" value="/WEB-INF/views/addStore.jsp"/>
+        <put-attribute name="body" value="/WEB-INF/views/store/addStore.jsp"/>
         <put-list-attribute name="stylesheets" inherit="true">
             <add-attribute value="/css/dataTables.bootstrap.css"/>
             <add-attribute value="/css/dataTables.responsive.css"/>
@@ -189,7 +189,7 @@
 
     <definition name="addProductsToStore" extends="mainLayout">
         <put-attribute name="title" value="Product Tracker Project"/>
-        <put-attribute name="body" value="/WEB-INF/views/addProductsToStore.jsp"/>
+        <put-attribute name="body" value="/WEB-INF/views/store/addProductsToStore.jsp"/>
         <put-list-attribute name="stylesheets" inherit="true">
             <add-attribute value="/css/jquery-ui.css"/>
             <add-attribute value="/css/dataTables.bootstrap.css"/>
@@ -268,7 +268,7 @@
 
     <definition name="editStore" extends="mainLayout">
         <put-attribute name="title" value="Product Tracker Project"/>
-        <put-attribute name="body" value="/WEB-INF/views/editStore.jsp"/>
+        <put-attribute name="body" value="/WEB-INF/views/store/editStore.jsp"/>
         <put-list-attribute name="stylesheets" inherit="true">
             <add-attribute value="/css/dataTables.bootstrap.css"/>
             <add-attribute value="/css/dataTables.responsive.css"/>
