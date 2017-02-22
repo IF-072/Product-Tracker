@@ -52,11 +52,16 @@ public class ProductController {
     @GetMapping(value = "/user/{userId}")
     @ResponseBody
     @ResponseStatus(value = HttpStatus.OK)
-    public List<Product> getAllProductsByUserId(@PathVariable int userId) throws DataNotFoundException {
+    public List<Product> getAllProductsByUserId(@PathVariable int userId) {
 
-        List<Product> products = productService.getAllProducts(userId);
-        LOGGER.info("All products were found");
-        return products;
+        try {
+            List<Product> products = productService.getAllProducts(userId);
+            LOGGER.info("All products were found");
+            return products;
+        } catch (DataNotFoundException e) {
+            LOGGER.error(e.getMessage());
+            return new ArrayList<Product>();
+        }
 
     }
 
