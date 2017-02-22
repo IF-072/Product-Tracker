@@ -32,20 +32,23 @@
                         </div>
                     </c:if>
                     <div class="form-group">
-                        <label class="control-label" for="inputWarning">Input with warning</label>
+                        <label class="control-label" for="inputWarning">Product name</label>
                         <sf:input path="name" class="form-control" id="inputWarning"
                                     placeholder="Product name" type="text"/>
                     </div>
                     <div class="form-group">
+                        <label class="control-label">Product description</label>
                         <sf:input path="description" class="form-control" placeholder="Description" type="text"/>
                     </div>
                     <div class="form-group">
+                        <label class="control-label">Unit</label>
                         <sf:select path="unit.id" class="form-control" placeholder="Unit">
                             <sf:option label="--- Select ---" value="-1"/>
                             <sf:options items="${units}" itemLabel="name" itemValue="id"/>
                         </sf:select>
                     </div>
                     <div class="form-group">
+                        <label class="control-label">Category</label>
                         <sf:select path="category.id" class="form-control" placeholder="Category">
                             <sf:option label="--- Select ---" value="-1"/>
                             <sf:options items="${categories}" itemLabel="name" itemValue="id"/>

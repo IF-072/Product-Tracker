@@ -79,14 +79,6 @@ public interface CartDAO {
     int update(Cart cart);
 
     /**
-     * Delete current cart from the cart table
-     *
-     * @param cart item to be deleted from the cart table
-     */
-    @Delete("DELETE FROM cart WHERE product_id=#{product.id}")
-    int delete(Cart cart);
-
-    /**
      * Delete cart item with specific product from the cart table
      *
      * @param productId unique product identifier

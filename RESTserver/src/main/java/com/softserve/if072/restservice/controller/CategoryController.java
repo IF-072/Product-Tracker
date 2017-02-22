@@ -47,7 +47,7 @@ public class CategoryController {
         return categories;
     }
 
-    // TODO
+    @PreAuthorize("@categorySecurityService.hasPermissionToAccess(#categoryID)")
     @GetMapping(value = "/id/{categoryID}")
     @ResponseBody
     @ResponseStatus(value = HttpStatus.OK)
@@ -58,7 +58,7 @@ public class CategoryController {
         return category;
     }
 
-    @PreAuthorize("#category.user != null && #category.user.id == authentication.user.id")
+    @PreAuthorize("#category != null && #category.user != null && #category.user.id == authentication.user.id")
     @PostMapping(value = "/")
     @ResponseStatus(value = HttpStatus.CREATED)
     public void insert(@RequestBody Category category)  {
@@ -66,7 +66,7 @@ public class CategoryController {
             LOGGER.info("New category %d was created", category.getId());
     }
 
-    @PreAuthorize("#storage.user != null && #storage.user.id == authentication.user.id")
+    @PreAuthorize("#category != null && #category.user != null && #category.user.id == authentication.user.id")
     @PutMapping(value = "/")
     @ResponseStatus(value = HttpStatus.OK)
     public void update(@RequestBody Category category, HttpServletResponse response) {
@@ -75,7 +75,7 @@ public class CategoryController {
         LOGGER.info(String.format("Category with id %d was updated", category.getId()));
     }
 
-    // TODO
+    @PreAuthorize("@categorySecurityService.hasPermissionToAccess(#id)")
     @DeleteMapping(value = "/{id}")
     @ResponseStatus(value = HttpStatus.OK)
     public void delete(@PathVariable("id") int id) {

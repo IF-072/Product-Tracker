@@ -12,7 +12,6 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -37,22 +36,15 @@ public class StoreService {
      * Returns all user stores
      *
      * @param userId - user whose stores will be returned
-     * @return - list of user stores
-     * @throws DataNotFoundException - if stores not found
+     * @return list of user stores or null if current user don`t has stores
      */
     @Transactional
-    public List<Store> getAllStores(int userId) throws DataNotFoundException {
+    public List<Store> getAllStores(int userId) {
         List<Store> stores = storeDAO.getAllStoresByUser(userId);
-        List<Store> enabledStores = new ArrayList<>();
         if (!stores.isEmpty()) {
-            for (Store getStore : stores) {
-                if (getStore.isEnabled()) {
-                    enabledStores.add(getStore);
-                }
-            }
-            return enabledStores;
+            return stores;
         } else {
-            throw new DataNotFoundException("Stores not found");
+           return null;
         }
     }
 
@@ -95,8 +87,7 @@ public class StoreService {
      */
     @Transactional
     public void updateStore(Store store) throws IllegalArgumentException {
-        Store oldStore = storeDAO.getByID(store.getId());
-        if (oldStore == null || store.getName().isEmpty() || store.getName() == "") {
+       if (store.getName().isEmpty() || store.getName() == "") {
             throw new IllegalArgumentException("Illegal arguments!");
         }
         storeDAO.update(store);

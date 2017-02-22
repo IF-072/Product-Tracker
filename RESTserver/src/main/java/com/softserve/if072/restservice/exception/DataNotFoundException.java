@@ -5,7 +5,7 @@ package com.softserve.if072.restservice.exception;
  * if the mandatory field is null
  */
 
-public class DataNotFoundException extends Exception {
+public class DataNotFoundException extends RuntimeException {
 
     public DataNotFoundException() {super(); }
 

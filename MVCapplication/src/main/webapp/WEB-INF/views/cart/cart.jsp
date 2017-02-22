@@ -39,7 +39,6 @@
                             <td>${cart.product.category.name}</td>
                             <td class="text-center">
                                     ${cart.amount} ${cart.product.unit.name}
-                                <a href="#"/><i class="fa fa-edit fa-fw"/>
                             </td>
                             <td class="text-center">
                                 <div class="input-append">
@@ -49,6 +48,7 @@
                                         <input type="hidden" name="productId" value="${cart.product.id}"/>
                                         <input class="span2 number table-input-number-width" id="appendedInputButton"
                                                size="16" type="number" name="amount" min="1" value="${cart.amount}"/>
+                                        <input type="hidden" name="initialAmount" value="${cart.amount}"/>
                                         <input class="span2" type="button" class="btn btn-default boughtOkBtn"
                                                value="Ok"/>
                                     </form>

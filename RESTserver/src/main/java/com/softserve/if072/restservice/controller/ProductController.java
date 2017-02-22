@@ -10,10 +10,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,8 +60,7 @@ public class ProductController {
     @GetMapping(value = "/user/{userId}")
     @ResponseBody
     @ResponseStatus(value = HttpStatus.OK)
-    public List<Product> getAllProductsByUserId(@PathVariable int userId,
-                                                HttpServletResponse response) throws DataNotFoundException {
+    public List<Product> getAllProductsByUserId(@PathVariable int userId) throws DataNotFoundException {
 
         List<Product> products = productService.getAllProducts(userId);
         LOGGER.info("All products were found");
@@ -63,18 +71,16 @@ public class ProductController {
     /**
      * Returns product by id
      *
-     * @param userId user whose product will be returned
      * @param productId product that will be returned
      * @return product
      * @throws DataNotFoundException - if product is not found
      */
 
-    @PreAuthorize("#userId == authentication.user.id")
-    @GetMapping(value = "/{userId}/{productId}")
+    @PostAuthorize("returnObject != null && returnObject.user != null && returnObject.user.id == authentication.user.id")
+    @GetMapping(value = "/{productId}")
     @ResponseBody
     @ResponseStatus(value = HttpStatus.OK)
-    public Product getProductById(@PathVariable int userId, @PathVariable int productId,
-                                  HttpServletResponse response) throws DataNotFoundException {
+    public Product getProductById(@PathVariable int productId) throws DataNotFoundException {
 
         Product product = productService.getProductById(productId);
         LOGGER.info(String.format("Product with id %d was retrieved", productId));
@@ -107,7 +113,7 @@ public class ProductController {
     @PreAuthorize("#product.user != null && #product.user.id == authentication.user.id")
     @PutMapping(value = "/")
     @ResponseStatus(value = HttpStatus.OK)
-    public void update(@RequestBody Product product, HttpServletResponse response) throws DataNotFoundException {
+    public void update(@RequestBody Product product) throws DataNotFoundException {
 
         int id = product.getId();
         productService.updateProduct(product);
@@ -125,8 +131,7 @@ public class ProductController {
     @PreAuthorize("#product.user != null && #product.user.id == authentication.user.id")
     @PutMapping(value = "/image")
     @ResponseStatus(value = HttpStatus.OK)
-    public void updateByImage(@RequestBody Product product,
-                              HttpServletResponse response) throws DataNotFoundException {
+    public void updateByImage(@RequestBody Product product) throws DataNotFoundException {
 
         int id = product.getId();
         productService.updateProductByImage(product);
@@ -137,16 +142,14 @@ public class ProductController {
     /**
      * Rremoves product
      *
-     * @param userId user whose product will be removed
      * @param productId product which will be removed
      * @throws DataNotFoundException if the product is not found
      */
 
-    @PreAuthorize("#userId == authentication.user.id")
-    @DeleteMapping(value = "/{userId}/{productId}")
+    @PreAuthorize("@productSecurityService.hasPermissionToAccess(#productId)")
+    @DeleteMapping(value = "/{productId}")
     @ResponseStatus(value = HttpStatus.OK)
-    public void delete(@PathVariable int productId, @PathVariable int userId,
-                       HttpServletResponse response) throws DataNotFoundException {
+    public void delete(@PathVariable int productId) throws DataNotFoundException {
 
         productService.deleteProduct(productId);
         LOGGER.info(String.format("Product with id %d was deleted", productId));
@@ -162,12 +165,11 @@ public class ProductController {
      * @throws DataNotFoundException if stores are not found
      */
 
-    @PreAuthorize("#userId == authentication.user.id")
+    @PreAuthorize("@productSecurityService.hasPermissionToAccess(#productId)")
     @GetMapping("/{productId}/productStores/{userId}")
     @ResponseBody
     @ResponseStatus(value = HttpStatus.OK)
-    public List<Store> getAllStoresFromProduct(@PathVariable int productId, @PathVariable int userId,
-                                               HttpServletResponse response) {
+    public List<Store> getAllStoresFromProduct(@PathVariable int productId, @PathVariable int userId) {
         try {
             List<Store> stores = productService.getStoresByProductId(productId, userId);
             LOGGER.info("All Stores were found");
@@ -205,8 +207,7 @@ public class ProductController {
     @PreAuthorize("#product.user != null && #product.user.id == authentication.user.id")
     @PostMapping("/deleteStores/")
     @ResponseStatus(value = HttpStatus.OK)
-    public void deleteStoreFromProduct(@RequestBody Product product,
-                                       HttpServletResponse response) throws DataNotFoundException {
+    public void deleteStoreFromProduct(@RequestBody Product product) throws DataNotFoundException {
 
         productService.deleteStoreFromProductById(product);
         LOGGER.info(String.format("Stores were deleted from product %d", product.getId()));

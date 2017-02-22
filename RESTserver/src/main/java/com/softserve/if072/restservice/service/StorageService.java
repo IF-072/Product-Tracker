@@ -4,6 +4,8 @@ import com.softserve.if072.common.model.ShoppingList;
 import com.softserve.if072.common.model.Storage;
 import com.softserve.if072.restservice.exception.DataNotFoundException;
 import com.softserve.if072.restservice.dao.mybatisdao.StorageDAO;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -16,7 +18,8 @@ import java.util.List;
  * @author Roman Dyndyn
  */
 @Service
-public class StorageService{
+public class StorageService {
+    private static final Logger LOGGER = LogManager.getLogger(StorageService.class);
     private StorageDAO storageDAO;
     private ShoppingListService shoppingListService;
 
@@ -35,22 +38,23 @@ public class StorageService{
         }
     }
 
-    public Storage getByProductId(int product_id) throws DataNotFoundException {
-        Storage storage = storageDAO.getByProductID(product_id);
-        if (storage != null) {
-            return storage;
-        } else {
-            throw new DataNotFoundException(String.format("Storage of product with id %d not found", product_id));
-        }
+    public Storage getByProductId(int product_id) {
+        return storageDAO.getByProductID(product_id);
     }
 
     public void insert(Storage storage) {
-        storageDAO.insert(storage);
+        if (storage != null)
+            storageDAO.insert(storage);
     }
 
-    public void update(Storage storage) throws DataNotFoundException {
-        if(storage.getAmount() < 0){
-            throw new DataNotFoundException("illegal arguments!");
+    public void insert(int userId, int productId, int amount) {
+        storageDAO.insertInParts(userId, productId, amount);
+    }
+
+    public void update(Storage storage) {
+        if (storage.getAmount() < 0) {
+            LOGGER.error("Illegal argument: amount < 0");
+            return;
         }
 
         if (storage.getEndDate() != null) {
@@ -58,16 +62,17 @@ public class StorageService{
         } else {
             storageDAO.updateAmount(storage);
         }
-        if (storage.getAmount() <= 1){
+        if (storage.getAmount() <= 1) {
             shoppingListService.insert(new ShoppingList(storage.getUser(), storage.getProduct(), 1));
         }
     }
 
-    public void delete(Storage storage) throws DataNotFoundException {
+    public void delete(Storage storage) {
         if (storage != null) {
             storageDAO.delete(storage);
         } else {
-            throw new DataNotFoundException(String.format("Storage with user's id %d and product's id %d was not found", storage.getUser().getId(), storage.getProduct().getId()));
+            LOGGER.error("Illegal argument: storage == null");
+            return;
         }
     }
 }

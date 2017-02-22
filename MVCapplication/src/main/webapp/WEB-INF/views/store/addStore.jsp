@@ -40,8 +40,10 @@
                             <form:input path="address" class="form-control" placeholder="Address" type="text"/>
                         </div>
 
+                        <input type="submit" class="btn btn-lg btn-success btn-custom" value="Add Store"/>
+                        <input type="reset" class="btn btn-lg btn-reset-custom btn-reset-custom"
+                               onclick="document.location.href='<c:url value="/stores/"/>'" value="Cancel" />
 
-                        <input type="submit" class="btn btn-lg btn-success btn-default" value="Add Store"/>
                     </fieldset>
                 </form:form>
             </div>

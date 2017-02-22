@@ -89,7 +89,7 @@ public class ProductService {
 
     @Transactional
     public List<Store> getStoresByProductId(int productId, int userId) throws DataNotFoundException {
-        List<Store> stores = productDAO.getStoresByProductId(productId, userId);
+        List<Store> stores = productDAO.getStoresByProductIdAndUserId(productId, userId);
         if (CollectionUtils.isNotEmpty(stores)){
             return stores;
         } else {

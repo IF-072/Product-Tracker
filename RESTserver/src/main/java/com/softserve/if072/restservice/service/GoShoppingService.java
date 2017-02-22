@@ -9,6 +9,8 @@ import com.softserve.if072.restservice.dao.mybatisdao.CartDAO;
 import com.softserve.if072.restservice.dao.mybatisdao.ShoppingListDAO;
 import com.softserve.if072.restservice.dao.mybatisdao.StoreDAO;
 import com.softserve.if072.restservice.exception.DataNotFoundException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -29,6 +31,7 @@ import java.util.Map;
  */
 @Service
 public class GoShoppingService {
+    private static final Logger LOGGER = LogManager.getLogger(GoShoppingService.class);
 
     private ShoppingListDAO shoppingListDAO;
     private StoreDAO storeDAO;
@@ -54,7 +57,8 @@ public class GoShoppingService {
 
         List<Product> shoppingList = shoppingListDAO.getProductsByUserId(userId);
         if (CollectionUtils.isEmpty(shoppingList)) {
-            throw new DataNotFoundException(String.format("Shopping list of user with id %d is empty", userId));
+            LOGGER.info(String.format("Shopping list of user with id %d is empty", userId));
+            return null;
         }
         List<Store> storeList = storeDAO.getAllByUser(userId);
         if (CollectionUtils.isEmpty(storeList)) {
@@ -81,7 +85,8 @@ public class GoShoppingService {
         store.add(storeDAO.getByID(storeId));
 
         if (CollectionUtils.isEmpty(productsFromSelectedStore)) {
-            throw new DataNotFoundException(String.format("Products of user with id %d, store with id %d is empty", userId, storeId));
+            throw new DataNotFoundException(String.format("Products of user with id %d, store with id %d is empty",
+                    userId, storeId));
         }
 
         List<ShoppingList> productsToBuy = new ArrayList<ShoppingList>();
@@ -108,12 +113,12 @@ public class GoShoppingService {
     }
 
     /**
-     * method retain in each store only products that are contained in the shopping list. If store doesn't contain
+     * method retain in each store products that are contained in the shopping list. If store doesn't contain
      * products from shopping list, it will be removed.
      *
      * @param shoppingList list of products from shoppinglist
      * @param storeList    list of stores
-     * @return storage item that belong to specific product
+     * @return List of Store with products that contains in ShoppingList
      */
     private List<Store> retainProductFromShoppingList(List<Store> storeList, List<Product> shoppingList) {
         Iterator<Store> iterator = storeList.iterator();

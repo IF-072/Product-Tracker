@@ -11,15 +11,17 @@ public class CartDTO {
     private int storeId;
     private int productId;
     private int amount;
+    private int initialAmount;
 
     public CartDTO() {
     }
 
-    public CartDTO(int userId, int storeId, int productId, int amount) {
+    public CartDTO(int userId, int storeId, int productId, int amount, int initialAmount) {
         this.userId = userId;
         this.storeId = storeId;
         this.productId = productId;
         this.amount = amount;
+        this.initialAmount = initialAmount;
     }
 
     public int getUserId() {
@@ -54,9 +56,17 @@ public class CartDTO {
         this.amount = amount;
     }
 
+    public int getInitialAmount() {
+        return initialAmount;
+    }
+
+    public void setInitialAmount(int initialAmount) {
+        this.initialAmount = initialAmount;
+    }
+
     @Override
     public String toString() {
-        return "Cart{ UserId: " + userId +
+        return "CartDTO{ UserId: " + userId +
                 "; StoreId:  " + storeId +
                 "; ProductId: " + productId +
                 ", amount: " + amount +
