@@ -17,9 +17,6 @@
                 <div class="panel-heading text-center">
                     <h4>Your History is Empty!</h4>
                 </div>
-                <%--<div class="panel-body text-center">--%>
-                    <%--<p> Would you like to add some products to it?</p>--%>
-                <%--</div>--%>
                 <div class="panel-footer">
                     <div class="btn-group btn-group-justified" role="group" aria-label="...">
                         <div class="btn-group" role="group">
