@@ -1,12 +1,11 @@
 package com.softserve.if072.restservice.controller;
 
 import com.softserve.if072.common.model.History;
-import com.softserve.if072.restservice.exception.DataNotFoundException;
 import com.softserve.if072.restservice.service.HistoryService;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,41 +26,50 @@ import java.util.List;
  * @author Igor Kryviuk
  */
 @RestController
-@RequestMapping("api/users/{userID}/histories")
+@RequestMapping("api/users/{userId}/histories")
 public class HistoryController {
     @Autowired
     private HistoryService historyService;
-    private static final Logger LOGGER = LogManager.getLogger(HistoryController.class);
 
-    @PreAuthorize("hasRole('ROLE_PREMIUM')")
+    @PreAuthorize("hasRole('ROLE_PREMIUM') && #userId == authentication.user.id")
     @GetMapping()
     @ResponseStatus(HttpStatus.OK)
-    public List<History> getByUserId(@PathVariable int userID) {
-        return historyService.getByUserId(userID);
+    public List<History> getByUserId(@PathVariable int userId) {
+        return historyService.getByUserId(userId);
     }
 
-    @PreAuthorize("hasRole('ROLE_PREMIUM')")
-    @GetMapping("/products/{productID}")
+
+    @PostAuthorize("hasRole('ROLE_PREMIUM') && #history != null && #history.user != null"
+            + " && #history.user.id == authentication.user.id")
+    @GetMapping("/products/{productId}")
     @ResponseStatus(HttpStatus.OK)
-    public List<History> getByProductId(@PathVariable int userID, @PathVariable int productID) {
-        return historyService.getByProductId(userID, productID);
+    public List<History> getByProductId(@PathVariable int userId, @PathVariable int productId) {
+        List<History> histories = historyService.getByProductId(userId, productId);
+        History history = null;
+        if (CollectionUtils.isNotEmpty(histories)) {
+            history = histories.get(0);
+        }
+        return histories;
     }
 
+    @PreAuthorize("#history != null && #history.user != null && #history.user.id == authentication.user.id")
     @PostMapping()
     @ResponseStatus(value = HttpStatus.CREATED)
     public void insert(@RequestBody History history) {
         historyService.insert(history);
     }
 
+    @PreAuthorize("#history != null && #history.user != null && #history.user.id == authentication.user.id")
     @PutMapping()
     @ResponseStatus(value = HttpStatus.OK)
-    public void update(@RequestBody History history) throws DataNotFoundException {
+    public void update(@RequestBody History history) {
         historyService.update(history);
     }
 
-    @DeleteMapping()
+    @PreAuthorize("@historySecurityService.hasPermissionToAccess(#historyId)")
+    @DeleteMapping("/{historyId}")
     @ResponseStatus(value = HttpStatus.OK)
-    public void delete(@RequestBody History history) throws DataNotFoundException {
-        historyService.delete(history);
+    public void delete(@PathVariable int historyId) {
+        historyService.delete(historyId);
     }
 }
