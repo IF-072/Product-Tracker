@@ -86,7 +86,12 @@ public class ShoppingListController extends BaseController {
 
         HttpEntity<ShoppingList> entity = new HttpEntity<>(shoppingList);
 
-        shoppingList.setAmount(shoppingList.getAmount() + value);
+        int newAmount = shoppingList.getAmount() + value;
+        if (newAmount < 1) {
+            shoppingList.setAmount(1);
+        } else {
+            shoppingList.setAmount(newAmount);
+        }
 
         restTemplate.exchange(shoppingListUrl, HttpMethod.PUT, entity, ShoppingList.class);
         LOG.info(String.format(INFO_LOG_TEMPLATE,
