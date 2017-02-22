@@ -23,7 +23,7 @@ public interface CategoryDAO extends DAO<Category> {
     List<Category> getByUserID(int userID);
 
     @Override
-    @Select("SELECT id, name, user_id FROM category WHERE id = #{id}")
+    @Select("SELECT id, name, user_id FROM category WHERE id = #{id} AND is_enabled = 1")
     @Results(value = {
             @Result(property = "id", column = "id"),
             @Result(property = "name", column = "name"),

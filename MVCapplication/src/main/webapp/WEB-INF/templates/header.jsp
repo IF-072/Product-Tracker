@@ -82,6 +82,7 @@
             </a>
             <ul class="dropdown-menu dropdown-user">
                 <li><a href="<c:url value="/profile" />"><i class="fa fa-user fa-fw"></i> User Profile</a>
+                </li>
                 <li class="divider"></li>
                 <li><a href="<c:url value="/logout"/>"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
                 </li>
@@ -99,7 +100,7 @@
                     <a href="<c:url value="../home"/>" class="active"><i class="fa fa-home fa-fw"></i> Home</a>
                 </li>
                 <li>
-                    <a href="<c:url value="../categories"/>" class="active"><i class="fa fa-list-alt fa-fw"></i> Categories</a>
+                    <a href="<c:url value="../category"/>" class="active"><i class="fa fa-list-alt fa-fw"></i> Categories</a>
                 </li>
                 <li>
                     <a href="<c:url value="../product/"/>" class="active"><i class="fa fa-inbox fa-fw"></i> Products</a>
