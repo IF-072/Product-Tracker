@@ -38,6 +38,7 @@ public class HistoryController {
         return historyService.getByUserId(userId);
     }
 
+
     @PostAuthorize("#history != null && #history.user != null && #history.user.id == authentication.user.id")
     @GetMapping("/products/{productId}")
     @ResponseStatus(HttpStatus.OK)

@@ -145,7 +145,7 @@ public class StoreController {
      * @return product
      * @throws DataNotFoundException if result set is empty
      */
-    @PostAuthorize("returnObject != null && returnObject.user.id == authentication.user.id")
+    @PostAuthorize("returnObject != null && returnObject.user != null && returnObject.user.id == authentication.user.id")
     @GetMapping("/{storeId}/products/{productId}")
     @ResponseBody
     @ResponseStatus(value = HttpStatus.OK)
