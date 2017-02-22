@@ -86,7 +86,7 @@ public class ShoppingListController extends BaseController {
 
         HttpEntity<ShoppingList> entity = new HttpEntity<>(shoppingList);
 
-        if (shoppingList.getAmount() > 1) {
+        if (shoppingList.getAmount() > 1 && value == -1) {
             shoppingList.setAmount(shoppingList.getAmount() + value);
         }
         restTemplate.exchange(shoppingListUrl, HttpMethod.PUT, entity, ShoppingList.class);
