@@ -49,6 +49,14 @@ public class StorePageController extends BaseController {
     @Value("${service.user.current}")
     private String getCurrentUser;
 
+    /**
+     * Method for mapping on default store url.
+     * shows the view page with user stores. On view page user can add a new one store, edit store, delete it, add
+     * products to store, and get page with all products that are offered in store
+     *
+     * @param model contains data for view
+     * @return store view page that contains list of stores
+     */
     @GetMapping("/stores/")
     public String getAllStoresByUserId(Model model) {
         final String uri = storeUrl + "/user/{userId}";
@@ -65,6 +73,13 @@ public class StorePageController extends BaseController {
         return "allStores";
     }
 
+    /**
+     * Method for mapping on adding store url.
+     * shows the view page with form of fields for adding information about store.
+     *
+     * @param model contains empty store entity
+     * @return store view page that contains form for creating store
+     */
     @GetMapping("/addStore")
     public String addStore(Model model) {
         model.addAttribute("store", new Store());
@@ -72,6 +87,13 @@ public class StorePageController extends BaseController {
         return "addStore";
     }
 
+    /**
+     * Method gets completed store entity and  sends a request to the rest-service to update Database
+     *
+     * @param store  completed store entity from method addStore with @GetMapping annotation
+     * @param model   for sending errorMessage if the store name is empty
+     * @return redirect to the store view page that contains list of stores
+     */
     @PostMapping(value = "/addStore")
     public String addStore(@Validated @ModelAttribute("store") Store store, BindingResult result,
                            Model model, HttpServletResponse httpServletResponse) {
@@ -94,6 +116,14 @@ public class StorePageController extends BaseController {
         return "redirect:/stores/";
     }
 
+    /**
+     * Method for mapping on store products url.
+     * shows the view page with products of current store and information about they.
+     *
+     * @param storeId store which products will be shown
+     * @param model   contains data for view
+     * @return view page that contains all products that are offered in store
+     */
     @GetMapping("/stores/storeProducts")
     public String getAllProductsByStoreId(@RequestParam("storeId") String storeId, ModelMap model) {
         final String uri = storeUrl + "/{storeId}/storeProducts/{userId}";
@@ -111,6 +141,15 @@ public class StorePageController extends BaseController {
         return "product";
     }
 
+    /**
+     * Method for mapping on products url.
+     * shows the view page with all products of current user that are not added to this store. User can chose
+     * products which will be added to the store
+     *
+     * @param storeId id of store where we add products
+     * @param model   contains data for view
+     * @return view page that contains all products that are not offered in store yet
+     */
     @GetMapping("/addProductsToStore")
     public String addProductsToStore(@RequestParam("storeId") String storeId, ModelMap model) {
 
@@ -142,9 +181,17 @@ public class StorePageController extends BaseController {
         return "addProductsToStore";
     }
 
+    /**
+     * Method gets wrapedProducts object which contains list of product id. This all products will be added to
+     * store and saved in Database. Method  sends a request to the rest-service to update Database
+     *
+     * @param storeId        id of store where we add products
+     * @param wrapedProducts list of product id that will be added to current store
+     * @return redirect to the store view page that contains list of stores
+     */
     @PostMapping("/addProductsToStore")
     public String addProductsToStore(@RequestParam("storeId") String storeId, @ModelAttribute("wrapedProducts")
-            ProductsWrapper wrapedProducts, BindingResult result) {
+            ProductsWrapper wrapedProducts) {
         RestTemplate restTemplate = getRestTemplate();
         User user = restTemplate.getForObject(getCurrentUser, User.class);
         int userId = user.getId();
@@ -160,6 +207,12 @@ public class StorePageController extends BaseController {
         return "redirect:/stores/";
     }
 
+    /**
+     * Method for deleting store
+     *
+     * @param storeId store that will be deleted
+     * @return redirect to the store view page that contains list of stores
+     */
     @PostMapping(value = "/stores/delStore")
     public String deleteStore(@RequestParam("storeId") int storeId) {
         final String uri = storeUrl + "/{storeId}";
@@ -176,6 +229,13 @@ public class StorePageController extends BaseController {
         return "redirect:/stores/";
     }
 
+    /**
+     * Method for mapping on page for editing store
+     *
+     * @param storeId store that will be changed
+     * @param model   contains data of store for view
+     * @return store view page that contains form for editing store
+     */
     @GetMapping("/editStore")
     public String editStore(@RequestParam("storeId") String storeId, ModelMap model) {
         final String uri = storeUrl + "/{storeId}";
@@ -189,9 +249,17 @@ public class StorePageController extends BaseController {
         return "editStore";
     }
 
+    /**
+     * Method gets edited store and sends a request to the rest-service to update database
+     *
+     * @param store completed store that will be changed
+     * @param storeId id of store that will be changed
+     * @param model for sending errorMessage if the store name is empty
+     * @return redirect to the store view page that contains list of stores
+     */
     @PostMapping("/editStore")
-    public String editStore(@Validated @ModelAttribute("store") Store store, @RequestParam("storeId") String storeId,
-                            BindingResult result, Model model, HttpServletResponse httpServletResponse) {
+    public String editStore(@Validated @ModelAttribute("store") Store store, BindingResult result, @RequestParam
+            ("storeId") String storeId, Model model, HttpServletResponse httpServletResponse) {
 
         if (result.hasErrors()) {
             model.addAttribute("errorMessages", result.getFieldErrors());

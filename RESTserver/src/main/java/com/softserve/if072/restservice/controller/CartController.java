@@ -2,10 +2,11 @@ package com.softserve.if072.restservice.controller;
 
 import com.softserve.if072.common.model.Cart;
 import com.softserve.if072.common.model.dto.CartDTO;
-import com.softserve.if072.restservice.exception.DataNotFoundException;
 import com.softserve.if072.restservice.service.CartService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,46 +31,47 @@ public class CartController {
     @Autowired
     private CartService cartService;
 
+    @PreAuthorize("#userId == authentication.user.id")
     @GetMapping()
     @ResponseStatus(HttpStatus.OK)
     public List<Cart> getByUserId(@PathVariable int userId) {
         return cartService.getByUserId(userId);
     }
 
+    @PostAuthorize("#cart != null && #cart.user != null && #cart.user.id == authentication.user.id")
     @GetMapping("/{productId}")
     @ResponseStatus(HttpStatus.OK)
     public Cart getByProductId(@PathVariable int productId) {
-        return cartService.getByProductId(productId);
+        Cart cart = cartService.getByProductId(productId);
+        return cart;
     }
 
+    @PreAuthorize("#cart != null && #cart.user != null && #cart.user.id == authentication.user.id")
     @PostMapping()
     @ResponseStatus(value = HttpStatus.CREATED)
     public void insert(@RequestBody Cart cart) {
         cartService.insert(cart);
     }
 
+    @PreAuthorize("#cart != null && #cart.user != null && #cart.user.id == authentication.user.id")
     @PutMapping()
     @ResponseStatus(value = HttpStatus.OK)
-    public void update(@RequestBody Cart cart) throws DataNotFoundException {
+    public void update(@RequestBody Cart cart)  {
         cartService.update(cart);
     }
 
-    @DeleteMapping()
-    @ResponseStatus(value = HttpStatus.OK)
-    public void delete(@RequestBody Cart cart) throws DataNotFoundException {
-        cartService.delete(cart);
-    }
-
+    @PreAuthorize("@cartSecurityService.hasPermissionToAccess(#productId)")
     @DeleteMapping("/{productId}")
     @ResponseStatus(value = HttpStatus.OK)
-    public void deleteByProductId(@PathVariable int productId) throws DataNotFoundException {
+    public void deleteByProductId(@PathVariable int productId)  {
         cartService.delete(productId);
     }
 
+
+    @PreAuthorize("#cartDTO != null && #cartDTO.userId == authentication.user.id")
     @PutMapping("/bought")
     @ResponseStatus(value = HttpStatus.OK)
-    public void  productBuying(@RequestBody CartDTO cartDTO) {
+    public void productBuying(@RequestBody CartDTO cartDTO) {
         cartService.productBuying(cartDTO);
     }
-
 }

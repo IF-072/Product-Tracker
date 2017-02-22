@@ -54,10 +54,10 @@ public class HistoryService {
         LOGGER.info(String.format(successfullyOperation, history.getProduct().getName(), "updated in"));
     }
 
-    public void delete(History history) throws DataNotFoundException {
-        if (historyDAO.delete(history) == 0) {
-            throw new  DataNotFoundException(String.format(historyNotFound, "invalid DELETE operation", history.getProduct().getName()));
+    public void delete(int historyId) throws DataNotFoundException {
+        if (historyDAO.delete(historyId) == 0) {
+            throw new  DataNotFoundException(String.format(historyNotFound, "invalid DELETE operation", historyId));
         }
-        LOGGER.info(String.format(successfullyOperation, history.getProduct().getName(), "deleted from"));
+        LOGGER.info(String.format(successfullyOperation, historyId, "deleted from"));
     }
 }

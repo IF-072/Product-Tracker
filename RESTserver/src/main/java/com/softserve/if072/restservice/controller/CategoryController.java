@@ -8,6 +8,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,7 +21,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import javax.servlet.http.HttpServletResponse;
-import javax.xml.crypto.Data;
 import java.util.List;
 
 @Controller
@@ -36,16 +36,18 @@ public class CategoryController {
         this.categoryService = categoryService;
     }
 
+    @PreAuthorize("#userID == authentication.user.id")
     @GetMapping(value = "/{userID}")
     @ResponseBody
     @ResponseStatus(value = HttpStatus.OK)
     public List<Category> getAllCategoriesByUserID(@PathVariable("userID") int userID, HttpServletResponse response) throws DataNotFoundException {
 
         List<Category> categories = categoryService.getByUserID(userID);
-         LOGGER.info("All categories were found");
-         return categories;
+        LOGGER.info("All categories were found");
+        return categories;
     }
 
+    @PreAuthorize("@categorySecurityService.hasPermissionToAccess(#categoryID)")
     @GetMapping(value = "/id/{categoryID}")
     @ResponseBody
     @ResponseStatus(value = HttpStatus.OK)
@@ -56,6 +58,7 @@ public class CategoryController {
         return category;
     }
 
+    @PreAuthorize("#category != null && #category.user != null && #category.user.id == authentication.user.id")
     @PostMapping(value = "/")
     @ResponseStatus(value = HttpStatus.CREATED)
     public void insert(@RequestBody Category category)  {
@@ -63,6 +66,7 @@ public class CategoryController {
             LOGGER.info("New category %d was created", category.getId());
     }
 
+    @PreAuthorize("#category != null && #category.user != null && #category.user.id == authentication.user.id")
     @PutMapping(value = "/")
     @ResponseStatus(value = HttpStatus.OK)
     public void update(@RequestBody Category category, HttpServletResponse response) {
@@ -71,6 +75,7 @@ public class CategoryController {
         LOGGER.info(String.format("Category with id %d was updated", category.getId()));
     }
 
+    @PreAuthorize("@categorySecurityService.hasPermissionToAccess(#id)")
     @DeleteMapping(value = "/{id}")
     @ResponseStatus(value = HttpStatus.OK)
     public void delete(@PathVariable("id") int id) {
