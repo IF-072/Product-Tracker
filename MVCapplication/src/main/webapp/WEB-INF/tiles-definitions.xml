@@ -115,7 +115,7 @@
 
     <definition name="category" extends="mainLayout">
         <put-attribute name="title" value="Product Tracker"/>
-        <put-attribute name="body" value="/WEB-INF/views/category.jsp"/>
+        <put-attribute name="body" value="/WEB-INF/views/category/category.jsp"/>
 
         <put-list-attribute name="stylesheets" inherit="true">
             <add-attribute value="/css/jquery-ui.css"/>
@@ -123,8 +123,6 @@
             <add-attribute value="/css/dataTables.responsive.css"/>
             <add-attribute value="/css/jquery.dataTables.css"/>
             <add-attribute value="/css/category.css" />
-            <add-attribute value="/css/jquery-ui.css"/>
-            <add-attribute value="/css/category.css"/>
         </put-list-attribute>
 
         <put-list-attribute name="javascripts" inherit="true">
@@ -133,13 +131,12 @@
             <add-attribute value="/js/dataTables.bootstrap.js"/>
             <add-attribute value="/js/dataTables.responsive.js"/>
             <add-attribute value="/js/category.js" />
-            <add-attribute value="/js/category.js"/>
         </put-list-attribute>
     </definition>
 
     <definition name="editCategory" extends="mainLayout">
         <put-attribute name="title" value="Product Tracker"/>
-        <put-attribute name="body" value="/WEB-INF/views/editCategory.jsp"/>
+        <put-attribute name="body" value="/WEB-INF/views/category/editCategory.jsp"/>
 
         <put-list-attribute name="stylesheets" inherit="true">
             <add-attribute value="/css/category.css"/>
@@ -152,7 +149,7 @@
 
     <definition name="addCategory" extends="mainLayout">
         <put-attribute name="title" value="Product Tracker" />
-        <put-attribute name="body" value="/WEB-INF/views/addCategory.jsp" />
+        <put-attribute name="body" value="/WEB-INF/views/category/addCategory.jsp" />
 
         <put-list-attribute name="stylesheets" inherit="true">
             <add-attribute value = "/css/category.css" />

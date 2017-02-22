@@ -9,6 +9,7 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
@@ -65,7 +66,12 @@ public class CategoryPageController extends BaseController{
     }
 
     @PostMapping("/add")
-    public String addCategory(@ModelAttribute Category category) {
+    public String addCategory(@Validated @ModelAttribute Category category, BindingResult result, ModelMap model) {
+
+        if (result.hasErrors()) {
+            model.addAttribute("errors", result.getAllErrors());
+            return "addCategory";
+        }
 
         RestTemplate restTemplate = getRestTemplate();
         category.setUser(getCurrentUser());

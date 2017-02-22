@@ -23,6 +23,12 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
+/**
+ * Controller that handles requests from MVCapplication to RESTserver
+ *
+ * @author Pavlo Bendus
+ */
+
 @Controller
 @RequestMapping(value = "api/category")
 @PropertySource("classpath:message.properties")
@@ -42,9 +48,15 @@ public class CategoryController {
     @ResponseStatus(value = HttpStatus.OK)
     public List<Category> getAllCategoriesByUserID(@PathVariable("userID") int userID, HttpServletResponse response) throws DataNotFoundException {
 
-        List<Category> categories = categoryService.getByUserID(userID);
-        LOGGER.info("All categories were found");
-        return categories;
+        try {
+            List<Category> categories = categoryService.getByUserID(userID);
+            LOGGER.info(String.format("All categories of user with id %d were found", userID));
+            return categories;
+        } catch (DataNotFoundException e) {
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            LOGGER.error(String.format("Categories of user with id %d were not found", userID));
+            return null;
+        }
     }
 
     @PreAuthorize("@categorySecurityService.hasPermissionToAccess(#categoryID)")
@@ -63,7 +75,7 @@ public class CategoryController {
     @ResponseStatus(value = HttpStatus.CREATED)
     public void insert(@RequestBody Category category)  {
             categoryService.insert(category);
-            LOGGER.info("New category %d was created", category.getId());
+            LOGGER.info("New category with id %d was created", category.getId());
     }
 
     @PreAuthorize("#category != null && #category.user != null && #category.user.id == authentication.user.id")

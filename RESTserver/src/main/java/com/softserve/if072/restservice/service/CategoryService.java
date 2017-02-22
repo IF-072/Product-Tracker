@@ -39,10 +39,14 @@ public class CategoryService {
         this.categoryDAO = categoryDAO;
     }
 
-    public List<Category> getByUserID(int userID) {
+    public List<Category> getByUserID(int userID) throws DataNotFoundException {
         List<Category> categories = categoryDAO.getByUserID(userID);
-        LOGGER.info(categories);
-        return categories;
+        if (!CollectionUtils.isEmpty(categories)) {
+            LOGGER.info(categories);
+            return categories;
+        } else {
+            throw new DataNotFoundException(categoriesNotFound);
+        }
     }
 
     public Category getById(int id) throws DataNotFoundException {

@@ -66,7 +66,7 @@
                         <tr class="gradeA">
                             <td>${loop.count}</td>
                             <td>${category.name}</td>
-                            <td class="text-center"><a href="#"><i onclick="location.href='/category/edit?id=${category.id}'" class="fa fa-pencil fa-lg"></i></a></td>
+                            <td onclick="location.href='/category/edit?id=${category.id}'" class="text-center"><a href="#"><i class="fa fa-pencil fa-lg"></i></a></td>
                             <td onclick="deleteCategory(${category.id})" class="text-center"><a href="#"><i  class="fa fa-trash-o fa-lg"></i></a></td>
                         </tr>
                     </c:forEach>
