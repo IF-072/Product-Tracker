@@ -9,6 +9,7 @@ import java.sql.Timestamp;
  * @author Igor Kryviuk
  */
 public class History {
+    private int id;
     private User user;
     private Product product;
     private int amount;
@@ -17,11 +18,20 @@ public class History {
     public History() {
     }
 
-    public History(User user, Product product, int amount, Timestamp usedDate) {
+    public History(int id, User user, Product product, int amount, Timestamp usedDate) {
+        this.id = id;
         this.user = user;
         this.product = product;
         this.amount = amount;
         this.usedDate = usedDate;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public User getUser() {

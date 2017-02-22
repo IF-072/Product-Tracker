@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
@@ -22,11 +23,17 @@ import java.util.List;
 @Controller
 @RequestMapping("/history")
 public class HistoryController extends BaseController {
+    private static final Logger LOGGER = LogManager.getLogger();
     @Value("${application.restHistoryURL}")
     private String restHistoryURL;
+    @Value("${application.restHistoryDeleteURL}")
+    private String restHistoryDeleteURL;
+    @Value("${application.restHistoryDeleteURL}")
+    private String getRestHistoryDeleteURL;
     @Value("${history.found}")
     private String historyFound;
-    private static final Logger LOGGER = LogManager.getLogger();
+    @Value("${history.SuccessfullyOperation}")
+    private String successfullyOperation;
 
     @GetMapping
     public String getHistory(Model model) {
@@ -40,5 +47,12 @@ public class HistoryController extends BaseController {
             return "history";
         }
         return "emptyHistory";
+    }
+
+    @GetMapping("/delete")
+    public String deleteHistory(@RequestParam int historyId) {
+        template.delete(String.format(restHistoryDeleteURL, getCurrentUser().getId(), historyId));
+        LOGGER.info(String.format(successfullyOperation, historyId, "deleted from"));
+        return "redirect: /history/";
     }
 }
