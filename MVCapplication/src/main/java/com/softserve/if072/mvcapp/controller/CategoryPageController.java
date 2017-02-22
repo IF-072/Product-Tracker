@@ -8,9 +8,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 /**
@@ -20,12 +22,15 @@ import java.util.List;
  */
 
 @Controller
-@RequestMapping("/categories")
-@PropertySource("classpath:application.properties")
+@RequestMapping("/category")
+@PropertySource({"classpath:application.properties", "classpath:message.properties"})
 public class CategoryPageController extends BaseController{
 
     @Value("${application.restCategoryURL}")
     private String restCategoryURL;
+
+    @Value("${category.added}")
+    private String categoryAdded;
 
     private static final Logger LOGGER = LogManager.getLogger(CategoryPageController.class);
 
@@ -34,7 +39,7 @@ public class CategoryPageController extends BaseController{
      * shows the list of available categories and allows to add a new one
      *
      * @param model with data for view
-     * @return
+     * @return .jsp page
      */
     @GetMapping
     public String getPage(ModelMap model) {
@@ -44,7 +49,35 @@ public class CategoryPageController extends BaseController{
         LOGGER.info(categories);
         model.addAttribute("categories", categories);
 
-        return "categories";
+        return "category";
+    }
+
+    /**
+     * Method for mapping on page for adding the category
+     *
+     * @param model allows to create a new default category object
+     * @return .jsp page
+     */
+
+    @GetMapping("/add")
+    public String addCategory(ModelMap model) {
+
+        model.addAttribute("category", new Category());
+
+        return "addCategory";
+    }
+
+    @PostMapping("/add")
+    public String addCategory(@ModelAttribute Category category, ModelMap model) {
+
+        RestTemplate restTemplate = getRestTemplate();
+        category.setUser(getCurrentUser());
+        category.setEnabled(true);
+
+        restTemplate.postForObject(restCategoryURL, category, Category.class);
+        model.addAttribute("successMessage", categoryAdded);
+
+        return "redirect:/category";
     }
 
     /**
@@ -52,7 +85,7 @@ public class CategoryPageController extends BaseController{
      *
      * @param id for getting the category from rest-service
      * @param model for forming model that will be edited
-     * @return
+     * @return .jsp page
      */
 
     @GetMapping(value="/edit")
@@ -77,8 +110,7 @@ public class CategoryPageController extends BaseController{
     public String editCategory(@ModelAttribute Category category) {
 
         RestTemplate restTemplate = getRestTemplate();
-        User user = getCurrentUser();
-        category.setUser(user);
+        category.setUser(getCurrentUser());
         restTemplate.put(restCategoryURL, category, Category.class);
         LOGGER.info("Category " + category.getName() + " was updated");
         return "redirect:/categories/";
