@@ -28,7 +28,7 @@ import java.util.List;
  */
 
 @RestController
-@RequestMapping("/shoppingList")
+@RequestMapping("/api/shoppingList")
 public class ShoppingListController {
 
     public static final Logger LOGGER = LogManager.getLogger(ShoppingListController.class);
@@ -43,7 +43,7 @@ public class ShoppingListController {
     @GetMapping("/{userId}")
     @ResponseBody
     @ResponseStatus(value = HttpStatus.OK)
-    public List<ShoppingList> getShoppingListByUserId(@PathVariable int userId) throws DataNotFoundException {
+    public List<ShoppingList> getShoppingListByUserId(@PathVariable Integer userId) throws DataNotFoundException {
 //        try {
             List<ShoppingList> shoppingLists = shoppingListService.getByUserId(userId);
             LOGGER.info(String.format("Full ShoppingList of user id %d was found ", userId));
