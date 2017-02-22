@@ -29,9 +29,6 @@ public class CategoryPageController extends BaseController{
     @Value("${application.restCategoryURL}")
     private String restCategoryURL;
 
-    @Value("${category.added}")
-    private String categoryAdded;
-
     private static final Logger LOGGER = LogManager.getLogger(CategoryPageController.class);
 
     /**
@@ -68,14 +65,13 @@ public class CategoryPageController extends BaseController{
     }
 
     @PostMapping("/add")
-    public String addCategory(@ModelAttribute Category category, ModelMap model) {
+    public String addCategory(@ModelAttribute Category category) {
 
         RestTemplate restTemplate = getRestTemplate();
         category.setUser(getCurrentUser());
         category.setEnabled(true);
 
         restTemplate.postForObject(restCategoryURL, category, Category.class);
-        model.addAttribute("successMessage", categoryAdded);
 
         return "redirect:/category";
     }
@@ -113,7 +109,7 @@ public class CategoryPageController extends BaseController{
         category.setUser(getCurrentUser());
         restTemplate.put(restCategoryURL, category, Category.class);
         LOGGER.info("Category " + category.getName() + " was updated");
-        return "redirect:/categories/";
+        return "redirect:/category/";
     }
 
     /**

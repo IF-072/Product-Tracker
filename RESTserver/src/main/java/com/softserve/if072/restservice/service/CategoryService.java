@@ -39,7 +39,7 @@ public class CategoryService {
         this.categoryDAO = categoryDAO;
     }
 
-    public List<Category> getByUserID(int userID) throws DataNotFoundException {
+    public List<Category> getByUserID(int userID) {
         List<Category> categories = categoryDAO.getByUserID(userID);
         LOGGER.info(categories);
         return categories;

@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 /**
@@ -43,16 +44,16 @@ public class ShoppingListController {
     @GetMapping("/{userId}")
     @ResponseBody
     @ResponseStatus(value = HttpStatus.OK)
-    public List<ShoppingList> getShoppingListByUserId(@PathVariable Integer userId) throws DataNotFoundException {
-//        try {
+    public List<ShoppingList> getShoppingListByUserId(@PathVariable Integer userId, HttpServletResponse response) throws DataNotFoundException {
+        try {
             List<ShoppingList> shoppingLists = shoppingListService.getByUserId(userId);
             LOGGER.info(String.format("Full ShoppingList of user id %d was found ", userId));
             return shoppingLists;
-//        } catch (DataNotFoundException e) {
-//            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-//            LOGGER.error(e.getMessage());
-//            return null;
-//        }
+        } catch (DataNotFoundException e) {
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            LOGGER.error(e.getMessage());
+            return null;
+        }
     }
 
     @GetMapping("/{userId}/{productId}")

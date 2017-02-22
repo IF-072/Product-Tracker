@@ -9,9 +9,18 @@ import java.util.List;
 
 /**
  * The interface contains SQL-queries for manipulating categories data
+ *
+ * @author Pavlo Bendus
  */
 
 public interface CategoryDAO extends DAO<Category> {
+
+    /**
+     * Selects all categories for specified user's id
+     *
+     * @param userID id of current user
+     * @return list of categories
+     */
 
     @Select("SELECT id, name, user_id, is_enabled FROM category WHERE user_id = #{userID} AND is_enabled = 1")
     @Results(value = {
@@ -21,6 +30,13 @@ public interface CategoryDAO extends DAO<Category> {
             @Result(property = "isEnabled", column = "is_enabled")
     })
     List<Category> getByUserID(int userID);
+
+    /**
+     * Selects specified category by its id
+     *
+     * @param id category id
+     * @return category object
+     */
 
     @Override
     @Select("SELECT id, name, user_id FROM category WHERE id = #{id} AND is_enabled = 1")
@@ -32,14 +48,31 @@ public interface CategoryDAO extends DAO<Category> {
     })
     Category getByID(int id);
 
+    /**
+     * Inserts new category to the database
+     *
+     * @param category category's object
+     */
+
     @Override
     @Insert("INSERT INTO category(name, user_id) VALUES(#{name}, #{user.id})")
     void insert(Category category);
 
+    /**
+     * Updates specified category in the database
+     *
+     * @param category updated category's object
+     */
 
     @Override
     @Update("UPDATE category SET name = #{name}, user_id = #{user.id} WHERE id = #{id}")
     void update(Category category);
+
+    /**
+     *
+     *
+     * @param id
+     */
 
     @Override
     @Delete("UPDATE category SET is_enabled = 0 WHERE id = #{id}")
