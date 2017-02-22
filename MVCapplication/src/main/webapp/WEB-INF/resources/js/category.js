@@ -1,13 +1,5 @@
 var id;
 
-// function formShow() {
-//     document.getElementById('deleteForm').style.display = "block";
-// }
-//
-// function formHide() {
-//     document.getElementById('deleteForm').style.display = "none";
-// }
-
 function deleteCategory(id) {
     $("#deleteForm").dialog("open");
     this.id = id;
@@ -16,13 +8,13 @@ function deleteCategory(id) {
 
 function acceptDeleting() {
     $.ajax({
-        url: "categories/delete",
+        url: "category/delete",
         method: "POST",
         data: {id: this.id}
     });
 
     $("#deleteForm").dialog("close");
-    setTimeout(function() {window.location.reload();}, 1000);
+    setTimeout(function() {window.location.reload();}, 500);
 }
 
 function cancelDeleting() {

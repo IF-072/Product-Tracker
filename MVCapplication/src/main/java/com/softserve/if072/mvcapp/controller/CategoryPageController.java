@@ -8,9 +8,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 /**
@@ -20,7 +22,7 @@ import java.util.List;
  */
 
 @Controller
-@RequestMapping("/categories")
+@RequestMapping("/category")
 @PropertySource("classpath:application.properties")
 public class CategoryPageController extends BaseController{
 
@@ -44,7 +46,28 @@ public class CategoryPageController extends BaseController{
         LOGGER.info(categories);
         model.addAttribute("categories", categories);
 
-        return "categories";
+        return "category";
+    }
+
+    @GetMapping("/add")
+    public String addCategory(ModelMap model) {
+
+        model.addAttribute("category", new Category());
+        RestTemplate restTemplate = getRestTemplate();
+
+        return "addCategory";
+    }
+
+    @PostMapping("/add")
+    public String addCategory(@ModelAttribute Category category, ModelMap model) {
+
+        RestTemplate restTemplate = getRestTemplate();
+        category.setUser(getCurrentUser());
+        category.setEnabled(true);
+
+        restTemplate.postForObject(restCategoryURL, category, Category.class);
+
+        return "redirect:/category";
     }
 
     /**
@@ -77,8 +100,7 @@ public class CategoryPageController extends BaseController{
     public String editCategory(@ModelAttribute Category category) {
 
         RestTemplate restTemplate = getRestTemplate();
-        User user = getCurrentUser();
-        category.setUser(user);
+        category.setUser(getCurrentUser());
         restTemplate.put(restCategoryURL, category, Category.class);
         LOGGER.info("Category " + category.getName() + " was updated");
         return "redirect:/categories/";

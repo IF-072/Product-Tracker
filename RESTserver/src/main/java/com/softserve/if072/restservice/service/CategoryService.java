@@ -3,6 +3,9 @@ package com.softserve.if072.restservice.service;
 import com.softserve.if072.common.model.Category;
 import com.softserve.if072.restservice.dao.mybatisdao.CategoryDAO;
 import com.softserve.if072.restservice.exception.DataNotFoundException;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
@@ -21,6 +24,8 @@ import java.util.List;
 @PropertySource("classpath:message.properties")
 public class CategoryService {
 
+    private static final Logger LOGGER = LogManager.getLogger(CategoryService.class);
+
     private CategoryDAO categoryDAO;
 
     @Value("categories.notFound")
@@ -36,12 +41,8 @@ public class CategoryService {
 
     public List<Category> getByUserID(int userID) throws DataNotFoundException {
         List<Category> categories = categoryDAO.getByUserID(userID);
-
-        if (!categories.isEmpty()) {
-            return categories;
-        } else {
-            throw new DataNotFoundException(categoriesNotFound);
-        }
+        LOGGER.info(categories);
+        return categories;
     }
 
     public Category getById(int id) throws DataNotFoundException {

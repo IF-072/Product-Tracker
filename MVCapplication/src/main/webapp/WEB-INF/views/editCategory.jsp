@@ -12,7 +12,7 @@
 </div>
 
 <!-- Form -->
-<div class="col-lg-5">
+<div class="col-lg-6">
     <div class="form-group has-warning">
             <sf:form role="form" modelAttribute="category" method="post">
                 <fieldset>
@@ -22,7 +22,7 @@
                                   placeholder="Category name" type="text"/>
                     </div>
                     <input type="submit" class="btn btn-success btn-success-custom" value="Submit"/>
-                    <input type="reset" class="btn btn-default btn-reset-custom" onclick="document.location.href='/categories'" value="Cancel" />
+                    <input type="reset" class="btn btn-default btn-reset-custom" onclick="location.href='/category'" value="Cancel" />
                 </fieldset>
             </sf:form>
     </div>
