@@ -126,7 +126,7 @@ public class StoreController {
      * @return list of products of current store
      */
     @PreAuthorize("#userId != null  && #userId == authentication.user.id && " +
-            "@StoreSecurityService.hasPermissionToAccess(#storeId)")
+            "@storeSecurityService.hasPermissionToAccess(#storeId)")
     @GetMapping("/{storeId}/storeProducts/{userId}")
     @ResponseBody
     @ResponseStatus(value = HttpStatus.OK)
@@ -164,7 +164,7 @@ public class StoreController {
      * @throws DataNotFoundException if the product is not presented in this store
      */
     @PreAuthorize("#product != null && #product.user != null && #product.user.id == authentication.user.id && " +
-            "@StoreSecurityService.hasPermissionToAccess(#storeId)")
+            "@storeSecurityService.hasPermissionToAccess(#storeId)")
     @DeleteMapping("/{storeId}/products")
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void deleteProductFromStore(@RequestBody Product product, @PathVariable Integer storeId) throws DataNotFoundException {
@@ -180,8 +180,8 @@ public class StoreController {
      * @param productId product that will be added to store
      * @throws DataNotFoundException - if product or store is not found
      */
-    @PreAuthorize("#userId != null  && #userId == authentication.user.id && @StoreSecurityService" +
-            ".hasPermissionToAccess(#storeId) && @ProductSecurityService.hasPermissionToAccess(#productId)")
+    @PreAuthorize("#userId != null  && #userId == authentication.user.id && @storeSecurityService" +
+            ".hasPermissionToAccess(#storeId) && @productSecurityService.hasPermissionToAccess(#productId)")
     @PostMapping("/products/")
     @ResponseStatus(value = HttpStatus.CREATED)
     public void addProductToStore(@PathVariable Integer storeId, @PathVariable Integer productId,
@@ -198,8 +198,8 @@ public class StoreController {
      * @param storeId    store where products will be added
      * @throws DataNotFoundException if list of productId is empty, or store is not found
      */
-    @PreAuthorize("#userId != null  && #userId == authentication.user.id && @StoreSecurityService" +
-            ".hasPermissionToAccess(#storeId) && @ProductSecurityService.hasPermissionToAccess(#productId)")
+    @PreAuthorize("#userId != null  && #userId == authentication.user.id && @storeSecurityService" +
+            ".hasPermissionToAccess(#storeId)")
     @PostMapping("/manyProducts/{userId}/{storeId}")
     @ResponseStatus(value = HttpStatus.OK)
     public void addProductsToStore(@RequestBody List<Integer> productsId, @PathVariable Integer storeId,
@@ -218,7 +218,8 @@ public class StoreController {
      * @return - set of products that are not added to store
      * @throws DataNotFoundException - if result set is empty
      */
-    @PreAuthorize("#userId != null  && #userId == authentication.user.id && @StoreSecurityService.hasPermissionToAccess(#storeId)")
+    @PreAuthorize("#userId != null  && #userId == authentication.user.id && @storeSecurityService" +
+            ".hasPermissionToAccess(#storeId)")
     @GetMapping("/{storeId}/notMappedProducts/{userId}")
     @ResponseBody
     @ResponseStatus(value = HttpStatus.OK)
