@@ -7,6 +7,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -32,12 +33,14 @@ public class HistoryController {
     private HistoryService historyService;
     private static final Logger LOGGER = LogManager.getLogger(HistoryController.class);
 
+    @PreAuthorize("hasRole('ROLE_PREMIUM')")
     @GetMapping()
     @ResponseStatus(HttpStatus.OK)
     public List<History> getByUserId(@PathVariable int userID) {
         return historyService.getByUserId(userID);
     }
 
+    @PreAuthorize("hasRole('ROLE_PREMIUM')")
     @GetMapping("/products/{productID}")
     @ResponseStatus(HttpStatus.OK)
     public List<History> getByProductId(@PathVariable int userID, @PathVariable int productID) {
