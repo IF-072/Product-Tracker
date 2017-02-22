@@ -23,11 +23,14 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/category")
-@PropertySource("classpath:application.properties")
+@PropertySource({"classpath:application.properties", "classpath:message.properties"})
 public class CategoryPageController extends BaseController{
 
     @Value("${application.restCategoryURL}")
     private String restCategoryURL;
+
+    @Value("${category.added}")
+    private String categoryAdded;
 
     private static final Logger LOGGER = LogManager.getLogger(CategoryPageController.class);
 
@@ -36,7 +39,7 @@ public class CategoryPageController extends BaseController{
      * shows the list of available categories and allows to add a new one
      *
      * @param model with data for view
-     * @return
+     * @return .jsp page
      */
     @GetMapping
     public String getPage(ModelMap model) {
@@ -49,11 +52,17 @@ public class CategoryPageController extends BaseController{
         return "category";
     }
 
+    /**
+     * Method for mapping on page for adding the category
+     *
+     * @param model allows to create a new default category object
+     * @return .jsp page
+     */
+
     @GetMapping("/add")
     public String addCategory(ModelMap model) {
 
         model.addAttribute("category", new Category());
-        RestTemplate restTemplate = getRestTemplate();
 
         return "addCategory";
     }
@@ -66,6 +75,7 @@ public class CategoryPageController extends BaseController{
         category.setEnabled(true);
 
         restTemplate.postForObject(restCategoryURL, category, Category.class);
+        model.addAttribute("successMessage", categoryAdded);
 
         return "redirect:/category";
     }
@@ -75,7 +85,7 @@ public class CategoryPageController extends BaseController{
      *
      * @param id for getting the category from rest-service
      * @param model for forming model that will be edited
-     * @return
+     * @return .jsp page
      */
 
     @GetMapping(value="/edit")
