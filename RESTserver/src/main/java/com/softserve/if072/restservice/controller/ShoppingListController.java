@@ -28,7 +28,7 @@ import java.util.List;
  */
 
 @RestController
-@RequestMapping("/shoppingList")
+@RequestMapping("/api/shoppingList")
 public class ShoppingListController {
 
     public static final Logger LOGGER = LogManager.getLogger(ShoppingListController.class);
@@ -39,31 +39,51 @@ public class ShoppingListController {
         this.shoppingListService = shoppingListService;
     }
 
+    /**
+     * Returns all user user shoppingLists
+     *
+     * @param userId user whose shoppingLists are are retrieved
+     * @return list of user
+     * @throws DataNotFoundException if list of shoppingLists is null
+     */
     @PreAuthorize("#userId != null  && #userId == authentication.user.id")
     @GetMapping("/{userId}")
     @ResponseBody
     @ResponseStatus(value = HttpStatus.OK)
-    public List<ShoppingList> getShoppingListByUserId(@PathVariable int userId) throws DataNotFoundException {
-
-            List<ShoppingList> shoppingLists = shoppingListService.getByUserId(userId);
-            LOGGER.info(String.format("Full ShoppingList of user id %d was found ", userId));
-            return shoppingLists;
+    public List<ShoppingList> getShoppingListByUserId(@PathVariable Integer userId) throws DataNotFoundException {
+        List<ShoppingList> shoppingLists = shoppingListService.getByUserId(userId);
+        LOGGER.info(String.format("Full ShoppingList of user id %d was found ", userId));
+        return shoppingLists;
     }
 
+    /**
+     * This method returns one shoppingList
+     *
+     * @param userId    user whose shoppingLists are are retrieved
+     * @param productId product from this shoppingList
+     * @return shoppingList
+     * @throws DataNotFoundException if shoppingLists is null
+     */
     @PreAuthorize("#userId != null  && #userId == authentication.user.id && " +
-            "@shoppingListSecurityService.hasPermissionToAccess(#productId)")
+            "@productSecurityService.hasPermissionToAccess(#productId)")
     @GetMapping("/{userId}/{productId}")
     @ResponseBody
     @ResponseStatus(value = HttpStatus.OK)
     public ShoppingList getByUserAndProductId(@PathVariable int userId, @PathVariable int productId)
             throws DataNotFoundException {
 
-            ShoppingList shoppingList = shoppingListService.getByUserAndProductId(userId, productId);
-            LOGGER.info(String.format("ShoppingList of user id %d with product %d was found ", userId, productId));
-            return shoppingList;
+        ShoppingList shoppingList = shoppingListService.getByUserAndProductId(userId, productId);
+        LOGGER.info(String.format("ShoppingList of user id %d with product %d was found ", userId, productId));
+        return shoppingList;
     }
 
-    @PreAuthorize("#shoppingList != null && #shoppingList.user != null && #shoppingList.user.id == authentication.user.id")
+    /**
+     * This method adds new shoppingList
+     *
+     * @param shoppingList this shoppingList will be added
+     */
+    @PreAuthorize("#shoppingList != null && #shoppingList.user != null &&" +
+            "#shoppingList.user.id == authentication.user.id")
     @PostMapping("/")
     @ResponseStatus(value = HttpStatus.CREATED)
     public void addShoppingList(@RequestBody ShoppingList shoppingList) {
@@ -71,23 +91,36 @@ public class ShoppingListController {
         LOGGER.info("New ShoppingList was created");
     }
 
-    @PreAuthorize("#shoppingList != null && #shoppingList.user != null && #shoppingList.user.id == authentication.user.id")
+    /**
+     * This method updates shoppingList
+     *
+     * @param shoppingList this shoppingList will replace old shoppingList with the same id
+     * @throws IllegalArgumentException if shoppingList.amount <= 0 or shoppingList.product == null or
+     * shoppingList.user() == null
+     */
+    @PreAuthorize("#shoppingList != null && #shoppingList.user != null &&" +
+            " #shoppingList.user.id == authentication.user.id")
     @PutMapping("/")
     @ResponseBody
     @ResponseStatus(value = HttpStatus.OK)
     public void updateShoppingList(@RequestBody ShoppingList shoppingList) throws IllegalArgumentException {
         int id = shoppingList.getUser().getId();
-
-            shoppingListService.update(shoppingList);
-            LOGGER.info(String.format("ShoppingList of user id %d was updated", id));
+        shoppingListService.update(shoppingList);
+        LOGGER.info(String.format("ShoppingList of user id %d was updated", id));
     }
 
-    @PreAuthorize("#shoppingList != null && #shoppingList.user != null && #shoppingList.user.id == authentication.user.id")
+    /**
+     *  This method deletes shoppingList
+     *
+     * @param shoppingList this shoppingList will be deleted
+     */
+    @PreAuthorize("#shoppingList != null && #shoppingList.user != null && " +
+            "#shoppingList.user.id == authentication.user.id")
     @DeleteMapping("/")
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
-    public void deleteShoppingList(@RequestBody ShoppingList shoppingList) throws DataNotFoundException {
-            shoppingListService.delete(shoppingList);
-            LOGGER.info("ShoppingList was deleted");
+    public void deleteShoppingList(@RequestBody ShoppingList shoppingList) {
+        shoppingListService.delete(shoppingList);
+        LOGGER.info("ShoppingList was deleted");
     }
 
 }

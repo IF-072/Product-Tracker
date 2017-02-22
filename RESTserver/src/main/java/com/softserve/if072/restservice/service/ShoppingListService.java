@@ -76,7 +76,7 @@ public class ShoppingListService {
         }
     }
 
-    public void delete(ShoppingList shoppingList) throws DataNotFoundException {
+    public void delete(ShoppingList shoppingList) {
         if (shoppingList != null) {
             shoppingListDAO.delete(shoppingList);
         } else {
