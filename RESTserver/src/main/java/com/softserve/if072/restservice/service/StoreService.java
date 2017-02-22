@@ -87,8 +87,7 @@ public class StoreService {
      */
     @Transactional
     public void updateStore(Store store) throws IllegalArgumentException {
-        Store oldStore = storeDAO.getByID(store.getId());
-        if (oldStore == null || store.getName().isEmpty() || store.getName() == "") {
+       if (store.getName().isEmpty() || store.getName() == "") {
             throw new IllegalArgumentException("Illegal arguments!");
         }
         storeDAO.update(store);
