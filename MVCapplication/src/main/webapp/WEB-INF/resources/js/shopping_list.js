@@ -21,9 +21,8 @@ function edit(prodId, val, index) {
             var amount = $("#am" + index);
             amount.text(data);
         },
-        error: function (jqXHR, exception) {
-            console.log(exception);
-            console.log(jqXHR);
+        error: function () {
+            alert("Something went wrong. Please, try again.")
         }
     })
 }
