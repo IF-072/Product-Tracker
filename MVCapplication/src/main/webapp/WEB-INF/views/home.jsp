@@ -21,7 +21,7 @@
                     </div>
                     <div class="col-xs-9 text-right">
                         <div class="huge">Go</div>
-                        <div>to the cart!</div>
+                        <div>to the cart</div>
                     </div>
                 </div>
             </div>
@@ -43,7 +43,7 @@
                     </div>
                     <div class="col-xs-9 text-right">
                         <div class="huge">${storage}</div>
-                        <div>in storage!</div>
+                        <div>in storage</div>
                     </div>
                 </div>
             </div>
@@ -65,7 +65,7 @@
                     </div>
                     <div class="col-xs-9 text-right">
                         <div class="huge">${shoplist}</div>
-                        <div>in shopping list!</div>
+                        <div>in shopping list</div>
                     </div>
                 </div>
             </div>

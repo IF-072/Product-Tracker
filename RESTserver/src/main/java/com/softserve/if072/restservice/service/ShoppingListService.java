@@ -42,11 +42,8 @@ public class ShoppingListService {
 
     public ShoppingList getByUserAndProductId(int user_id, int product_id) throws DataNotFoundException {
         ShoppingList list = shoppingListDAO.getByUserAndProductId(user_id, product_id);
-        if (list != null) {
-            return list;
-        } else {
-            throw new DataNotFoundException(String.format("ShoppingLists of user with id %d not found", user_id));
-        }
+
+        return list;
     }
 
     public List<Product> getProductsByUserId(int user_id) throws DataNotFoundException {
@@ -76,7 +73,7 @@ public class ShoppingListService {
         }
     }
 
-    public void delete(ShoppingList shoppingList) throws DataNotFoundException {
+    public void delete(ShoppingList shoppingList) {
         if (shoppingList != null) {
             shoppingListDAO.delete(shoppingList);
         } else {
