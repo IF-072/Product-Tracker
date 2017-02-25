@@ -5,5 +5,4 @@ HomeGoodsTracker Application
 
 To see current progress, please check out the *develop* branch
 
-This project is integrated with Travis CI continuous integration service.
-https://travis-ci.org/IF-072/Product-Tracker
+This project is integrated with Travis CI continuous integration service: https://travis-ci.org/IF-072/Product-Tracker
