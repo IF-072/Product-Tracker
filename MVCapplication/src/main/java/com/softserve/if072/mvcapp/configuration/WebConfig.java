@@ -76,6 +76,11 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         return template;
     }
 
+    /**
+     * Configure the HttpMessageConverters to use for reading or writing to the body of the request or response.
+     *
+     * @param converters initially an empty list of converters
+     */
     @Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
         StringHttpMessageConverter stringConverter = new StringHttpMessageConverter();

@@ -39,7 +39,7 @@ public class ShoppingListService {
     private String productById;
 
     @Autowired
-    RestTemplate restTemplate;
+    private RestTemplate restTemplate;
 
     /**
      * This method receives all shopping list's elements from RESTful service and returns them.
@@ -51,7 +51,7 @@ public class ShoppingListService {
         List<ShoppingList> shoppingList = restTemplate.getForObject(String.format(shoppingListByUserUrl, userId), List.class);
 
         if (CollectionUtils.isNotEmpty(shoppingList)) {
-            LOG.info(String.format("Shopping list with %d elements has been received.", shoppingList.size()));
+            LOG.info("Shopping list with {} elements has been received.", shoppingList.size());
         } else {
             LOG.info("Shopping list has't got any elements yet.");
         }
