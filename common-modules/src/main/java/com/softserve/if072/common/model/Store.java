@@ -1,7 +1,8 @@
 package com.softserve.if072.common.model;
 
-import org.hibernate.validator.constraints.NotEmpty;
+import org.hibernate.validator.constraints.NotBlank;
 
+import javax.validation.constraints.Size;
 import java.util.List;
 
 /**
@@ -14,8 +15,11 @@ public class Store {
 
     private int id;
 
-    @NotEmpty(message = "{error.name.notnull}")
+    @NotBlank(message = "{error.name.notnull}")
+    @Size(min = 3, max = 64, message = "{error.name.size}")
     private String name;
+
+    @Size(min = 5, max = 255, message = "{error.address.size}")
     private String address;
     private User user;
     private boolean isEnabled;

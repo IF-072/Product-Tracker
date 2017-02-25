@@ -7,7 +7,7 @@
 --%>
 
 <style>
-    #edit, #delete {
+    #edit, #delete, #prod {
         text-align: center
     }
 </style>
@@ -46,7 +46,7 @@
                     <tr class="gradeA">
                         <td id="name">${store.name}</td>
                         <td id="address">${store.address}</td>
-                        <td><a href="<c:url value='/stores/storeProducts?storeId=${store.id}'/>">products</a>
+                        <td id="prod"><a href="<c:url value='/stores/storeProducts?storeId=${store.id}'/>">products</a>
                         </td>
                         <td id="edit"><a href="<c:url value='/editStore?storeId=${store.id}'/>"
                                          class="fa fa-pencil fa-lg"></a></td>

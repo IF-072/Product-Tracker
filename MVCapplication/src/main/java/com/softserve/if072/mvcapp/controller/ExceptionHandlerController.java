@@ -33,8 +33,7 @@ public class ExceptionHandlerController {
 
     @ExceptionHandler(HttpClientErrorException.class)
     public String handleRestClientException(HttpClientErrorException e, final RedirectAttributes redirectAttributes) {
-        LOGGER.error(e.getMessage());
-        LOGGER.error(Arrays.toString(e.getStackTrace()));
+        LOGGER.error(e.getMessage(), Arrays.toString(e.getStackTrace()));
 
         HttpStatus statusCode = e.getStatusCode();
         if (statusCode.equals(HttpStatus.FORBIDDEN)) {
@@ -54,8 +53,7 @@ public class ExceptionHandlerController {
 
     @ExceptionHandler(HttpServerErrorException.class)
     public String handleRestServerException(HttpServerErrorException e) {
-        LOGGER.error(e.getMessage());
-        LOGGER.error(Arrays.toString(e.getStackTrace()));
+        LOGGER.error(e.getMessage(), Arrays.toString(e.getStackTrace()));
         return "generalError";
     }
 }

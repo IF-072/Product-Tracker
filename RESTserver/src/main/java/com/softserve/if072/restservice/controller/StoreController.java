@@ -224,7 +224,7 @@ public class StoreController {
 
         Set<Product> notMappedProducts = storeService.getNotMappedProducts(storeId, userId);
 
-        LOGGER.info("All Products were found");
+        LOGGER.info(String.format("All Products that are not presented in store %d were found", storeId));
         return notMappedProducts;
     }
 
