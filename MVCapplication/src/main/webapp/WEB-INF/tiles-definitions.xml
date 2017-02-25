@@ -215,9 +215,11 @@
         <put-attribute name="body" value="/WEB-INF/views/shopping_list.jsp"/>
         <put-list-attribute name="stylesheets" inherit="true">
             <add-attribute value="/css/shopping_list.css"/>
+            <add-attribute value="/css/jquery-ui.css"/>
         </put-list-attribute>
         <put-list-attribute name="javascripts" inherit="true">
             <add-attribute value="/js/shopping_list.js"/>
+            <add-attribute value="/js/jquery-ui.js"/>
         </put-list-attribute>
     </definition>
 
