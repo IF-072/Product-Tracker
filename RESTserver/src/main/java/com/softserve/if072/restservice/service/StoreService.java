@@ -44,7 +44,7 @@ public class StoreService {
         if (!stores.isEmpty()) {
             return stores;
         } else {
-           return null;
+            return null;
         }
     }
 
@@ -70,14 +70,15 @@ public class StoreService {
      *
      * @param store - will be written to DataBase
      * @throws IllegalArgumentException - if the passed store is null or has empty name
-     * not found
+     *                                  not found
      */
     @Transactional
     public void addStore(Store store) throws IllegalArgumentException {
         if (store != null && store.getName() != null && store.getName() != "") {
             storeDAO.insert(store);
-        } else throw new IllegalArgumentException("Illegal arguments!");
+        } else throw new IllegalArgumentException(String.format("Illegal arguments in store id %d", store.getId()));
     }
+
 
     /**
      * This method  updates store that is in DataBase and has the same id as the passed hire.
@@ -87,8 +88,8 @@ public class StoreService {
      */
     @Transactional
     public void updateStore(Store store) throws IllegalArgumentException {
-       if (store.getName().isEmpty() || store.getName() == "") {
-            throw new IllegalArgumentException("Illegal arguments!");
+        if (store.getName().isEmpty() || store.getName() == "") {
+            throw new IllegalArgumentException(String.format("Illegal arguments in store id %d", store.getId()));
         }
         storeDAO.update(store);
     }

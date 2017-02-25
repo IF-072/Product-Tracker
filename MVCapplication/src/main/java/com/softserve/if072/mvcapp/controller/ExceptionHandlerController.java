@@ -11,6 +11,8 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.Arrays;
+
 /**
  * The ExceptionHandlerController class is used to provide methods that handle common exceptions
  *
@@ -31,7 +33,7 @@ public class ExceptionHandlerController {
 
     @ExceptionHandler(HttpClientErrorException.class)
     public String handleRestClientException(HttpClientErrorException e, final RedirectAttributes redirectAttributes) {
-        LOGGER.error(e.getMessage());
+        LOGGER.error(e.getMessage(), Arrays.toString(e.getStackTrace()));
 
         HttpStatus statusCode = e.getStatusCode();
         if (statusCode.equals(HttpStatus.FORBIDDEN)) {
@@ -51,7 +53,7 @@ public class ExceptionHandlerController {
 
     @ExceptionHandler(HttpServerErrorException.class)
     public String handleRestServerException(HttpServerErrorException e) {
-        LOGGER.error(e.getMessage());
+        LOGGER.error(e.getMessage(), Arrays.toString(e.getStackTrace()));
         return "generalError";
     }
 }
