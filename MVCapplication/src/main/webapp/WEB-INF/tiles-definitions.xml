@@ -332,4 +332,21 @@
         <put-attribute name="body" value="/WEB-INF/views/productInStores.jsp"/>
     </definition>
 
+    <definition name="productsInStore" extends="mainLayout">
+        <put-attribute name="title" value="Product Tracker"/>
+        <put-attribute name="body" value="/WEB-INF/views/store/productsInStore.jsp"/>
+        <put-list-attribute name="stylesheets" inherit="true">
+            <add-attribute value="/css/dataTables.bootstrap.css"/>
+            <add-attribute value="/css/dataTables.responsive.css"/>
+            <add-attribute value="/css/jquery-ui.css"/>
+            <add-attribute value="/css/jquery.dataTables.css"/>
+            <add-attribute value="/css/store.css"/>
+        </put-list-attribute>
+        <put-list-attribute name="javascripts" inherit="true">
+            <add-attribute value="/js/jquery-ui.js"/>
+            <add-attribute value="/js/storeTable.js"/>
+            <add-attribute value="/js/jquery.dataTables.js"/>
+        </put-list-attribute>
+    </definition>
+
 </tiles-definitions>

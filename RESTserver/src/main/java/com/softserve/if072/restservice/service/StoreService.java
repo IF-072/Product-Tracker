@@ -139,8 +139,8 @@ public class StoreService {
         Product product = storeDAO.getProductFromStoreById(storeId, productId);
         if (product != null) {
             storeDAO.deleteProductFromStoreById(storeId, productId);
-        } else {
-            throw new DataNotFoundException(String.format("Product %d from Store %d not found", productId, storeId));
+      } else {
+           throw new DataNotFoundException(String.format("Product %d from Store %d not found", productId, storeId));
         }
     }
 
