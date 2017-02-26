@@ -7,7 +7,7 @@
 --%>
 
 <style>
-    #edit, #delete {
+    #edit, #delete, #prod {
         text-align: center
     }
 </style>
@@ -37,7 +37,6 @@
                         <th>Name</th>
                         <th>Address</th>
                         <th>Products at store</th>
-                        <th>Add Products to Store</th>
                         <th>Edit</th>
                         <th>Delete</th>
                     </tr>
@@ -47,13 +46,7 @@
                     <tr class="gradeA">
                         <td id="name">${store.name}</td>
                         <td id="address">${store.address}</td>
-                        <td><a href="<c:url value='/stores/storeProducts?storeId=${store.id}'/>">products</a>
-                        </td>
-                        <td>
-                            <button type="button" class="btn btn-outline btn-primary" onclick=
-                                    "location.href='/addProductsToStore?storeId=${store.id}'"
-                                    id="addProductButton">AddProducts
-                            </button>
+                        <td id="prod"><a href="<c:url value='/stores/storeProducts?storeId=${store.id}'/>">products</a>
                         </td>
                         <td id="edit"><a href="<c:url value='/editStore?storeId=${store.id}'/>"
                                          class="fa fa-pencil fa-lg"></a></td>

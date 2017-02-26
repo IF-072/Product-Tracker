@@ -77,8 +77,7 @@ public class ShoppingListController {
     @GetMapping("/{userId}/{productId}")
     @ResponseBody
     @ResponseStatus(value = HttpStatus.OK)
-    public ShoppingList getByUserAndProductId(@PathVariable int userId, @PathVariable int productId)
-            throws DataNotFoundException {
+    public ShoppingList getByUserAndProductId(@PathVariable int userId, @PathVariable int productId) {
 
         ShoppingList shoppingList = shoppingListService.getByUserAndProductId(userId, productId);
         LOGGER.info(String.format("ShoppingList of user id %d with product %d was found ", userId, productId));
@@ -111,11 +110,16 @@ public class ShoppingListController {
     @PutMapping("/")
     @ResponseBody
     @ResponseStatus(value = HttpStatus.OK)
-    public void updateShoppingList(@RequestBody ShoppingList shoppingList) throws IllegalArgumentException {
-        int id = shoppingList.getUser().getId();
+    public void updateShoppingList(@RequestBody ShoppingList shoppingList) {
+        if (shoppingList != null) {
+            int id = shoppingList.getUser().getId();
+            shoppingListService.update(shoppingList);
+            LOGGER.info(String.format("ShoppingList of user id %d was updated", id));
+        } else {
+            LOGGER.error("Illegal argument: shoppingList == null");
+            throw new IllegalArgumentException("Incorrect fields by shoppingList");
 
-        shoppingListService.update(shoppingList);
-        LOGGER.info(String.format("ShoppingList of user id %d was updated", id));
+        }
     }
 
     /**
