@@ -98,6 +98,7 @@ public class RegistrationController extends BaseController {
         if(registrationService.performRegistration(user)){
             redirectAttributes.addFlashAttribute("successMessage", registrationSuccessfulMessage);
             LOGGER.info("User {} has been successfully registered");
+            return "redirect:/login";
         } else {
             redirectAttributes.addFlashAttribute("errorMessage", generalErrorMessage);
         }
