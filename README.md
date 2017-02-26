@@ -1,3 +1,8 @@
+# Product Tracker
+
+[![Build Status](https://api.travis-ci.org/IF-072/Product-Tracker.svg?branch=develop)](https://travis-ci.org/IF-072/Product-Tracker)
+***
+
 ## To run this project:
 
 1. clone the project & open it in your IDE;
