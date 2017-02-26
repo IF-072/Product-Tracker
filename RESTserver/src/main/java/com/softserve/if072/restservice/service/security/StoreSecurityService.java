@@ -18,9 +18,6 @@ public class StoreSecurityService extends BaseSecurityService {
 
     public boolean hasPermissionToAccess(int storeID){
         Store store = storeDAO.getByID(storeID);
-        if(store != null && store.getUser() != null && store.getUser().getId() == getCurrentUser().getId()) {
-            return true;
-        }
-        return false;
+        return store != null && store.getUser() != null && store.getUser().getId() == getCurrentUser().getId();
     }
 }

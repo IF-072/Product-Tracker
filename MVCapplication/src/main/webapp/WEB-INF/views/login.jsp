@@ -46,11 +46,6 @@
                             <div class="form-group">
                                 <form:input path="password" class="form-control" placeholder="Password" name="password" type="password" value=""/>
                             </div>
-                            <div class="checkbox">
-                                <label>
-                                    <input name="remember" type="checkbox" value="true">Remember Me
-                                </label>
-                            </div>
                             <input type="submit" class="btn btn-lg btn-success btn-block" value="Login"/>
                         </fieldset>
                     </form:form>

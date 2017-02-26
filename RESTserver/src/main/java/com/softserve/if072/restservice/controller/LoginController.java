@@ -14,8 +14,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletResponse;
-
 @RestController
 @RequestMapping("/login")
 public class LoginController {
@@ -29,7 +27,7 @@ public class LoginController {
     @RequestMapping(value = "/", method = RequestMethod.POST)
     @ResponseBody
     @ResponseStatus(value = HttpStatus.OK)
-    public ResponseEntity<?> getAuthenticationToken(@RequestParam String login, @RequestParam String password, HttpServletResponse response) {
+    public ResponseEntity<?> getAuthenticationToken(@RequestParam String login, @RequestParam String password) {
         try {
             User user = userService.getByUsername(login);
             if (user == null) {
