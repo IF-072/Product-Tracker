@@ -5,11 +5,9 @@ function allowBtn(index, amount) {
     var jbtn = jtr.find(' button');
 
     if (amount == value) {
-        jbtn.removeClass("btn-default");
         jbtn.addClass("disabled");
     } else {
         jbtn.removeClass("disabled");
-        jbtn.addClass("btn-default");
     }
 
 }
@@ -24,8 +22,17 @@ function subForm(e) {
         type: 'post',
         data: data,
         success: function () {
-            jbtn.removeClass("btn-default");
             jbtn.addClass("disabled");
+        },
+        error: function (jqXHR, exception) {
+            console.log(jqXHR);
+            console.log(exception);
+            $("#error").modal('show');
+
+            $(".btn-confirm").click(function () {
+
+                $("#error").modal('hide');
+            });
         }
     });
 }
@@ -48,6 +55,12 @@ function addToShoppingList(productId) {
         error: function (jqXHR, exception) {
             console.log(jqXHR);
             console.log(exception);
+            $("#error").modal('show');
+
+            $(".btn-confirm").click(function () {
+
+                $("#error").modal('hide');
+            });
         }
     });
 
