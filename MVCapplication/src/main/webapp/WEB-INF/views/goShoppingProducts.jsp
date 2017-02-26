@@ -41,7 +41,7 @@
                 </table>
                 <button type="button" class="btn btn-default" id="selectAll">Select all</button>
                 <button type="button" class="btn btn-default" id="prevStep">Previous step</button>
-                <input type="submit" class="btn btn-default selected btn-success" value="Add to cart">
+                <input type="submit" class="btn btn-default btn-success" value="Add to cart">
             </form:form>
 
 

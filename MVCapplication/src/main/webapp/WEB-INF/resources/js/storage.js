@@ -30,12 +30,11 @@ function subForm(e) {
     });
 }
 
-function addToShoppingList(userId, productId) {
+function addToShoppingList(productId) {
     $.ajax({
         url: "addToSL",
         method: "POST",
         data: {
-            userId: userId,
             productId: productId
         },
         success: function () {
