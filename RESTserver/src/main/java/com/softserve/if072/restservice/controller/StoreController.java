@@ -200,8 +200,8 @@ public class StoreController {
             ".hasPermissionToAccess(#storeId)")
     @PostMapping("/manyProducts/{userId}/{storeId}")
     @ResponseStatus(value = HttpStatus.OK)
-    public void addProductsToStore(@RequestBody List<Integer> productsId, @PathVariable Integer storeId,
-                                   @PathVariable Integer userId) {
+    public void addProductsToStore(@RequestBody List<Integer> productsId, @PathVariable Integer userId, @PathVariable
+            Integer storeId) {
         storeService.addProductsToStore(productsId, storeId);
         LOGGER.info(String.format("Products  where added to Store %d", storeId));
     }

@@ -2,16 +2,12 @@ package com.softserve.if072.mvcapp.controller;
 
 import com.softserve.if072.common.model.Product;
 import com.softserve.if072.common.model.Store;
-import com.softserve.if072.common.model.User;
 import com.softserve.if072.mvcapp.dto.ProductsWrapper;
 import com.softserve.if072.mvcapp.service.StorePageService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -21,13 +17,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.client.RestTemplate;
 
-import javax.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * The class contains methods that handle the http requests from the stores`s page
@@ -38,9 +29,12 @@ import java.util.Map;
 @Controller
 public class StorePageController extends BaseController {
 
-    @Autowired
     StorePageService storePageService;
 
+    @Autowired
+    public StorePageController(StorePageService storePageService) {
+        this.storePageService = storePageService;
+    }
 
     public static final Logger LOGGER = LogManager.getLogger(StorePageController.class);
 
@@ -63,8 +57,9 @@ public class StorePageController extends BaseController {
      */
     @GetMapping("/stores/")
     public String getAllStoresByUserId(Model model) {
-        model.addAttribute("stores", storePageService.getAllStoresByUserId(getCurrentUser().getId()));
-
+        int userId = getCurrentUser().getId();
+        model.addAttribute("stores", storePageService.getAllStoresByUserId(userId));
+        LOGGER.info(String.format("Stores of user with id %d were found", userId));
         return "allStores";
     }
 
@@ -77,8 +72,9 @@ public class StorePageController extends BaseController {
      */
     @GetMapping("/addStore")
     public String addStore(Model model) {
-        model.addAttribute("store", new Store());
-        LOGGER.info("Adding Store");
+        model.addAttribute("store", storePageService.addNewStore());
+        LOGGER.info(String.format("Store of user %d is adding", getCurrentUser().getId()));
+
         return "addStore";
     }
 
@@ -91,22 +87,13 @@ public class StorePageController extends BaseController {
      */
     @PostMapping(value = "/addStore")
     public String addStore(@Validated @ModelAttribute("store") Store store, BindingResult result,
-                           Model model, HttpServletResponse httpServletResponse) {
-
+                           Model model) {
         if (result.hasErrors()) {
             model.addAttribute("errorMessages", result.getFieldErrors());
             return "addStore";
         }
-
-        final String uri = storeUrl + "/";
-        RestTemplate restTemplate = getRestTemplate();
-        User user = restTemplate.getForObject(getCurrentUser, User.class);
-        int userId = user.getId();
-
-        store.setUser(user);
-        store.setEnabled(true);
-        restTemplate.postForObject(uri, store, Store.class);
-        LOGGER.info(String.format("Store of user %d was added", user.getId()));
+        storePageService.addStore(getCurrentUser(), store);
+        LOGGER.info(String.format("Store of user %d was added", getCurrentUser().getId()));
 
         return "redirect:/stores/";
     }
@@ -120,22 +107,9 @@ public class StorePageController extends BaseController {
      * @return view page that contains all products that are offered in store
      */
     @GetMapping("/stores/storeProducts")
-    public String getAllProductsByStoreId(@RequestParam("storeId") Integer storeId, ModelMap model) {
-        final String uri = storeUrl + "/{storeId}/storeProducts/{userId}";
-        final String storeUri = storeUrl + "/{storeId}";
-
-        RestTemplate restTemplate = getRestTemplate();
-        User user = restTemplate.getForObject(getCurrentUser, User.class);
-        int userId = user.getId();
-
-        Map<String, Integer> param = new HashMap<>();
-        param.put("storeId", storeId);
-        Store store = restTemplate.getForObject(storeUri, Store.class, param);
-        param.put("userId", userId);
-        List products = restTemplate.getForObject(uri, List.class, param);
-        model.addAttribute("store", store);
-        model.addAttribute("products", products);
-
+    public String getAllProductsByStoreId(@RequestParam("storeId") int storeId, ModelMap model) {
+        model.addAttribute("store", storePageService.getStoreById(storeId));
+        model.addAttribute("products", storePageService.getAllProductsFromStore(storeId, getCurrentUser().getId()));
         LOGGER.info(String.format("Products from store %d were found", storeId));
 
         return "productsInStore";
@@ -148,62 +122,39 @@ public class StorePageController extends BaseController {
      *
      * @param storeId id of store where we add products
      * @param model   contains data for view
-     * @return view page that contains all products that are not offered in store yet
+     * @return view page that contains all products that are not represented in this store
      */
     @GetMapping("/addProductsToStore")
-    public String addProductsToStore(@RequestParam("storeId") Integer storeId, ModelMap model) {
+    public String addProductsToStore(@RequestParam("storeId") int storeId, ModelMap model) {
 
-        final String productsUri = storeUrl + "/{storeId}/notMappedProducts/{userId}";
-        final String storeUri = storeUrl + "/{storeId}";
-
-        RestTemplate restTemplate = getRestTemplate();
-        User user = restTemplate.getForObject(getCurrentUser, User.class);
-        int userId = user.getId();
-
-        Map<String, Integer> param = new HashMap<>();
-        param.put("storeId", storeId);
-        Store myStore = restTemplate.getForObject(storeUri, Store.class, param);
-
-        param.put("userId", userId);
-        ResponseEntity<List<Product>> productResult = restTemplate.exchange(productsUri, HttpMethod.GET, null,
-                new ParameterizedTypeReference<List<Product>>() {
-                }, param);
-        List<Product> products = productResult.getBody();
-        model.addAttribute("myStore", myStore);
-
-        ProductsWrapper productsWrapper = new ProductsWrapper(new ArrayList<>(products.size()));
+        model.addAttribute("myStore", storePageService.getStoreById(storeId));
+        List<Product> products = storePageService.getNotMappedProducts(storeId, getCurrentUser().getId());
         model.addAttribute("products", products);
-        model.addAttribute("wrapedProducts", productsWrapper);
-        LOGGER.info(String.format("Products of user %d in store %d found", userId, storeId));
+        model.addAttribute("wrapedProducts", new ProductsWrapper(products.size()));
+        LOGGER.info(String.format("NotMappedProducts in store %d found and shoved on display", storeId));
 
         return "addProductsToStore";
     }
 
     /**
-     * Method gets wrapedProducts object which contains list of product id. This all products will be added to
-     * store and saved in Database. Method  sends a request to the rest-service to update Database
+     * Method for adding products to store
      *
      * @param storeId        id of store where we add products
      * @param wrapedProducts list of product id that will be added to current store
      * @return redirect to the store view page that contains list of stores
      */
     @PostMapping("/addProductsToStore")
-    public String addProductsToStore(@RequestParam("storeId") Integer storeId, @ModelAttribute("wrapedProducts")
+    public String addProductsToStore(@RequestParam("storeId") int storeId, @ModelAttribute("wrapedProducts")
             ProductsWrapper wrapedProducts) {
-
-        RestTemplate restTemplate = getRestTemplate();
-        User user = restTemplate.getForObject(getCurrentUser, User.class);
-        int userId = user.getId();
-        final String uri = storeUrl + "/manyProducts/" + userId + "/" + storeId;
-
-        List<Integer> productsId = wrapedProducts.getProducts();
-        if (productsId.isEmpty()) {
-            return "redirect:/stores/";
+        int userId = getCurrentUser().getId();
+        if (wrapedProducts.getProducts().isEmpty()) {
+            LOGGER.info(String.format("No products have been chosen in store %d ", storeId));
+            return String.format("redirect:/stores/storeProducts?storeId=%d", storeId);
         }
-        restTemplate.postForObject(uri, productsId, List.class);
+        storePageService.addProductsToStore(userId, storeId, wrapedProducts);
         LOGGER.info(String.format("Products of user %d added in store %d ", userId, storeId));
 
-        return "redirect:/stores/storeProducts?storeId=" + storeId;
+        return String.format("redirect:/stores/storeProducts?storeId=%d", storeId);
     }
 
     /**
@@ -216,16 +167,7 @@ public class StorePageController extends BaseController {
     @PostMapping(value = "/stores/delProduct")
     public String deleteProductFromStore(@RequestParam("storeID") int storeID, @RequestParam("productID") int
             productID) {
-
-        final String productUri = storeUrl + "/{storeId}/products/{productId}";
-        final String delUri = storeUrl + "/" + storeID + "/products";
-
-        RestTemplate restTemplate = getRestTemplate();
-        Map<String, Integer> param = new HashMap<>();
-        param.put("storeId", storeID);
-        param.put("productId", productID);
-        Product product = restTemplate.getForObject(productUri, Product.class, param);
-        restTemplate.postForObject(delUri, product, Product.class);
+        storePageService.deleteProductFromStore(storeID, productID);
         LOGGER.info(String.format("Product %d from tore with id %d was deleted", productID, storeID));
 
         return "redirect:/stores/storeProducts";
@@ -239,15 +181,7 @@ public class StorePageController extends BaseController {
      */
     @PostMapping(value = "/stores/delStore")
     public String deleteStore(@RequestParam("storeId") int storeId) {
-        final String uri = storeUrl + "/{storeId}";
-        final String delUri = storeUrl + "/delStore";
-
-        RestTemplate restTemplate = getRestTemplate();
-        Map<String, Integer> param = new HashMap<>();
-        param.put("storeId", storeId);
-        Store store = restTemplate.getForObject(uri, Store.class, param);
-
-        restTemplate.put(delUri, store, Store.class);
+        storePageService.deleteStore(storeId);
         LOGGER.info(String.format("Store with id %d was deleted", storeId));
 
         return "redirect:/stores/";
@@ -261,41 +195,32 @@ public class StorePageController extends BaseController {
      * @return store view page that contains form for editing store
      */
     @GetMapping("/editStore")
-    public String editStore(@RequestParam("storeId") Integer storeId, ModelMap model) {
-        final String uri = storeUrl + "/{storeId}";
-        RestTemplate restTemplate = getRestTemplate();
-        Map<String, Integer> param = new HashMap<>();
-        param.put("storeId", storeId);
-        Store store = restTemplate.getForObject(uri, Store.class, param);
-        model.addAttribute("store", store);
-        LOGGER.info("Editing Store" + storeId);
+    public String editStore(@RequestParam("storeId") int storeId, ModelMap model) {
+        model.addAttribute("store", storePageService.getStoreById(storeId));
+        LOGGER.info(String.format("Editing Store %d", storeId));
+
         return "editStore";
     }
 
     /**
      * Method gets edited store and sends a request to the rest-service to update database
      *
-     * @param store   completed store that will be changed
+     * @param store   store that will replace old store
      * @param storeId id of store that will be changed
      * @param model   for sending errorMessage if the store name is empty
      * @return redirect to the store view page that contains list of stores
      */
     @PostMapping("/editStore")
     public String editStore(@Validated @ModelAttribute("store") Store store, BindingResult result, @RequestParam
-            ("storeId") Integer storeId, Model model, HttpServletResponse httpServletResponse) {
-
+            ("storeId") int storeId, Model model) {
         if (result.hasErrors()) {
+            model.addAttribute("store", storePageService.getStoreById(storeId));
             model.addAttribute("errorMessages", result.getFieldErrors());
             return "editStore";
         }
-        store.setId(storeId);
-        final String uri = storeUrl + "/update";
-        RestTemplate restTemplate = getRestTemplate();
-        User user = restTemplate.getForObject(getCurrentUser, User.class);
-        store.setUser(user);
-
-        restTemplate.put(uri, store, Store.class);
+        storePageService.editStore(store, storeId, getCurrentUser());
         LOGGER.info(String.format("Store with id %d was updated", storeId));
+
         return "redirect:/stores/";
     }
 
