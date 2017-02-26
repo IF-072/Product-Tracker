@@ -1,6 +1,6 @@
 package com.softserve.if072.restservice.controller;
 
-import com.softserve.if072.common.model.FormForCart;
+import com.softserve.if072.common.model.Cart;
 import com.softserve.if072.common.model.ShoppingList;
 import com.softserve.if072.common.model.Store;
 import com.softserve.if072.restservice.exception.DataNotFoundException;
@@ -72,15 +72,15 @@ public class GoShoppingController {
         }
     }
 
-    @PreAuthorize("#cart != null && #cart.carts != null && #cart.carts[0] != null && " +
-            "#cart.carts[0].user.id == authentication.user.id")
+    @PreAuthorize("#carts != null &&  #carts[0] != null && " +
+            "#carts[0].user.id == authentication.user.id")
     @PostMapping("/cart")
     @ResponseBody
     @ResponseStatus(value = HttpStatus.OK)
-    public void insertInCart(@RequestBody FormForCart cart, HttpServletResponse response) {
+    public void insertInCart(@RequestBody List<Cart> carts, HttpServletResponse response) {
 
-        goShoppingService.insertCart(cart);
-        LOGGER.info(String.format("Cart of user id %d was updated", cart.getUserId()));
+        goShoppingService.insertCart(carts);
+        LOGGER.info("Cart was inserted");
 
     }
 }

@@ -1,5 +1,5 @@
-function checkBox(index) {
-    var checkbox = $("#checkbox" + index);
+function checkBox() {
+    var checkbox = $(this).find('.checkbox');
     checkbox.prop("checked", checkbox.prop("checked") ? 0 : 1);
 }
 
@@ -24,4 +24,9 @@ $(document).ready(function () {
             });
         }
     });
+
+
+    $(".check-tr").on("click", checkBox);
+    $("#selectAll").on("click", selectAll);
+    $("#prevStep").on("click", prevStep);
 });

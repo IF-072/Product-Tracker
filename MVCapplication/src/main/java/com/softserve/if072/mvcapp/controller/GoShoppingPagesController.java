@@ -1,6 +1,7 @@
 package com.softserve.if072.mvcapp.controller;
 
-import com.softserve.if072.common.model.FormForCart;
+import com.softserve.if072.common.model.Cart;
+import com.softserve.if072.mvcapp.dto.FormForCart;
 import com.softserve.if072.common.model.ShoppingList;
 import com.softserve.if072.common.model.Store;
 import org.apache.logging.log4j.LogManager;
@@ -9,7 +10,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.util.CollectionUtils;
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -52,7 +53,7 @@ public class GoShoppingPagesController extends BaseController {
         final String uri = goShoppingURL + "/" + stores + "/products/" + userId;
         RestTemplate restTemplate = getRestTemplate();
         Map<String, List<ShoppingList>> map = restTemplate.getForObject(uri, Map.class);
-        if (!CollectionUtils.isEmpty(map)) {
+        if (map != null) {
             model.addAllAttributes(map);
         }
 
@@ -67,7 +68,8 @@ public class GoShoppingPagesController extends BaseController {
 
         final String uri = goShoppingURL + "/cart";
         RestTemplate restTemplate = getRestTemplate();
-        restTemplate.postForObject(uri, form, FormForCart.class);
+        form.removeUncheked();
+        restTemplate.postForObject(uri, form.getCarts(), Cart.class);
         return "redirect:/cart/";
     }
 

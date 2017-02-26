@@ -1,6 +1,5 @@
 package com.softserve.if072.restservice.service;
 
-import com.softserve.if072.common.model.FormForCart;
 import com.softserve.if072.common.model.Product;
 import com.softserve.if072.common.model.ShoppingList;
 import com.softserve.if072.common.model.Store;
@@ -13,7 +12,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
+import org.apache.commons.collections.CollectionUtils;
 
 import java.util.HashSet;
 import java.util.Iterator;
@@ -51,7 +50,7 @@ public class GoShoppingService {
      * @return list of store item that belong to specific user
      */
     public List<Store> getStoreByUserId(int userId) throws DataNotFoundException {
-        if (!CollectionUtils.isEmpty(cartDAO.getByUserId(userId))) {
+        if (CollectionUtils.isNotEmpty(cartDAO.getByUserId(userId))) {
             return null;
         }
 
@@ -77,11 +76,11 @@ public class GoShoppingService {
      * @return two lists of products item that belong to specific user
      */
     public Map<String, List<ShoppingList>> getProducts(Integer userId, int storeId) throws DataNotFoundException {
-        Map<String, List<ShoppingList>> productsMap = new HashMap<String, List<ShoppingList>>();
+        Map<String, List<ShoppingList>> productsMap = new HashMap<>();
 
         List<ShoppingList> shoppinList = shoppingListDAO.getByUserID(userId);
         List<Product> productsFromSelectedStore = storeDAO.getProductsByStoreId(storeId, userId);
-        List<Store> store = new ArrayList<Store>();
+        List<Store> store = new ArrayList<>();
         store.add(storeDAO.getByID(storeId));
 
         if (CollectionUtils.isEmpty(productsFromSelectedStore)) {
@@ -89,7 +88,7 @@ public class GoShoppingService {
                     userId, storeId));
         }
 
-        List<ShoppingList> productsToBuy = new ArrayList<ShoppingList>();
+        List<ShoppingList> productsToBuy = new ArrayList<>();
 
         for (Iterator<ShoppingList> iterator = shoppinList.iterator(); iterator.hasNext(); ) {
             ShoppingList element = iterator.next();
@@ -105,9 +104,8 @@ public class GoShoppingService {
         return productsMap;
     }
 
-    public void insertCart(FormForCart carts) {
-        carts.removeUncheked();
-        for (Cart cart : carts.getCarts()) {
+    public void insertCart(List<Cart> carts) {
+        for (Cart cart : carts) {
             cartDAO.insert(cart);
         }
     }
@@ -124,13 +122,13 @@ public class GoShoppingService {
         Iterator<Store> iterator = storeList.iterator();
         while (iterator.hasNext()) {
             Store store = iterator.next();
-            if (!CollectionUtils.isEmpty(store.getProducts())) {
-                Set<Product> set = new HashSet<Product>(shoppingList);
+            if (CollectionUtils.isNotEmpty(store.getProducts())) {
+                Set<Product> set = new HashSet<>(shoppingList);
                 set.retainAll(store.getProducts());
                 if (CollectionUtils.isEmpty(set)) {
                     iterator.remove();
                 } else {
-                    store.setProducts(new ArrayList<Product>(set));
+                    store.setProducts(new ArrayList<>(set));
                 }
             } else {
                 iterator.remove();
