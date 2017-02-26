@@ -4,6 +4,9 @@ import com.softserve.if072.common.model.Role;
 import com.softserve.if072.common.model.User;
 import com.softserve.if072.mvcapp.dto.UserRegistrationForm;
 import com.softserve.if072.mvcapp.service.RegistrationService;
+import com.softserve.if072.mvcapp.validator.RegistrationValidator;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -26,11 +29,28 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @RequestMapping("/register")
 public class RegistrationController extends BaseController {
 
+    private static final Logger LOGGER = LogManager.getLogger(RegistrationController.class);
+
     @Value("${registration.incorrectAccountType}")
     private String incorrectAccountTypeMessage;
 
-    @Autowired
+    @Value("${registration.alreadyExists}")
+    private String alreadyExistMessage;
+
+    @Value("${registration.successful}")
+    private String registrationSuccessfulMessage;
+
+    @Value("${registration.generalError}")
+    private String generalErrorMessage;
+
+    private RegistrationValidator registrationValidator;
     private RegistrationService registrationService;
+
+    @Autowired
+    public RegistrationController(RegistrationValidator registrationValidator, RegistrationService registrationService) {
+        this.registrationValidator = registrationValidator;
+        this.registrationService = registrationService;
+    }
 
     /**
      * Creates empty {@link UserRegistrationForm} and puts it with into model.
@@ -48,16 +68,17 @@ public class RegistrationController extends BaseController {
      * Handles user registration process. In case of errors (such as already existed account,
      * incorrect account type etc.) redirects to register page with displaying error message.
      *
-     * @param registrationForm an {@link ModelAttribute} filled in with user's data
-     * @param result validation result
+     * @param registrationForm   an {@link ModelAttribute} filled in with user's data
+     * @param result             validation result
      * @param redirectAttributes attributes with custom messages to be displayed on the page
      * @return view name
      */
     @PostMapping
     public String postRegisterPage(@Validated @ModelAttribute("registrationForm") UserRegistrationForm registrationForm,
                                    BindingResult result, RedirectAttributes redirectAttributes) {
+        registrationValidator.validate(registrationForm, result);
         if (result.hasErrors()) {
-            redirectAttributes.addFlashAttribute("validationErrors", result.getFieldErrors());
+            redirectAttributes.addFlashAttribute("validationErrors", result.getAllErrors());
             return "redirect:/register";
         }
 
@@ -74,9 +95,13 @@ public class RegistrationController extends BaseController {
         user.setRole(role);
         user.setEnabled(true);
 
-        return registrationService.performRegistration(user, redirectAttributes);
+        if(registrationService.performRegistration(user)){
+            redirectAttributes.addFlashAttribute("successMessage", registrationSuccessfulMessage);
+            LOGGER.info("User {} has been successfully registered");
+        } else {
+            redirectAttributes.addFlashAttribute("errorMessage", generalErrorMessage);
+        }
+
+        return "redirect:/register";
     }
-
-
-
 }

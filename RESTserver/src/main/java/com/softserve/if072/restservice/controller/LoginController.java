@@ -18,12 +18,23 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/login")
 public class LoginController {
 
-    @Autowired
     private TokenService tokenService;
-
-    @Autowired
     private UserService userService;
 
+    @Autowired
+    public LoginController(TokenService tokenService, UserService userService) {
+        this.tokenService = tokenService;
+        this.userService = userService;
+    }
+
+    /**
+     * Performs server-side authentication process. If user credentials are correct, generates token string and returns
+     * it as a response body
+     *
+     * @param login user login
+     * @param password user password
+     * @return token string
+     */
     @RequestMapping(value = "/", method = RequestMethod.POST)
     @ResponseBody
     @ResponseStatus(value = HttpStatus.OK)
