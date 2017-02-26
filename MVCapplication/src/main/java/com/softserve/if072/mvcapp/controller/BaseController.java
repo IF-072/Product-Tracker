@@ -3,7 +3,6 @@ package com.softserve.if072.mvcapp.controller;
 import com.softserve.if072.common.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
@@ -13,7 +12,7 @@ import org.springframework.web.client.RestTemplate;
  *
  * @author Igor Parada
  */
-@PropertySource({"classpath:application.properties", "classpath:message.properties"})
+
 abstract public class BaseController {
 
     @Value("${application.authenticationCookieName}")

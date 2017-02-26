@@ -18,9 +18,6 @@ public class CategorySecurityService extends BaseSecurityService {
 
     public boolean hasPermissionToAccess(int categoryID){
         Category category = categoryDAO.getByID(categoryID);
-        if(category != null && category.getUser() != null && category.getUser().getId() == getCurrentUser().getId()) {
-            return true;
-        }
-        return false;
+        return category != null && category.getUser() != null && category.getUser().getId() == getCurrentUser().getId();
     }
 }

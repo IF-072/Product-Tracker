@@ -46,6 +46,5 @@ public class StorePageService {
         LOGGER.info(String.format("Stores of user with id %d were found", userId));
         return stores;
     }
-
 }
 
