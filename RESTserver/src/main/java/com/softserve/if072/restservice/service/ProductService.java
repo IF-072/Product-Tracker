@@ -7,11 +7,9 @@ import com.softserve.if072.restservice.exception.DataNotFoundException;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.xml.crypto.Data;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,7 +20,6 @@ import java.util.List;
  */
 
 @Service
-@PropertySource(value = {"classpath:message.properties"})
 public class ProductService {
 
     private ProductDAO productDAO;

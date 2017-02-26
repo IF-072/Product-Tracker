@@ -7,7 +7,6 @@ import com.softserve.if072.common.model.Store;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.apache.commons.collections.CollectionUtils;
@@ -23,7 +22,6 @@ import java.util.Map;
 
 
 @Controller
-@PropertySource(value = {"classpath:application.properties"})
 public class GoShoppingPagesController extends BaseController {
 
     private static final Logger LOGGER = LogManager.getLogger(GoShoppingPagesController.class);

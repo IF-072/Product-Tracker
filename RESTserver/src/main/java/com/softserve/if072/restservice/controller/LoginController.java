@@ -14,22 +14,31 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletResponse;
-
 @RestController
 @RequestMapping("/login")
 public class LoginController {
 
-    @Autowired
     private TokenService tokenService;
-
-    @Autowired
     private UserService userService;
 
+    @Autowired
+    public LoginController(TokenService tokenService, UserService userService) {
+        this.tokenService = tokenService;
+        this.userService = userService;
+    }
+
+    /**
+     * Performs server-side authentication process. If user credentials are correct, generates token string and returns
+     * it as a response body
+     *
+     * @param login user login
+     * @param password user password
+     * @return token string
+     */
     @RequestMapping(value = "/", method = RequestMethod.POST)
     @ResponseBody
     @ResponseStatus(value = HttpStatus.OK)
-    public ResponseEntity<?> getAuthenticationToken(@RequestParam String login, @RequestParam String password, HttpServletResponse response) {
+    public ResponseEntity<?> getAuthenticationToken(@RequestParam String login, @RequestParam String password) {
         try {
             User user = userService.getByUsername(login);
             if (user == null) {

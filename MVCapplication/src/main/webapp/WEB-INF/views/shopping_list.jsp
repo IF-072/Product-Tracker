@@ -35,8 +35,7 @@
                                    class="fa fa-minus-square fa-lg"/></td>
                             <td><a onclick="edit(${elem.product.id}, 1, ${loop.count})"
                                    class="fa fa-plus-square fa-lg"/></td>
-                            <td><a href="<c:url value="/shopping_list/delete?prodId=${elem.product.id}"/> "
-                                   class="fa fa-times fa-lg"/></td>
+                            <td><a prodId="${elem.product.id}" class="fa fa-times fa-lg del"/></td>
                         </tr>
                     </c:forEach>
                     </tbody>
@@ -47,4 +46,14 @@
         <!-- /.panel-body -->
     </div>
     <!-- /.panel -->
+</div>
+
+<div id="dialog" hidden="hidden">
+    <h2 class="text-center">Are you sure?</h2>
+    <br />
+    <br />
+    <div class="center-block text-center">
+        <button id="yes" class="btn btn-success btn-reset-custom">Yes</button>
+        <button id="no" class="btn btn-default btn-reset-custom">No</button>
+    </div>
 </div>

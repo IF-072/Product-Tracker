@@ -5,7 +5,6 @@ import com.softserve.if072.common.model.Storage;
 import com.softserve.if072.common.model.User;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,7 +19,6 @@ import java.util.List;
  * @author Pavlo Bendus
  */
 @Controller
-@PropertySource("classpath:application.properties")
 public class HomePageController extends BaseController {
 
     @Value("${application.restStorageURL}")

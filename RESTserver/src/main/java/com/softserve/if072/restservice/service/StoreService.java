@@ -8,7 +8,6 @@ import com.softserve.if072.restservice.exception.DataNotFoundException;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,7 +16,6 @@ import java.util.List;
 import java.util.Set;
 
 @Service
-@PropertySource(value = {"classpath:message.properties"})
 public class StoreService {
 
     private final StoreDAO storeDAO;
@@ -44,7 +42,7 @@ public class StoreService {
         if (!stores.isEmpty()) {
             return stores;
         } else {
-           return null;
+            return null;
         }
     }
 
@@ -70,14 +68,15 @@ public class StoreService {
      *
      * @param store - will be written to DataBase
      * @throws IllegalArgumentException - if the passed store is null or has empty name
-     * not found
+     *                                  not found
      */
     @Transactional
     public void addStore(Store store) throws IllegalArgumentException {
         if (store != null && store.getName() != null && store.getName() != "") {
             storeDAO.insert(store);
-        } else throw new IllegalArgumentException("Illegal arguments!");
+        } else throw new IllegalArgumentException(String.format("Illegal arguments in store id %d", store.getId()));
     }
+
 
     /**
      * This method  updates store that is in DataBase and has the same id as the passed hire.
@@ -87,8 +86,8 @@ public class StoreService {
      */
     @Transactional
     public void updateStore(Store store) throws IllegalArgumentException {
-       if (store.getName().isEmpty() || store.getName() == "") {
-            throw new IllegalArgumentException("Illegal arguments!");
+        if (store.getName().isEmpty() || store.getName() == "") {
+            throw new IllegalArgumentException(String.format("Illegal arguments in store id %d", store.getId()));
         }
         storeDAO.update(store);
     }

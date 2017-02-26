@@ -6,7 +6,6 @@ import com.softserve.if072.restservice.service.CategoryService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -31,7 +30,6 @@ import java.util.List;
 
 @Controller
 @RequestMapping(value = "api/category")
-@PropertySource("classpath:message.properties")
 public class CategoryController {
 
     private static final Logger LOGGER = LogManager.getLogger(CategoryController.class);
