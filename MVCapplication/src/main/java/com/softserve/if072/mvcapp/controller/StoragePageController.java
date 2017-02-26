@@ -7,7 +7,6 @@ import com.softserve.if072.common.model.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -25,7 +24,6 @@ import java.util.List;
  */
 @Controller
 @RequestMapping("/storage")
-@PropertySource(value = {"classpath:application.properties"})
 public class StoragePageController extends BaseController {
 
     private static final Logger LOGGER = LogManager.getLogger(StoragePageController.class);

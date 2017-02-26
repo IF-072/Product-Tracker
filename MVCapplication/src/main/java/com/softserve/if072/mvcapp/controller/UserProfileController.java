@@ -3,7 +3,6 @@ package com.softserve.if072.mvcapp.controller;
 import com.softserve.if072.common.model.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
  * @author Oleh Pochernin
  */
 @Controller
-@PropertySource(value = {"classpath:application.properties"})
 public class UserProfileController extends BaseController {
     private static final Logger LOG = LogManager.getLogger(UserProfileController.class);
 

@@ -2,12 +2,10 @@ package com.softserve.if072.restservice.service;
 
 import com.softserve.if072.common.model.User;
 import com.softserve.if072.restservice.dao.mybatisdao.UserDAO;
-
 import com.softserve.if072.restservice.exception.DataNotFoundException;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
 
 import javax.xml.bind.annotation.adapters.HexBinaryAdapter;
@@ -22,7 +20,6 @@ import static org.apache.commons.codec.binary.StringUtils.getBytesUtf8;
  * @author Oleh Pochernin
  */
 @Service
-@PropertySource(value = {"classpath:message.properties"})
 public class UserService {
 
     @Value("${users.notfound}")

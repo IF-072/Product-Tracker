@@ -7,7 +7,6 @@ import com.softserve.if072.mvcapp.dto.ProductsWrapper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -35,7 +34,6 @@ import java.util.Map;
  */
 
 @Controller
-@PropertySource(value = {"classpath:application.properties"})
 public class StorePageController extends BaseController {
 
     public static final Logger LOGGER = LogManager.getLogger(StorePageController.class);

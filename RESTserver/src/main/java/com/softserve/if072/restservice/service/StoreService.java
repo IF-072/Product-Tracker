@@ -8,7 +8,6 @@ import com.softserve.if072.restservice.exception.DataNotFoundException;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,7 +16,6 @@ import java.util.List;
 import java.util.Set;
 
 @Service
-@PropertySource(value = {"classpath:message.properties"})
 public class StoreService {
 
     private final StoreDAO storeDAO;
