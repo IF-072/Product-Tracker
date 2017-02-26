@@ -52,10 +52,10 @@
                         <tbody>
 
                         <c:forEach var="store" items="${stores}" varStatus="loop">
-                            <tr onclick="checkBox(${loop.index})">
+                            <tr class="check-tr">
                                 <td>
-                                    <input type="radio" value="${store.id}" name="stores" id="checkbox${loop.index}"
-                                           onclick="checkBox(${loop.index})" required>
+                                    <input type="radio" value="${store.id}" name="stores" class="checkbox"
+                                           required>
                                 </td>
                                 <td>${store.name}</td>
                                 <td>${store.address}</td>

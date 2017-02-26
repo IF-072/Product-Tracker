@@ -2,7 +2,7 @@ function allowBtn(index, amount) {
     var tr = document.getElementsByTagName("tr");
     var jtr = $(tr[index]);
     var value = jtr.find(' input[type=number]').val();
-    var jbtn = jtr.find(' input[type=submit]');
+    var jbtn = jtr.find(' button');
 
     if (amount == value) {
         jbtn.removeClass("btn-default");
@@ -18,7 +18,7 @@ function subForm(e) {
     e.preventDefault();
     var url = $(this).closest('form').attr('action'),
         data = $(this).closest('form').serialize();
-    var jbtn = $(this).find(' input[type=submit]');
+    var jbtn = $(this).find('button');
     $.ajax({
         url: url,
         type: 'post',
@@ -30,12 +30,11 @@ function subForm(e) {
     });
 }
 
-function addToShoppingList(userId, productId) {
+function addToShoppingList(productId) {
     $.ajax({
         url: "addToSL",
         method: "POST",
         data: {
-            userId: userId,
             productId: productId
         },
         success: function () {

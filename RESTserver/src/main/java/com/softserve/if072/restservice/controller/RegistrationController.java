@@ -18,8 +18,12 @@ public class RegistrationController {
 
     private static final Logger LOGGER = LogManager.getLogger(RegistrationController.class);
 
-    @Autowired
     private UserService userService;
+
+    @Autowired
+    public RegistrationController(UserService userService) {
+        this.userService = userService;
+    }
 
     @RequestMapping(value = "/", method = RequestMethod.POST)
     public ResponseEntity<String> performRegistration(@RequestBody User user) {
@@ -37,4 +41,16 @@ public class RegistrationController {
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    @RequestMapping(value = "/findUsername", method = RequestMethod.POST)
+    public ResponseEntity<String> findUsername(@RequestBody String username) {
+        User alreadyRegisteredUser = userService.getByUsername(username);
+        if (alreadyRegisteredUser != null) {
+            return new ResponseEntity<String>(alreadyRegisteredUser.getEmail(), HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+
 }

@@ -3,6 +3,7 @@ package com.softserve.if072.mvcapp.controller;
 import com.softserve.if072.mvcapp.dto.UserLoginForm;
 import com.softserve.if072.mvcapp.service.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 
 
@@ -24,8 +26,15 @@ import javax.servlet.http.HttpServletResponse;
 @RequestMapping("/login")
 public class LoginController extends BaseController {
 
-    @Autowired
+    @Value("${login.invalidCredentials}")
+    private String invalidCredentialsMessage;
+
     private LoginService loginService;
+
+    @Autowired
+    public LoginController(LoginService loginService) {
+        this.loginService = loginService;
+    }
 
     /**
      * Fills in the login page model with empty UserLoginForm instance.
@@ -47,6 +56,13 @@ public class LoginController extends BaseController {
             return "login";
         }
 
-        return loginService.performLogin(loginForm, httpServletResponse, model);
+        Cookie cookie = loginService.performLogin(loginForm);
+        if(cookie != null) {
+            httpServletResponse.addCookie(cookie);
+            return "redirect:/home";
+        } else {
+            model.addAttribute("loginError", invalidCredentialsMessage);
+            return "login";
+        }
     }
 }
