@@ -4,8 +4,10 @@ import com.softserve.if072.common.model.Product;
 import com.softserve.if072.common.model.Store;
 import com.softserve.if072.common.model.User;
 import com.softserve.if072.mvcapp.dto.ProductsWrapper;
+import com.softserve.if072.mvcapp.service.StorePageService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.ParameterizedTypeReference;
@@ -38,6 +40,10 @@ import java.util.Map;
 @PropertySource(value = {"classpath:application.properties"})
 public class StorePageController extends BaseController {
 
+    @Autowired
+    StorePageService storePageService;
+
+
     public static final Logger LOGGER = LogManager.getLogger(StorePageController.class);
 
     @Value("${application.restStoreURL}")
@@ -51,7 +57,7 @@ public class StorePageController extends BaseController {
 
     /**
      * Method for mapping on default store url.
-     * shows the view page with user stores. On view page user can add a new one store, edit store, delete it, add
+     * shows the view page with user stores. On view page user can add a new store, edit store, delete it, add
      * products to store, and get page with all products that are offered in store
      *
      * @param model contains data for view
@@ -59,16 +65,7 @@ public class StorePageController extends BaseController {
      */
     @GetMapping("/stores/")
     public String getAllStoresByUserId(Model model) {
-        final String uri = storeUrl + "/user/{userId}";
-        RestTemplate restTemplate = getRestTemplate();
-        User user = restTemplate.getForObject(getCurrentUser, User.class);
-        int userId = user.getId();
-
-        Map<String, Integer> param = new HashMap<>();
-        param.put("userId", userId);
-        List stores = restTemplate.getForObject(uri, List.class, param);
-        model.addAttribute("stores", stores);
-        LOGGER.info(String.format("Stores of user with id %d were found", userId));
+        model.addAttribute("stores", storePageService.getAllStoresByUserId(getCurrentUser().getId()));
 
         return "allStores";
     }
