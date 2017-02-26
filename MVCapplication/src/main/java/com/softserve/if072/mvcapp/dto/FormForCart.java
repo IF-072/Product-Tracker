@@ -1,4 +1,9 @@
-package com.softserve.if072.common.model;
+package com.softserve.if072.mvcapp.dto;
+
+import com.softserve.if072.common.model.Cart;
+import com.softserve.if072.common.model.Product;
+import com.softserve.if072.common.model.Store;
+import com.softserve.if072.common.model.User;
 
 import java.util.ArrayList;
 import java.util.List;

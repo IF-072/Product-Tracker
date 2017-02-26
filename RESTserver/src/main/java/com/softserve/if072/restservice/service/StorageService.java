@@ -2,13 +2,14 @@ package com.softserve.if072.restservice.service;
 
 import com.softserve.if072.common.model.ShoppingList;
 import com.softserve.if072.common.model.Storage;
+import com.softserve.if072.common.model.dto.StorageDTO;
 import com.softserve.if072.restservice.exception.DataNotFoundException;
 import com.softserve.if072.restservice.dao.mybatisdao.StorageDAO;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
+import org.apache.commons.collections.CollectionUtils;
 
 import java.util.List;
 
@@ -31,7 +32,7 @@ public class StorageService {
 
     public List<Storage> getByUserId(int user_id) throws DataNotFoundException {
         List<Storage> list = storageDAO.getByUserID(user_id);
-        if (!CollectionUtils.isEmpty(list)) {
+        if (CollectionUtils.isNotEmpty(list)) {
             return list;
         } else {
             throw new DataNotFoundException(String.format("Storages of user with id %d not found", user_id));
@@ -62,6 +63,25 @@ public class StorageService {
         } else {
             storageDAO.updateAmount(storage);
         }
+        if (storage.getAmount() <= 1) {
+            shoppingListService.insert(new ShoppingList(storage.getUser(), storage.getProduct(), 1));
+        }
+    }
+
+    public void update(StorageDTO storageDTO) {
+        if (storageDTO.getAmount() < 0) {
+            LOGGER.error("Illegal argument: amount < 0");
+            return;
+        }
+
+        Storage storage = storageDAO.getByProductID(storageDTO.getProductId());
+        if(storage == null){
+            LOGGER.error(String.format("Storage with product id %d doesn't exist", storageDTO.getProductId()));
+            return;
+        }
+        storage.setAmount(storageDTO.getAmount());
+        storageDAO.updateAmount(storage);
+
         if (storage.getAmount() <= 1) {
             shoppingListService.insert(new ShoppingList(storage.getUser(), storage.getProduct(), 1));
         }

@@ -8,7 +8,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
+import org.apache.commons.collections.CollectionUtils;
 
 import java.util.List;
 
@@ -29,7 +29,7 @@ public class ShoppingListService {
 
     public List<ShoppingList> getByUserId(int user_id) throws DataNotFoundException {
         List<ShoppingList> list = shoppingListDAO.getByUserID(user_id);
-        if (!CollectionUtils.isEmpty(list)) {
+        if (CollectionUtils.isNotEmpty(list)) {
             return list;
         } else {
             throw new DataNotFoundException(String.format("ShoppingLists of user with id %d not found", user_id));
@@ -48,7 +48,7 @@ public class ShoppingListService {
 
     public List<Product> getProductsByUserId(int user_id) throws DataNotFoundException {
         List<Product> list = shoppingListDAO.getProductsByUserId(user_id);
-        if (!CollectionUtils.isEmpty(list)) {
+        if (CollectionUtils.isNotEmpty(list)) {
             return list;
         } else {
             throw new DataNotFoundException(String.format("Product not found of user with id %d in shoppinglist",

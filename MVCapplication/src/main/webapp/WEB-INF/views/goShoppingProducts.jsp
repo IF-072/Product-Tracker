@@ -1,4 +1,5 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <div class="row">
     <div class="col-lg-12">
         <h1 class="page-header">Choose products</h1>
@@ -7,7 +8,7 @@
 <div class="panel panel-default">
     <div class="panel-body">
         <div class="table-responsive">
-            <form action="../addToCart" method="post" modelAttribute="cartForm" id="addToCart">
+            <form:form action="../addToCart" method="post" modelAttribute="cartForm" id="addToCart">
                 <table class="table table-striped table-bordered table-hover">
                     <thead>
                     <tr>
@@ -19,11 +20,11 @@
                     <tbody>
 
                     <c:forEach var="shoppingList" items="${selected}" varStatus="loop">
-                        <tr onclick="checkBox(${loop.index})">
-                            <td >
+                        <tr class="check-tr">
+                            <td>
 
                                 <input type="checkbox" value="${loop.index}" name="checkbox[${loop.index}]"
-                                       id="checkbox${loop.index}" onclick="checkBox(${loop.index})" class="checkbox">
+                                       id="checkbox${loop.index}" class="checkbox">
                                 <input type="hidden" value="${shoppingList.product.stores[0].id}"
                                        name="carts[${loop.index}].store.id">
                             </td>
@@ -31,18 +32,17 @@
                                        value="${shoppingList.product.id}"> ${shoppingList.product.name}
                             </td>
                             <td><input type="number" name="carts[${loop.index}].amount" min="1"
-                                       value="${shoppingList.amount}" class="form-control"
-                                       onclick="checkBox(${loop.index})">
+                                       value="${shoppingList.amount}" class="form-control">
                             </td>
 
                         </tr>
                     </c:forEach>
                     </tbody>
                 </table>
-                <button type="button" class="btn btn-default" onclick="selectAll()">Select all</button>
-                <button type="button" class="btn btn-default" onclick="prevStep()">Previous step</button>
-                <input type="submit" class="btn btn-default selected btn-success" value="Add to cart">
-            </form>
+                <button type="button" class="btn btn-default" id="selectAll">Select all</button>
+                <button type="button" class="btn btn-default" id="prevStep">Previous step</button>
+                <input type="submit" class="btn btn-default btn-success" value="Add to cart">
+            </form:form>
 
 
         </div>
