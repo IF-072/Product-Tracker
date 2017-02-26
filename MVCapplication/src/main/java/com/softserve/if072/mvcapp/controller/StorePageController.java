@@ -7,7 +7,6 @@ import com.softserve.if072.mvcapp.service.StorePageService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -28,24 +27,14 @@ import java.util.List;
 
 @Controller
 public class StorePageController extends BaseController {
+    private static final Logger LOGGER = LogManager.getLogger(StorePageController.class);
 
-    StorePageService storePageService;
+    private StorePageService storePageService;
 
     @Autowired
     public StorePageController(StorePageService storePageService) {
         this.storePageService = storePageService;
     }
-
-    public static final Logger LOGGER = LogManager.getLogger(StorePageController.class);
-
-    @Value("${application.restStoreURL}")
-    private String storeUrl;
-
-    @Value("${application.restProductURL}")
-    private String productUrl;
-
-    @Value("${service.user.current}")
-    private String getCurrentUser;
 
     /**
      * Method for mapping on default store url.
