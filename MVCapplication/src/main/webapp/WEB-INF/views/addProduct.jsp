@@ -8,8 +8,6 @@
   Time: 21:40
 --%>
 
-
-
 <div class="row">
     <div class="col-lg-12">
         <h1 class="page-header">Add product</h1>
@@ -23,32 +21,37 @@
         <div class="panel-body">
             <sf:form role="form" modelAttribute="product" method="post">
                 <fieldset>
-                    <c:if test="${not empty errorMessages}">
-                        <div class="alert alert-danger">
-                            <c:forEach items="${errorMessages}" var="errorItem">
-                                <p><span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-                                        ${errorItem.getDefaultMessage()}</p>
-                            </c:forEach>
-                        </div>
-                    </c:if>
+                        <c:if test="${not empty errorMessage}">
+                            <div class="alert alert-danger">
+                                <span class="glyphicon glyphicon-minus-sign" aria-hidden="true"></span>
+                                    ${errorMessage}
+                            </div>
+                        </c:if>
                     <div class="form-group">
                         <label class="control-label" for="inputWarning">Product name</label>
+                        <sf:errors path="name" cssClass="form-control label-danger"/>
                         <sf:input path="name" class="form-control" id="inputWarning"
                                     placeholder="Product name" type="text"/>
                     </div>
+
                     <div class="form-group">
                         <label class="control-label">Product description</label>
+                        <sf:errors path="description" cssClass="form-control label-danger"/>
                         <sf:input path="description" class="form-control" placeholder="Description" type="text"/>
                     </div>
+
                     <div class="form-group">
                         <label class="control-label">Unit</label>
+                        <sf:errors path="unit" cssClass="form-control label-danger"/>
                         <sf:select path="unit.id" class="form-control" placeholder="Unit">
                             <sf:option label="--- Select ---" value="-1"/>
                             <sf:options items="${units}" itemLabel="name" itemValue="id"/>
                         </sf:select>
                     </div>
+
                     <div class="form-group">
                         <label class="control-label">Category</label>
+                        <sf:errors path="category" cssClass="form-control label-danger"/>
                         <sf:select path="category.id" class="form-control" placeholder="Category">
                             <sf:option label="--- Select ---" value="-1"/>
                             <sf:options items="${categories}" itemLabel="name" itemValue="id"/>
