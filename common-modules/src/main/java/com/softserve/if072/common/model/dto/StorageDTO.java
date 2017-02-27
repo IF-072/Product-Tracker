@@ -1,12 +1,16 @@
 package com.softserve.if072.common.model.dto;
 
+import javax.validation.constraints.Min;
+
 /**
  * Created by dyndyn on 24.02.2017.
  */
 public class StorageDTO {
-    int userId;
-    int productId;
-    int amount;
+    private int userId;
+    @Min(value = 1, message = "{error.storage.product}")
+    private int productId;
+    @Min(value = 0, message = "{error.storage.amount}")
+    private int amount;
 
     public int getUserId() {
         return userId;

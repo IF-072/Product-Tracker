@@ -136,13 +136,13 @@ public class Product {
         return "Product{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", description='" + description + '\'' +
-                ", image=" + image +
-                ", user=" + user +
-                ", category=" + category +
-                ", unit=" + unit +
-                ", isEnabled=" + isEnabled +
-                ", stores=" + stores +
+//                ", description='" + description + '\'' +
+//                ", image=" + image +
+//                ", user=" + user +
+//                ", category=" + category +
+//                ", unit=" + unit +
+//                ", isEnabled=" + isEnabled +
+//                ", stores=" + stores +
                 '}';
     }
 }
