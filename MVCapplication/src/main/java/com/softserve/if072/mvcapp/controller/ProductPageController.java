@@ -108,16 +108,12 @@ public class ProductPageController extends BaseController {
             return "addProduct";
         }
 
-        System.out.println("1");
-
         //if product is deleted
         if (productPageService.isDeleted(product, getCurrentUser())) {
             model.addAttribute("product", productPageService.getProductByNameAndUserId(product, getCurrentUser()));
 
             return "existsProduct";
         }
-
-        System.out.println("2");
 
         productPageService.addProduct(product, getCurrentUser());
 
@@ -161,6 +157,22 @@ public class ProductPageController extends BaseController {
             model.addAttribute("categories", productPageService.getAllCategories(getCurrentUser().getId()));
 
             return "editProduct";
+        }
+
+        //if product already exists
+        if(productPageService.isAlreadyExist(product, getCurrentUser())) {
+            model.addAttribute("message", alreadyExistMessage);
+            model.addAttribute("units", productPageService.getAllUnits());
+            model.addAttribute("categories", productPageService.getAllCategories(getCurrentUser().getId()));
+
+            return "editProduct";
+        }
+
+        //if product is deleted
+        if (productPageService.isDeleted(product, getCurrentUser())) {
+            model.addAttribute("product", productPageService.getProductByNameAndUserId(product, getCurrentUser()));
+
+            return "existsProduct";
         }
 
         productPageService.editProduct(product, getCurrentUser());

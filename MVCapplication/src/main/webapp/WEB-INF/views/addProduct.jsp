@@ -21,14 +21,6 @@
         <div class="panel-body">
             <sf:form role="form" modelAttribute="product" method="post">
                 <fieldset>
-                    <%--<c:if test="${not empty errorMessages}">
-                        <div class="alert alert-danger">
-                            <c:forEach items="${errorMessages}" var="errorItem">
-                                <p><span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-                                        ${errorItem.getDefaultMessage()}</p>
-                            </c:forEach>
-                        </div>
-                    </c:if>--%>
                         <c:if test="${not empty errorMessage}">
                             <div class="alert alert-danger">
                                 <span class="glyphicon glyphicon-minus-sign" aria-hidden="true"></span>

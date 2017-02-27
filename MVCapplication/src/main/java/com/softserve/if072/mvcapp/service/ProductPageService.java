@@ -278,7 +278,12 @@ public class ProductPageService {
         Product existsProduct = getProductByNameAndUserId(product, user);
 
         if(existsProduct != null && existsProduct.isEnabled()) {
-            return true;
+            if(existsProduct.getId() == product.getId()) {
+                return false;
+            } else {
+                return true;
+            }
+
         } else {
             return false;
         }
