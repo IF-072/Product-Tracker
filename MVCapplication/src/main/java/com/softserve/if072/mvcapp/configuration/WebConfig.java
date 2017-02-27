@@ -5,6 +5,7 @@ import com.softserve.if072.mvcapp.interceptor.AddTokenHeaderInterceptor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.StringHttpMessageConverter;
@@ -19,8 +20,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import static com.fasterxml.jackson.core.JsonEncoding.UTF8;
-
 /**
  * Configuration class for Spring MVC framework
  *
@@ -29,6 +28,7 @@ import static com.fasterxml.jackson.core.JsonEncoding.UTF8;
 @Configuration
 @EnableWebMvc
 @ComponentScan("com.softserve.if072.mvcapp")
+@PropertySource({"classpath:application.properties", "classpath:message.properties"})
 public class WebConfig extends WebMvcConfigurerAdapter {
 
     /**
@@ -76,6 +76,11 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         return template;
     }
 
+    /**
+     * Configure the HttpMessageConverters to use for reading or writing to the body of the request or response.
+     *
+     * @param converters initially an empty list of converters
+     */
     @Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
         StringHttpMessageConverter stringConverter = new StringHttpMessageConverter();

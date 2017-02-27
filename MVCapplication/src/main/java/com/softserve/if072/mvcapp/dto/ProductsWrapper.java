@@ -1,5 +1,6 @@
 package com.softserve.if072.mvcapp.dto;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -13,6 +14,10 @@ public class ProductsWrapper {
 
     public ProductsWrapper(List<Integer> productsID) {
         this.productsID = productsID;
+    }
+
+    public ProductsWrapper(int size){
+        this.productsID = new ArrayList<>(size);
     }
 
     public List<Integer> getProducts() {

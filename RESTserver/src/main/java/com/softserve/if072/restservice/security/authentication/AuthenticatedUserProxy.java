@@ -15,15 +15,13 @@ import java.util.Collection;
 public class AuthenticatedUserProxy implements Authentication {
 
     private User user;
+    private CustomAuthenticationToken authenticationToken;
     private boolean isAuthenticated;
     private Collection<? extends GrantedAuthority> authorities;
 
-    public AuthenticatedUserProxy(User user) {
+    public AuthenticatedUserProxy(User user, CustomAuthenticationToken token, boolean isAuthenticated, Collection<? extends GrantedAuthority> authorities) {
         this.user = user;
-    }
-
-    public AuthenticatedUserProxy(User user, boolean isAuthenticated, Collection<? extends GrantedAuthority> authorities) {
-        this.user = user;
+        this.authenticationToken = token;
         this.isAuthenticated = isAuthenticated;
         this.authorities = authorities;
     }
@@ -75,5 +73,13 @@ public class AuthenticatedUserProxy implements Authentication {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public CustomAuthenticationToken getAuthenticationToken() {
+        return authenticationToken;
+    }
+
+    public void setAuthenticationToken(CustomAuthenticationToken authenticationToken) {
+        this.authenticationToken = authenticationToken;
     }
 }

@@ -5,6 +5,7 @@ package com.softserve.if072.restservice.controller;
  */
 
 import com.softserve.if072.common.model.Storage;
+import com.softserve.if072.common.model.dto.StorageDTO;
 import com.softserve.if072.restservice.exception.DataNotFoundException;
 import com.softserve.if072.restservice.service.StorageService;
 import org.apache.logging.log4j.LogManager;
@@ -91,5 +92,14 @@ public class StorageController {
         storageService.update(storage);
         LOGGER.info(String.format("Storage with user's id %d and product's id %d was updated",
                 storage.getUser().getId(), storage.getProduct().getId()));
+    }
+
+    @PreAuthorize("#storage.userId == authentication.user.id")
+    @PutMapping(value = "/dto")
+    @ResponseStatus(value = HttpStatus.OK)
+    public void updateByDTO(@RequestBody StorageDTO storage, HttpServletResponse response) {
+        storageService.update(storage);
+        LOGGER.info(String.format("Storage with user's id %d and product's id %d was updated",
+                storage.getUserId(), storage.getProductId()));
     }
 }

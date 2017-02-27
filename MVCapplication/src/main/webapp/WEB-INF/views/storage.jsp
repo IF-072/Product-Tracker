@@ -1,4 +1,5 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <div class="row">
     <div class="col-lg-12">
         <h1 class="page-header">My storage</h1>
@@ -18,27 +19,28 @@
                 </tr>
                 </thead>
                 <tbody>
+
                 <c:forEach var="storage" items="${list}" varStatus="loop">
                     <tr>
                         <td>${loop.count}</td>
                         <td>${storage.product.name}</td>
                         <td>${storage.endDate}</td>
                         <td>
-                            <form method="post" action="update">
-                                <input type="hidden" name="userId" value="${storage.user.id}">
-                                <input type="hidden" name="productId" value="${storage.product.id}">
-                                <input type="number" name="amount" min="0" value="${storage.amount}"
-                                       class="form-control" onchange="allowBtn(${loop.count}, ${storage.amount})">
-                                <input type="submit" class="btn disabled btn-default" value="confirm">
-                            </form>
+                            <form:form method="post" action="update" modelAttribute="storage">
+                                <form:hidden path="productId" value="${storage.product.id}"/>
+                                <input type="number" path="amount" name="amount" min="0" value="${storage.amount}"
+                                       class="form-control" onchange="allowBtn(${loop.count}, ${storage.amount})"/>
+                            <form:button class="btn disabled btn-default">confirm</form:button>
+                            </form:form>
                         </td>
                         <td>
                             <button type="button" class="btn btn-default btn-success"
-                                    onclick="addToShoppingList(${storage.user.id}, ${storage.product.id});">
+                                    onclick="addToShoppingList(${storage.product.id});">
                                 Add
                             </button>
                     </tr>
                 </c:forEach>
+
                 </tbody>
             </table>
         </div>
@@ -53,6 +55,23 @@
             </div>
             <div class="modal-body text-center">
                 Product was added to shopping list
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary btn-confirm">Ok</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="error" class="modal fade" tabindex="-1">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header alert alert-danger" role="alert">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Error</h4>
+            </div>
+            <div class="modal-body text-center">
+                Something went wrong!!!
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary btn-confirm">Ok</button>

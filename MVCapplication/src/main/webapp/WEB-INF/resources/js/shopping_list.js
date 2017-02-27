@@ -20,10 +20,28 @@ function edit(prodId, val, index) {
         success: function (data) {
             var amount = $("#am" + index);
             amount.text(data);
-        },
-        error: function (jqXHR, exception) {
-            console.log(exception);
-            console.log(jqXHR);
         }
     })
 }
+
+$(function () {
+    var prodId;
+
+    $( "#dialog" ).dialog({
+        autoOpen: false
+    });
+
+    $(".del").click(function() {
+        prodId = $(this).attr("prodId");
+        $("#dialog").dialog("open");
+    });
+
+    $("#yes").click(function () {
+        window.location.replace("/shopping_list/delete?prodId=" + prodId);
+        $("#dialog").dialog("close");
+    });
+
+    $("#no").click(function () {
+        $("#dialog").dialog("close");
+    });
+});

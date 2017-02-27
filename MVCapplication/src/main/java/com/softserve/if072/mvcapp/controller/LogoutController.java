@@ -3,7 +3,6 @@ package com.softserve.if072.mvcapp.controller;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,7 +13,6 @@ import javax.servlet.http.HttpServletResponse;
 
 @Controller
 @RequestMapping("/logout")
-@PropertySource({"classpath:application.properties", "classpath:message.properties"})
 public class LogoutController {
 
     private static final Logger LOGGER = LogManager.getLogger(LogoutController.class);

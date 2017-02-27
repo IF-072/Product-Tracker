@@ -8,7 +8,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
@@ -25,7 +24,6 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
  * @author Igor Parada
  */
 @Service
-@PropertySource(value = {"classpath:security.properties"})
 public class TokenService {
 
     private static final Logger LOGGER = LogManager.getLogger(TokenService.class);
@@ -107,6 +105,16 @@ public class TokenService {
     }
 
     /**
+     * Generates new token instead of the outdated one.
+     *
+     * @param authenticationToken token object to be renewed
+     * @return String that contains renewed token
+     */
+    public String renewToken(CustomAuthenticationToken authenticationToken) {
+        return generateTokenFor(authenticationToken.getUserName());
+    }
+
+    /**
      * Decodes input token string and splits result into array contains token's parts
      *
      * @param tokenString an Base64 string which contains token
@@ -132,13 +140,12 @@ public class TokenService {
     }
 
     /**
-     * Generates token string based and signs it with confirmation key
+     * Generates token string based on given username and expiration date and signs it with confirmation key
      *
-     * @see TokenService#buildTokenConfirmationKey
-     *
-     * @param username given user's name
-     * @param expirationDate token expirration date
+     * @param username       given user's name
+     * @param expirationDate token expiration date
      * @return token string
+     * @see TokenService#buildTokenConfirmationKey
      */
     private String buildToken(String username, long expirationDate) {
         String tokenConfirmationKey = buildTokenConfirmationKey(username, expirationDate);

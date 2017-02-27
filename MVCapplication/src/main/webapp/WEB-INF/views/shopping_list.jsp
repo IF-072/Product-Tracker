@@ -35,8 +35,7 @@
                                    class="fa fa-minus-square fa-lg"/></td>
                             <td><a onclick="edit(${elem.product.id}, 1, ${loop.count})"
                                    class="fa fa-plus-square fa-lg"/></td>
-                            <td><a href="<c:url value="/shopping_list/delete?prodId=${elem.product.id}"/> "
-                                   class="fa fa-times fa-lg"/></td>
+                            <td><a prodId="${elem.product.id}" class="fa fa-times fa-lg del"/></td>
                         </tr>
                     </c:forEach>
                     </tbody>

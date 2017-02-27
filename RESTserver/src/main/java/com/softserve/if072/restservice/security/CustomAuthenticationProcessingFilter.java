@@ -1,8 +1,9 @@
 package com.softserve.if072.restservice.security;
 
+import com.softserve.if072.restservice.security.authentication.AuthenticatedUserProxy;
 import com.softserve.if072.restservice.security.authentication.CustomAuthenticationToken;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import com.softserve.if072.restservice.service.TokenService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -21,9 +22,10 @@ import java.io.IOException;
  */
 public class CustomAuthenticationProcessingFilter extends AbstractAuthenticationProcessingFilter {
 
-    private static final Logger LOGGER = LogManager.getLogger(CustomAuthenticationProcessingFilter.class);
-
     private String tokenHeaderName;
+
+    @Autowired
+    private TokenService tokenService;
 
     public CustomAuthenticationProcessingFilter(String processingURL, String tokenHeaderName) {
         super(processingURL);
@@ -42,7 +44,7 @@ public class CustomAuthenticationProcessingFilter extends AbstractAuthentication
             throws AuthenticationException, IOException, ServletException {
         String token = request.getHeader(tokenHeaderName);
 
-        if(token == null){
+        if (token == null) {
             throw new BadCredentialsException("Token not found");
         }
 
@@ -51,6 +53,25 @@ public class CustomAuthenticationProcessingFilter extends AbstractAuthentication
 
         //Perform a full authentication by our custom authentication manager
         Authentication authentication = getAuthenticationManager().authenticate(auth);
+
+        //send new renewed token value as a response header
+        renewToken(response, authentication);
+
         return authentication;
+    }
+
+    /**
+     * Adds an updated token as a ServletResponse's header.
+     *
+     * @param response servlet response
+     * @param authentication Spring representation of authenticated user
+     */
+    private void renewToken(HttpServletResponse response, Authentication authentication) {
+        if(authentication != null && authentication instanceof AuthenticatedUserProxy && authentication.isAuthenticated()) {
+            CustomAuthenticationToken authenticationToken = ((AuthenticatedUserProxy) authentication).getAuthenticationToken();
+            if(authenticationToken.isValid()) {
+                response.addHeader(tokenHeaderName, tokenService.renewToken(authenticationToken));
+            }
+        }
     }
 }

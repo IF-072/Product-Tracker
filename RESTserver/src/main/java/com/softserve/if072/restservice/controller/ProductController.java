@@ -8,7 +8,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -25,7 +24,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "/api/product")
-@PropertySource(value = {"classpath:message.properties"})
 public class ProductController {
 
     public static final Logger LOGGER =  LogManager.getLogger(ProductController.class);

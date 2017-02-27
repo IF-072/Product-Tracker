@@ -19,10 +19,7 @@ public class ProductSecurityService extends BaseSecurityService {
 
     public boolean hasPermissionToAccess(int productId){
         Product product = productDAO.getByID(productId);
-        if(product != null && product.getUser() != null && product.getUser().getId() == getCurrentUser().getId()) {
-            return true;
-        }
-        return false;
+        return product != null && product.getUser() != null && product.getUser().getId() == getCurrentUser().getId();
     }
 
     public boolean hasPermissionToAccess(String productName){

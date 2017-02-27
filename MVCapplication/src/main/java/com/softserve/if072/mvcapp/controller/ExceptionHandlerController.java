@@ -3,7 +3,6 @@ package com.softserve.if072.mvcapp.controller;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -18,7 +17,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
  * @author Igor Parada
  */
 @ControllerAdvice
-@PropertySource({"classpath:message.properties"})
 public class ExceptionHandlerController {
 
     @Value("${login.unauthorized}")
@@ -31,7 +29,7 @@ public class ExceptionHandlerController {
 
     @ExceptionHandler(HttpClientErrorException.class)
     public String handleRestClientException(HttpClientErrorException e, final RedirectAttributes redirectAttributes) {
-        LOGGER.error(e.getMessage());
+        LOGGER.error(e.getMessage(), e);
 
         HttpStatus statusCode = e.getStatusCode();
         if (statusCode.equals(HttpStatus.FORBIDDEN)) {
@@ -51,7 +49,7 @@ public class ExceptionHandlerController {
 
     @ExceptionHandler(HttpServerErrorException.class)
     public String handleRestServerException(HttpServerErrorException e) {
-        LOGGER.error(e.getMessage());
+        LOGGER.error(e.getMessage(), e);
         return "generalError";
     }
 }

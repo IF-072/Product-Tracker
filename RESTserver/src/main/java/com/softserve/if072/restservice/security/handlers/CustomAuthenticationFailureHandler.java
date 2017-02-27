@@ -23,7 +23,7 @@ public class CustomAuthenticationFailureHandler implements AuthenticationFailure
     @Override
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
                                         AuthenticationException e) throws IOException, ServletException {
-        LOGGER.warn("AUTHENTICATION FAILURE FROM " + request.getRemoteAddr() + ":  " + e.getMessage());
+        LOGGER.warn("Authentication failure from " + request.getRemoteAddr() + ":  " + e.getMessage());
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
     }
 }

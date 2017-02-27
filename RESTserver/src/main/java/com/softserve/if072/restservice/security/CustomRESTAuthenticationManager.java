@@ -28,8 +28,6 @@ import java.util.List;
 @Component
 public class CustomRESTAuthenticationManager implements AuthenticationManager {
 
-    private static final Logger LOGGER = LogManager.getLogger(CustomRESTAuthenticationManager.class);
-
     private final TokenService tokenService;
 
     @Autowired
@@ -66,7 +64,7 @@ public class CustomRESTAuthenticationManager implements AuthenticationManager {
 
         List<GrantedAuthority> authorities = new ArrayList<>();
         authorities.add(user.getRole());
-        Authentication authenticatedUser = new AuthenticatedUserProxy(user, true, authorities);
+        Authentication authenticatedUser = new AuthenticatedUserProxy(user, authenticationToken, true, authorities);
 
         return authenticatedUser;
     }

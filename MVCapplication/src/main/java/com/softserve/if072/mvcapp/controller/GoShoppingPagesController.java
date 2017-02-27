@@ -1,20 +1,21 @@
 package com.softserve.if072.mvcapp.controller;
 
-import com.softserve.if072.common.model.FormForCart;
+import com.softserve.if072.common.model.Cart;
+import com.softserve.if072.mvcapp.dto.FormForCart;
 import com.softserve.if072.common.model.ShoppingList;
 import com.softserve.if072.common.model.Store;
+import com.softserve.if072.mvcapp.service.GoShoppingPageService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.util.CollectionUtils;
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 import java.util.Map;
@@ -22,37 +23,28 @@ import java.util.Map;
 
 
 @Controller
-@PropertySource(value = {"classpath:application.properties"})
 public class GoShoppingPagesController extends BaseController {
 
     private static final Logger LOGGER = LogManager.getLogger(GoShoppingPagesController.class);
+    private GoShoppingPageService goShoppingPageService;
 
-    @Value("${application.restGoShoppingURL}")
-    private String goShoppingURL;
+    @Autowired
+    public GoShoppingPagesController(GoShoppingPageService goShoppingPageService) {
+        this.goShoppingPageService = goShoppingPageService;
+    }
 
     @GetMapping("/goShoppingStores")
     public String getPageWithStores(ModelMap model) {
-        int userId = getCurrentUser().getId();
-
-        final String uri = goShoppingURL + "/stores/" + userId;
-        RestTemplate restTemplate = getRestTemplate();
-        List<Store> list = restTemplate.getForObject(uri, List.class);
-
-        model.addAttribute("stores", list);
+        model.addAttribute("stores", goShoppingPageService.getStores(getCurrentUser().getId()));
         return "goShoppingStores";
-
     }
 
 
     @PostMapping("/goShoppingProducts")
-    public String getProductList(ModelMap model, @RequestParam("stores") Integer stores) {
+    public String getProductList(ModelMap model, @RequestParam("stores") Integer store) {
 
-        int userId = getCurrentUser().getId();
-
-        final String uri = goShoppingURL + "/" + stores + "/products/" + userId;
-        RestTemplate restTemplate = getRestTemplate();
-        Map<String, List<ShoppingList>> map = restTemplate.getForObject(uri, Map.class);
-        if (!CollectionUtils.isEmpty(map)) {
+        Map<String, List<ShoppingList>> map = goShoppingPageService.getProducts(getCurrentUser().getId(), store);
+        if (map != null) {
             model.addAllAttributes(map);
         }
 
@@ -64,10 +56,7 @@ public class GoShoppingPagesController extends BaseController {
     @PostMapping("/addToCart")
     public String addToCart(@ModelAttribute("cartForm") FormForCart form) {
         form.setUser(getCurrentUser());
-
-        final String uri = goShoppingURL + "/cart";
-        RestTemplate restTemplate = getRestTemplate();
-        restTemplate.postForObject(uri, form, FormForCart.class);
+        goShoppingPageService.addToCart(form);
         return "redirect:/cart/";
     }
 

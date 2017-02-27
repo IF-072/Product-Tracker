@@ -17,9 +17,6 @@ public class HistorySecurityService extends BaseSecurityService {
 
     public boolean hasPermissionToAccess(int historyId) {
         History history = historyDAO.getByHistoryId(historyId);
-        if (history != null && history.getUser() != null && history.getUser().getId() == getCurrentUser().getId()) {
-            return true;
-        }
-        return false;
+        return history != null && history.getUser() != null && history.getUser().getId() == getCurrentUser().getId();
     }
 }
