@@ -107,6 +107,9 @@ public interface ProductDAO extends DAO<Product> {
     @Update("UPDATE product SET image_id = #{image.id} WHERE id = #{id}")
     void updateImage(Product product);
 
+    @Update("UPDATE product SET is_enabled = 1 WHERE id = #{id}")
+    void restore(Product product);
+
     @Override
     @Update("UPDATE product SET is_enabled = 0 WHERE id = #{id}")
     void deleteById(int id);
@@ -177,4 +180,41 @@ public interface ProductDAO extends DAO<Product> {
             @Result(property = "isEnabled", column = "is_enabled")
     })
     List<Product> getEnabledProductsByUserId(int userId);
+
+    @Select("SELECT id, name, description, image_id, user_id, category_id, unit_id, is_enabled FROM product WHERE " +
+            "user_id = #{userId} and name = #{productName}")
+    @Results(value = {
+            @Result(property = "id", column = "id"),
+            @Result(property = "name", column = "name"),
+            @Result(property = "description", column = "description"),
+            @Result(property = "image", column = "image_id", javaType = Image.class,
+                    one = @One(select = "com.softserve.if072.restservice.dao.mybatisdao.ImageDAO.getByID")),
+            @Result(property = "user", column = "user_id", javaType = User.class,
+                    one = @One(select = "com.softserve.if072.restservice.dao.mybatisdao.UserDAO.getByID")),
+            @Result(property = "category", column = "category_id", javaType = Category.class,
+                    one = @One(select = "com.softserve.if072.restservice.dao.mybatisdao.CategoryDAO.getByID")),
+            @Result(property = "unit", column = "unit_id", javaType = Unit.class,
+                    one = @One(select = "com.softserve.if072.restservice.dao.mybatisdao.UnitDAO.getByID")),
+            @Result(property = "isEnabled", column = "is_enabled")
+    })
+    Product getProductByNameAndUserId(@Param("productName") String productName, @Param("userId") int userId);
+
+    @Select("SELECT id, name, description, image_id, user_id, category_id, unit_id, is_enabled FROM product WHERE " +
+            "name = #{productName}")
+    @Results(value = {
+            @Result(property = "id", column = "id"),
+            @Result(property = "name", column = "name"),
+            @Result(property = "description", column = "description"),
+            @Result(property = "image", column = "image_id", javaType = Image.class,
+                    one = @One(select = "com.softserve.if072.restservice.dao.mybatisdao.ImageDAO.getByID")),
+            @Result(property = "user", column = "user_id", javaType = User.class,
+                    one = @One(select = "com.softserve.if072.restservice.dao.mybatisdao.UserDAO.getByID")),
+            @Result(property = "category", column = "category_id", javaType = Category.class,
+                    one = @One(select = "com.softserve.if072.restservice.dao.mybatisdao.CategoryDAO.getByID")),
+            @Result(property = "unit", column = "unit_id", javaType = Unit.class,
+                    one = @One(select = "com.softserve.if072.restservice.dao.mybatisdao.UnitDAO.getByID")),
+            @Result(property = "isEnabled", column = "is_enabled")
+    })
+    Product getProductByName(String productName);
+
 }

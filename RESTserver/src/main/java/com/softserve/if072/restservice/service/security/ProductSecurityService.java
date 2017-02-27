@@ -24,4 +24,20 @@ public class ProductSecurityService extends BaseSecurityService {
         }
         return false;
     }
+
+    public boolean hasPermissionToAccess(String productName){
+
+        Product product = productDAO.getProductByName(productName);
+
+        if(product == null) {
+            return true;
+        } else {
+            if(product != null && product.getUser() != null && product.getUser().getId() == getCurrentUser().getId()) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+    }
 }

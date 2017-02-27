@@ -1,6 +1,9 @@
 package com.softserve.if072.common.model;
 
-import org.hibernate.validator.constraints.NotEmpty;
+import com.softserve.if072.common.model.validation.product.ValidCategory;
+import com.softserve.if072.common.model.validation.product.ValidUnit;
+import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.NotBlank;
 
 import java.util.List;
 
@@ -15,12 +18,16 @@ public class Product {
 
     private int id;
 
-    @NotEmpty(message = "{error.productName.notnull}")
+    @NotBlank(message = "{error.productName.notblank}")
+    @Length(min = 3, max = 64, message = "{error.productName.length}")
     private String name;
+    @Length(max = 255, message = "{error.productDescription.length}")
     private String description;
     private Image image;
     private User user;
+    @ValidCategory
     private Category category;
+    @ValidUnit
     private Unit unit;
     private boolean isEnabled;
     private List<Store> stores;

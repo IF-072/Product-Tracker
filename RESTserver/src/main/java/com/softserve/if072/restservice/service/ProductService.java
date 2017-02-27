@@ -5,6 +5,8 @@ import com.softserve.if072.common.model.Store;
 import com.softserve.if072.restservice.dao.mybatisdao.ProductDAO;
 import com.softserve.if072.restservice.exception.DataNotFoundException;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
@@ -24,6 +26,8 @@ import java.util.List;
 @Service
 @PropertySource(value = {"classpath:message.properties"})
 public class ProductService {
+
+    public static final Logger LOGGER =  LogManager.getLogger(ProductService.class);
 
     private ProductDAO productDAO;
 
@@ -48,7 +52,6 @@ public class ProductService {
         }
     }
 
-    @Transactional
     public Product getProductById(int id) throws DataNotFoundException {
         Product product = productDAO.getByID(id);
         if (product != null){
@@ -77,7 +80,6 @@ public class ProductService {
         }
     }
 
-    @Transactional
     public List<Product> getProductsByStoreId(int storeId) throws DataNotFoundException {
         List<Product> products = productDAO.getProductsByStoreId(storeId);
         if (!products.isEmpty()){
@@ -87,7 +89,6 @@ public class ProductService {
         }
     }
 
-    @Transactional
     public List<Store> getStoresByProductId(int productId, int userId) throws DataNotFoundException {
         List<Store> stores = productDAO.getStoresByProductIdAndUserId(productId, userId);
         if (CollectionUtils.isNotEmpty(stores)){
@@ -118,5 +119,28 @@ public class ProductService {
             productDAO.addStoreToProduct(s.getId(), product.getId());
         }
 
+    }
+
+    public Product getProductByNameAndUserId(String productName, int userId) {
+
+        Product product = productDAO.getProductByNameAndUserId(productName, userId);
+
+        if(product != null) {
+            LOGGER.info("Product with id " + product.getId() + " was found.");
+            return product;
+        } else {
+            LOGGER.error("Product with name " + productName + " wasn't found");
+            return null;
+        }
+
+    }
+
+    public void restoreProduct(Product product) {
+        if(getProductById(product.getId()) != null) {
+            productDAO.restore(product);
+            LOGGER.info("Product with id=" + product.getId() + " was restored");
+        } else {
+            LOGGER.error("Product with id " + product.getId() + " wasn't found");
+        }
     }
 }

@@ -12,13 +12,15 @@ function deleteProduct(productId) {
 
 $("#dialogDelete").dialog({autoOpen:false,buttons:{
     Delete:function(){
-        $.ajax({
+        location.href = '/product/delProduct?productId='+prId;
+
+        /*$.ajax({
             url : "delProduct",
             method : "POST",
             data : {productId: prId}
         });
         $(this).dialog("close");
-        setTimeout(function() {window.location.reload();}, 1000);
+        setTimeout(function() {window.location.reload();}, 1000);*/
     },
     Cancel:function(){
         $(this).dialog("close");}}
