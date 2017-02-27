@@ -336,6 +336,11 @@
         <put-attribute name="body" value="/WEB-INF/views/productInStores.jsp"/>
     </definition>
 
+    <definition name="existsProduct" extends="mainLayout">
+        <put-attribute name="title" value="Product Tracker Project"/>
+        <put-attribute name="body" value="/WEB-INF/views/existsProduct.jsp"/>
+    </definition>
+
     <definition name="productsInStore" extends="mainLayout">
         <put-attribute name="title" value="Product Tracker"/>
         <put-attribute name="body" value="/WEB-INF/views/store/productsInStore.jsp"/>

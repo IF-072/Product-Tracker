@@ -12,6 +12,9 @@
 <style>
     #image, #edit,#delete, #goStores, #addImage, #addImage, #addToShoppingList {text-align:center; cursor: pointer}
     #image {text-align:center}
+
+    td {vertical-align: middle}
+    .fa:hover {color: #7B83EF}
 </style>
 
 <div class="row">
@@ -62,16 +65,16 @@
                                     <p onclick="document.location.href='/product/stores?productId=${product.id}'"
                                        id="goStores">Stores</p>
                                 </td>
-                                <td onclick="addProductToShoppingList(${product.id});"
-                                id="addToShoppingList">
-                                    <p class="fa fa-plus fa-lg"></p>
+                                <td style="text-align:center; vertical-align: middle">
+                                    <p onclick="addProductToShoppingList(${product.id});" class="fa fa-plus fa-2x"
+                                       id="addToShoppingList"></p>
                                 </td>
-                                <td id="edit">
+                                <td style="text-align:center; vertical-align: middle">
                                     <p onclick="document.location.href='/product/editProduct?productId=${product.id}'"
-                                       class="fa fa-pencil fa-lg"></p>
+                                       id="edit" class="fa fa-pencil fa-2x"></p>
                                 </td>
-                                <td onclick="deleteProduct(${product.id});" id="delete">
-                                    <p class="fa fa-times fa-lg" ></p>
+                                <td style="text-align:center; vertical-align: middle">
+                                    <p onclick="deleteProduct(${product.id});" class="fa fa-times fa-2x" id="delete"></p>
                                 </td>
                             </tr>
                         </c:forEach>
