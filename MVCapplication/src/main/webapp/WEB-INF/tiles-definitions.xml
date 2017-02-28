@@ -30,6 +30,7 @@
         <put-attribute name="title" value=""/>
         <put-attribute name="header" value="/WEB-INF/templates/header.jsp"/>
         <put-attribute name="body" value=""/>
+        <put-attribute name="dialog" value=""/>
 
         <put-list-attribute name="stylesheets">
             <add-attribute value="/css/bootstrap.css"/>
@@ -213,6 +214,7 @@
     <definition name="shopping_list" extends="mainLayout">
         <put-attribute name="title" value="Shopping list"/>
         <put-attribute name="body" value="/WEB-INF/views/shopping_list.jsp"/>
+        <put-attribute name="dialog" value="/WEB-INF/templates/dialog.jsp"/>
         <put-list-attribute name="stylesheets" inherit="true">
             <add-attribute value="/css/shopping_list.css"/>
             <add-attribute value="/css/jquery-ui.css"/>
@@ -332,6 +334,11 @@
     <definition name="productInStores" extends="mainLayout">
         <put-attribute name="title" value="Product Tracker Project"/>
         <put-attribute name="body" value="/WEB-INF/views/productInStores.jsp"/>
+    </definition>
+
+    <definition name="existsProduct" extends="mainLayout">
+        <put-attribute name="title" value="Product Tracker Project"/>
+        <put-attribute name="body" value="/WEB-INF/views/existsProduct.jsp"/>
     </definition>
 
     <definition name="productsInStore" extends="mainLayout">

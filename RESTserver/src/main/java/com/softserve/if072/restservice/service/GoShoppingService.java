@@ -21,6 +21,7 @@ import java.util.Set;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 
 /**
@@ -60,6 +61,7 @@ public class GoShoppingService {
             return null;
         }
         List<Store> storeList = storeDAO.getAllByUser(userId);
+
         if (CollectionUtils.isEmpty(storeList)) {
             throw new DataNotFoundException(String.format("Store list of user with id %d is empty", userId));
         }
@@ -89,15 +91,12 @@ public class GoShoppingService {
         }
 
         List<ShoppingList> productsToBuy = new ArrayList<>();
-
-        for (Iterator<ShoppingList> iterator = shoppinList.iterator(); iterator.hasNext(); ) {
-            ShoppingList element = iterator.next();
-            if (productsFromSelectedStore.contains(element.getProduct())) {
-                element.getProduct().setStores(store);
-                productsToBuy.add(element);
-                iterator.remove();
-            }
-        }
+        productsToBuy = shoppinList.stream().filter(element -> productsFromSelectedStore.contains(element.getProduct()))
+                .map(element -> {
+                    element.getProduct().setStores(store);
+                    return element;
+                }).collect(Collectors.toList());
+        shoppinList.removeAll(productsToBuy);
 
         productsMap.put("selected", productsToBuy);
         productsMap.put("remained", shoppinList);
@@ -119,22 +118,13 @@ public class GoShoppingService {
      * @return List of Store with products that contains in ShoppingList
      */
     private List<Store> retainProductFromShoppingList(List<Store> storeList, List<Product> shoppingList) {
-        Iterator<Store> iterator = storeList.iterator();
-        while (iterator.hasNext()) {
-            Store store = iterator.next();
-            if (CollectionUtils.isNotEmpty(store.getProducts())) {
-                Set<Product> set = new HashSet<>(shoppingList);
-                set.retainAll(store.getProducts());
-                if (CollectionUtils.isEmpty(set)) {
-                    iterator.remove();
-                } else {
+        return storeList.stream().filter(store -> CollectionUtils.isNotEmpty(store.getProducts()))
+                .map(store -> {
+                    Set<Product> set = new HashSet<>(shoppingList);
+                    set.retainAll(store.getProducts());
                     store.setProducts(new ArrayList<>(set));
-                }
-            } else {
-                iterator.remove();
-            }
-
-        }
-        return storeList;
+                    return store;
+                }).filter(store -> CollectionUtils.isNotEmpty(store.getProducts()))
+                .collect(Collectors.toCollection(ArrayList::new));
     }
 }

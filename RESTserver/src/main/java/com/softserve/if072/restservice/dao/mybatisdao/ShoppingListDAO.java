@@ -49,7 +49,8 @@ public interface ShoppingListDAO extends DAO<ShoppingList> {
      * @param userId unique user's identifier
      * @return list of all shoppingList items that belong to specific user
      */
-    @Select("SELECT amount, user_id, product_id FROM shopping_list WHERE user_id = #{userId}")
+    @Select("SELECT amount, shopping_list.user_id, product_id FROM shopping_list LEFT JOIN product" +
+            " ON product_id=id WHERE shopping_list.user_id = #{userId} AND is_enabled=1")
     @Results(value = {
             @Result(property = "amount", column = "amount"),
             @Result(property = "user", column = "user_id", javaType = User.class,

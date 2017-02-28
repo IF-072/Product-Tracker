@@ -11,16 +11,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -215,6 +206,34 @@ public class ProductController {
         productService.deleteStoreFromProductById(product);
         LOGGER.info(String.format("Stores were deleted from product %d", product.getId()));
 
+    }
+
+    /**
+     * This method gets product from DataBase by name and user's ID
+     * @param productName Name of product, which must be returned
+     * @param userId ID of user which product must be returned
+     * @return product
+     */
+    @PreAuthorize("@productSecurityService.hasPermissionToAccess(#productName)")
+    @GetMapping("/{userId}/getByName/{productName}")
+    @ResponseBody
+    @ResponseStatus(value = HttpStatus.OK)
+    public Product getProductByNameAndUserId(@PathVariable String productName, @PathVariable String userId) {
+
+        Product product = productService.getProductByNameAndUserId(productName, Integer.parseInt(userId));
+        return product;
+
+    }
+
+    /**
+     * This method restores the product that was deleted
+     * @param product product that was deleted
+     */
+    @PreAuthorize("#product.user != null && #product.user.id == authentication.user.id")
+    @PutMapping("/restore")
+    @ResponseStatus(value = HttpStatus.OK)
+    public void restoreProduct(@RequestBody Product product) {
+        productService.restoreProduct(product);
     }
 
 }

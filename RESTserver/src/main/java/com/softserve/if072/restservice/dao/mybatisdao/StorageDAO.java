@@ -32,7 +32,8 @@ public interface StorageDAO extends DAO<Storage> {
      * @param userId unique user's identifier
      * @return list of all storage items that belong to specific user
      */
-    @Select("SELECT end_date, amount, user_id, product_id FROM storage WHERE user_id = #{userId}")
+    @Select("SELECT end_date, amount, storage.user_id, product_id FROM storage LEFT JOIN product " +
+            "ON product_id=id WHERE storage.user_id = #{userId} AND is_enabled=1")
     @Results(value = {
             @Result(property = "endDate", column = "end_date"),
             @Result(property = "amount", column = "amount"),
