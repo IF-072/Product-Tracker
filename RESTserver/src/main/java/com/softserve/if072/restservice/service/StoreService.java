@@ -219,19 +219,17 @@ public class StoreService {
 
     /**
      * This method returns store by name ant user id
-     * @param name name off store
+     *
+     * @param name   name off store
      * @param userId owner of store
-     * @return store
+     * @return store or null if store is not found
      */
     @Transactional
     public Store getStoreByNameAndUser(String name, int userId) {
-//        if (!name.isEmpty()) {
-            Store store = storeDAO.getByName(name, userId);
+        Store store = storeDAO.getByName(name, userId);
+        if (store != null) {
             return store;
-//        } else
-//            return null;
-
-
+        } else return null;
     }
 
 }

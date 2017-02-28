@@ -32,11 +32,13 @@
 
                         <div class="form-group">
                             <label class="control-label" for="inputWarning">Store Name</label>
+                            <form:errors path="name" cssClass="form-control label-danger"/>
                             <form:input path="name" class="form-control" id="inputWarning"
                                         placeholder="Store Name" type="text"/>
                         </div>
                         <div class="form-group">
                             <label class="control-label" for="inputWarning">Store Address</label>
+                            <form:errors path="address" cssClass="form-control label-danger"/>
                             <form:input path="address" class="form-control" placeholder="Address" type="text"/>
                         </div>
 

@@ -186,6 +186,43 @@ public class StorePageService {
         restTemplate.put(uri, store, Store.class);
     }
 
+    public Store getStoreByNameAndUserId(Store store, User user) {
 
+        final String getStoreByNameAndUserIdUri = storeUrl + "/byName/{userId}/{storeName}";
+
+        Map<String, String> param = new HashMap<>();
+        param.put("storeName", store.getName());
+
+        System.out.println(store.getName());
+
+        param.put("userId", Integer.toString(user.getId()));
+
+        return restTemplate.getForObject(getStoreByNameAndUserIdUri, Store.class, param);
+    }
+
+    public boolean alreadyExist(Store store, User user) {
+
+        Store existStore = getStoreByNameAndUserId(store, user);
+        System.out.println(store.toString());
+        System.out.println(existStore.toString());
+        if (existStore != null && existStore.isEnabled()) {
+
+  System.out.println(existStore.getAddress() + "   "+ store.getAddress());
+            return existStore.getAddress() == store.getAddress();
+        }
+        return false;
+    }
+
+    public boolean isDeleted(Store store, User user) {
+        Store existStore = getStoreByNameAndUserId(store, user);
+
+        if (existStore != null && !existStore.isEnabled()) {
+            if (existStore.getAddress() == store.getAddress()) {
+                return true;
+            }
+            return false;
+        }
+        return false;
+    }
 }
 

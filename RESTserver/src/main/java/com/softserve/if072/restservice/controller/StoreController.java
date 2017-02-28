@@ -232,18 +232,18 @@ public class StoreController {
      * This method checks does user has saved in database store with same name as by received store
      *
      * @param userId owner of store
-     * @param store  store which name is checked
+     * @param storeName  name of store
      * @return store from DataBase which name is equal to received store or if such store is not found - null
      */
-    @PreAuthorize("#userId != null  && #userId == authentication.user.id && #store != null && #store.user != null &&" +
-            " #store.user.id == authentication.user.id")
-    @PostMapping("/byName/{userId}")
+
+    @GetMapping("/byName/{userId}/{storeName}")
     @ResponseBody
     @ResponseStatus(value = HttpStatus.OK)
-    public Store getStoreByNameAndUser(@PathVariable Integer userId, @RequestBody Store store) {
-        Store oldStore = storeService.getStoreByNameAndUser(store.getName(), userId);
-        LOGGER.info(String.format("Store with name %s was retrieved", store.getName()));
+    public Store getStoreByNameAndUser(@PathVariable String userId, @PathVariable String storeName) {
+        System.out.println("Rest" + storeName);
+        Store oldStore = storeService.getStoreByNameAndUser(storeName, Integer.parseInt(userId));
+        LOGGER.info(String.format("Store with name %s was retrieved", storeName));
         return oldStore;
     }
 
-}
+  }

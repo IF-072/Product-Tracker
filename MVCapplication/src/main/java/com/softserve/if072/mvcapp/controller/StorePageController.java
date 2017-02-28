@@ -7,6 +7,7 @@ import com.softserve.if072.mvcapp.service.StorePageService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -30,6 +31,9 @@ public class StorePageController extends BaseController {
     private static final Logger LOGGER = LogManager.getLogger(StorePageController.class);
 
     private StorePageService storePageService;
+
+    @Value("${error.store.alreadyExist}")
+    private String existMessage;
 
     @Autowired
     public StorePageController(StorePageService storePageService) {
@@ -81,6 +85,13 @@ public class StorePageController extends BaseController {
             model.addAttribute("errorMessages", result.getFieldErrors());
             return "addStore";
         }
+
+        if(storePageService.alreadyExist(store, getCurrentUser()))
+        {
+            model.addAttribute("message", existMessage);
+            return "addStore";
+        }
+        System.out.println(storePageService.alreadyExist(store, getCurrentUser()) + "   ++++++++++++++++     ");
         storePageService.addStore(getCurrentUser(), store);
         LOGGER.info(String.format("Store of user %d was added", getCurrentUser().getId()));
 
@@ -153,8 +164,8 @@ public class StorePageController extends BaseController {
      * @param productID product that will be deleted from current store
      * @return redirect to the store products view page that contains list of products from this store
      */
-    @PostMapping(value = "/stores/delProduct")
-    public String deleteProductFromStore(@RequestParam("storeID") int storeID, @RequestParam("productID") int
+    @GetMapping(value = "/stores/delProduct")
+    public String deleteProductFromStore(@RequestParam("storeID") Integer storeID, @RequestParam("productID") Integer
             productID) {
         storePageService.deleteProductFromStore(storeID, productID);
         LOGGER.info(String.format("Product %d from tore with id %d was deleted", productID, storeID));

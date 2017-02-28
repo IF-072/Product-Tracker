@@ -35,13 +35,14 @@ function dellProduct(storeId, productId) {
 
 $("#dialogDel").dialog({autoOpen:false,buttons:{
     Delete:function(){
-        $.ajax({
-            url : "/stores/delProduct",
-            method : "POST",
-            data : {
-                storeID: storId,
-                 productID: prodId}
-        });
+        window.location.replace("/stores/delProduct?storeID=" + storId + "&&productID=" + prodId );
+        // $.ajax({
+        //     url : "/stores/delProduct",
+        //     method : "POST",
+        //     data : {
+        //         storeID: storId,
+        //          productID: prodId}
+        // });
         $(this).dialog("close");
         setTimeout(function() {window.location.reload();}, 1000);
     },

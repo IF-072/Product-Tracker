@@ -1,6 +1,10 @@
 package com.softserve.if072.mvcapp.service;
 
-import com.softserve.if072.common.model.*;
+import com.softserve.if072.common.model.Category;
+import com.softserve.if072.common.model.Product;
+import com.softserve.if072.common.model.Store;
+import com.softserve.if072.common.model.Unit;
+import com.softserve.if072.common.model.User;
 import com.softserve.if072.mvcapp.dto.StoresInProduct;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -12,7 +16,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import javax.jws.soap.SOAPBinding;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -267,6 +270,7 @@ public class ProductPageService {
 
         Map<String, String> param = new HashMap<>();
         param.put("productName", product.getName());
+        System.out.println(product.getName());
         param.put("userId", Integer.toString(user.getId()));
 
         return restTemplate.getForObject(getProductByNameAndUserIdUri, Product.class, param);
