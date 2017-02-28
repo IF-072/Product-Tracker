@@ -44,7 +44,8 @@ public interface StoreDAO extends DAO<Store> {
     })
     List<Store> getAll();
 
-    @Select("SELECT id, name, address, latitude, longitude, user_id, is_enabled FROM store WHERE user_id = #{userId} AND is_enabled = 1")
+    @Select("SELECT id, name, address, latitude, longitude, user_id, is_enabled FROM store WHERE user_id = #{userId} " +
+            "AND is_enabled = 1")
     @Results(value = {
             @Result(property = "id", column = "id"),
             @Result(property = "name", column = "name"),
@@ -90,6 +91,20 @@ public interface StoreDAO extends DAO<Store> {
                             ".getProductsOnlyByStoreId"))
     })
     Store getByID(int id);
+
+    @Select("SELECT id, name, address, user_id, latitude, longitude, is_enabled FROM store WHERE name = #{name} and " +
+            "user_id = #{userId}")
+    @Results(value = {
+            @Result(property = "id", column = "id"),
+            @Result(property = "name", column = "name"),
+            @Result(property = "address", column = "address"),
+            @Result(property = "latitude", column = "latitude"),
+            @Result(property = "longitude", column = "longitude"),
+            @Result(property = "user", column = "user_id", javaType = User.class,
+                    one = @One(select = "com.softserve.if072.restservice.dao.mybatisdao.UserDAO.getByID")),
+            @Result(property = "isEnabled", column = "is_enabled")
+    })
+    Store getByName(@Param("name") String name, @Param("userId") Integer userId);
 
     @Override
     @Insert("INSERT into store (name, address, user_id, is_enabled, latitude, longitude) VALUES(#{name}, " +

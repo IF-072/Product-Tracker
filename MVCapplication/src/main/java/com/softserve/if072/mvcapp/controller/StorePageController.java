@@ -29,7 +29,6 @@ import java.util.List;
 public class StorePageController extends BaseController {
     private static final Logger LOGGER = LogManager.getLogger(StorePageController.class);
 
-
     private StorePageService storePageService;
 
     @Autowired

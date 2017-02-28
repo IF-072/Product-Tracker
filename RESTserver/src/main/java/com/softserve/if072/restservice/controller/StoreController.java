@@ -228,4 +228,22 @@ public class StoreController {
         return notMappedProducts;
     }
 
+    /**
+     * This method checks does user has saved in database store with same name as by received store
+     *
+     * @param userId owner of store
+     * @param store  store which name is checked
+     * @return store from DataBase which name is equal to received store or if such store is not found - null
+     */
+    @PreAuthorize("#userId != null  && #userId == authentication.user.id && #store != null && #store.user != null &&" +
+            " #store.user.id == authentication.user.id")
+    @PostMapping("/byName/{userId}")
+    @ResponseBody
+    @ResponseStatus(value = HttpStatus.OK)
+    public Store getStoreByNameAndUser(@PathVariable Integer userId, @RequestBody Store store) {
+        Store oldStore = storeService.getStoreByNameAndUser(store.getName(), userId);
+        LOGGER.info(String.format("Store with name %s was retrieved", store.getName()));
+        return oldStore;
+    }
+
 }
