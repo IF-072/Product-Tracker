@@ -17,7 +17,10 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by Nazar Vynnyk
+ * The class contains methods that handle the http requests from the MVC Application and send requests to REST
+ * Application
+ *
+ * @author Nazar Vynnyk
  */
 
 @Service
@@ -119,12 +122,10 @@ public class StorePageService {
         param.put("storeId", storeId);
         param.put("userId", userId);
         ResponseEntity<List<Product>> productResult = restTemplate.exchange(productsUri, HttpMethod.GET, null,
-                new ParameterizedTypeReference<List<Product>>() {
-                }, param);
+                new ParameterizedTypeReference<List<Product>>() {}, param);
 
         return productResult.getBody();
     }
-
 
     /**
      * Method gets wrapedProducts object which contains list of product id. This all products will be added to
@@ -186,43 +187,55 @@ public class StorePageService {
         restTemplate.put(uri, store, Store.class);
     }
 
+    /**
+     * Method receives from Rest Controller store with the same name and address as by incoming store
+     *
+     * @param store store that has fields which we check for duplicates in database
+     * @param user  owner of store
+     * @return store from
+     */
     public Store getStoreByNameAndUserId(Store store, User user) {
-
-        final String getStoreByNameAndUserIdUri = storeUrl + "/byName/{userId}/{storeName}";
-
-        Map<String, String> param = new HashMap<>();
-        param.put("storeName", store.getName());
-
-        System.out.println(store.getName());
-
-        param.put("userId", Integer.toString(user.getId()));
-
-        return restTemplate.getForObject(getStoreByNameAndUserIdUri, Store.class, param);
+        final String getStoreByNameAndUserIdUri = storeUrl + "/byName/" + user.getId();
+        ResponseEntity<Store> oldStore = restTemplate.postForEntity(getStoreByNameAndUserIdUri, store, Store.class);
+        if (oldStore.getBody() == null) {
+            return null;
+        } else return oldStore.getBody();
     }
 
+    /**
+     * Method checks does exist store with such fields as user want to add and checks if the store is enabled
+     *
+     * @param store store that has fields which we check for duplicates
+     * @param user  owner of store
+     * @return true if received store from Rest controller exist and is enabled
+     */
     public boolean alreadyExist(Store store, User user) {
-
         Store existStore = getStoreByNameAndUserId(store, user);
-        System.out.println(store.toString());
-        System.out.println(existStore.toString());
-        if (existStore != null && existStore.isEnabled()) {
-
-  System.out.println(existStore.getAddress() + "   "+ store.getAddress());
-            return existStore.getAddress() == store.getAddress();
-        }
-        return false;
+        return existStore != null && existStore.isEnabled();
     }
 
+    /**
+     * Method checks does exist store with such fields as user want to add and checks if it was deleted
+     *
+     * @param store store that user adds
+     * @param user  owner of store
+     * @return true if received store from Rest controller exist and is not enabled
+     */
     public boolean isDeleted(Store store, User user) {
         Store existStore = getStoreByNameAndUserId(store, user);
-
-        if (existStore != null && !existStore.isEnabled()) {
-            if (existStore.getAddress() == store.getAddress()) {
-                return true;
-            }
-            return false;
-        }
-        return false;
+        return existStore != null && !existStore.isEnabled();
     }
+
+    /**
+     * Method retrieves store after his deleting
+     *
+     * @param storeId store that is retrieving
+     */
+    public void retrieveStore(int storeId) {
+        final String uri = storeUrl + "/retrieve";
+        Store store = getStoreById(storeId);
+        restTemplate.put(uri, store, Store.class);
+    }
+
 }
 

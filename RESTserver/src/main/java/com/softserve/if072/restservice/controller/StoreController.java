@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Serve requests used for working with Store model
+ * Serve requests from MVC Application, used for working with Store model
  *
  * @author Nazar Vynnyk
  */
@@ -229,21 +229,35 @@ public class StoreController {
     }
 
     /**
-     * This method checks does user has saved in database store with same name as by received store
+     * This method checks does user has store with same name as by received store
      *
      * @param userId owner of store
-     * @param storeName  name of store
+     * @param store  store that user want save
      * @return store from DataBase which name is equal to received store or if such store is not found - null
      */
 
-    @GetMapping("/byName/{userId}/{storeName}")
-    @ResponseBody
+    @PostMapping("/byName/{userId}")
     @ResponseStatus(value = HttpStatus.OK)
-    public Store getStoreByNameAndUser(@PathVariable String userId, @PathVariable String storeName) {
-        System.out.println("Rest" + storeName);
-        Store oldStore = storeService.getStoreByNameAndUser(storeName, Integer.parseInt(userId));
-        LOGGER.info(String.format("Store with name %s was retrieved", storeName));
-        return oldStore;
+    public Store getStoreByNameAndUser(@PathVariable Integer userId, @RequestBody Store store) {
+        Store oldStore = storeService.getStoreByNameAndUser(store.getName(), store.getAddress(), userId);
+        LOGGER.info(String.format("Store with name %s was retrieved", store.getName()));
+        if (oldStore != null) {
+            return oldStore;
+        } else return null;
     }
 
-  }
+    /**
+     * This method  retrieves store that is in DataBase.
+     *
+     * @param store that will be will be retrieved
+     */
+    @PreAuthorize("#store != null && #store.user != null && #store.user.id == authentication.user.id")
+    @PutMapping("/retrieve")
+    @ResponseStatus(value = HttpStatus.OK)
+    @ResponseBody
+    public void retrieveStore(@RequestBody Store store) {
+        storeService.retrieveStore(store.getId());
+        LOGGER.info(String.format("Store with id %d was retrieved", store.getId()));
+    }
+
+}

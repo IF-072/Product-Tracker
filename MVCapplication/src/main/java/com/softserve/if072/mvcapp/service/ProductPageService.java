@@ -90,7 +90,8 @@ public class ProductPageService {
         param.put("userId", userId);
 
         ResponseEntity<List<Category>> categoriesResponse = restTemplate.exchange(categoryUri, HttpMethod.GET,
-                null, new ParameterizedTypeReference<List<Category>>(){}, param);
+                null, new ParameterizedTypeReference<List<Category>>() {
+                }, param);
 
         return categoriesResponse.getBody();
 
@@ -101,7 +102,8 @@ public class ProductPageService {
         final String unitUri = unitUrl + "/";
 
         ResponseEntity<List<Unit>> unitsResponse = restTemplate.exchange(unitUri, HttpMethod.GET,
-                null, new ParameterizedTypeReference<List<Unit>>(){});
+                null, new ParameterizedTypeReference<List<Unit>>() {
+                });
         List<Unit> units = unitsResponse.getBody();
 
         return units;
@@ -111,10 +113,10 @@ public class ProductPageService {
 
         final String categoryByIdUri = categoryUrl + "/id/{categoryId}";
         final String UnitByIdUri = unitUrl + "/{unitId}";
-        final String addProductUri = productUrl +"/";
+        final String addProductUri = productUrl + "/";
 
         Map<String, Integer> param = new HashMap<>();
-        if(product.getCategory().getId() > 0) {
+        if (product.getCategory().getId() > 0) {
             param.put("categoryId", product.getCategory().getId());
             Category category = restTemplate.getForObject(categoryByIdUri, Category.class, param);
             product.setCategory(category);
@@ -122,7 +124,7 @@ public class ProductPageService {
             product.setCategory(null);
         }
 
-        if(product.getUnit().getId() > 0) {
+        if (product.getUnit().getId() > 0) {
             param.clear();
             param.put("unitId", product.getUnit().getId());
             Unit unit = restTemplate.getForObject(UnitByIdUri, Unit.class, param);
@@ -142,10 +144,10 @@ public class ProductPageService {
 
         final String categoryByIdUri = categoryUrl + "/id/{categoryId}";
         final String UnitByIdUri = unitUrl + "/{unitId}";
-        final String editProductUri = productUrl +"/";
+        final String editProductUri = productUrl + "/";
 
         Map<String, Integer> param = new HashMap<>();
-        if(product.getCategory().getId() > 0) {
+        if (product.getCategory().getId() > 0) {
             param.put("categoryId", product.getCategory().getId());
             Category category = restTemplate.getForObject(categoryByIdUri, Category.class, param);
             product.setCategory(category);
@@ -153,7 +155,7 @@ public class ProductPageService {
             product.setCategory(null);
         }
 
-        if(product.getUnit().getId() > 0) {
+        if (product.getUnit().getId() > 0) {
             param.clear();
             param.put("unitId", product.getUnit().getId());
             Unit unit = restTemplate.getForObject(UnitByIdUri, Unit.class, param);
@@ -175,7 +177,7 @@ public class ProductPageService {
         Map<String, Integer> param = new HashMap<>();
         param.put("productId", productId);
 
-        restTemplate.delete(uri,param);
+        restTemplate.delete(uri, param);
     }
 
     public List<Store> getAllStores(int userId) {
@@ -186,16 +188,17 @@ public class ProductPageService {
         param.put("userId", userId);
 
         ResponseEntity<List<Store>> rateResponse = restTemplate.exchange(getAllStoresUri, HttpMethod.GET,
-                null, new ParameterizedTypeReference<List<Store>>(){}, param);
+                null, new ParameterizedTypeReference<List<Store>>() {
+                }, param);
         return rateResponse.getBody();
     }
 
-    public Map<Integer,String> getAllStoresId(int userId) {
-        Map<Integer,String> allStoresById = new HashMap<>();
+    public Map<Integer, String> getAllStoresId(int userId) {
+        Map<Integer, String> allStoresById = new HashMap<>();
         List<Store> allStores = getAllStores(userId);
-        if(allStores != null) {
-            for(Store s : allStores) {
-                allStoresById.put(s.getId(),s.getName() + ", " + s.getAddress());
+        if (allStores != null) {
+            for (Store s : allStores) {
+                allStoresById.put(s.getId(), s.getName() + ", " + s.getAddress());
             }
         }
         return allStoresById;
@@ -205,11 +208,11 @@ public class ProductPageService {
 
         Product product = getProduct(productId);
 
-        Map<Integer,String> storesInProductById = new HashMap<>();
+        Map<Integer, String> storesInProductById = new HashMap<>();
         List<Integer> listStoresInProductById = new ArrayList<>();
-        if(product.getStores() != null){
-            for(Store s : product.getStores()) {
-                storesInProductById.put(s.getId(),s.getName() + ", " + s.getAddress());
+        if (product.getStores() != null) {
+            for (Store s : product.getStores()) {
+                storesInProductById.put(s.getId(), s.getName() + ", " + s.getAddress());
                 listStoresInProductById.add(s.getId());
             }
         }
@@ -233,15 +236,15 @@ public class ProductPageService {
         Map<String, Integer> param = new HashMap<>();
         List<Store> newStores = new ArrayList<>();
 
-        for(int storeId : storesInProduct.getStoresId()) {
+        for (int storeId : storesInProduct.getStoresId()) {
             param.put("storeId", storeId);
             newStores.add(restTemplate.getForObject(getStoreByIdUri, Store.class, param));
         }
 
         List<Store> storesToAdd = new ArrayList<>();
         List<Store> storesToDelete = new ArrayList<>();
-        if(oldStores != null) {
-            if(newStores != null) {
+        if (oldStores != null) {
+            if (newStores != null) {
                 storesToAdd.addAll(newStores);
                 storesToDelete.addAll(oldStores);
                 storesToAdd.removeAll(oldStores);
@@ -253,12 +256,12 @@ public class ProductPageService {
             storesToAdd.addAll(newStores);
         }
 
-        if(!storesToAdd.isEmpty()) {
+        if (!storesToAdd.isEmpty()) {
             product.setStores(storesToAdd);
             restTemplate.postForObject(addStoreToProductUri, product, Product.class);
         }
 
-        if(!storesToDelete.isEmpty()) {
+        if (!storesToDelete.isEmpty()) {
             product.setStores(storesToDelete);
             restTemplate.postForObject(deleteStoreFromProductUri, product, Product.class);
         }
@@ -270,7 +273,6 @@ public class ProductPageService {
 
         Map<String, String> param = new HashMap<>();
         param.put("productName", product.getName());
-        System.out.println(product.getName());
         param.put("userId", Integer.toString(user.getId()));
 
         return restTemplate.getForObject(getProductByNameAndUserIdUri, Product.class, param);
@@ -281,8 +283,8 @@ public class ProductPageService {
 
         Product existsProduct = getProductByNameAndUserId(product, user);
 
-        if(existsProduct != null && existsProduct.isEnabled()) {
-            if(existsProduct.getId() == product.getId()) {
+        if (existsProduct != null && existsProduct.isEnabled()) {
+            if (existsProduct.getId() == product.getId()) {
                 return false;
             } else {
                 return true;
@@ -298,7 +300,7 @@ public class ProductPageService {
 
         Product existsProduct = getProductByNameAndUserId(product, user);
 
-        if(existsProduct != null && !existsProduct.isEnabled()) {
+        if (existsProduct != null && !existsProduct.isEnabled()) {
             return true;
         } else {
             return false;

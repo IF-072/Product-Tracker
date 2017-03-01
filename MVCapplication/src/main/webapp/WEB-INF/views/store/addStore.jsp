@@ -21,12 +21,10 @@
                 <form:form role="form" action="${addAction}" method="POST" modelAttribute="store">
                     <fieldset>
 
-                        <c:if test="${not empty errorMessages}">
+                        <c:if test="${not empty validMessage}">
                             <div class="alert alert-danger">
-                                <c:forEach items="${errorMessages}" var="errorItem">
-                                    <p><span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-                                            ${errorItem.getDefaultMessage()}</p>
-                                </c:forEach>
+                                <p><span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                                        ${validMessage}</p>
                             </div>
                         </c:if>
 
@@ -44,7 +42,7 @@
 
                         <input type="submit" class="btn btn-lg btn-success btn-custom" value="Add Store"/>
                         <input type="reset" class="btn btn-lg btn-reset-custom btn-reset-custom"
-                               onclick="document.location.href='<c:url value="/stores/"/>'" value="Cancel" />
+                               onclick="document.location.href='<c:url value="/stores/"/>'" value="Cancel"/>
 
                     </fieldset>
                 </form:form>

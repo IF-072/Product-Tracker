@@ -92,8 +92,8 @@ public interface StoreDAO extends DAO<Store> {
     })
     Store getByID(int id);
 
-    @Select("SELECT id, name, address, user_id, latitude, longitude, is_enabled FROM store WHERE name = #{name} and " +
-            "user_id = #{userId}")
+    @Select(value = "SELECT id, name, address, latitude, longitude, user_id, is_enabled FROM store WHERE user_id = " +
+            "#{userId} AND name = #{StoreName} AND address = #{address}")
     @Results(value = {
             @Result(property = "id", column = "id"),
             @Result(property = "name", column = "name"),
@@ -102,9 +102,12 @@ public interface StoreDAO extends DAO<Store> {
             @Result(property = "longitude", column = "longitude"),
             @Result(property = "user", column = "user_id", javaType = User.class,
                     one = @One(select = "com.softserve.if072.restservice.dao.mybatisdao.UserDAO.getByID")),
-            @Result(property = "isEnabled", column = "is_enabled")
-    })
-    Store getByName(@Param("name") String name, @Param("userId") Integer userId);
+            @Result(property = "isEnabled", column = "is_enabled"),
+            @Result(property = "products", column = "id", javaType = List.class,
+                    many = @Many(select = "com.softserve.if072.restservice.dao.mybatisdao.StoreDAO" +
+                            ".getProductsByStoreId"))})
+    Store getByName(@Param("StoreName") String StoreName, @Param("address") String address, @Param("userId") Integer
+            userId);
 
     @Override
     @Insert("INSERT into store (name, address, user_id, is_enabled, latitude, longitude) VALUES(#{name}, " +
@@ -130,6 +133,8 @@ public interface StoreDAO extends DAO<Store> {
     @Update("UPDATE store SET is_enabled = 0 WHERE id = #{id}")
     void deleteById(int id);
 
+    @Update("UPDATE store SET is_enabled = 1 WHERE id = #{storeId}")
+    void retrieveStore(int storeId);
 
     @Select("SELECT id, name, description, image_id, category_id, unit_id, is_enabled FROM product  JOIN " +
             "stores_products ON product.id = stores_products.product_id WHERE store_id = #{storeId} and user_id = " +
