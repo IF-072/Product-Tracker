@@ -81,7 +81,7 @@
         <!-- languages -->
         <div class="btn-group dropdown">
             <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                <span class="lang-sm lang-lbl-full" lang="en"></span>
+                <spring:message code="changeLanguage"/>
                 <span class="caret"></span>
             </button>
             <ul class="dropdown-menu" role="menu">
