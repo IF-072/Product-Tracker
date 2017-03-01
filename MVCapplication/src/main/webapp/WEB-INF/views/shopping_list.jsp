@@ -1,9 +1,10 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
 
 <div class="row">
     <div class="panel panel-default">
         <div class="panel-heading">
-            Shopping list
+            <spring:message code="shoppingList"/>
         </div>
         <!-- /.panel-heading -->
         <div class="panel-body">
@@ -12,11 +13,11 @@
                     <tbody>
                     <tr>
                         <th>#</th>
-                        <th>Product</th>
-                        <th>Amount</th>
-                        <th>Image</th>
-                        <th colspan="2">Edit</th>
-                        <th>Delete</th>
+                        <th><spring:message code="product"/></th>
+                        <th><spring:message code="amount"/></th>
+                        <th><spring:message code="image"/></th>
+                        <th colspan="2"><spring:message code="edit"/></th>
+                        <th><spring:message code="delete"/></th>
                     </tr>
                     <c:forEach items="${shoppingList}" var="elem" varStatus="loop">
                         <tr>

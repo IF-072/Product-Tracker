@@ -1,6 +1,8 @@
-function checkBox() {
-    var checkbox = $(this).find('.checkbox');
-    checkbox.prop("checked", checkbox.prop("checked") ? 0 : 1);
+function checkBox(event) {
+    if(!$(event.target).is('input')) {
+        var checkbox = $(this).find('.checkbox');
+        checkbox.prop("checked", checkbox.prop("checked") ? 0 : 1);
+    }
 }
 
 function selectAll() {

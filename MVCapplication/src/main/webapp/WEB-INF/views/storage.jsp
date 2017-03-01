@@ -30,7 +30,7 @@
                                 <form:hidden path="productId" value="${storage.product.id}"/>
                                 <input type="number" path="amount" name="amount" min="0" value="${storage.amount}"
                                        class="form-control" onchange="allowBtn(${loop.count}, ${storage.amount})"/>
-                            <form:button class="btn disabled btn-default">confirm</form:button>
+                            <form:button class="btn disabled btn-default" id="confirm">confirm</form:button>
                             </form:form>
                         </td>
                         <td>
@@ -70,8 +70,7 @@
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 <h4 class="modal-title">Error</h4>
             </div>
-            <div class="modal-body text-center">
-                Something went wrong!!!
+            <div class="modal-body text-center" id="message">
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary btn-confirm">Ok</button>

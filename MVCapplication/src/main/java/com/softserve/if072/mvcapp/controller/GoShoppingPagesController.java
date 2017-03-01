@@ -46,9 +46,8 @@ public class GoShoppingPagesController extends BaseController {
         Map<String, List<ShoppingList>> map = goShoppingPageService.getProducts(getCurrentUser().getId(), store);
         if (map != null) {
             model.addAllAttributes(map);
+            model.addAttribute("cartForm", new FormForCart(map.get("selected").size()));
         }
-
-        model.addAttribute("cartForm", new FormForCart(map.get("selected").size()));
 
         return "goShoppingProducts";
     }

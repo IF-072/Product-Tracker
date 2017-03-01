@@ -7,6 +7,8 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.client.RestTemplate;
 import org.apache.commons.collections.CollectionUtils;
 
@@ -33,11 +35,11 @@ public class StoragePageService {
         this.restTemplate = restTemplate;
     }
 
-    public List<Storage> getStorages(int userId){
+    public List<Storage> getStorages(int userId) {
         final String uri = storageUrl + userId;
         List<Storage> storage = restTemplate.getForObject(uri, List.class);
 
-        if (CollectionUtils.isEmpty(storage)){
+        if (CollectionUtils.isEmpty(storage)) {
             LOGGER.error("Storage' list of user with id {} is empty", userId);
         } else {
             LOGGER.info("Storage' list of user with id {} has been received.", userId);
@@ -45,9 +47,17 @@ public class StoragePageService {
         return storage;
     }
 
-    public void updateAmount(StorageDTO storageDTO){
+    public String updateAmount(StorageDTO storageDTO, BindingResult result) {
+        if (result.hasErrors()) {
+            String message = "";
+            for (FieldError error : result.getFieldErrors()) {
+                message += error.getDefaultMessage() + "\r\n";
+            }
+            return message;
+        }
         final String uri = storageUrl + "dto";
         restTemplate.put(uri, storageDTO);
+        return "";
     }
 
 }
