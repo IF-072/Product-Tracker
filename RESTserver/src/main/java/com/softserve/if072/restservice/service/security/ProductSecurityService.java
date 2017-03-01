@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
- * Provides security methods for StoreService
+ * Provides security methods for ProductService
  *
  * @author Vitaliy Malisevych
  */
@@ -14,8 +14,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class ProductSecurityService extends BaseSecurityService {
 
+    private ProductDAO productDAO;
+
     @Autowired
-    ProductDAO productDAO;
+    public ProductSecurityService(ProductDAO productDAO) {
+        this.productDAO = productDAO;
+    }
 
     public boolean hasPermissionToAccess(int productId){
         Product product = productDAO.getByID(productId);
@@ -29,11 +33,12 @@ public class ProductSecurityService extends BaseSecurityService {
         if(product == null) {
             return true;
         } else {
-            if(product != null && product.getUser() != null && product.getUser().getId() == getCurrentUser().getId()) {
+            /*if(product != null && product.getUser() != null && product.getUser().getId() == getCurrentUser().getId()) {
                 return true;
             } else {
                 return false;
-            }
+            }*/
+            return product != null && product.getUser() != null && product.getUser().getId() == getCurrentUser().getId();
         }
 
     }

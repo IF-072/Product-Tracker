@@ -9,14 +9,6 @@
   Time: 21:40
 --%>
 
-<style>
-    #image, #edit,#delete, #goStores, #addImage, #addImage, #addToShoppingList {text-align:center; cursor: pointer}
-    #image {text-align:center}
-
-    td {vertical-align: middle}
-    .fa:hover {color: #7B83EF}
-</style>
-
 <div class="row">
     <div class="col-lg-12">
         <h1 class="page-header">My products</h1>
@@ -66,8 +58,11 @@
                                        id="goStores">Stores</p>
                                 </td>
                                 <td style="text-align:center; vertical-align: middle">
-                                    <p onclick="addProductToShoppingList(${product.id});" class="fa fa-plus fa-2x"
-                                       id="addToShoppingList"></p>
+                                    <button type="button" class="btn btn-default"
+                                            onclick="addProductToShoppingList(${product.id});"
+                                            id="addToShoppingList">
+                                        Add to<br/>Shopping list
+                                    </button>
                                 </td>
                                 <td style="text-align:center; vertical-align: middle">
                                     <p onclick="document.location.href='/product/editProduct?productId=${product.id}'"
@@ -82,11 +77,6 @@
                     </table>
             </div>
         </div>
-    </div>
-    <div id="dialogDelete" title="Delete product">
-    <br/>
-    <b>Are you shure?</b>
-    <br/>
     </div>
 </div>
 

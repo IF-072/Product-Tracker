@@ -1,18 +1,11 @@
 package com.softserve.if072.mvcapp.controller;
 
-import com.softserve.if072.common.model.Category;
 import com.softserve.if072.common.model.Product;
-import com.softserve.if072.common.model.Store;
-import com.softserve.if072.common.model.Unit;
-import com.softserve.if072.common.model.User;
 import com.softserve.if072.mvcapp.dto.StoresInProduct;
 import com.softserve.if072.mvcapp.service.ProductPageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -22,13 +15,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.client.RestTemplate;
-
-import javax.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  * The class contains methods that handle the http requests from the product's page
@@ -41,8 +27,12 @@ import java.util.Map;
 @PropertySource(value = {"classpath:application.properties", "classpath:message.properties"})
 public class ProductPageController extends BaseController {
 
-    @Autowired
     private ProductPageService productPageService;
+
+    @Autowired
+    public ProductPageController(ProductPageService productPageService) {
+        this.productPageService = productPageService;
+    }
 
     @Value("${product.alreadyExists}")
     private String alreadyExistMessage;

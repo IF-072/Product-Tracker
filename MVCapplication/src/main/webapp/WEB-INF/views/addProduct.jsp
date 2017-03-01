@@ -29,7 +29,7 @@
                         </c:if>
                     <div class="form-group">
                         <label class="control-label" for="inputWarning">Product name</label>
-                        <sf:errors path="name" cssClass="form-control label-danger"/>
+                        <sf:errors path="name" cssClass="form-control growable label-danger rows=*"/>
                         <sf:input path="name" class="form-control" id="inputWarning"
                                     placeholder="Product name" type="text"/>
                     </div>
