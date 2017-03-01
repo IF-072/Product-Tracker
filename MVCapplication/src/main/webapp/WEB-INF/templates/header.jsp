@@ -1,4 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
+
 <div id="wrapper">
 
 <!-- Navigation -->
@@ -10,7 +12,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" href="/">Product Tracker</a>
+        <a class="navbar-brand" href="/"><spring:message code="productTracker"/></a>
     </div>
     <!-- /.navbar-header -->
 
@@ -75,6 +77,20 @@
             </ul>
             <!-- /.dropdown-alerts -->
         </li>
+
+        <!-- languages -->
+        <div class="btn-group dropdown">
+            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                <span class="lang-sm lang-lbl-full" lang="en"></span>
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" role="menu">
+                <li><span class="lang-sm lang-lbl-full lang-choice" lang="en"></span></li>
+                <li><span class="lang-sm lang-lbl-full lang-choice" lang="uk"></span></li>
+                <li><span class="lang-sm lang-lbl-full lang-choice" lang="ru"></span></li>
+            </ul>
+        </div>
+
         <!-- /.dropdown -->
         <li class="dropdown">
             <a class="dropdown-toggle" data-toggle="dropdown" href="#">
@@ -97,32 +113,31 @@
         <div class="sidebar-nav navbar-collapse">
             <ul class="nav in" id="side-menu">
                 <li>
-                    <a href="<c:url value="../home"/>" class="active"><i class="fa fa-home fa-fw"></i> Home</a>
+                    <a href="<c:url value="../home"/>" class="active"><i class="fa fa-home fa-fw"></i> <spring:message code="home"/></a>
                 </li>
                 <li>
-                    <a href="<c:url value="../category"/>" class="active"><i class="fa fa-list-alt fa-fw"></i> Categories</a>
+                    <a href="<c:url value="../category"/>" class="active"><i class="fa fa-list-alt fa-fw"></i> <spring:message code="categories"/></a>
                 </li>
                 <li>
-                    <a href="<c:url value="../product/"/>" class="active"><i class="fa fa-inbox fa-fw"></i> Products</a>
+                    <a href="<c:url value="../product/"/>" class="active"><i class="fa fa-inbox fa-fw"></i> <spring:message code="products"/></a>
                 </li>
                 <li>
-                    <a href="<c:url value="/shopping_list" />" class="active"><i class="fa fa-archive fa-fw"></i> Shopping List</a>
+                    <a href="<c:url value="/shopping_list" />" class="active"><i class="fa fa-archive fa-fw"></i> <spring:message code="shoppingList"/></a>
                 </li>
                 <li>
-                    <a href="<c:url value="../stores/"/>" class="active"><i class="fa fa-globe fa-fw"></i> Stores</a>
+                    <a href="<c:url value="../stores/"/>" class="active"><i class="fa fa-globe fa-fw"></i> <spring:message code="stores"/></a>
                 </li>
                 <li>
-                    <a href="<c:url value="../storage/"/>" class="active"><i class="fa fa-archive fa-fw"></i> My
-                        Storage</a>
+                    <a href="<c:url value="../storage/"/>" class="active"><i class="fa fa-archive fa-fw"></i> <spring:message code="myStorage"/></a>
                 </li>
                 <li>
-                    <a href="<c:url value="../cart/"/>" class="active"><i class="fa fa-shopping-cart"></i> Cart</a>
+                    <a href="<c:url value="../cart/"/>" class="active"><i class="fa fa-shopping-cart"></i> <spring:message code="cart"/></a>
                 </li>
                 <li>
-                    <a href="<c:url value="../history/"/>" class="active"><i class="fa fa-calendar"></i> History</a>
+                    <a href="<c:url value="../history/"/>" class="active"><i class="fa fa-calendar"></i> <spring:message code="history"/></a>
                 </li>
                 <li>
-                    <a href="<c:url value="../goShoppingStores/"/>"><button type="button" class="btn btn-outline btn-primary">Go shopping</button></a>
+                    <a href="<c:url value="../goShoppingStores/"/>"><button type="button" class="btn btn-outline btn-primary"><spring:message code="goShopping"/></button></a>
                 </li>
 
             </ul>
