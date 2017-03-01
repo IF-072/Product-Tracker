@@ -88,17 +88,14 @@ public class StorePageController extends BaseController {
             model.addAttribute("errorMessages", result.getFieldErrors());
             return "addStore";
         }
-
         if (storePageService.alreadyExist(store, getCurrentUser())) {
             model.addAttribute("validMessage", existMessage);
             return "addStore";
         }
-
         if (storePageService.isDeleted(store, getCurrentUser())) {
             model.addAttribute("store", storePageService.getStoreByNameAndUserId(store, getCurrentUser()));
             return "dialogWindow";
         }
-
         storePageService.addStore(getCurrentUser(), store);
         LOGGER.info(String.format("Store of user %d was added", getCurrentUser().getId()));
 
@@ -219,12 +216,21 @@ public class StorePageController extends BaseController {
      * @return redirect to the store view page that contains list of stores
      */
     @PostMapping("/editStore")
-    public String editStore(@Validated @ModelAttribute("store") Store store, BindingResult result, @RequestParam
-            ("storeId") int storeId, Model model) {
+    public String editStore(@Validated @ModelAttribute("store") Store store, BindingResult result, Model model,
+                            @RequestParam ("storeId") int storeId) {
         if (result.hasErrors()) {
-            model.addAttribute("store", storePageService.getStoreById(storeId));
+           model.addAttribute("store", storePageService.getStoreById(storeId));
             model.addAttribute("errorMessages", result.getFieldErrors());
             return "editStore";
+        }
+        if (storePageService.alreadyExist(store, getCurrentUser())) {
+            model.addAttribute("store", storePageService.getStoreById(storeId));
+            model.addAttribute("validMessage", existMessage);
+            return "editStore";
+        }
+        if (storePageService.isDeleted(store, getCurrentUser())) {
+            model.addAttribute("store", storePageService.getStoreByNameAndUserId(store, getCurrentUser()));
+            return "dialogWindow";
         }
         storePageService.editStore(store, storeId, getCurrentUser());
         LOGGER.info(String.format("Store with id %d was updated", storeId));

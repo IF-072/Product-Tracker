@@ -211,7 +211,9 @@ public class StorePageService {
      */
     public boolean alreadyExist(Store store, User user) {
         Store existStore = getStoreByNameAndUserId(store, user);
-        return existStore != null && existStore.isEnabled();
+        if (existStore != null && existStore.isEnabled())  {
+            return store.getId()!=existStore.getId();
+        }return  false;
     }
 
     /**
