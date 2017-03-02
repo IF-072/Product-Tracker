@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Serve requests used for working with Store model
+ * Serve requests from MVC Application, used for working with Store model
  *
  * @author Nazar Vynnyk
  */
@@ -226,6 +226,38 @@ public class StoreController {
 
         LOGGER.info(String.format("All Products that are not presented in store %d were found", storeId));
         return notMappedProducts;
+    }
+
+    /**
+     * This method checks does user has store with same name as by received store
+     *
+     * @param userId owner of store
+     * @param store  store that user want save
+     * @return store from DataBase which name is equal to received store or if such store is not found - null
+     */
+
+    @PostMapping("/byName/{userId}")
+    @ResponseStatus(value = HttpStatus.OK)
+    public Store getStoreByNameAndUser(@PathVariable Integer userId, @RequestBody Store store) {
+        Store oldStore = storeService.getStoreByNameAndUser(store.getName(), store.getAddress(), userId);
+        LOGGER.info(String.format("Store with name %s was retrieved", store.getName()));
+        if (oldStore != null) {
+            return oldStore;
+        } else return null;
+    }
+
+    /**
+     * This method  retrieves store that is in DataBase.
+     *
+     * @param store that will be will be retrieved
+     */
+    @PreAuthorize("#store != null && #store.user != null && #store.user.id == authentication.user.id")
+    @PutMapping("/retrieve")
+    @ResponseStatus(value = HttpStatus.OK)
+    @ResponseBody
+    public void retrieveStore(@RequestBody Store store) {
+        storeService.retrieveStore(store.getId());
+        LOGGER.info(String.format("Store with id %d was retrieved", store.getId()));
     }
 
 }

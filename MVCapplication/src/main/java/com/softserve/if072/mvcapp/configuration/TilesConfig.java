@@ -29,6 +29,7 @@ public class TilesConfig extends WebMvcConfigurerAdapter {
     public UrlBasedViewResolver viewResolver() {
         UrlBasedViewResolver viewResolver = new UrlBasedViewResolver();
         viewResolver.setViewClass(TilesView.class);
+        viewResolver.setExposedContextBeanNames("userService");
         return viewResolver;
     }
 }

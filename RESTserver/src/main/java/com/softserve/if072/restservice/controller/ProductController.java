@@ -228,7 +228,6 @@ public class ProductController {
     @ResponseBody
     @ResponseStatus(value = HttpStatus.OK)
     public Product getProductByNameAndUserId(@PathVariable String productName, @PathVariable String userId) {
-
         Product product = productService.getProductByNameAndUserId(productName, Integer.parseInt(userId));
         return product;
 

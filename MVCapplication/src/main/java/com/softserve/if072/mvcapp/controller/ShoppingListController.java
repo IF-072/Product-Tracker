@@ -1,6 +1,7 @@
 package com.softserve.if072.mvcapp.controller;
 
 import com.softserve.if072.mvcapp.service.ShoppingListService;
+import com.softserve.if072.mvcapp.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,9 +16,16 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * @author Oleh Pochernin
  */
 @Controller
-public class ShoppingListController extends BaseController {
-    @Autowired
+public class ShoppingListController {
+
     private ShoppingListService shoppingListService;
+    private UserService userService;
+
+    @Autowired
+    public ShoppingListController(ShoppingListService shoppingListService, UserService userService) {
+        this.shoppingListService = shoppingListService;
+        this.userService = userService;
+    }
 
     /**
      * This method extracts a shopping list model for the shopping list's view.
@@ -27,7 +35,7 @@ public class ShoppingListController extends BaseController {
      */
     @RequestMapping("/shopping_list")
     public String getPage(Model model) {
-        model.addAttribute("shoppingList", shoppingListService.getAllElements(getCurrentUser().getId()));
+        model.addAttribute("shoppingList", shoppingListService.getAllElements(userService.getCurrentUser().getId()));
 
         return "shopping_list";
     }
@@ -44,7 +52,7 @@ public class ShoppingListController extends BaseController {
     @ResponseBody
     public String editShoppingList(@RequestParam("prodId") int prodId,
                                    @RequestParam("val") int value) {
-        return shoppingListService.editShoppingList(getCurrentUser().getId(), prodId, value);
+        return shoppingListService.editShoppingList(userService.getCurrentUser().getId(), prodId, value);
     }
 
     /**
@@ -55,7 +63,7 @@ public class ShoppingListController extends BaseController {
      */
     @RequestMapping(value = "/shopping_list/delete", method = RequestMethod.GET)
     public String deleteProductFromShoppingList(@RequestParam("prodId") int prodId) {
-        shoppingListService.deleteProductFromShoppingList(getCurrentUser().getId(), prodId);
+        shoppingListService.deleteProductFromShoppingList(userService.getCurrentUser().getId(), prodId);
 
         return "redirect:/shopping_list/";
     }
@@ -68,7 +76,7 @@ public class ShoppingListController extends BaseController {
      */
     @RequestMapping(value = "/shopping_list/add", method = RequestMethod.POST)
     public String addProductToShoppingList(@RequestParam("productId") int productId) {
-        shoppingListService.addProductToShoppingList(getCurrentUser(), productId);
+        shoppingListService.addProductToShoppingList(userService.getCurrentUser(), productId);
 
         return "redirect:/product/";
     }

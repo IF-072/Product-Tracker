@@ -3,6 +3,7 @@ package com.softserve.if072.mvcapp.controller;
 import com.softserve.if072.common.model.Product;
 import com.softserve.if072.mvcapp.dto.StoresInProduct;
 import com.softserve.if072.mvcapp.service.ProductPageService;
+import com.softserve.if072.mvcapp.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
@@ -25,9 +26,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 @RequestMapping("/product")
 @PropertySource(value = {"classpath:application.properties", "classpath:message.properties"})
-public class ProductPageController extends BaseController {
+public class ProductPageController {
 
     private ProductPageService productPageService;
+    private UserService userService;
 
     @Autowired
     public ProductPageController(ProductPageService productPageService) {
@@ -36,6 +38,12 @@ public class ProductPageController extends BaseController {
 
     @Value("${product.alreadyExists}")
     private String alreadyExistMessage;
+
+    @Autowired
+    public ProductPageController(ProductPageService productPageService, UserService userService) {
+        this.productPageService = productPageService;
+        this.userService = userService;
+    }
 
     /**
      * Method returns product's page
@@ -47,7 +55,7 @@ public class ProductPageController extends BaseController {
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String getProductPage(ModelMap model) {
 
-        model.addAttribute("products", productPageService.getAllProducts(getCurrentUser().getId()));
+        model.addAttribute("products", productPageService.getAllProducts(userService.getCurrentUser().getId()));
 
         return "product";
 
@@ -65,7 +73,7 @@ public class ProductPageController extends BaseController {
 
         model.addAttribute("product", new Product());
         model.addAttribute("units", productPageService.getAllUnits());
-        model.addAttribute("categories", productPageService.getAllCategories(getCurrentUser().getId()));
+        model.addAttribute("categories", productPageService.getAllCategories(userService.getCurrentUser().getId()));
 
         return "addProduct";
     }
@@ -84,28 +92,28 @@ public class ProductPageController extends BaseController {
         if (result.hasErrors()) {
             model.addAttribute("errorMessages", result.getFieldErrors());
             model.addAttribute("units", productPageService.getAllUnits());
-            model.addAttribute("categories", productPageService.getAllCategories(getCurrentUser().getId()));
+            model.addAttribute("categories", productPageService.getAllCategories(userService.getCurrentUser().getId()));
 
             return "addProduct";
         }
 
         //if product already exists
-        if(productPageService.isAlreadyExist(product, getCurrentUser())) {
+        if(productPageService.isAlreadyExist(product, userService.getCurrentUser())) {
             model.addAttribute("errorMessage", alreadyExistMessage);
             model.addAttribute("units", productPageService.getAllUnits());
-            model.addAttribute("categories", productPageService.getAllCategories(getCurrentUser().getId()));
+            model.addAttribute("categories", productPageService.getAllCategories(userService.getCurrentUser().getId()));
 
             return "addProduct";
         }
 
         //if product is deleted
-        if (productPageService.isDeleted(product, getCurrentUser())) {
-            model.addAttribute("product", productPageService.getProductByNameAndUserId(product, getCurrentUser()));
+        if (productPageService.isDeleted(product, userService.getCurrentUser())) {
+            model.addAttribute("product", productPageService.getProductByNameAndUserId(product, userService.getCurrentUser()));
 
             return "existsProduct";
         }
 
-        productPageService.addProduct(product, getCurrentUser());
+        productPageService.addProduct(product, userService.getCurrentUser());
 
         return "redirect:/product/";
     }
@@ -122,7 +130,7 @@ public class ProductPageController extends BaseController {
     public String editProduct(@RequestParam int productId, Model model) {
 
         model.addAttribute("units",  productPageService.getAllUnits());
-        model.addAttribute("categories", productPageService.getAllCategories(getCurrentUser().getId()));
+        model.addAttribute("categories", productPageService.getAllCategories(userService.getCurrentUser().getId()));
         model.addAttribute("product", productPageService.getProduct(productId));
 
         return "editProduct";
@@ -144,28 +152,28 @@ public class ProductPageController extends BaseController {
         if (result.hasErrors()) {
             model.addAttribute("errorMessages", result.getFieldErrors());
             model.addAttribute("units", productPageService.getAllUnits());
-            model.addAttribute("categories", productPageService.getAllCategories(getCurrentUser().getId()));
+            model.addAttribute("categories", productPageService.getAllCategories(userService.getCurrentUser().getId()));
 
             return "editProduct";
         }
 
         //if product already exists
-        if(productPageService.isAlreadyExist(product, getCurrentUser())) {
+        if(productPageService.isAlreadyExist(product, userService.getCurrentUser())) {
             model.addAttribute("message", alreadyExistMessage);
             model.addAttribute("units", productPageService.getAllUnits());
-            model.addAttribute("categories", productPageService.getAllCategories(getCurrentUser().getId()));
+            model.addAttribute("categories", productPageService.getAllCategories(userService.getCurrentUser().getId()));
 
             return "editProduct";
         }
 
         //if product is deleted
-        if (productPageService.isDeleted(product, getCurrentUser())) {
-            model.addAttribute("product", productPageService.getProductByNameAndUserId(product, getCurrentUser()));
+        if (productPageService.isDeleted(product, userService.getCurrentUser())) {
+            model.addAttribute("product", productPageService.getProductByNameAndUserId(product, userService.getCurrentUser()));
 
             return "existsProduct";
         }
 
-        productPageService.editProduct(product, getCurrentUser());
+        productPageService.editProduct(product, userService.getCurrentUser());
 
         return "redirect:/product/";
     }
@@ -197,7 +205,7 @@ public class ProductPageController extends BaseController {
     @RequestMapping(value = "/stores", method = RequestMethod.GET)
     public String getStoresByProductId(@RequestParam int productId, Model model) {
 
-        model.addAttribute("storesId", productPageService.getAllStoresId(getCurrentUser().getId()));
+        model.addAttribute("storesId", productPageService.getAllStoresId(userService.getCurrentUser().getId()));
         model.addAttribute("storesInProduct", productPageService.getStoresInProduct(productId));
         model.addAttribute("product", productPageService.getProduct(productId));
 

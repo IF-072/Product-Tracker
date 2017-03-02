@@ -5,6 +5,7 @@ import com.softserve.if072.common.model.Product;
 import com.softserve.if072.common.model.User;
 import com.softserve.if072.mvcapp.service.ImageUploadService;
 import com.softserve.if072.mvcapp.service.ProductPageService;
+import com.softserve.if072.mvcapp.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -34,7 +35,7 @@ import java.util.Map;
 
 @Controller
 @RequestMapping("/image")
-public class ImageUploadController extends BaseController {
+public class ImageUploadController {
 
     @Value("${application.restImageURL}")
     private String imageUrl;
@@ -44,12 +45,13 @@ public class ImageUploadController extends BaseController {
 
     private ProductPageService productPageService;
     private ImageUploadService imageUploadService;
+    private RestTemplate restTemplate;
+    private UserService userService;
 
     @Autowired
-    public ImageUploadController(ProductPageService productPageService,
-                                 ImageUploadService imageUploadService) {
-        this.productPageService = productPageService;
-        this.imageUploadService = imageUploadService;
+    public ImageUploadController(RestTemplate restTemplate, UserService userService) {
+        this.restTemplate = restTemplate;
+        this.userService = userService;
     }
 
     /**
@@ -86,8 +88,6 @@ public class ImageUploadController extends BaseController {
         return "redirect:/product/";
     }
 
-
-
     /**
      * Method returns image by id
      *
@@ -101,9 +101,8 @@ public class ImageUploadController extends BaseController {
 
         final String uri = imageUrl + "/{userId}/{imageId}";
 
-        User user = getCurrentUser();
+        User user = userService.getCurrentUser();
 
-        RestTemplate restTemplate = getRestTemplate();
         Map<String, Integer> param = new HashMap<>();
         param.put("userId", user.getId());
         param.put("imageId", id);
@@ -130,9 +129,7 @@ public class ImageUploadController extends BaseController {
 
         final String uri = productUrl + "/{productId}";
 
-        User user = getCurrentUser();
-
-        RestTemplate restTemplate = getRestTemplate();
+        User user = userService.getCurrentUser();
 
         Map<String, Integer> param = new HashMap<>();
         param.put("productId", productId);
@@ -158,9 +155,7 @@ public class ImageUploadController extends BaseController {
     @RequestMapping(value =  "/edit", method = RequestMethod.POST)
     public String editImage(@ModelAttribute Image image, @RequestParam int productId) throws IOException {
 
-        User user = getCurrentUser();
-
-        RestTemplate restTemplate = getRestTemplate();
+        User user = userService.getCurrentUser();
 
         MultipartFile multipartFile = image.getMultipartFile();
         image.setContentType(multipartFile.getContentType());
@@ -198,9 +193,7 @@ public class ImageUploadController extends BaseController {
 
         final String uri = imageUrl + "/delete/{userId}/{imageId}";
 
-        User user = getCurrentUser();
-
-        RestTemplate restTemplate = getRestTemplate();
+        User user = userService.getCurrentUser();
 
         Map<String, Integer> param = new HashMap<>();
         param.put("userId", user.getId());

@@ -81,7 +81,7 @@
         <!-- languages -->
         <div class="btn-group dropdown">
             <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                <span class="lang-sm lang-lbl-full" lang="en"></span>
+                <spring:message code="changeLanguage"/>
                 <span class="caret"></span>
             </button>
             <ul class="dropdown-menu" role="menu">
@@ -97,10 +97,10 @@
                 <i class="fa fa-user fa-fw"></i> <i class="fa fa-caret-down"></i>
             </a>
             <ul class="dropdown-menu dropdown-user">
-                <li><a href="<c:url value="/profile" />"><i class="fa fa-user fa-fw"></i> User Profile</a>
+                <li><a href="<c:url value="/profile" />"><i class="fa fa-user fa-fw"></i> <spring:message code="userProfile"/></a>
                 </li>
                 <li class="divider"></li>
-                <li><a href="<c:url value="/logout"/>"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
+                <li><a href="<c:url value="/logout"/>"><i class="fa fa-sign-out fa-fw"></i> <spring:message code="logout"/></a>
                 </li>
             </ul>
             <!-- /.dropdown-user -->
@@ -136,6 +136,11 @@
                 <li>
                     <a href="<c:url value="../history/"/>" class="active"><i class="fa fa-calendar"></i> <spring:message code="history"/></a>
                 </li>
+                <c:if test="${'ROLE_PREMIUM' == userService.getCurrentUser().getRole().getAuthority()}">
+                    <li>
+                        <a href="<c:url value="../analytics/"/>" class="active"><i class="fa fa-line-chart"></i> <spring:message code="analytics"/></a>
+                    </li>
+                </c:if>
                 <li>
                     <a href="<c:url value="../goShoppingStores/"/>"><button type="button" class="btn btn-outline btn-primary"><spring:message code="goShopping"/></button></a>
                 </li>
