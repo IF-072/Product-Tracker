@@ -22,7 +22,7 @@
             <div class="panel-body">
                     <input type="button" class="btn btn-outline btn-primary"
                            onClick="window.location.href = '/product/addProduct'"
-                           value=<spring:message code="product.addNewProduct"/>>
+                           value=<spring:message code="product.addNewProductBut"/>>
                     <table width="100%" class="table table-striped table-bordered table-hover" id="productData">
                         <thead>
                         <tr>

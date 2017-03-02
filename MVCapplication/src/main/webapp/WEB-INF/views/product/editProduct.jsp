@@ -72,7 +72,7 @@
                         <sf:hidden path="id"/>
                     </div>
                     <input type="submit" class="btn btn-lg btn-success btn-custom"
-                           value=<spring:message code="product.editProduct"/>/>
+                           value=<spring:message code="product.editProductBut"/>/>
                     <input type="reset" class="btn btn-lg btn-reset-custom btn-reset-custom"
                            onclick="document.location.href='<c:url value="/product/"/>'"
                            value=<spring:message code="product.cancel"/>>

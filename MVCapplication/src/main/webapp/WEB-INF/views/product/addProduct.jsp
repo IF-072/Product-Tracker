@@ -11,7 +11,7 @@
 
 <div class="row">
     <div class="col-lg-12">
-        <h1 class="page-header"><spring:message code="product.addProduct"/></h1>
+        <h1 class="page-header"><spring:message code="product.addNewProduct"/></h1>
     </div>
 </div>
 
