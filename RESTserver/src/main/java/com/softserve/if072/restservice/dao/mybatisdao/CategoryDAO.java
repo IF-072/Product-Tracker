@@ -35,11 +35,11 @@ public interface CategoryDAO extends DAO<Category> {
      * Selects specified category by its id
      *
      * @param id category id
-     * @return category object
+     * @return category's object
      */
 
     @Override
-    @Select("SELECT id, name, user_id FROM category WHERE id = #{id} AND is_enabled = 1")
+    @Select("SELECT id, name, user_id, is_enabled FROM category WHERE id = #{id} AND is_enabled = 1")
     @Results(value = {
             @Result(property = "id", column = "id"),
             @Result(property = "name", column = "name"),
@@ -47,6 +47,23 @@ public interface CategoryDAO extends DAO<Category> {
             @Result(property = "isEnabled", column = "is_enabled")
     })
     Category getByID(int id);
+
+    /**
+     * Checks whether category already was added to the database
+     *
+     * @param name category's name
+     * @param userID id of current user
+     * @return category's object
+     */
+
+    @Select("SELECT id, name, user_id, is_enabled FROM category WHERE user_id = #{userID} AND name = #{name}")
+    @Results(value = {
+            @Result(property = "id", column = "id"),
+            @Result(property = "name", column = "name"),
+            @Result(property = "user", column = "user_id", javaType = User.class, one = @One(select = "com.softserve.if072.restservice.dao.mybatisdao.UserDAO.getByID")),
+            @Result(property = "isEnabled", column = "is_enabled")
+    })
+    Category getByNameAndUserID(String name, int userID);
 
     /**
      * Inserts new category to the database

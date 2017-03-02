@@ -68,6 +68,17 @@ public class CategoryController {
         return category;
     }
 
+    @PreAuthorize("#userID == authentication.user.id")
+    @GetMapping(value = "/{userID}/name/{name}")
+    @ResponseBody
+    @ResponseStatus(value = HttpStatus.OK)
+    public Category getCategoryByNameAndUserID(@PathVariable("name") String name, @PathVariable("userID") int userID) {
+        LOGGER.info("Category name - " + name);
+        Category category = categoryService.getByNameAndUserID(name, userID);
+        LOGGER.info(String.format("Category with name %s of user with id %d was found", name, userID));
+        return category;
+    }
+
     @PreAuthorize("#category != null && #category.user != null && #category.user.id == authentication.user.id")
     @PostMapping(value = "/")
     @ResponseStatus(value = HttpStatus.CREATED)

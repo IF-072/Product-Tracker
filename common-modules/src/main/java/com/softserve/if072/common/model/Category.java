@@ -1,6 +1,7 @@
 package com.softserve.if072.common.model;
 
-import org.hibernate.validator.constraints.NotEmpty;
+import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.NotBlank;
 
 /**
  * The class contains information about product's category
@@ -12,7 +13,8 @@ public class Category {
 
     private int id;
 
-    @NotEmpty(message = "{error.categoryName.notNull}")
+    @NotBlank(message = "{error.categoryName.notBlank}")
+    @Length(min = 3, max = 64, message = "{error.categoryName.length}")
     private String name;
     private User user;
     private boolean isEnabled;

@@ -14,12 +14,20 @@
 <!-- Form -->
 <div class="col-lg-6">
     <div class="form-group has-warning">
+
         <c:if test="${not empty errors}">
             <div class="alert alert-danger">
                 <c:forEach items="${errors}" var="errorItem">
                     <p><span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
                             ${errorItem.getDefaultMessage()}</p>
                 </c:forEach>
+            </div>
+        </c:if>
+
+        <c:if test="${not empty error}">
+            <div class="alert alert-danger">
+                <p><span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                        ${error}</p>
             </div>
         </c:if>
         <sf:form role="form" modelAttribute="category" method="post">

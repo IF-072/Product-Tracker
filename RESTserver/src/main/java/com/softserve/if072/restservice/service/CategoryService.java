@@ -28,8 +28,11 @@ public class CategoryService {
     @Value("categories.notFound")
     private String categoriesNotFound;
 
-    @Value("categoryNotFound")
+    @Value("category.notFound")
     private String categoryNotFound;
+
+    @Value("categoryByName.notFound")
+    private String categoryByNameNotFound;
 
     @Autowired
     public CategoryService(CategoryDAO categoryDAO) {
@@ -53,6 +56,19 @@ public class CategoryService {
             return category;
         } else {
             throw new DataNotFoundException(String.format(categoryNotFound, id));
+        }
+    }
+
+    public Category getByNameAndUserID(String name, int userID) throws DataNotFoundException {
+
+        System.out.println("Ім'я прийшло в сервіс: " + name);
+        System.out.println("ID, який прийшов в сервіс: " + userID);
+        Category category = categoryDAO.getByNameAndUserID(name, userID);
+
+        if (category != null) {
+            return category;
+        } else {
+            throw new DataNotFoundException(String.format(categoryByNameNotFound, name, userID));
         }
     }
 
