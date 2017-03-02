@@ -80,7 +80,7 @@
 
     <definition name="product" extends="mainLayout">
         <put-attribute name="title" value="Product Tracker"/>
-        <put-attribute name="body" value="/WEB-INF/views/product.jsp"/>
+        <put-attribute name="body" value="/WEB-INF/views/product/product.jsp"/>
         <put-attribute name="dialog" value="/WEB-INF/templates/dialog.jsp"/>
 
         <put-list-attribute name="stylesheets" inherit="true">
@@ -102,7 +102,7 @@
 
     <definition name="addProduct" extends="mainLayout">
         <put-attribute name="title" value="Product Tracker Project"/>
-        <put-attribute name="body" value="/WEB-INF/views/addProduct.jsp"/>
+        <put-attribute name="body" value="/WEB-INF/views/product/addProduct.jsp"/>
 
         <put-list-attribute name="stylesheets" inherit="true">
             <add-attribute value="/css/DataTables.bootstrap.css"/>
@@ -249,7 +249,7 @@
 
     <definition name="editProduct" extends="mainLayout">
         <put-attribute name="title" value="Product Tracker Project"/>
-        <put-attribute name="body" value="/WEB-INF/views/editProduct.jsp"/>
+        <put-attribute name="body" value="/WEB-INF/views/product/editProduct.jsp"/>
 
         <put-list-attribute name="stylesheets" inherit="true">
             <add-attribute value="/css/dataTables.bootstrap.css"/>
@@ -267,12 +267,20 @@
 
     <definition name="addImage" extends="mainLayout">
         <put-attribute name="title" value="Add image"/>
-        <put-attribute name="body" value="/WEB-INF/views/addImage.jsp"/>
+        <put-attribute name="body" value="/WEB-INF/views/product/addImage.jsp"/>
+
+        <put-list-attribute name="javascripts" inherit="true">
+            <add-attribute value="/js/image.js"/>
+        </put-list-attribute>
     </definition>
 
     <definition name="editImage" extends="mainLayout">
         <put-attribute name="title" value="Edit image"/>
-        <put-attribute name="body" value="/WEB-INF/views/editImage.jsp"/>
+        <put-attribute name="body" value="/WEB-INF/views/product/editImage.jsp"/>
+
+        <put-list-attribute name="javascripts" inherit="true">
+            <add-attribute value="/js/image.js"/>
+        </put-list-attribute>
     </definition>
 
     <definition name="goShoppingProducts" extends="mainLayout">
@@ -337,12 +345,12 @@
 
     <definition name="productInStores" extends="mainLayout">
         <put-attribute name="title" value="Product Tracker Project"/>
-        <put-attribute name="body" value="/WEB-INF/views/productInStores.jsp"/>
+        <put-attribute name="body" value="/WEB-INF/views/product/productInStores.jsp"/>
     </definition>
 
     <definition name="existsProduct" extends="mainLayout">
         <put-attribute name="title" value="Product Tracker Project"/>
-        <put-attribute name="body" value="/WEB-INF/views/existsProduct.jsp"/>
+        <put-attribute name="body" value="/WEB-INF/views/product/existsProduct.jsp"/>
     </definition>
 
     <definition name="productsInStore" extends="mainLayout">

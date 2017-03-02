@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
- * Provides security methods for ProductService
+ * Provides security methods for ProductController
  *
  * @author Vitaliy Malisevych
  */
@@ -28,16 +28,11 @@ public class ProductSecurityService extends BaseSecurityService {
 
     public boolean hasPermissionToAccess(String productName){
 
-        Product product = productDAO.getProductByName(productName);
+        Product product = productDAO.getProductByNameAndUserId(productName, getCurrentUser().getId());
 
         if(product == null) {
             return true;
         } else {
-            /*if(product != null && product.getUser() != null && product.getUser().getId() == getCurrentUser().getId()) {
-                return true;
-            } else {
-                return false;
-            }*/
             return product != null && product.getUser() != null && product.getUser().getId() == getCurrentUser().getId();
         }
 

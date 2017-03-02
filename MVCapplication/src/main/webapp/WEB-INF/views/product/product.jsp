@@ -57,7 +57,7 @@
                                 </td>
                                 <td>
                                     <p onclick="document.location.href='/product/stores?productId=${product.id}'"
-                                       id="goStores">Stores</p>
+                                       id="goStores"><spring:message code="product.stores"/></p>
                                 </td>
                                 <td style="text-align:center; vertical-align: middle">
                                     <button type="button" class="btn btn-default"

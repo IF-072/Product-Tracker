@@ -2,10 +2,13 @@ package com.softserve.if072.mvcapp.service;
 
 import com.softserve.if072.common.model.Image;
 import com.softserve.if072.common.model.Product;
+import com.softserve.if072.common.model.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
@@ -65,6 +68,46 @@ public class ImageUploadService {
 
         final String updateProductUri = productUrl +"/image";
         restTemplate.put(updateProductUri, product, Product.class);
+
+    }
+
+    public Image getImageById(int id) {
+
+        final String uri = imageUrl + "/{imageId}";
+
+        Map<String, Integer> param = new HashMap<>();
+        param.put("imageId", id);
+
+        return restTemplate.getForObject(uri, Image.class, param);
+
+    }
+
+    public void editImage(Image image, int productId) throws IOException {
+
+        MultipartFile multipartFile = image.getMultipartFile();
+        image.setContentType(multipartFile.getContentType());
+        image.setFileName(multipartFile.getOriginalFilename());
+        image.setImageData(multipartFile.getBytes());
+
+        final String uri = imageUrl + "/";
+
+        Product product = productPageService.getProduct(productId);
+
+        image.setId(product.getImage().getId());
+
+        //HttpEntity<Image> requestEntity = new HttpEntity<>(image);
+        restTemplate.exchange(uri, HttpMethod.PUT, new HttpEntity<>(image), Image.class);
+
+    }
+
+    public void deleteImage(int id) {
+
+        final String uri = imageUrl + "/delete/{imageId}";
+
+        Map<String, Integer> param = new HashMap<>();
+        param.put("imageId", id);
+
+        restTemplate.delete(uri, param);
 
     }
 }

@@ -31,11 +31,6 @@ public class ProductPageController {
     private ProductPageService productPageService;
     private UserService userService;
 
-    @Autowired
-    public ProductPageController(ProductPageService productPageService) {
-        this.productPageService = productPageService;
-    }
-
     @Value("${product.alreadyExists}")
     private String alreadyExistMessage;
 

@@ -49,9 +49,12 @@ public class ImageUploadController {
     private UserService userService;
 
     @Autowired
-    public ImageUploadController(RestTemplate restTemplate, UserService userService) {
+    public ImageUploadController(RestTemplate restTemplate, UserService userService,
+                                 ProductPageService productPageService, ImageUploadService imageUploadService) {
         this.restTemplate = restTemplate;
         this.userService = userService;
+        this.productPageService = productPageService;
+        this.imageUploadService = imageUploadService;
     }
 
     /**
@@ -83,7 +86,7 @@ public class ImageUploadController {
     @RequestMapping(value =  "/upload", method = RequestMethod.POST)
     public String uploadImage(@ModelAttribute Image image, @RequestParam int productId) throws IOException {
 
-        imageUploadService.uploadImage(image, productId, getCurrentUser().getId());
+        imageUploadService.uploadImage(image, productId, userService.getCurrentUser().getId());
 
         return "redirect:/product/";
     }
@@ -99,21 +102,14 @@ public class ImageUploadController {
     @ResponseBody
     public void getImageById(@PathVariable("id") int id, HttpServletResponse response) throws IOException {
 
-        final String uri = imageUrl + "/{userId}/{imageId}";
-
-        User user = userService.getCurrentUser();
-
-        Map<String, Integer> param = new HashMap<>();
-        param.put("userId", user.getId());
-        param.put("imageId", id);
-
-        Image image = restTemplate.getForObject(uri,Image.class,param);
+        Image image = imageUploadService.getImageById(id);
 
         if (image != null) {
             response.setContentType(image.getContentType());
             response.getOutputStream().write(image.getImageData());
             response.getOutputStream().close();
         }
+
     }
 
     /**
@@ -127,16 +123,7 @@ public class ImageUploadController {
     @RequestMapping(value = "/edit", method = RequestMethod.GET)
     public String getEditPage(@RequestParam int productId, Model model) {
 
-        final String uri = productUrl + "/{productId}";
-
-        User user = userService.getCurrentUser();
-
-        Map<String, Integer> param = new HashMap<>();
-        param.put("productId", productId);
-
-        Product product = restTemplate.getForObject(uri, Product.class, param);
-
-        model.addAttribute("product", product);
+        model.addAttribute("product", productPageService.getProduct(productId));
 
         model.addAttribute("image", new Image());
 
@@ -155,27 +142,7 @@ public class ImageUploadController {
     @RequestMapping(value =  "/edit", method = RequestMethod.POST)
     public String editImage(@ModelAttribute Image image, @RequestParam int productId) throws IOException {
 
-        User user = userService.getCurrentUser();
-
-        MultipartFile multipartFile = image.getMultipartFile();
-        image.setContentType(multipartFile.getContentType());
-        image.setFileName(multipartFile.getOriginalFilename());
-        image.setImageData(multipartFile.getBytes());
-
-        final String uri = imageUrl + "/{userId}";
-        final String getProductUri = productUrl + "/{productId}";
-
-        Map<String, Integer> param = new HashMap<>();
-        param.put("productId", productId);
-
-        Product product = restTemplate.getForObject(getProductUri, Product.class, param);
-
-        image.setId(product.getImage().getId());
-
-        param.clear();
-        param.put("userId", user.getId());
-        HttpEntity<Image> requestEntity = new HttpEntity<>(image);
-        restTemplate.exchange(uri, HttpMethod.PUT, requestEntity, Image.class, param);
+        imageUploadService.editImage(image,productId);
 
         return "redirect:/product/";
 
@@ -191,15 +158,7 @@ public class ImageUploadController {
     @RequestMapping(value = "/delete", method = RequestMethod.GET)
     public String deleteImage(@RequestParam int id) {
 
-        final String uri = imageUrl + "/delete/{userId}/{imageId}";
-
-        User user = userService.getCurrentUser();
-
-        Map<String, Integer> param = new HashMap<>();
-        param.put("userId", user.getId());
-        param.put("imageId", id);
-
-        restTemplate.delete(uri, param);
+        imageUploadService.deleteImage(id);
 
         return "redirect:/product/";
 
