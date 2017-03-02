@@ -1,17 +1,14 @@
 package com.softserve.if072.mvcapp.controller;
 
-import com.softserve.if072.common.model.Cart;
-import com.softserve.if072.mvcapp.dto.FormForCart;
 import com.softserve.if072.common.model.ShoppingList;
-import com.softserve.if072.common.model.Store;
+import com.softserve.if072.mvcapp.dto.FormForCart;
 import com.softserve.if072.mvcapp.service.GoShoppingPageService;
+import com.softserve.if072.mvcapp.service.UserService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.apache.commons.collections.CollectionUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,19 +20,21 @@ import java.util.Map;
 
 
 @Controller
-public class GoShoppingPagesController extends BaseController {
+public class GoShoppingPagesController {
 
     private static final Logger LOGGER = LogManager.getLogger(GoShoppingPagesController.class);
     private GoShoppingPageService goShoppingPageService;
+    private UserService userService;
 
     @Autowired
-    public GoShoppingPagesController(GoShoppingPageService goShoppingPageService) {
+    public GoShoppingPagesController(GoShoppingPageService goShoppingPageService, UserService userService) {
         this.goShoppingPageService = goShoppingPageService;
+        this.userService = userService;
     }
 
     @GetMapping("/goShoppingStores")
     public String getPageWithStores(ModelMap model) {
-        model.addAttribute("stores", goShoppingPageService.getStores(getCurrentUser().getId()));
+        model.addAttribute("stores", goShoppingPageService.getStores(userService.getCurrentUser().getId()));
         return "goShoppingStores";
     }
 
@@ -43,7 +42,7 @@ public class GoShoppingPagesController extends BaseController {
     @PostMapping("/goShoppingProducts")
     public String getProductList(ModelMap model, @RequestParam("stores") Integer store) {
 
-        Map<String, List<ShoppingList>> map = goShoppingPageService.getProducts(getCurrentUser().getId(), store);
+        Map<String, List<ShoppingList>> map = goShoppingPageService.getProducts(userService.getCurrentUser().getId(), store);
         if (map != null) {
             model.addAllAttributes(map);
             model.addAttribute("cartForm", new FormForCart(map.get("selected").size()));
@@ -54,7 +53,7 @@ public class GoShoppingPagesController extends BaseController {
 
     @PostMapping("/addToCart")
     public String addToCart(@ModelAttribute("cartForm") FormForCart form) {
-        form.setUser(getCurrentUser());
+        form.setUser(userService.getCurrentUser());
         goShoppingPageService.addToCart(form);
         return "redirect:/cart/";
     }

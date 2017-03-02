@@ -1,8 +1,10 @@
 package com.softserve.if072.mvcapp.controller;
 
 import com.softserve.if072.common.model.Category;
+import com.softserve.if072.mvcapp.service.UserService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -25,12 +27,21 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/category")
-public class CategoryPageController extends BaseController{
+public class CategoryPageController {
 
     @Value("${application.restCategoryURL}")
     private String restCategoryURL;
 
+    private RestTemplate restTemplate;
+    private UserService userService;
+
     private static final Logger LOGGER = LogManager.getLogger(CategoryPageController.class);
+
+    @Autowired
+    public CategoryPageController(RestTemplate template, UserService userService) {
+        this.restTemplate = template;
+        this.userService = userService;
+    }
 
     /**
      * Method for mapping on default categories url
@@ -42,8 +53,7 @@ public class CategoryPageController extends BaseController{
     @GetMapping
     public String getPage(ModelMap model) {
 
-        RestTemplate restTemplate = getRestTemplate();
-        List<Category> categories = restTemplate.getForObject(restCategoryURL + getCurrentUser().getId(), List.class);
+        List<Category> categories = restTemplate.getForObject(restCategoryURL + userService.getCurrentUser().getId(), List.class);
         LOGGER.info(categories);
         model.addAttribute("categories", categories);
 
@@ -73,8 +83,7 @@ public class CategoryPageController extends BaseController{
             return "addCategory";
         }
 
-        RestTemplate restTemplate = getRestTemplate();
-        category.setUser(getCurrentUser());
+        category.setUser(userService.getCurrentUser());
         category.setEnabled(true);
 
         restTemplate.postForObject(restCategoryURL, category, Category.class);
@@ -93,7 +102,6 @@ public class CategoryPageController extends BaseController{
     @GetMapping(value="/edit")
     public String editCategory(@RequestParam int id, ModelMap model) {
 
-        RestTemplate restTemplate = getRestTemplate();
         Category category = restTemplate.getForObject(restCategoryURL + "id/" + id, Category.class);
         LOGGER.info("Category were opened for updating: " + category);
         model.addAttribute("category", category);
@@ -111,8 +119,7 @@ public class CategoryPageController extends BaseController{
     @PostMapping(value = "/edit")
     public String editCategory(@ModelAttribute Category category) {
 
-        RestTemplate restTemplate = getRestTemplate();
-        category.setUser(getCurrentUser());
+        category.setUser(userService.getCurrentUser());
         restTemplate.put(restCategoryURL, category, Category.class);
         LOGGER.info("Category " + category.getName() + " was updated");
         return "redirect:/category/";
@@ -127,7 +134,6 @@ public class CategoryPageController extends BaseController{
 
     @PostMapping(value = "/delete")
     public void deleteCategory(@RequestParam int id) {
-        RestTemplate restTemplate = getRestTemplate();
         restTemplate.delete(restCategoryURL + id);
     }
 }
