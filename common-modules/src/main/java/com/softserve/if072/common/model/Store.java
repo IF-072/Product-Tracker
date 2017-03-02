@@ -11,6 +11,7 @@ import java.util.List;
  *
  * @author Nazar Vynnyk
  */
+
 public class Store {
 
     private int id;

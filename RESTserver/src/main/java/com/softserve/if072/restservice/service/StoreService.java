@@ -15,6 +15,12 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * The class contains methods to add, read and delete stores from database.
+ * All methods  handle the http requests from the MVC Application
+ *
+ * @author Nazar Vynnyk
+ */
 @Service
 public class StoreService {
 
@@ -72,7 +78,7 @@ public class StoreService {
      */
     @Transactional
     public void addStore(Store store) throws IllegalArgumentException {
-        if (store != null && store.getName() != null && store.getName() != "") {
+        if (store != null && store.getName() != null && !store.getName().equals("")) {
             storeDAO.insert(store);
         } else throw new IllegalArgumentException(String.format("Illegal arguments in store id %d", store.getId()));
     }
@@ -86,7 +92,7 @@ public class StoreService {
      */
     @Transactional
     public void updateStore(Store store) throws IllegalArgumentException {
-        if (store.getName().isEmpty() || store.getName() == "") {
+        if (store.getName().isEmpty() || store.getName().equals("")) {
             throw new IllegalArgumentException(String.format("Illegal arguments in store id %d", store.getId()));
         }
         storeDAO.update(store);
@@ -185,7 +191,7 @@ public class StoreService {
     @Transactional
     public Set<Product> getNotMappedProducts(int storeId, int userId) throws DataNotFoundException {
         Set<Product> storeProducts = new HashSet<>(getProductsByStoreId(storeId, userId));
-        Set<Product> allProducts = new HashSet<Product>(productDAO.getEnabledProductsByUserId(userId));
+        Set<Product> allProducts = new HashSet<>(productDAO.getEnabledProductsByUserId(userId));
 
         if (CollectionUtils.isNotEmpty(allProducts)) {
             allProducts.removeAll(storeProducts);
@@ -209,7 +215,6 @@ public class StoreService {
         Store store = getStoreByID(storeId);
         if (store != null && CollectionUtils.isNotEmpty(productsId)) {
             for (int id : productsId) {
-
                 addProductToStore(id, storeId);
             }
         } else {
@@ -217,5 +222,29 @@ public class StoreService {
         }
     }
 
-}
+    /**
+     * This method returns store by name ant user id
+     *
+     * @param StoreName name off store
+     * @param userId    owner of store
+     * @return store or null if store is not found
+     */
+    @Transactional
+    public Store getStoreByNameAndUser(String StoreName, String storeAddress, int userId) {
+        Store store = storeDAO.getByName(StoreName, storeAddress, userId);
+        if (store != null) {
+            return store;
+        } else return null;
+    }
 
+    /**
+     * This method  retrieves store that is in DataBase and sets his field isEnabled - true.
+     *
+     * @param storeId - store that will be will be retrieved
+     */
+    @Transactional
+    public void retrieveStore(int storeId) {
+        storeDAO.retrieveStore(storeId);
+    }
+
+}
