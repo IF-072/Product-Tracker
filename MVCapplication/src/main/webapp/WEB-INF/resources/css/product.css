@@ -1,1 +1,5 @@
-.fa{cursor: pointer}
+#image, #edit,#delete, #goStores, #addImage, #addImage, #addToShoppingList {text-align:center; cursor: pointer}
+#image {text-align:center}
+
+#productData td {vertical-align: middle}
+.fa:hover {color: #7B83EF}

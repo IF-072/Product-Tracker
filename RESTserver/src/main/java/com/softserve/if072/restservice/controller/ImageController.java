@@ -22,7 +22,7 @@ import java.io.IOException;
  * @author Vitaliy Malisevych
  */
 
-@Controller
+@RestController
 @RequestMapping("/api/image")
 public class  ImageController {
 
@@ -40,15 +40,14 @@ public class  ImageController {
     /**
      * Returns image by id
      *
-     * @param userId user whose image will be returned
      * @param imageId id of image
      * @return image
      */
 
-    @PreAuthorize("#userId == authentication.user.id")
-    @RequestMapping(value = "/{userId}/{imageId}", method = RequestMethod.GET)
+    @PreAuthorize("@imageSecurityService.hasPermissionToAccess(#imageId)")
+    @RequestMapping(value = "/{imageId}", method = RequestMethod.GET)
     @ResponseBody
-    public Image getImageById(@PathVariable("userId") int userId, @PathVariable("imageId") int imageId, HttpServletResponse response) {
+    public Image getImageById(@PathVariable("imageId") int imageId, HttpServletResponse response) {
 
         try {
             Image image = imageService.getById(imageId);
@@ -80,15 +79,13 @@ public class  ImageController {
     /**
      * Deletes image from DataBase
      *
-     * @param userId user whose image will be deleted
      * @param imageId id of image
      */
 
-    @PreAuthorize("#userId == authentication.user.id")
-    @RequestMapping(value = "/delete/{userId}/{imageId}", method = RequestMethod.DELETE)
+    @PreAuthorize("@imageSecurityService.hasPermissionToAccess(#imageId)")
+    @RequestMapping(value = "/delete/{imageId}", method = RequestMethod.DELETE)
     @ResponseBody
-    public void deleteImage(@PathVariable("userId") int userId, @PathVariable("imageId") int imageId,
-                            HttpServletResponse response) {
+    public void deleteImage(@PathVariable("imageId") int imageId, HttpServletResponse response) {
 
         try {
             imageService.delete(imageId);
@@ -127,13 +124,12 @@ public class  ImageController {
     /**
      * Updates image
      *
-     * @param userId user whose image will be updated
      */
 
-    @PreAuthorize("#userId == authentication.user.id")
-    @PutMapping(value = "/{userId}")
+    @PreAuthorize("@imageSecurityService.hasPermissionToAccess(#image)")
+    @PutMapping(value = "/")
     @ResponseStatus(value = HttpStatus.OK)
-    public void update(@RequestBody Image image, @PathVariable("userId") int userId, HttpServletResponse response) {
+    public void update(@RequestBody Image image, HttpServletResponse response) {
         int id = image.getId();
         try {
             imageService.update(image);
