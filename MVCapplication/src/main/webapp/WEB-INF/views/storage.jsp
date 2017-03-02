@@ -1,8 +1,9 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
 <div class="row">
     <div class="col-lg-12">
-        <h1 class="page-header">My storage</h1>
+        <h1 class="page-header"><spring:message code="myStorage"/></h1>
     </div>
 </div>
 <div class="panel panel-default">
@@ -12,10 +13,10 @@
                 <thead>
                 <tr>
                     <th>#</th>
-                    <th>Product</th>
-                    <th>End date</th>
-                    <th>Amount</th>
-                    <th>Add to shopping list</th>
+                    <th><spring:message code="product"/></th>
+                    <th><spring:message code="endDate"/></th>
+                    <th><spring:message code="amount"/></th>
+                    <th><spring:message code="addToShoppingList"/></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -30,14 +31,15 @@
                                 <form:hidden path="productId" value="${storage.product.id}"/>
                                 <input type="number" path="amount" name="amount" min="0" value="${storage.amount}"
                                        class="form-control" onchange="allowBtn(${loop.count}, ${storage.amount})"/>
-                            <form:button class="btn disabled btn-default" id="confirm">confirm</form:button>
+                            <form:button class="btn disabled btn-default" id="confirm"><spring:message code="confirm"/></form:button>
                             </form:form>
                         </td>
                         <td>
                             <button type="button" class="btn btn-default btn-success"
                                     onclick="addToShoppingList(${storage.product.id});">
-                                Add
+                                <spring:message code="add"/>
                             </button>
+                        </td>
                     </tr>
                 </c:forEach>
 
@@ -51,13 +53,13 @@
         <div class="modal-content">
             <div class="modal-header alert alert-success" role="alert">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title">Info</h4>
+                <h4 class="modal-title"><spring:message code="info"/></h4>
             </div>
             <div class="modal-body text-center">
-                Product was added to shopping list
+                <spring:message code="successAdd"/>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary btn-confirm">Ok</button>
+                <button type="button" class="btn btn-primary btn-confirm"><spring:message code="ok"/></button>
             </div>
         </div>
     </div>
@@ -68,12 +70,12 @@
         <div class="modal-content">
             <div class="modal-header alert alert-danger" role="alert">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title">Error</h4>
+                <h4 class="modal-title"><spring:message code="error"/></h4>
             </div>
             <div class="modal-body text-center" id="message">
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary btn-confirm">Ok</button>
+                <button type="button" class="btn btn-primary btn-confirm"><spring:message code="ok"/></button>
             </div>
         </div>
     </div>

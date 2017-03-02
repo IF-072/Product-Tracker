@@ -1,25 +1,26 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
 <c:if test="${empty stores}">
     <div class="container-fluid">
         <div class="row">
             <div class="col-lg-4 col-lg-offset-4">
                 <div class="panel panel-primary">
                     <div class="panel-heading text-center">
-                        <h4>You can't go shopping!</h4>
+                        <h4><spring:message code="cantGoShopping"/></h4>
                     </div>
                     <div class="panel-body text-center">
-                        <p> Maybe you haven't confirmed previous shopping yet or your shopping list is empty</p>
+                        <p><spring:message code="cantMessage"/></p>
                     </div>
                     <div class="panel-footer">
                         <div class="btn-group btn-group-justified" role="group" aria-label="...">
                             <div class="btn-group" role="group">
                                 <a href="<c:url value='/storage/'/>">
-                                    <button type="button" class="btn btn-default">Storage</button>
+                                    <button type="button" class="btn btn-default"><spring:message code="storage"/></button>
                                 </a>
                             </div>
                             <div class="btn-group" role="group">
                                 <a href="<c:url value='/cart/'/>">
-                                    <button type="button" class="btn btn-default">Cart</button>
+                                    <button type="button" class="btn btn-default"><spring:message code="cart"/></button>
                                 </a>
                             </div>
                         </div>
@@ -33,7 +34,7 @@
 <c:if test="${not empty stores}">
     <div class="row">
         <div class="col-lg-12">
-            <h1 class="page-header">Choose store</h1>
+            <h1 class="page-header"><spring:message code="chooseStore"/></h1>
         </div>
     </div>
     <div class="panel panel-default">
@@ -44,9 +45,9 @@
                         <thead>
                         <tr>
                             <th></th>
-                            <th>Store</th>
-                            <th>Address</th>
-                            <th>Products</th>
+                            <th><spring:message code="store"/></th>
+                            <th><spring:message code="address"/></th>
+                            <th><spring:message code="products"/></th>
                         </tr>
                         </thead>
                         <tbody>
@@ -68,7 +69,7 @@
                         </c:forEach>
                         </tbody>
                     </table>
-                    <input type="submit" class="btn btn-default" value="Next">
+                    <input type="submit" class="btn btn-default" value="<spring:message code="next"/>">
                 </form>
             </div>
         </div>
