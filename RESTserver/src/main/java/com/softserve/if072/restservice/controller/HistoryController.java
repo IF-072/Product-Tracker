@@ -20,8 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 /**
- * The HistoryController class is used to mapping requests for
- * history resources
+ * The HistoryController class handles requests for cart resources
  *
  * @author Igor Kryviuk
  */
@@ -31,15 +30,33 @@ public class HistoryController {
     @Autowired
     private HistoryService historyService;
 
-    @PreAuthorize("#userId == authentication.user.id")
+    /**
+     * Handles requests for retrieving all history records for current user
+     *
+     * @param userId - current user unique identifier
+     * @return list of cart records or empty list
+     */
+    @PreAuthorize("hasRole('ROLE_PREMIUM') && #userId == authentication.user.id")
     @GetMapping()
     @ResponseStatus(HttpStatus.OK)
     public List<History> getByUserId(@PathVariable int userId) {
         return historyService.getByUserId(userId);
     }
 
+    /**
+     * Handles requests for deleting a record from the history of current user
+     *
+     * @param historyId - history unique identifier
+     */
+    @PreAuthorize("@historySecurityService.hasPermissionToAccess(#historyId)")
+    @DeleteMapping("/{historyId}")
+    @ResponseStatus(value = HttpStatus.OK)
+    public void delete(@PathVariable int historyId) {
+        historyService.delete(historyId);
+    }
 
-    @PostAuthorize("#history != null && #history.user != null && #history.user.id == authentication.user.id")
+    @PostAuthorize("hasRole('ROLE_PREMIUM') && #history != null && #history.user != null"
+            + " && #history.user.id == authentication.user.id")
     @GetMapping("/products/{productId}")
     @ResponseStatus(HttpStatus.OK)
     public List<History> getByProductId(@PathVariable int userId, @PathVariable int productId) {
@@ -63,12 +80,5 @@ public class HistoryController {
     @ResponseStatus(value = HttpStatus.OK)
     public void update(@RequestBody History history) {
         historyService.update(history);
-    }
-
-    @PreAuthorize("@historySecurityService.hasPermissionToAccess(#historyId)")
-    @DeleteMapping("/{historyId}")
-    @ResponseStatus(value = HttpStatus.OK)
-    public void delete(@PathVariable int historyId) {
-        historyService.delete(historyId);
     }
 }
