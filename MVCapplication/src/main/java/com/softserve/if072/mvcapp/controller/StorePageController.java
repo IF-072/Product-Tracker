@@ -7,6 +7,8 @@ import com.softserve.if072.mvcapp.service.StorePageService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -26,11 +28,15 @@ import java.util.List;
  */
 
 @Controller
+@PropertySource(value = {"classpath:application.properties", "classpath:message.properties"})
 public class StorePageController extends BaseController {
     private static final Logger LOGGER = LogManager.getLogger(StorePageController.class);
 
-
     private StorePageService storePageService;
+
+    @Value("${store.alreadyExist}")
+    private String existMessage;
+
 
     @Autowired
     public StorePageController(StorePageService storePageService) {
@@ -81,6 +87,14 @@ public class StorePageController extends BaseController {
         if (result.hasErrors()) {
             model.addAttribute("errorMessages", result.getFieldErrors());
             return "addStore";
+        }
+        if (storePageService.alreadyExist(store, getCurrentUser())) {
+            model.addAttribute("validMessage", existMessage);
+            return "addStore";
+        }
+        if (storePageService.isDeleted(store, getCurrentUser())) {
+            model.addAttribute("store", storePageService.getStoreByNameAndUserId(store, getCurrentUser()));
+            return "dialogWindow";
         }
         storePageService.addStore(getCurrentUser(), store);
         LOGGER.info(String.format("Store of user %d was added", getCurrentUser().getId()));
@@ -154,13 +168,14 @@ public class StorePageController extends BaseController {
      * @param productID product that will be deleted from current store
      * @return redirect to the store products view page that contains list of products from this store
      */
-    @PostMapping(value = "/stores/delProduct")
-    public String deleteProductFromStore(@RequestParam("storeID") int storeID, @RequestParam("productID") int
+    @GetMapping(value = "/stores/delProduct")
+    public String deleteProductFromStore(@RequestParam("storeID") Integer storeID, @RequestParam("productID") Integer
             productID) {
         storePageService.deleteProductFromStore(storeID, productID);
         LOGGER.info(String.format("Product %d from tore with id %d was deleted", productID, storeID));
 
-        return "redirect:/stores/storeProducts";
+        return String.format("redirect:/stores/storeProducts?storeId=%d", storeID);
+
     }
 
     /**
@@ -169,7 +184,7 @@ public class StorePageController extends BaseController {
      * @param storeId store that will be deleted
      * @return redirect to the store view page that contains list of stores
      */
-    @PostMapping(value = "/stores/delStore")
+    @GetMapping(value = "/stores/delStore")
     public String deleteStore(@RequestParam("storeId") int storeId) {
         storePageService.deleteStore(storeId);
         LOGGER.info(String.format("Store with id %d was deleted", storeId));
@@ -201,16 +216,38 @@ public class StorePageController extends BaseController {
      * @return redirect to the store view page that contains list of stores
      */
     @PostMapping("/editStore")
-    public String editStore(@Validated @ModelAttribute("store") Store store, BindingResult result, @RequestParam
-            ("storeId") int storeId, Model model) {
+    public String editStore(@Validated @ModelAttribute("store") Store store, BindingResult result, Model model,
+                            @RequestParam ("storeId") int storeId) {
         if (result.hasErrors()) {
-            model.addAttribute("store", storePageService.getStoreById(storeId));
+           model.addAttribute("store", storePageService.getStoreById(storeId));
             model.addAttribute("errorMessages", result.getFieldErrors());
             return "editStore";
+        }
+        if (storePageService.alreadyExist(store, getCurrentUser())) {
+            model.addAttribute("store", storePageService.getStoreById(storeId));
+            model.addAttribute("validMessage", existMessage);
+            return "editStore";
+        }
+        if (storePageService.isDeleted(store, getCurrentUser())) {
+            model.addAttribute("store", storePageService.getStoreByNameAndUserId(store, getCurrentUser()));
+            return "dialogWindow";
         }
         storePageService.editStore(store, storeId, getCurrentUser());
         LOGGER.info(String.format("Store with id %d was updated", storeId));
 
+        return "redirect:/stores/";
+    }
+
+    /**
+     * Method for retrieving store
+     *
+     * @param storeId store that will be retrieved
+     * @return redirect to the store view page that contains list of stores
+     */
+    @GetMapping("/retrieveStore")
+    public String retrieveStore(@RequestParam("storeId") int storeId) {
+        storePageService.retrieveStore(storeId);
+        LOGGER.info(String.format("Store with id %d was successful retrieved", storeId));
         return "redirect:/stores/";
     }
 
