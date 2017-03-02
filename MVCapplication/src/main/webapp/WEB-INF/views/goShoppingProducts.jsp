@@ -1,8 +1,9 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
 <div class="row">
     <div class="col-lg-12">
-        <h1 class="page-header">Choose products</h1>
+        <h1 class="page-header"><spring:message code="chooseProducts"/></h1>
     </div>
 </div>
 <div class="panel panel-default">
@@ -13,8 +14,8 @@
                     <thead>
                     <tr>
                         <th></th>
-                        <th>Product's name</th>
-                        <th>Amount</th>
+                        <th><spring:message code="product"/></th>
+                        <th><spring:message code="amount"/></th>
                     </tr>
                     </thead>
                     <tbody>
@@ -39,9 +40,9 @@
                     </c:forEach>
                     </tbody>
                 </table>
-                <button type="button" class="btn btn-default" id="selectAll">Select all</button>
-                <button type="button" class="btn btn-default" id="prevStep">Previous step</button>
-                <input type="submit" class="btn btn-default btn-success" value="Add to cart">
+                <button type="button" class="btn btn-default" id="selectAll"><spring:message code="selectAll"/></button>
+                <button type="button" class="btn btn-default" id="prevStep"><spring:message code="previousStep"/></button>
+                <input type="submit" class="btn btn-default btn-success" value="<spring:message code="AddToCart"/>">
             </form:form>
 
 
@@ -52,7 +53,7 @@
 <c:if test="${not empty remained}">
     <div class="panel panel-default">
         <div class="panel-heading">
-            <p class="fa fa-info-circle"></p><b> Products that are remained in shopping list!</b>
+            <p class="fa fa-info-circle"></p><b><spring:message code="remainedroducts"/></b>
         </div>
         <div class="panel-body">
             <div class="table-responsive">
@@ -60,7 +61,7 @@
                     <thead>
                     <tr>
                         <th>#</th>
-                        <th>Product's name</th>
+                        <th><spring:message code="product"/></th>
                     </tr>
                     </thead>
                     <tbody>
@@ -89,13 +90,13 @@
         <div class="modal-content">
             <div class="modal-header alert alert-danger" role="alert">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title">Info</h4>
+                <h4 class="modal-title"><spring:message code="info"/></h4>
             </div>
             <div class="modal-body text-center">
-                You need to choose at least one product
+                <spring:message code="needChoose"/>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary btn-confirm">Ok</button>
+                <button type="button" class="btn btn-primary btn-confirm"><spring:message code="ok"/></button>
             </div>
         </div>
     </div>
