@@ -136,6 +136,11 @@
                 <li>
                     <a href="<c:url value="../history/"/>" class="active"><i class="fa fa-calendar"></i> <spring:message code="history"/></a>
                 </li>
+                <c:if test="${'ROLE_PREMIUM' == userService.getCurrentUser().getRole().getAuthority()}">
+                    <li>
+                        <a href="<c:url value="../analytics/"/>" class="active"><i class="fa fa-line-chart"></i> <spring:message code="analytics"/></a>
+                    </li>
+                </c:if>
                 <li>
                     <a href="<c:url value="../goShoppingStores/"/>"><button type="button" class="btn btn-outline btn-primary"><spring:message code="goShopping"/></button></a>
                 </li>
