@@ -1,4 +1,5 @@
 <%@ taglib prefix="sf" uri="http://www.springframework.org/tags/form"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page isELIgnored="false" %>
 
 <div class="row">
@@ -15,7 +16,9 @@
             <sf:form role="form" method="POST" modelAttribute="image" enctype="multipart/form-data">
                 <sf:input type="file" path="multipartFile" id="imageToUpload"/>
                 <br/>
-                <input type="submit" class="btn btn-lg btn-success" value="Upload">
+                <input type="submit" class="btn btn-lg btn-success btn-custom" value="Upload">
+                <input type="reset" class="btn btn-lg btn-reset-custom"
+                       onclick="document.location.href='<c:url value="/product/"/>'" value="Cancel" />
             </sf:form>
         </div>
     </div>

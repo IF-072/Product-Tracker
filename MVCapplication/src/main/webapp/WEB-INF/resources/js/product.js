@@ -34,4 +34,7 @@ $(document).ready(function() {
     $("#no").click(function () {
         $("#dialog").dialog("close");
     });
+
+
+
 });
