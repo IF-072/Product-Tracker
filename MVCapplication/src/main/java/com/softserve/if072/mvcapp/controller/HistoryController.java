@@ -1,9 +1,11 @@
 package com.softserve.if072.mvcapp.controller;
 
 import com.softserve.if072.common.model.History;
+import com.softserve.if072.mvcapp.service.UserService;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,7 +24,7 @@ import java.util.List;
  */
 @Controller
 @RequestMapping("/history")
-public class HistoryController extends BaseController {
+public class HistoryController {
     private static final Logger LOGGER = LogManager.getLogger();
     @Value("${application.restHistoryURL}")
     private String restHistoryURL;
@@ -34,15 +36,21 @@ public class HistoryController extends BaseController {
     private String historyFound;
     @Value("${history.SuccessfullyOperation}")
     private String successfullyOperation;
+    private RestTemplate restTemplate;
+    private UserService userService;
+
+    @Autowired
+    public HistoryController(RestTemplate restTemplate, UserService userService) {
+        this.restTemplate = restTemplate;
+        this.userService = userService;
+    }
 
     @GetMapping
     public String getHistory(Model model) {
 
-        RestTemplate template = getRestTemplate();
-
-        List<History> histories = template.getForObject(String.format(restHistoryURL, getCurrentUser().getId()), List.class);
+        List<History> histories = restTemplate.getForObject(String.format(restHistoryURL, userService.getCurrentUser().getId()), List.class);
         model.addAttribute("histories", histories);
-        LOGGER.info(String.format(historyFound, "user", getCurrentUser().getId(), histories.size()));
+        LOGGER.info(String.format(historyFound, "user", userService.getCurrentUser().getId(), histories.size()));
         if (CollectionUtils.isNotEmpty(histories)) {
             return "history";
         }
@@ -51,7 +59,7 @@ public class HistoryController extends BaseController {
 
     @GetMapping("/delete")
     public String deleteHistory(@RequestParam int historyId) {
-        template.delete(String.format(restHistoryDeleteURL, getCurrentUser().getId(), historyId));
+        restTemplate.delete(String.format(restHistoryDeleteURL, userService.getCurrentUser().getId(), historyId));
         LOGGER.info(String.format(successfullyOperation, historyId, "deleted from"));
         return "redirect: /history/";
     }

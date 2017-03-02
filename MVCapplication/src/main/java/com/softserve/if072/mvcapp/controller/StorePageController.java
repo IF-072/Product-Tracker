@@ -4,6 +4,7 @@ import com.softserve.if072.common.model.Product;
 import com.softserve.if072.common.model.Store;
 import com.softserve.if072.mvcapp.dto.ProductsWrapper;
 import com.softserve.if072.mvcapp.service.StorePageService;
+import com.softserve.if072.mvcapp.service.UserService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,19 +29,21 @@ import java.util.List;
  */
 
 @Controller
-@PropertySource(value = {"classpath:application.properties", "classpath:message.properties"})
-public class StorePageController extends BaseController {
+public class StorePageController {
+
     private static final Logger LOGGER = LogManager.getLogger(StorePageController.class);
 
     private StorePageService storePageService;
+    private UserService userService;
 
     @Value("${store.alreadyExist}")
     private String existMessage;
 
 
     @Autowired
-    public StorePageController(StorePageService storePageService) {
+    public StorePageController(StorePageService storePageService, UserService userService) {
         this.storePageService = storePageService;
+        this.userService = userService;
     }
 
     /**
@@ -53,7 +56,7 @@ public class StorePageController extends BaseController {
      */
     @GetMapping("/stores/")
     public String getAllStoresByUserId(Model model) {
-        int userId = getCurrentUser().getId();
+        int userId = userService.getCurrentUser().getId();
         model.addAttribute("stores", storePageService.getAllStoresByUserId(userId));
         LOGGER.info(String.format("Stores of user with id %d were found", userId));
         return "allStores";
@@ -69,7 +72,7 @@ public class StorePageController extends BaseController {
     @GetMapping("/addStore")
     public String addStore(Model model) {
         model.addAttribute("store", storePageService.addNewStore());
-        LOGGER.info(String.format("Store of user %d is adding", getCurrentUser().getId()));
+        LOGGER.info(String.format("Store of user %d is adding", userService.getCurrentUser().getId()));
 
         return "addStore";
     }
@@ -88,16 +91,17 @@ public class StorePageController extends BaseController {
             model.addAttribute("errorMessages", result.getFieldErrors());
             return "addStore";
         }
-        if (storePageService.alreadyExist(store, getCurrentUser())) {
+
+        if (storePageService.alreadyExist(store, userService.getCurrentUser())) {
             model.addAttribute("validMessage", existMessage);
             return "addStore";
         }
-        if (storePageService.isDeleted(store, getCurrentUser())) {
-            model.addAttribute("store", storePageService.getStoreByNameAndUserId(store, getCurrentUser()));
+        if (storePageService.isDeleted(store, userService.getCurrentUser())) {
+            model.addAttribute("store", storePageService.getStoreByNameAndUserId(store, userService.getCurrentUser()));
             return "dialogWindow";
         }
-        storePageService.addStore(getCurrentUser(), store);
-        LOGGER.info(String.format("Store of user %d was added", getCurrentUser().getId()));
+        storePageService.addStore(userService.getCurrentUser(), store);
+        LOGGER.info(String.format("Store of user %d was added", userService.getCurrentUser().getId()));
 
         return "redirect:/stores/";
     }
@@ -113,7 +117,7 @@ public class StorePageController extends BaseController {
     @GetMapping("/stores/storeProducts")
     public String getAllProductsByStoreId(@RequestParam("storeId") int storeId, ModelMap model) {
         model.addAttribute("store", storePageService.getStoreById(storeId));
-        model.addAttribute("products", storePageService.getAllProductsFromStore(storeId, getCurrentUser().getId()));
+        model.addAttribute("products", storePageService.getAllProductsFromStore(storeId, userService.getCurrentUser().getId()));
         LOGGER.info(String.format("Products from store %d were found", storeId));
 
         return "productsInStore";
@@ -132,7 +136,7 @@ public class StorePageController extends BaseController {
     public String addProductsToStore(@RequestParam("storeId") int storeId, ModelMap model) {
 
         model.addAttribute("myStore", storePageService.getStoreById(storeId));
-        List<Product> products = storePageService.getNotMappedProducts(storeId, getCurrentUser().getId());
+        List<Product> products = storePageService.getNotMappedProducts(storeId, userService.getCurrentUser().getId());
         model.addAttribute("products", products);
         model.addAttribute("wrapedProducts", new ProductsWrapper(products.size()));
         LOGGER.info(String.format("NotMappedProducts in store %d found and shoved on display", storeId));
@@ -150,7 +154,7 @@ public class StorePageController extends BaseController {
     @PostMapping("/addProductsToStore")
     public String addProductsToStore(@RequestParam("storeId") int storeId, @ModelAttribute("wrapedProducts")
             ProductsWrapper wrapedProducts) {
-        int userId = getCurrentUser().getId();
+        int userId = userService.getCurrentUser().getId();
         if (wrapedProducts.getProducts().isEmpty()) {
             LOGGER.info(String.format("No products have been chosen in store %d ", storeId));
             return String.format("redirect:/stores/storeProducts?storeId=%d", storeId);
@@ -223,16 +227,17 @@ public class StorePageController extends BaseController {
             model.addAttribute("errorMessages", result.getFieldErrors());
             return "editStore";
         }
-        if (storePageService.alreadyExist(store, getCurrentUser())) {
+
+        if (storePageService.alreadyExist(store, userService.getCurrentUser())) {
             model.addAttribute("store", storePageService.getStoreById(storeId));
             model.addAttribute("validMessage", existMessage);
             return "editStore";
         }
-        if (storePageService.isDeleted(store, getCurrentUser())) {
-            model.addAttribute("store", storePageService.getStoreByNameAndUserId(store, getCurrentUser()));
+        if (storePageService.isDeleted(store, userService.getCurrentUser())) {
+            model.addAttribute("store", storePageService.getStoreByNameAndUserId(store, userService.getCurrentUser()));
             return "dialogWindow";
         }
-        storePageService.editStore(store, storeId, getCurrentUser());
+        storePageService.editStore(store, storeId, userService.getCurrentUser());
         LOGGER.info(String.format("Store with id %d was updated", storeId));
 
         return "redirect:/stores/";

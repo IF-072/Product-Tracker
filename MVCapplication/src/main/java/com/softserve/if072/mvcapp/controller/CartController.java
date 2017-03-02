@@ -2,9 +2,11 @@ package com.softserve.if072.mvcapp.controller;
 
 import com.softserve.if072.common.model.Cart;
 import com.softserve.if072.common.model.dto.CartDTO;
+import com.softserve.if072.mvcapp.service.UserService;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,7 +26,7 @@ import java.util.List;
  */
 @Controller
 @RequestMapping("/cart")
-public class CartController extends BaseController {
+public class CartController {
     private static final Logger LOGGER = LogManager.getLogger();
     @Value("${application.restCartURL}")
     private String restCartURL;
@@ -39,12 +41,20 @@ public class CartController extends BaseController {
     @Value("${cart.SuccessfullyOperation}")
     private String successfullyOperation;
 
+    private RestTemplate template;
+    private UserService userService;
+
+    @Autowired
+    public CartController(RestTemplate template, UserService userService) {
+        this.template = template;
+        this.userService = userService;
+    }
+
     @GetMapping
     public String getCart(Model model) {
-        RestTemplate template = getRestTemplate();
-        List<Cart> carts = template.getForObject(String.format(restCartURL, getCurrentUser().getId()), List.class);
+        List<Cart> carts = template.getForObject(String.format(restCartURL, userService.getCurrentUser().getId()), List.class);
         model.addAttribute("carts", carts);
-        LOGGER.info(String.format(cartFound, getCurrentUser().getId(), carts.size()));
+        LOGGER.info(String.format(cartFound, userService.getCurrentUser().getId(), carts.size()));
         if (CollectionUtils.isNotEmpty(carts)) {
             return "cart";
         }
@@ -67,14 +77,14 @@ public class CartController extends BaseController {
     public String productBuying(@RequestParam int userId, int storeId, int productId, int amount, int initialAmount) {
         CartDTO cartDTO = new CartDTO(userId, storeId, productId, amount, initialAmount);
         LOGGER.info(String.format(cartBoughtSubmint, productId, userId));
-        template.put(String.format(restCartBoughtURL, getCurrentUser().getId()), cartDTO);
+        template.put(String.format(restCartBoughtURL, userService.getCurrentUser().getId()), cartDTO);
         LOGGER.info(String.format(successfullyOperation, userId, "bought", amount, productId));
         return "redirect: /cart/";
     }
 
     @GetMapping("/delete")
     public String deleteProductFromCart(@RequestParam int userId, int productId, int amount) {
-        template.delete(String.format(restCartDeleteURL, getCurrentUser().getId(), productId));
+        template.delete(String.format(restCartDeleteURL, userService.getCurrentUser().getId(), productId));
         LOGGER.info(String.format(successfullyOperation, userId, "deleted", amount, productId));
         return "redirect: /cart/";
     }
