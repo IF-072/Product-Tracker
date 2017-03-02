@@ -31,7 +31,7 @@ public class HistoryController {
     @Autowired
     private HistoryService historyService;
 
-    @PreAuthorize("hasRole('ROLE_PREMIUM') && #userId == authentication.user.id")
+    @PreAuthorize("#userId == authentication.user.id")
     @GetMapping()
     @ResponseStatus(HttpStatus.OK)
     public List<History> getByUserId(@PathVariable int userId) {
@@ -39,8 +39,7 @@ public class HistoryController {
     }
 
 
-    @PostAuthorize("hasRole('ROLE_PREMIUM') && #history != null && #history.user != null"
-            + " && #history.user.id == authentication.user.id")
+    @PostAuthorize("#history != null && #history.user != null && #history.user.id == authentication.user.id")
     @GetMapping("/products/{productId}")
     @ResponseStatus(HttpStatus.OK)
     public List<History> getByProductId(@PathVariable int userId, @PathVariable int productId) {

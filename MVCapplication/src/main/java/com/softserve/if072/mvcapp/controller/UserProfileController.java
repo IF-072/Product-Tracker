@@ -4,6 +4,7 @@ import com.softserve.if072.common.model.User;
 import com.softserve.if072.mvcapp.service.UserService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,6 +19,11 @@ public class UserProfileController {
     private static final Logger LOG = LogManager.getLogger(UserProfileController.class);
 
     private UserService userService;
+
+    @Autowired
+    public UserProfileController(UserService userService) {
+        this.userService = userService;
+    }
 
     /**
      * This method extracts a user model for the profile view.
