@@ -9,7 +9,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -29,9 +28,8 @@ import java.util.List;
  */
 
 @Controller
-
-@PropertySource(value = {"classpath:application.properties", "classpath:message.properties"})
 public class StorePageController {
+
     private static final Logger LOGGER = LogManager.getLogger(StorePageController.class);
 
     private StorePageService storePageService;
@@ -39,6 +37,7 @@ public class StorePageController {
 
     @Value("${store.alreadyExist}")
     private String existMessage;
+
 
     @Autowired
     public StorePageController(StorePageService storePageService, UserService userService) {
@@ -91,6 +90,7 @@ public class StorePageController {
             model.addAttribute("errorMessages", result.getFieldErrors());
             return "addStore";
         }
+
         if (storePageService.alreadyExist(store, userService.getCurrentUser())) {
             model.addAttribute("validMessage", existMessage);
             return "addStore";
@@ -116,8 +116,7 @@ public class StorePageController {
     @GetMapping("/stores/storeProducts")
     public String getAllProductsByStoreId(@RequestParam("storeId") int storeId, ModelMap model) {
         model.addAttribute("store", storePageService.getStoreById(storeId));
-        model.addAttribute("products", storePageService.getAllProductsFromStore(storeId, userService.getCurrentUser()
-                .getId()));
+        model.addAttribute("products", storePageService.getAllProductsFromStore(storeId, userService.getCurrentUser().getId()));
         LOGGER.info(String.format("Products from store %d were found", storeId));
 
         return "productsInStore";
@@ -157,12 +156,12 @@ public class StorePageController {
         int userId = userService.getCurrentUser().getId();
         if (wrapedProducts.getProducts().isEmpty()) {
             LOGGER.info(String.format("No products have been chosen in store %d ", storeId));
-            return "redirect:/stores/storeProducts?storeId=" + storeId;
+            return "redirect:/stores/storeProducts?storeId="+ storeId;
         }
         storePageService.addProductsToStore(userId, storeId, wrapedProducts);
         LOGGER.info(String.format("Products of user %d added in store %d ", userId, storeId));
 
-        return "redirect:/stores/storeProducts?storeId=" + storeId;
+        return "redirect:/stores/storeProducts?storeId" + storeId;
     }
 
     /**
@@ -178,7 +177,8 @@ public class StorePageController {
         storePageService.deleteProductFromStore(storeID, productID);
         LOGGER.info(String.format("Product %d from tore with id %d was deleted", productID, storeID));
 
-        return "redirect:/stores/storeProducts?storeId=" + storeID;
+        return "redirect:/stores/storeProducts?storeId" + storeID;
+
     }
 
     /**
@@ -220,12 +220,13 @@ public class StorePageController {
      */
     @PostMapping("/editStore")
     public String editStore(@Validated @ModelAttribute("store") Store store, BindingResult result, Model model,
-                            @RequestParam("storeId") int storeId) {
+                            @RequestParam ("storeId") int storeId) {
         if (result.hasErrors()) {
             model.addAttribute("store", storePageService.getStoreById(storeId));
             model.addAttribute("errorMessages", result.getFieldErrors());
             return "editStore";
         }
+
         if (storePageService.alreadyExist(store, userService.getCurrentUser())) {
             model.addAttribute("store", storePageService.getStoreById(storeId));
             model.addAttribute("validMessage", existMessage);

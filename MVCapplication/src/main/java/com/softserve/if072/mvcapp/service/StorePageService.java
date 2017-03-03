@@ -200,7 +200,9 @@ public class StorePageService {
         ResponseEntity<Store> oldStore = restTemplate.postForEntity(getStoreByNameAndUserIdUri, store, Store.class);
         if (oldStore.getBody() == null) {
             return null;
-        } else return oldStore.getBody();
+        } else {
+            return oldStore.getBody();
+        }
     }
 
     /**
@@ -214,9 +216,8 @@ public class StorePageService {
         Store existStore = getStoreByNameAndUserId(store, user);
         if (existStore != null && existStore.isEnabled()) {
             return store.getId() != existStore.getId();
-        } else {
-            return false;
         }
+        return false;
     }
 
     /**
@@ -243,4 +244,3 @@ public class StorePageService {
     }
 
 }
-
