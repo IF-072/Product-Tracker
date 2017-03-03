@@ -12,3 +12,4 @@
 log/
 target/
 /RESTserver/src/main/resources/database.properties
+*private.sql

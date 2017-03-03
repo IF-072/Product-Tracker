@@ -45,7 +45,7 @@
 
                             <!-- Text input-->
                             <div class="form-group">
-                                <form:label path="name" cssClass="col-md-4 control-label"><spring:message code='name'/></form:label>
+                                <form:label path="name" cssClass="col-md-4 control-label"><spring:message code='userName'/></form:label>
                                 <div class="col-md-8">
                                     <spring:message code='username' var="usernameMessage"/>
                                     <form:input path="name" class="form-control" placeholder="${usernameMessage}"

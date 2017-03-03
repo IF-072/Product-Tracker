@@ -8,7 +8,6 @@ import com.softserve.if072.restservice.dao.mybatisdao.CartDAO;
 import com.softserve.if072.restservice.exception.DataNotFoundException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -21,13 +20,10 @@ import java.util.List;
  */
 @Service
 public class CartService {
-    private static final Logger LOGGER = LogManager.getLogger(CartService.class);
-    @Autowired
-    private CartDAO cartDAO;
-    @Autowired
-    private StorageService storageService;
-    @Autowired
-    private ShoppingListService shoppingListService;
+    private static final Logger LOGGER = LogManager.getLogger();
+    private final CartDAO cartDAO;
+    private final StorageService storageService;
+    private final ShoppingListService shoppingListService;
     @Value("${cart.containsProduct}")
     private String cartContainsProduct;
     @Value("${cart.deleteProduct}")
@@ -42,8 +38,14 @@ public class CartService {
     private String cartNotFound;
     @Value("${cart.SuccessfullyOperation}")
     private String cartSuccessfullyOperation;
-    @Value("%{cart.foundProductId}")
+    @Value("${cart.foundProductId}")
     private String cartFoundProductId;
+
+    public CartService(CartDAO cartDAO, StorageService storageService, ShoppingListService shoppingListService) {
+        this.cartDAO = cartDAO;
+        this.storageService = storageService;
+        this.shoppingListService = shoppingListService;
+    }
 
     /**
      * Make request to a Cart DAO for retrieving all cart records for current user

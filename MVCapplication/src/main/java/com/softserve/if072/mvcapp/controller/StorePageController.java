@@ -9,7 +9,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -157,12 +156,12 @@ public class StorePageController {
         int userId = userService.getCurrentUser().getId();
         if (wrapedProducts.getProducts().isEmpty()) {
             LOGGER.info(String.format("No products have been chosen in store %d ", storeId));
-            return String.format("redirect:/stores/storeProducts?storeId=%d", storeId);
+            return "redirect:/stores/storeProducts?storeId="+ storeId;
         }
         storePageService.addProductsToStore(userId, storeId, wrapedProducts);
         LOGGER.info(String.format("Products of user %d added in store %d ", userId, storeId));
 
-        return String.format("redirect:/stores/storeProducts?storeId=%d", storeId);
+        return "redirect:/stores/storeProducts?storeId=" + storeId;
     }
 
     /**
@@ -178,7 +177,7 @@ public class StorePageController {
         storePageService.deleteProductFromStore(storeID, productID);
         LOGGER.info(String.format("Product %d from tore with id %d was deleted", productID, storeID));
 
-        return String.format("redirect:/stores/storeProducts?storeId=%d", storeID);
+        return "redirect:/stores/storeProducts?storeId=" + storeID;
 
     }
 
@@ -223,7 +222,7 @@ public class StorePageController {
     public String editStore(@Validated @ModelAttribute("store") Store store, BindingResult result, Model model,
                             @RequestParam ("storeId") int storeId) {
         if (result.hasErrors()) {
-           model.addAttribute("store", storePageService.getStoreById(storeId));
+            model.addAttribute("store", storePageService.getStoreById(storeId));
             model.addAttribute("errorMessages", result.getFieldErrors());
             return "editStore";
         }

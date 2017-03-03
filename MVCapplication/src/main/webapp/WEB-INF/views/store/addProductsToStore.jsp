@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page isELIgnored="false" %>
 
@@ -11,7 +12,7 @@
 
     <div class="col-lg-6">
         <h1 class="page-header">
-            <b>Add products to Store</b>
+            <b><spring:message code="store.addProducts"/></b>
             <br>
             <b> ${myStore.name} (${myStore.address})</b>
         </h1>
@@ -27,9 +28,9 @@
 
                 <thead>
                 <tr>
-                    <th>Name</th>
-                    <th>Description</th>
-                    <th>Add</th>
+                    <th><spring:message code="name"/></th>
+                    <th><spring:message code="product.description"/></th>
+                    <th><spring:message code="add"/></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -43,9 +44,10 @@
                 </tbody>
             </table>
             <input type="submit" class="btn btn-lg btn-success btn-custom"
-                   value="Submit adding"/>
+                   value=<spring:message code="store.submitAdding"/>/>
             <input type="reset" class="btn btn-lg btn-reset-custom btn-reset-custom"
-                   onclick="document.location.href='<c:url value="/stores/"/>'" value="Cancel"/>
+                   onclick="document.location.href='<c:url value="/stores/storeProducts?storeId=${myStore.id}"/>'"
+                   value=<spring:message code="cancel"/>>
             <input type="hidden" name="storeId" value="${myStore.id}"/>
         </form:form>
     </div>
