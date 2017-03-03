@@ -3,6 +3,7 @@ package com.softserve.if072.mvcapp.service;
 import com.softserve.if072.common.model.History;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -18,8 +19,10 @@ import java.util.List;
 @Service
 public class HistoryService {
     private static final Logger LOGGER = LogManager.getLogger();
-    private final RestTemplate restTemplate;
-    private final UserService userService;
+    @Autowired
+    private RestTemplate restTemplate;
+    @Autowired
+    private UserService userService;
     @Value("${application.restHistoryURL}")
     private String restHistoryURL;
     @Value("${application.restHistoryDeleteURL}")
@@ -28,11 +31,6 @@ public class HistoryService {
     private String historyRequestReceive;
     @Value("${history.successfullyOperation}")
     private String historySuccessfullyOperation;
-
-    public HistoryService(RestTemplate restTemplate, UserService userService) {
-        this.restTemplate = restTemplate;
-        this.userService = userService;
-    }
 
     /**
      * Make request to a REST server for retrieving all history records for current user

@@ -3,6 +3,7 @@ package com.softserve.if072.mvcapp.controller;
 import com.softserve.if072.common.model.History;
 import com.softserve.if072.mvcapp.service.HistoryService;
 import org.apache.commons.collections.CollectionUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,12 +21,8 @@ import java.util.List;
 @Controller
 @RequestMapping("/history")
 public class HistoryController{
-
-    private final HistoryService historyService;
-
-    public HistoryController(HistoryService historyService) {
-        this.historyService = historyService;
-    }
+    @Autowired
+    HistoryService historyService;
 
     /**
      * Handles requests for getting all history records for current user

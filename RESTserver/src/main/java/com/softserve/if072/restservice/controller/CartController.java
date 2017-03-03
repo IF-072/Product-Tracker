@@ -3,6 +3,7 @@ package com.softserve.if072.restservice.controller;
 import com.softserve.if072.common.model.Cart;
 import com.softserve.if072.common.model.dto.CartDTO;
 import com.softserve.if072.restservice.service.CartService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -26,12 +27,8 @@ import java.util.List;
 @RestController
 @RequestMapping("api/users/{userId}/carts")
 public class CartController {
-
-    private final CartService cartService;
-
-    public CartController(CartService cartService) {
-        this.cartService = cartService;
-    }
+    @Autowired
+    private CartService cartService;
 
     /**
      * Handles requests for retrieving all cart records for current user
