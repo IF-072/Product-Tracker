@@ -49,7 +49,6 @@
                         <input type="reset" class="btn btn-lg btn-reset-custom btn-reset-custom"
                                onclick="document.location.href='<c:url value="/stores/"/>'" value=<spring:message
                                 code="cancel"/>>
-
                     </fieldset>
                 </form:form>
             </div>

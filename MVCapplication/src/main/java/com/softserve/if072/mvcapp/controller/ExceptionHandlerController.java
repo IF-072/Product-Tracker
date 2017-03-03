@@ -19,10 +19,10 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @ControllerAdvice
 public class ExceptionHandlerController {
 
-    @Value("${login.unauthorized}")
+    @Value("login.unauthorized")
     private String unathorizedAccess;
 
-    @Value("${login.generalError}")
+    @Value("login.generalError")
     private String generalError;
 
     private static final Logger LOGGER = LogManager.getLogger();
