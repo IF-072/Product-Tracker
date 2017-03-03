@@ -27,7 +27,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/register")
-public class RegistrationController extends BaseController {
+public class RegistrationController {
 
     private static final Logger LOGGER = LogManager.getLogger(RegistrationController.class);
 

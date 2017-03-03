@@ -200,9 +200,7 @@ public class StorePageService {
         ResponseEntity<Store> oldStore = restTemplate.postForEntity(getStoreByNameAndUserIdUri, store, Store.class);
         if (oldStore.getBody() == null) {
             return null;
-        } else {
-            return oldStore.getBody();
-        }
+        } else return oldStore.getBody();
     }
 
     /**

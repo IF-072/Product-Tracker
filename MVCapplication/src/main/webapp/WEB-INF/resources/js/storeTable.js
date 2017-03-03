@@ -6,6 +6,7 @@ var Id;
 
 var prodId;
 var storId;
+
 function deleteStore(storeId) {
     $("#dialog").dialog("open");
     Id = storeId;
@@ -19,7 +20,7 @@ $(document).ready(function () {
     });
 
     $("#yes").click(function () {
-        window.location.replace("/stores/delStore?storeId="+Id);
+        window.location.replace("/stores/delStore?storeId=" + Id);
         $("#dialog").dialog("close");
     });
 
@@ -29,27 +30,28 @@ $(document).ready(function () {
 });
 
 
+function dellProduct(storeId, productId) {
+    $("#dialog").dialog("open");
+    storId = storeId;
+    prodId = productId;
 
-    function dellProduct(storeId, productId) {
-        $("#dialog").dialog("open");
-        storId = storeId;
-        prodId = productId;
+    $(document).ready(function () {
+        var table = $('#ProductInStoreTable').DataTable();
 
-$(document).ready(function () {
-    var table = $('#ProductInStoreTable').DataTable();
+        $("#dialog").dialog({
+            autoOpen: false
+        });
 
-    $("#dialog").dialog({
-        autoOpen: false
+        $("#yes").click(function () {
+            window.location.replace("/stores/delProduct?storeID=" + storId + "&productID=" + prodId);
+            $("#dialog").dialog("close");
+        });
+
+        $("#no").click(function () {
+            $("#dialog").dialog("close");
+        });
+
     });
+};
 
-    $("#yes").click(function () {
-        window.location.replace("/stores/delProduct?storeID=" + storId + "&productID=" + prodId);
-        $("#dialog").dialog("close");
-    });
-
-    $("#no").click(function () {
-        $("#dialog").dialog("close");
-    });
-});
-    };
 

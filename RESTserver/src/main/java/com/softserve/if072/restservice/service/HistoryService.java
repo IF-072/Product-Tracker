@@ -21,41 +21,52 @@ public class HistoryService {
     private static final Logger LOGGER = LogManager.getLogger(HistoryService.class);
     @Autowired
     private HistoryDAO historyDAO;
+    @Value("${history.containsRecords}")
+    private String historyContainsRecords;
     @Value("${history.notFound}")
     private String historyNotFound;
-    @Value("${history.found}")
-    private String historyFound;
     @Value("${history.SuccessfullyOperation}")
-    private String successfullyOperation;
+    private String historySuccessfullyOperation;
 
+    /**
+     * Make request to a History DAO for retrieving all history records for current user
+     *
+     * @param userID - current user unique identifier
+     * @return list of cart records or empty list
+     */
     public List<History> getByUserId(int userID) {
         List<History> histories = historyDAO.getByUserId(userID);
-        LOGGER.info(String.format(historyFound, "user", userID, histories.size()));
+        LOGGER.info(historyContainsRecords, "user", userID, histories.size());
         return histories;
+    }
+
+    /**
+     * Make request to a History DTO for deleting a record from the history of current user
+     *
+     * @param historyId - history unique identifier
+     */
+    public void delete(int historyId) {
+        if (historyDAO.delete(historyId) == 0) {
+            throw new DataNotFoundException(String.format(historyNotFound, "DELETE", historyId));
+        }
+        LOGGER.info(historySuccessfullyOperation, historyId, "deleted from");
     }
 
     public List<History> getByProductId(int userID, int productID) {
         List<History> histories = historyDAO.getByProductId(userID, productID);
-        LOGGER.info(String.format(historyFound, "product", productID, histories.size()));
+        LOGGER.info(historyContainsRecords, "product", productID, histories.size());
         return histories;
     }
 
     public void insert(History history) {
         historyDAO.insert(history);
-        LOGGER.info(String.format(successfullyOperation, history.getProduct().getName(), "inserted into"));
+        LOGGER.info(historySuccessfullyOperation, history.getId(), "inserted into");
     }
 
-    public void update(History history) throws DataNotFoundException {
+    public void update(History history) {
         if (historyDAO.update(history) == 0) {
-            throw new DataNotFoundException(String.format(historyNotFound, "invalid UPDATE operation", history.getProduct().getName()));
+            throw new DataNotFoundException(String.format(historyNotFound, "UPDATE", history.getId()));
         }
-        LOGGER.info(String.format(successfullyOperation, history.getProduct().getName(), "updated in"));
-    }
-
-    public void delete(int historyId) throws DataNotFoundException {
-        if (historyDAO.delete(historyId) == 0) {
-            throw new  DataNotFoundException(String.format(historyNotFound, "invalid DELETE operation", historyId));
-        }
-        LOGGER.info(String.format(successfullyOperation, historyId, "deleted from"));
+        LOGGER.info(historySuccessfullyOperation, history.getId(), "updated in");
     }
 }
