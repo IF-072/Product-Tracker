@@ -20,16 +20,13 @@ public class LogoutController {
     @Value("${application.authenticationCookieName}")
     private String cookieName;
 
-    @Value("${logout.succesfull}")
-    private String logoutSuccessfullMessage;
-
     @GetMapping()
     public String logoutAndRedirectToLogin(HttpServletResponse response, final RedirectAttributes redirectAttributes) {
         Cookie cookie = new Cookie(cookieName, null);
         cookie.setMaxAge(0);
         response.addCookie(cookie);
 
-        redirectAttributes.addFlashAttribute("successMessage", logoutSuccessfullMessage);
+        redirectAttributes.addFlashAttribute("successMessage", "logoutSuccessful");
         return "redirect:login";
     }
 }

@@ -31,16 +31,16 @@ public class RegistrationController {
 
     private static final Logger LOGGER = LogManager.getLogger(RegistrationController.class);
 
-    @Value("${registration.incorrectAccountType}")
+    @Value("registration.incorrectAccountType")
     private String incorrectAccountTypeMessage;
 
-    @Value("${registration.alreadyExists}")
+    @Value("registration.alreadyExists")
     private String alreadyExistMessage;
 
-    @Value("${registration.successful}")
+    @Value("registration.successful")
     private String registrationSuccessfulMessage;
 
-    @Value("${registration.generalError}")
+    @Value("registration.generalError")
     private String generalErrorMessage;
 
     private RegistrationValidator registrationValidator;
