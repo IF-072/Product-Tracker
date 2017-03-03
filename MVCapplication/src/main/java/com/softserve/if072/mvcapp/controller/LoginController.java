@@ -26,7 +26,7 @@ import javax.servlet.http.HttpServletResponse;
 @RequestMapping("/login")
 public class LoginController {
 
-    @Value("${login.invalidCredentials}")
+    @Value("login.invalidCredentials")
     private String invalidCredentialsMessage;
 
     private LoginService loginService;
