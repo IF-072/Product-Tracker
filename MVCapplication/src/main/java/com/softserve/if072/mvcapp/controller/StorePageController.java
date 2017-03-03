@@ -161,7 +161,7 @@ public class StorePageController {
         storePageService.addProductsToStore(userId, storeId, wrapedProducts);
         LOGGER.info(String.format("Products of user %d added in store %d ", userId, storeId));
 
-        return "redirect:/stores/storeProducts?storeId" + storeId;
+        return "redirect:/stores/storeProducts?storeId=" + storeId;
     }
 
     /**
@@ -177,7 +177,7 @@ public class StorePageController {
         storePageService.deleteProductFromStore(storeID, productID);
         LOGGER.info(String.format("Product %d from tore with id %d was deleted", productID, storeID));
 
-        return "redirect:/stores/storeProducts?storeId" + storeID;
+        return "redirect:/stores/storeProducts?storeId=" + storeID;
 
     }
 

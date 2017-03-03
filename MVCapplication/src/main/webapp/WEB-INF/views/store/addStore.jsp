@@ -1,6 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ page isELIgnored="false" %>
 
 <%--
@@ -11,7 +12,7 @@
     <div class="col-lg-6">
         <div class="form-group has-warning">
             <div class="panel-heading">
-                <h1 class="page-header">Add new Store</h1>
+                <h1 class="page-header"><spring:message code="store.addNewStore"/></h1>
             </div>
 
             <div class="panel-body">
@@ -29,20 +30,22 @@
                         </c:if>
 
                         <div class="form-group">
-                            <label class="control-label" for="inputWarning">Store Name</label>
+                            <label class="control-label" for="inputWarning"><spring:message code="store.name"/></label>
                             <form:errors path="name" cssClass="form-control label-danger"/>
                             <form:input path="name" class="form-control" id="inputWarning"
                                         placeholder="Store Name" type="text"/>
                         </div>
                         <div class="form-group">
-                            <label class="control-label" for="inputWarning">Store Address</label>
+                            <label class="control-label"
+                                   for="inputWarning"><spring:message code="store.storeAddress"/></label>
                             <form:errors path="address" cssClass="form-control label-danger"/>
                             <form:input path="address" class="form-control" placeholder="Address" type="text"/>
                         </div>
 
-                        <input type="submit" class="btn btn-lg btn-success btn-custom" value="Add Store"/>
+                        <input type="submit" class="btn btn-lg btn-success btn-custom" value=<spring:message
+                                code="store.addStore"/>/>
                         <input type="reset" class="btn btn-lg btn-reset-custom btn-reset-custom"
-                               onclick="document.location.href='<c:url value="/stores/"/>'" value="Cancel"/>
+                               onclick="document.location.href='<c:url value="/stores/"/>'" value=<spring:message code="cancel"/>>
 
                     </fieldset>
                 </form:form>

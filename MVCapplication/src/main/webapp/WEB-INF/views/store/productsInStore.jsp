@@ -1,5 +1,6 @@
 <link rel="stylesheet" type="text/css" href="/css/product.css"/>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ page isELIgnored="false" %>
 
 <%--
@@ -15,7 +16,7 @@
 
 <div class="row">
     <div class="col-lg-12">
-        <h1 class="page-header">Products in store</h1>
+        <h1 class="page-header"><spring:message code="store.products"/></h1>
         <h1> ${store.name} (${store.address})</h1>
     </div>
 </div>
@@ -26,7 +27,7 @@
             <div class="panel-body">
                 <button type="button" class="btn btn-outline btn-primary" onclick=
                         "location.href='/addProductsToStore?storeId=${store.id}'"
-                        id="addProductButton">AddProducts
+                        id="addProductButton"><spring:message code="store.addProd"/>
                 </button>
                 <br>
                 <br>
@@ -34,12 +35,12 @@
                 <table width="100%" class="table table-striped table-bordered table-hover" id="ProductInStoreTable">
                     <thead>
                     <tr>
-                        <th>Name</th>
-                        <th>Description</th>
-                        <th>Category</th>
-                        <th>Unit</th>
-                        <th>Image</th>
-                        <th>Delete</th>
+                        <th><spring:message code="name"/></th>
+                        <th><spring:message code="product.description"/></th>
+                        <th><spring:message code="product.category"/></th>
+                        <th><spring:message code="product.unit"/></th>
+                        <th><spring:message code="product.image"/></th>
+                        <th><spring:message code="delete"/></th>
                     </tr>
                     </thead>
                     <tbody>

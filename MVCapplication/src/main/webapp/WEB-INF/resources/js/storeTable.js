@@ -54,4 +54,7 @@ function dellProduct(storeId, productId) {
     });
 };
 
+$(document).ready(function() {
+    var table = $('#ProductInStoreTable').DataTable();
+});
 
