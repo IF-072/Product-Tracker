@@ -3,7 +3,6 @@ package com.softserve.if072.restservice.controller;
 import com.softserve.if072.common.model.History;
 import com.softserve.if072.restservice.service.HistoryService;
 import org.apache.commons.collections.CollectionUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -27,8 +26,12 @@ import java.util.List;
 @RestController
 @RequestMapping("api/users/{userId}/histories")
 public class HistoryController {
-    @Autowired
-    private HistoryService historyService;
+
+    private final HistoryService historyService;
+
+    public HistoryController(HistoryService historyService) {
+        this.historyService = historyService;
+    }
 
     /**
      * Handles requests for retrieving all history records for current user

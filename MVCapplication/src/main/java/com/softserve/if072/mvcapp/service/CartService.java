@@ -4,7 +4,6 @@ import com.softserve.if072.common.model.Cart;
 import com.softserve.if072.common.model.dto.CartDTO;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,10 +20,8 @@ import java.util.List;
 @Service
 public class CartService {
     private static final Logger LOGGER = LogManager.getLogger();
-    @Autowired
-    private RestTemplate restTemplate;
-    @Autowired
-    private UserService userService;
+    private final RestTemplate restTemplate;
+    private final UserService userService;
     @Value("${application.restCartURL}")
     private String restCartURL;
     @Value("${application.restCartPurchaseURL}")
@@ -35,6 +32,11 @@ public class CartService {
     private String cartRequestReceive;
     @Value("${cart.successfullyOperation}")
     private String cartSuccessfullyOperation;
+
+    public CartService(RestTemplate restTemplate, UserService userService) {
+        this.restTemplate = restTemplate;
+        this.userService = userService;
+    }
 
     /**
      * Make request to a REST server for retrieving all cart records for current user
