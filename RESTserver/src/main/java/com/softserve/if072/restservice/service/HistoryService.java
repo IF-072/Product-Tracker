@@ -5,7 +5,6 @@ import com.softserve.if072.restservice.dao.mybatisdao.HistoryDAO;
 import com.softserve.if072.restservice.exception.DataNotFoundException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -18,15 +17,18 @@ import java.util.List;
  */
 @Service
 public class HistoryService {
-    private static final Logger LOGGER = LogManager.getLogger(HistoryService.class);
-    @Autowired
-    private HistoryDAO historyDAO;
+    private static final Logger LOGGER = LogManager.getLogger();
+    private final HistoryDAO historyDAO;
     @Value("${history.containsRecords}")
     private String historyContainsRecords;
     @Value("${history.notFound}")
     private String historyNotFound;
     @Value("${history.SuccessfullyOperation}")
     private String historySuccessfullyOperation;
+
+    public HistoryService(HistoryDAO historyDAO) {
+        this.historyDAO = historyDAO;
+    }
 
     /**
      * Make request to a History DAO for retrieving all history records for current user

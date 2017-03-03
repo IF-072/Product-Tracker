@@ -4,7 +4,6 @@ import com.softserve.if072.common.model.Cart;
 import com.softserve.if072.common.model.dto.CartDTO;
 import com.softserve.if072.mvcapp.service.CartService;
 import org.apache.commons.collections.CollectionUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,9 +19,13 @@ import java.util.List;
  */
 @Controller
 @RequestMapping("/cart")
-public class CartController{
-    @Autowired
-    CartService cartService;
+public class CartController {
+    private final CartService cartService;
+
+
+    public CartController(CartService cartService) {
+        this.cartService = cartService;
+    }
 
     /**
      * Handles requests for getting all cart records for current user
@@ -55,6 +58,7 @@ public class CartController{
 
     /**
      * Handles requests for deleting a product from the cart of current user
+     *
      * @param cartDTO - an object with required information for the product delete
      * @return string with appropriate view name
      */
