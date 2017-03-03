@@ -26,7 +26,7 @@ public interface CartDAO {
     /**
      * Select all records from the cart table that belong to specific user
      *
-     * @param userId unique user's identifier
+     * @param userId - unique user's identifier
      * @return list of all cart items that belong to specific user
      */
     @Select("SELECT user_id, store_id, product_id, amount FROM cart " +
@@ -45,7 +45,7 @@ public interface CartDAO {
     /**
      * Select record from the cart table that belong to specific product
      *
-     * @param productId unique product identifier
+     * @param productId - unique product identifier
      * @return cart item that belong to specific product identifier
      */
     @Select("SELECT user_id, store_id, product_id, amount FROM cart " +
@@ -64,7 +64,7 @@ public interface CartDAO {
     /**
      * Insert new record into the cart table
      *
-     * @param cart item to be inserted to the cart table
+     * @param cart - item to be inserted to the cart table
      */
     @Insert("INSERT INTO cart(user_id, store_id, product_id, amount) VALUES (#{user.id}, #{store.id}, #{product.id}, #{amount})")
     void insert(Cart cart);
@@ -73,7 +73,7 @@ public interface CartDAO {
      * Update amount for current cart.
      * Since other columns in the cart table are keys we should update only amount column.
      *
-     * @param cart item to be updated in the cart table
+     * @param cart - item to be updated in the cart table
      */
     @Update("UPDATE cart SET amount=#{amount} WHERE product_id=#{product.id}")
     int update(Cart cart);
@@ -81,7 +81,7 @@ public interface CartDAO {
     /**
      * Delete cart item with specific product from the cart table
      *
-     * @param productId unique product identifier
+     * @param productId - unique product identifier
      */
     @Delete("DELETE FROM cart WHERE product_id=#{productId}")
     int deleteByProductId(int productId);

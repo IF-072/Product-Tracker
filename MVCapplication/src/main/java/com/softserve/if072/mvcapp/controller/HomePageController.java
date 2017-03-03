@@ -43,7 +43,7 @@ public class HomePageController {
      *
      * @return view name
      */
-    @GetMapping({"/", "/home"})
+    @GetMapping("/home")
     public String getHomePage(ModelMap model) {
         User user = userService.getCurrentUser();
         if (user != null) {

@@ -1,19 +1,18 @@
 package com.softserve.if072.restservice.service;
 
-import com.softserve.if072.common.model.History;
 import com.softserve.if072.common.model.ShoppingList;
 import com.softserve.if072.common.model.Storage;
+import com.softserve.if072.common.model.dto.HistoryDTO;
 import com.softserve.if072.common.model.dto.StorageDTO;
-import com.softserve.if072.restservice.exception.DataNotFoundException;
 import com.softserve.if072.restservice.dao.mybatisdao.StorageDAO;
+import com.softserve.if072.restservice.exception.DataNotFoundException;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.apache.commons.collections.CollectionUtils;
 
 import java.sql.Timestamp;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -113,12 +112,13 @@ public class StorageService {
     }
 
     private void addToHistory(Storage storage, int diff){
-            History history = new History();
-            history.setAmount(diff);
-            history.setUser(storage.getUser());
-            history.setProduct(storage.getProduct());
-            history.setUsedDate(new Timestamp(System.currentTimeMillis()));
-            historyService.insert(history);
+            HistoryDTO historyDTO = new HistoryDTO.Builder()
+                    .userId(storage.getUser().getId())
+                    .productId(storage.getProduct().getId())
+                    .amount(diff)
+                    .usedDate(new Timestamp(System.currentTimeMillis()))
+                    .build();
+            historyService.insert(historyDTO);
 
     }
 }

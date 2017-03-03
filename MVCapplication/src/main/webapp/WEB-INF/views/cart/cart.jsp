@@ -41,7 +41,8 @@
                             <td class="text-center">
                                     ${cart.amount} ${cart.product.unit.name}
                             </td>
-                            <sf:form method="POST" action="purchase" modelAttribute="cartDTO" id="purchaseDeleteForm${status.count}" >
+                            <c:url var="purchase"  value="/cart/purchase"/>
+                            <sf:form method="POST" action="${purchase}" modelAttribute="cartDTO" id="purchaseDeleteForm${status.count}" >
                                 <td class="text-center">
                                     <div class="input-append">
                                         <sf:hidden path="userId" value="${cart.user.id}"/>
@@ -70,24 +71,4 @@
         </div>
     </div>
 </div>
-
-<!-- Modal window for delete product-->
-<div id="modalDeleteProduct" class="modal fade" tabindex="-1">
-    <div class="modal-dialog modal-sm">
-        <div class="modal-content">
-            <div class="modal-header alert alert-danger" role="alert">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title">Delete</h4>
-            </div>
-            <div class="modal-body text-center">
-                Do you really want to delete "<b class="productName"></b>" from your cart?
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-primary btn-confirm">Yes</button>
-            </div>
-        </div>
-    </div>
-</div>
-
 

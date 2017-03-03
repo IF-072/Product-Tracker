@@ -6,16 +6,18 @@
  * This function is used to show modal dialog window
  * for user to confirm or cancel deleting product
  */
-$("form[action='delete'] a").click(function () {
-    var form = $(this).parent("form[action='delete']");
+$("a[purpose='deleteRecord']").click(function () {
+    var href = $(this).attr("href");
     var productName = $(this).attr("productName");
 
-    $("#modalDeleteHistory").modal('show');
+    $("#modalDeleteConfirm").modal('show');
 
     $("b.productName").text(productName);
+    $("span.pageName").text("history");
+
 
     $(".btn-confirm").click(function () {
-        form.submit();
+        location.href = href;
     });
     event.preventDefault();
 });

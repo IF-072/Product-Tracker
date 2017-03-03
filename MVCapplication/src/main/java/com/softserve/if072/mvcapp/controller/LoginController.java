@@ -23,7 +23,7 @@ import javax.servlet.http.HttpServletResponse;
  * @author Igor Parada
  */
 @Controller
-@RequestMapping("/login")
+@RequestMapping({"/", "/login"})
 public class LoginController {
 
     @Value("login.invalidCredentials")
