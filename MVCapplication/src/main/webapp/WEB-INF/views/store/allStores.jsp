@@ -36,7 +36,7 @@
                     <thead>
                     <tr>
                         <th><spring:message code="name"/></th>
-                        <th><spring:message code="store.address"/></th>
+                        <th><spring:message code="address"/></th>
                         <th><spring:message code="store.products"/></th>
                         <th><spring:message code="edit"/></th>
                         <th><spring:message code="delete"/></th>
