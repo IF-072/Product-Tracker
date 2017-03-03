@@ -235,15 +235,14 @@ public class StoreController {
      * @param store  store that user want save
      * @return store from DataBase which name is equal to received store or if such store is not found - null
      */
-
+    @PreAuthorize("#store != null && #store.user != null && #store.user.id == authentication.user.id")
     @PostMapping("/byName/{userId}")
     @ResponseStatus(value = HttpStatus.OK)
     public Store getStoreByNameAndUser(@PathVariable Integer userId, @RequestBody Store store) {
         Store oldStore = storeService.getStoreByNameAndUser(store.getName(), store.getAddress(), userId);
         LOGGER.info(String.format("Store with name %s was retrieved", store.getName()));
-        if (oldStore != null) {
-            return oldStore;
-        } else return null;
+
+        return oldStore;
     }
 
     /**

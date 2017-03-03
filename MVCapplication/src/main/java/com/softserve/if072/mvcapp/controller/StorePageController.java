@@ -153,12 +153,12 @@ public class StorePageController extends BaseController {
         int userId = getCurrentUser().getId();
         if (wrapedProducts.getProducts().isEmpty()) {
             LOGGER.info(String.format("No products have been chosen in store %d ", storeId));
-            return String.format("redirect:/stores/storeProducts?storeId=%d", storeId);
+            return "redirect:/stores/storeProducts?storeId=" + storeId;
         }
         storePageService.addProductsToStore(userId, storeId, wrapedProducts);
         LOGGER.info(String.format("Products of user %d added in store %d ", userId, storeId));
 
-        return String.format("redirect:/stores/storeProducts?storeId=%d", storeId);
+        return "redirect:/stores/storeProducts?storeId=" + storeId;
     }
 
     /**
@@ -174,7 +174,7 @@ public class StorePageController extends BaseController {
         storePageService.deleteProductFromStore(storeID, productID);
         LOGGER.info(String.format("Product %d from tore with id %d was deleted", productID, storeID));
 
-        return String.format("redirect:/stores/storeProducts?storeId=%d", storeID);
+        return "redirect:/stores/storeProducts?storeId=" + storeID;
 
     }
 
@@ -217,9 +217,9 @@ public class StorePageController extends BaseController {
      */
     @PostMapping("/editStore")
     public String editStore(@Validated @ModelAttribute("store") Store store, BindingResult result, Model model,
-                            @RequestParam ("storeId") int storeId) {
+                            @RequestParam("storeId") int storeId) {
         if (result.hasErrors()) {
-           model.addAttribute("store", storePageService.getStoreById(storeId));
+            model.addAttribute("store", storePageService.getStoreById(storeId));
             model.addAttribute("errorMessages", result.getFieldErrors());
             return "editStore";
         }

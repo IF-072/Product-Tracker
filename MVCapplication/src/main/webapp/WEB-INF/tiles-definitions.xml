@@ -162,6 +162,7 @@
     <definition name="allStores" extends="mainLayout">
         <put-attribute name="title" value="Product Tracker"/>
         <put-attribute name="body" value="/WEB-INF/views/store/allStores.jsp"/>
+        <put-attribute name="dialog" value="/WEB-INF/templates/dialog.jsp"/>
         <put-list-attribute name="stylesheets" inherit="true">
             <add-attribute value="/css/dataTables.bootstrap.css"/>
             <add-attribute value="/css/dataTables.responsive.css"/>
@@ -346,6 +347,7 @@
     <definition name="productsInStore" extends="mainLayout">
         <put-attribute name="title" value="Product Tracker"/>
         <put-attribute name="body" value="/WEB-INF/views/store/productsInStore.jsp"/>
+        <put-attribute name="dialog" value="/WEB-INF/templates/dialog.jsp"/>
         <put-list-attribute name="stylesheets" inherit="true">
             <add-attribute value="/css/dataTables.bootstrap.css"/>
             <add-attribute value="/css/dataTables.responsive.css"/>

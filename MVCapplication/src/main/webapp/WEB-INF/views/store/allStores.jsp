@@ -25,7 +25,7 @@
             <div class="panel-body">
 
                 <button type="button" class="btn btn-outline btn-primary" onclick="location.href='<c:url
-                    value="/addStore"/>'"
+                        value="/addStore"/>'"
                         id="addStoreButton">AddStore
                 </button>
                 <br>
@@ -60,12 +60,6 @@
 
             </div>
         </div>
-    </div>
-
-    <div id="dialog" title="Delete product">
-        <br/>
-        <b>Are you sure?</b>
-        <br/>
     </div>
 </div>
 

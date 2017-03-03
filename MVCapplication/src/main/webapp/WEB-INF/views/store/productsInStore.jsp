@@ -7,7 +7,10 @@
 --%>
 
 <style>
-    #image, #delete {text-align:center; cursor: pointer}
+    #image, #delete {
+        text-align: center;
+        cursor: pointer
+    }
 </style>
 
 <div class="row">
@@ -28,7 +31,7 @@
                 <br>
                 <br>
 
-                <table width="100%" class="table table-striped table-bordered table-hover" id="storeTab">
+                <table width="100%" class="table table-striped table-bordered table-hover" id="ProductInStoreTable">
                     <thead>
                     <tr>
                         <th>Name</th>
@@ -53,7 +56,7 @@
                             </td>
 
                             <td onclick="dellProduct(${store.id}, ${product.id});" id="delete">
-                                <p class="fa fa-times fa-lg" ></p>
+                                <p class="fa fa-times fa-lg"></p>
                             </td>
                         </tr>
                     </c:forEach>
@@ -61,12 +64,6 @@
                 </table>
             </div>
         </div>
-    </div>
-
-    <div id="dialogDel" title="Delete product">
-        <br/>
-        <b>Are you sure?</b>
-        <br/>
     </div>
 </div>
 
