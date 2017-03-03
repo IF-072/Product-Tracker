@@ -35,9 +35,8 @@ public class StorePageController {
     private StorePageService storePageService;
     private UserService userService;
 
-    @Value("${store.alreadyExist}")
+    @Value("store.alreadyExist")
     private String existMessage;
-
 
     @Autowired
     public StorePageController(StorePageService storePageService, UserService userService) {
@@ -116,7 +115,8 @@ public class StorePageController {
     @GetMapping("/stores/storeProducts")
     public String getAllProductsByStoreId(@RequestParam("storeId") int storeId, ModelMap model) {
         model.addAttribute("store", storePageService.getStoreById(storeId));
-        model.addAttribute("products", storePageService.getAllProductsFromStore(storeId, userService.getCurrentUser().getId()));
+        model.addAttribute("products", storePageService.getAllProductsFromStore(storeId, userService.getCurrentUser()
+                .getId()));
         LOGGER.info(String.format("Products from store %d were found", storeId));
 
         return "productsInStore";
@@ -156,7 +156,7 @@ public class StorePageController {
         int userId = userService.getCurrentUser().getId();
         if (wrapedProducts.getProducts().isEmpty()) {
             LOGGER.info(String.format("No products have been chosen in store %d ", storeId));
-            return "redirect:/stores/storeProducts?storeId="+ storeId;
+            return "redirect:/stores/storeProducts?storeId=" + storeId;
         }
         storePageService.addProductsToStore(userId, storeId, wrapedProducts);
         LOGGER.info(String.format("Products of user %d added in store %d ", userId, storeId));
@@ -220,7 +220,7 @@ public class StorePageController {
      */
     @PostMapping("/editStore")
     public String editStore(@Validated @ModelAttribute("store") Store store, BindingResult result, Model model,
-                            @RequestParam ("storeId") int storeId) {
+                            @RequestParam("storeId") int storeId) {
         if (result.hasErrors()) {
             model.addAttribute("store", storePageService.getStoreById(storeId));
             model.addAttribute("errorMessages", result.getFieldErrors());

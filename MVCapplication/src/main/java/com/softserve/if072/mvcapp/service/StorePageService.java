@@ -35,9 +35,6 @@ public class StorePageService {
     @Value("${application.restProductURL}")
     private String productUrl;
 
-    @Value("${service.user.current}")
-    private String getCurrentUser;
-
     /**
      * Method receives from Rest Controller list of user stores
      *
