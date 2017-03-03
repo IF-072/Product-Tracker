@@ -122,7 +122,8 @@ public class StorePageService {
         param.put("storeId", storeId);
         param.put("userId", userId);
         ResponseEntity<List<Product>> productResult = restTemplate.exchange(productsUri, HttpMethod.GET, null,
-                new ParameterizedTypeReference<List<Product>>() {}, param);
+                new ParameterizedTypeReference<List<Product>>() {
+                }, param);
 
         return productResult.getBody();
     }
@@ -199,7 +200,9 @@ public class StorePageService {
         ResponseEntity<Store> oldStore = restTemplate.postForEntity(getStoreByNameAndUserIdUri, store, Store.class);
         if (oldStore.getBody() == null) {
             return null;
-        } else return oldStore.getBody();
+        } else {
+            return oldStore.getBody();
+        }
     }
 
     /**
@@ -211,9 +214,10 @@ public class StorePageService {
      */
     public boolean alreadyExist(Store store, User user) {
         Store existStore = getStoreByNameAndUserId(store, user);
-        if (existStore != null && existStore.isEnabled())  {
-            return store.getId()!=existStore.getId();
-        }return  false;
+        if (existStore != null && existStore.isEnabled()) {
+            return store.getId() != existStore.getId();
+        }
+        return false;
     }
 
     /**
@@ -240,4 +244,3 @@ public class StorePageService {
     }
 
 }
-

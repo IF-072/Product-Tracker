@@ -241,9 +241,7 @@ public class StoreController {
     public Store getStoreByNameAndUser(@PathVariable Integer userId, @RequestBody Store store) {
         Store oldStore = storeService.getStoreByNameAndUser(store.getName(), store.getAddress(), userId);
         LOGGER.info(String.format("Store with name %s was retrieved", store.getName()));
-        if (oldStore != null) {
-            return oldStore;
-        } else return null;
+        return oldStore;
     }
 
     /**

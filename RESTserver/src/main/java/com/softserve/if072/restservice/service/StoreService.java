@@ -78,7 +78,7 @@ public class StoreService {
      */
     @Transactional
     public void addStore(Store store) throws IllegalArgumentException {
-        if (store != null && store.getName() != null && !store.getName().equals("")) {
+        if (store != null && !"".equals(store.getName())) {
             storeDAO.insert(store);
         } else throw new IllegalArgumentException(String.format("Illegal arguments in store id %d", store.getId()));
     }
@@ -232,9 +232,8 @@ public class StoreService {
     @Transactional
     public Store getStoreByNameAndUser(String StoreName, String storeAddress, int userId) {
         Store store = storeDAO.getByName(StoreName, storeAddress, userId);
-        if (store != null) {
-            return store;
-        } else return null;
+
+        return store;
     }
 
     /**

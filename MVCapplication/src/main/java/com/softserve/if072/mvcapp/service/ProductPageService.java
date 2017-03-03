@@ -129,7 +129,7 @@ public class ProductPageService {
      * This method send new product's data to the RESTful service to write them into the DataBase.
      *
      * @param product new product that user want to add to the database
-     * @param user user whose product must be added
+     * @param user    user whose product must be added
      */
 
     public void addProduct(Product product, User user) {
@@ -167,7 +167,7 @@ public class ProductPageService {
      * This method send edited product's data to the RESTful service to update them into the DataBase.
      *
      * @param product new product that user want to edit in the database
-     * @param user user whose product must be edited
+     * @param user    user whose product must be edited
      */
 
     public void editProduct(Product product, User user) {
@@ -243,8 +243,8 @@ public class ProductPageService {
      * @return list of store's IDs
      */
 
-    public Map<Integer,String> getAllStoresId(int userId) {
-        Map<Integer,String> allStoresById = new HashMap<>();
+    public Map<Integer, String> getAllStoresId(int userId) {
+        Map<Integer, String> allStoresById = new HashMap<>();
         List<Store> allStores = getAllStores(userId);
         if (allStores != null) {
             for (Store s : allStores) {
@@ -285,7 +285,7 @@ public class ProductPageService {
      * This method sends new list of store's IDs mapped on product to the RESTful service
      * to update the information in the DataBase
      *
-     * @param productId ID of product that mapped on stores
+     * @param productId       ID of product that mapped on stores
      * @param storesInProduct new list of store's IDs mapped on product
      */
 
@@ -337,7 +337,7 @@ public class ProductPageService {
      * to receive te product from the DataBase by it's name
      *
      * @param product product that must be received
-     * @param user user whose product must be received
+     * @param user    user whose product must be received
      * @return product
      */
 
@@ -357,7 +357,7 @@ public class ProductPageService {
      * This method checks whether a product with this name already exists in the DataBase
      *
      * @param product product, which is checked
-     * @param user user whose product must be checked
+     * @param user    user whose product must be checked
      * @return boolean value
      */
 
@@ -365,8 +365,7 @@ public class ProductPageService {
 
         Product existsProduct = getProductByNameAndUserId(product, user);
 
-
-        if(existsProduct != null && existsProduct.isEnabled()) {
+        if (existsProduct != null && existsProduct.isEnabled()) {
             return !(existsProduct.getId() == product.getId());
         } else {
             return false;
@@ -378,12 +377,11 @@ public class ProductPageService {
      * This method checks whether a product with this name already exists in the DataBase and was deleted
      *
      * @param product product, which is checked
-     * @param user user whose product must be checked
+     * @param user    user whose product must be checked
      * @return boolean value
      */
 
     public boolean isDeleted(Product product, User user) {
-
         Product existsProduct = getProductByNameAndUserId(product, user);
 
         return existsProduct != null && !existsProduct.isEnabled();
