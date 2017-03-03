@@ -1,7 +1,6 @@
 package com.softserve.if072.mvcapp.controller;
 
 import com.softserve.if072.common.model.Cart;
-import com.softserve.if072.common.model.User;
 import com.softserve.if072.mvcapp.service.CartService;
 import org.junit.Before;
 import org.junit.Test;
@@ -16,7 +15,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
-import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -37,14 +35,13 @@ public class CartControllerTest {
     private CartService cartService;
     @Mock
     private Cart cart;
-    @Mock
-    private User user;
     @InjectMocks
-    private CartController cartController = spy(CartController.class);
+    private CartController cartController;
     private MockMvc mockMvc;
 
     @Before
     public void setup() throws ClassNotFoundException, NoSuchMethodException {
+        cartController = new CartController(cartService);
         mockMvc = standaloneSetup(cartController)
                 .setSingleView(new InternalResourceView("/WEB-INF/views/cart/cart.jsp"))
                 .build();
