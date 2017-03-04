@@ -11,6 +11,8 @@ import org.springframework.context.support.ReloadableResourceBundleMessageSource
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.StringHttpMessageConverter;
+import org.springframework.validation.Validator;
+import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.LocaleResolver;
@@ -67,7 +69,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
      * @return created interceptor instance
      */
     @Bean
-    public AddTokenHeaderInterceptor addTokenHeaderInterceptor(){
+    public AddTokenHeaderInterceptor addTokenHeaderInterceptor() {
         return new AddTokenHeaderInterceptor();
     }
 
@@ -114,7 +116,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
      * @return created instance
      */
     @Bean
-    public LocaleResolver localeResolver(){
+    public LocaleResolver localeResolver() {
         CookieLocaleResolver resolver = new CookieLocaleResolver();
         resolver.setDefaultLocale(new Locale("en"));
         resolver.setCookieName("myLocaleCookie");
@@ -134,4 +136,26 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         interceptor.setParamName("mylocale");
         registry.addInterceptor(interceptor);
     }
+
+
+    /**
+     * Creates a validator instance with custom message source
+     *
+     * @return validator's instance
+     */
+    @Bean
+    public LocalValidatorFactoryBean validator() {
+        LocalValidatorFactoryBean validatorFactoryBean = new LocalValidatorFactoryBean();
+        validatorFactoryBean.setValidationMessageSource(messageSource());
+        return validatorFactoryBean;
+    }
+
+    /**
+     * Register our custom validator as a default validator
+     */
+    @Override
+    public Validator getValidator() {
+        return validator();
+    }
+
 }
