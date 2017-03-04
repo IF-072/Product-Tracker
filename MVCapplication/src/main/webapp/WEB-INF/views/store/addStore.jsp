@@ -30,23 +30,27 @@
                         </c:if>
 
                         <div class="form-group">
-                            <label class="control-label" for="inputWarning"><spring:message code="store.name"/></label>
+                            <label class="control-label" form="inputWarning">
+                                <spring:message code="store.name"/></label>
                             <form:errors path="name" cssClass="form-control label-danger"/>
-                            <form:input path="name" class="form-control" id="inputWarning"
-                                        placeholder="Store Name" type="text"/>
+                            <spring:message code='name' var="addressMessage"/>
+                            <form:input path="name" class="form-control"
+                                        placeholder="${addressMessage}" type="text"/>
                         </div>
                         <div class="form-group">
-                            <label class="control-label"
-                                   for="inputWarning"><spring:message code="store.storeAddress"/></label>
+                            <label class="control-label" form="inputWarning"><spring:message
+                                    code="store.storeAddress"/></label>
                             <form:errors path="address" cssClass="form-control label-danger"/>
-                            <form:input path="address" class="form-control" placeholder="Address" type="text"/>
+                            <spring:message code='address' var="nameMessage"/>
+                            <form:input path="address" class="form-control"
+                                        placeholder="${nameMessage}" type="text"/>
                         </div>
 
                         <input type="submit" class="btn btn-lg btn-success btn-custom" value=<spring:message
                                 code="store.addStore"/>/>
                         <input type="reset" class="btn btn-lg btn-reset-custom btn-reset-custom"
-                               onclick="document.location.href='<c:url value="/stores/"/>'" value=<spring:message code="cancel"/>>
-
+                               onclick="document.location.href='<c:url value="/stores/"/>'" value=<spring:message
+                                code="cancel"/>>
                     </fieldset>
                 </form:form>
             </div>
