@@ -1,5 +1,6 @@
 package com.softserve.if072.restservice.service;
 
+import com.softserve.if072.common.model.History;
 import com.softserve.if072.common.model.ShoppingList;
 import com.softserve.if072.common.model.Storage;
 import com.softserve.if072.common.model.dto.StorageDTO;
@@ -11,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.apache.commons.collections.CollectionUtils;
 
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -23,11 +26,14 @@ public class StorageService {
     private static final Logger LOGGER = LogManager.getLogger(StorageService.class);
     private StorageDAO storageDAO;
     private ShoppingListService shoppingListService;
+    private HistoryService historyService;
 
     @Autowired
-    public StorageService(StorageDAO storageDAO, ShoppingListService shoppingListService) {
+    public StorageService(StorageDAO storageDAO, ShoppingListService shoppingListService,
+                          HistoryService historyService) {
         this.storageDAO = storageDAO;
         this.shoppingListService = shoppingListService;
+        this.historyService = historyService;
     }
 
     public List<Storage> getByUserId(int user_id) throws DataNotFoundException {
@@ -58,6 +64,11 @@ public class StorageService {
             return;
         }
 
+        Storage storageDB = storageDAO.getByProductID(storage.getProduct().getId());
+        int diff;
+        if((diff = storageDB.getAmount() - storage.getAmount()) > 0) {
+            addToHistory(storage, diff);
+        }
         if (storage.getEndDate() != null) {
             storageDAO.update(storage);
         } else {
@@ -79,6 +90,11 @@ public class StorageService {
             LOGGER.error(String.format("Storage with product id %d doesn't exist", storageDTO.getProductId()));
             return;
         }
+
+        int diff;
+        if((diff = storage.getAmount() - storageDTO.getAmount()) > 0) {
+            addToHistory(storage, diff);
+        }
         storage.setAmount(storageDTO.getAmount());
         storageDAO.updateAmount(storage);
 
@@ -94,5 +110,15 @@ public class StorageService {
             LOGGER.error("Illegal argument: storage == null");
             return;
         }
+    }
+
+    private void addToHistory(Storage storage, int diff){
+            History history = new History();
+            history.setAmount(diff);
+            history.setUser(storage.getUser());
+            history.setProduct(storage.getProduct());
+            history.setUsedDate(new Timestamp(System.currentTimeMillis()));
+            historyService.insert(history);
+
     }
 }
