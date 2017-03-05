@@ -66,7 +66,7 @@ public class StorageService {
 
         Storage storageDB = storageDAO.getByProductID(storage.getProduct().getId());
         int diff;
-        if((diff = storageDB.getAmount() - storage.getAmount()) > 0) {
+        if ((diff = storageDB.getAmount() - storage.getAmount()) > 0) {
             addToHistory(storage, diff);
         }
         if (storage.getEndDate() != null) {
@@ -86,13 +86,13 @@ public class StorageService {
         }
 
         Storage storage = storageDAO.getByProductID(storageDTO.getProductId());
-        if(storage == null){
+        if (storage == null) {
             LOGGER.error(String.format("Storage with product id %d doesn't exist", storageDTO.getProductId()));
             return;
         }
 
         int diff;
-        if((diff = storage.getAmount() - storageDTO.getAmount()) > 0) {
+        if ((diff = storage.getAmount() - storageDTO.getAmount()) > 0) {
             addToHistory(storage, diff);
         }
         storage.setAmount(storageDTO.getAmount());
@@ -112,13 +112,13 @@ public class StorageService {
         }
     }
 
-    private void addToHistory(Storage storage, int diff){
-            History history = new History();
-            history.setAmount(diff);
-            history.setUser(storage.getUser());
-            history.setProduct(storage.getProduct());
-            history.setUsedDate(new Timestamp(System.currentTimeMillis()));
-            historyService.insert(history);
+    private void addToHistory(Storage storage, int diff) {
+        History history = new History();
+        history.setAmount(diff);
+        history.setUser(storage.getUser());
+        history.setProduct(storage.getProduct());
+        history.setUsedDate(new Timestamp(System.currentTimeMillis()));
+        historyService.insert(history);
 
     }
 }
