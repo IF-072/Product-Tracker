@@ -10,6 +10,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 import java.util.List;
 
@@ -40,6 +42,10 @@ public class CartService {
     private String cartSuccessfullyOperation;
     @Value("${cart.foundProductId}")
     private String cartFoundProductId;
+    @Value("${cart.transaction}")
+    private String cartTransaction;
+    @Value("${cart.productPurchaseErrorOccur}")
+    private String cartProductPurchaseErrorOccur;
 
     public CartService(CartDAO cartDAO, StorageService storageService, ShoppingListService shoppingListService) {
         this.cartDAO = cartDAO;
@@ -72,31 +78,42 @@ public class CartService {
      *
      * @param cartDTO - an object with required information for the product purchase
      */
+    @Transactional(rollbackFor = Exception.class)
     public void productPurchase(CartDTO cartDTO) {
-        cartDAO.deleteByProductId(cartDTO.getProductId());
-        LOGGER.info(cartDeleteProduct, cartDTO.getProductId(), "cart", cartDTO.getUserId());
-
-        Storage storage = storageService.getByProductId(cartDTO.getProductId());
-        if (storage == null) {
-            storageService.insert(cartDTO.getUserId(), cartDTO.getProductId(), cartDTO.getAmount());
-            LOGGER.info(cartInsertProduct, cartDTO.getAmount(), cartDTO.getProductId(), cartDTO.getUserId());
-        } else {
-            storage.setAmount(storage.getAmount() + cartDTO.getAmount());
-            storageService.update(storage);
-            LOGGER.info(cartUpdateProductAmount, cartDTO.getProductId(), "storage", cartDTO.getUserId());
-        }
-
-        ShoppingList shoppingList = shoppingListService.getByProductId(cartDTO.getProductId());
-        if (shoppingList != null) {
-            LOGGER.info(cartProductExist, cartDTO.getProductId(), cartDTO.getUserId());
-            if (cartDTO.getInitialAmount() > cartDTO.getAmount()) {
-                shoppingList.setAmount(cartDTO.getInitialAmount() - cartDTO.getAmount());
-                shoppingListService.update(shoppingList);
-                LOGGER.info(cartUpdateProductAmount, cartDTO.getProductId(), "shopping list", cartDTO.getUserId());
+        try {
+            if (TransactionSynchronizationManager.isActualTransactionActive()) {
+                LOGGER.info(cartTransaction, cartDTO.getProductId(), "has");
             } else {
-                shoppingListService.delete(shoppingList);
-                LOGGER.info(cartDeleteProduct, cartDTO.getProductId(), "shopping list", cartDTO.getUserId());
+                LOGGER.warn(cartTransaction, cartDTO.getProductId(), "has not");
             }
+            cartDAO.deleteByProductId(cartDTO.getProductId());
+            LOGGER.info(cartDeleteProduct, cartDTO.getProductId(), "cart", cartDTO.getUserId());
+
+            Storage storage = storageService.getByProductId(cartDTO.getProductId());
+            if (storage == null) {
+                storageService.insert(cartDTO.getUserId(), cartDTO.getProductId(), cartDTO.getAmount());
+                LOGGER.info(cartInsertProduct, cartDTO.getAmount(), cartDTO.getProductId(), cartDTO.getUserId());
+            } else {
+                storage.setAmount(storage.getAmount() + cartDTO.getAmount());
+                storageService.update(storage);
+                LOGGER.info(cartUpdateProductAmount, cartDTO.getProductId(), "storage", cartDTO.getUserId());
+            }
+
+            ShoppingList shoppingList = shoppingListService.getByProductId(cartDTO.getProductId());
+            if (shoppingList != null) {
+                LOGGER.info(cartProductExist, cartDTO.getProductId(), cartDTO.getUserId());
+                if (cartDTO.getInitialAmount() > cartDTO.getAmount()) {
+                    shoppingList.setAmount(cartDTO.getInitialAmount() - cartDTO.getAmount());
+                    shoppingListService.update(shoppingList);
+                    LOGGER.info(cartUpdateProductAmount, cartDTO.getProductId(), "shopping list", cartDTO.getUserId());
+                } else {
+                    shoppingListService.delete(shoppingList);
+                    LOGGER.info(cartDeleteProduct, cartDTO.getProductId(), "shopping list", cartDTO.getUserId());
+                }
+            }
+        } catch (Exception e) {
+            LOGGER.error(cartProductPurchaseErrorOccur, e, cartDTO.getProductId());
+            throw e;
         }
     }
 
@@ -106,6 +123,7 @@ public class CartService {
      * @param productId - product unique identifier
      */
     public void delete(int productId) {
+
         if (cartDAO.deleteByProductId(productId) == 0) {
             throw new DataNotFoundException(String.format(cartNotFound, " DELETE", productId));
         }

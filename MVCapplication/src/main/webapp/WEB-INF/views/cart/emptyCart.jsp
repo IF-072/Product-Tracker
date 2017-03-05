@@ -28,7 +28,7 @@
                             </a>
                         </div>
                         <div class="btn-group" role="group">
-                            <a href="<c:url value='/'/>">
+                            <a href="<c:url value='/home'/>">
                                 <button type="button" class="btn btn-default">Cancel</button>
                             </a>
                         </div>

@@ -1,6 +1,7 @@
 package com.softserve.if072.restservice.controller;
 
 import com.softserve.if072.common.model.History;
+import com.softserve.if072.common.model.dto.HistoryDTO;
 import com.softserve.if072.restservice.service.HistoryService;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.http.HttpStatus;
@@ -26,7 +27,6 @@ import java.util.List;
 @RestController
 @RequestMapping("api/users/{userId}/histories")
 public class HistoryController {
-
     private final HistoryService historyService;
 
     public HistoryController(HistoryService historyService) {
@@ -74,14 +74,14 @@ public class HistoryController {
     @PreAuthorize("#history != null && #history.user != null && #history.user.id == authentication.user.id")
     @PostMapping()
     @ResponseStatus(value = HttpStatus.CREATED)
-    public void insert(@RequestBody History history) {
-        historyService.insert(history);
+    public void insert(@RequestBody HistoryDTO historyDTO) {
+        historyService.insert(historyDTO);
     }
 
     @PreAuthorize("#history != null && #history.user != null && #history.user.id == authentication.user.id")
     @PutMapping()
     @ResponseStatus(value = HttpStatus.OK)
-    public void update(@RequestBody History history) {
-        historyService.update(history);
+    public void update(@RequestBody HistoryDTO historyDTO) {
+        historyService.update(historyDTO);
     }
 }

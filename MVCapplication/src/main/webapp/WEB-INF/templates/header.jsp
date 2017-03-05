@@ -113,36 +113,36 @@
         <div class="sidebar-nav navbar-collapse">
             <ul class="nav in" id="side-menu">
                 <li>
-                    <a href="<c:url value="../home"/>" class="active"><i class="fa fa-home fa-fw"></i> <spring:message code="home"/></a>
+                    <a href="<c:url value="/home"/>" class="active"><i class="fa fa-home fa-fw"></i> <spring:message code="home"/></a>
                 </li>
                 <li>
-                    <a href="<c:url value="../category"/>" class="active"><i class="fa fa-list-alt fa-fw"></i> <spring:message code="categories"/></a>
+                    <a href="<c:url value="/category"/>" class="active"><i class="fa fa-list-alt fa-fw"></i> <spring:message code="categories"/></a>
                 </li>
                 <li>
-                    <a href="<c:url value="../product/"/>" class="active"><i class="fa fa-inbox fa-fw"></i> <spring:message code="products"/></a>
+                    <a href="<c:url value="/product/"/>" class="active"><i class="fa fa-inbox fa-fw"></i> <spring:message code="products"/></a>
                 </li>
                 <li>
                     <a href="<c:url value="/shopping_list" />" class="active"><i class="fa fa-archive fa-fw"></i> <spring:message code="shoppingList"/></a>
                 </li>
                 <li>
-                    <a href="<c:url value="../stores/"/>" class="active"><i class="fa fa-globe fa-fw"></i> <spring:message code="stores"/></a>
+                    <a href="<c:url value="/stores/"/>" class="active"><i class="fa fa-globe fa-fw"></i> <spring:message code="stores"/></a>
                 </li>
                 <li>
-                    <a href="<c:url value="../storage/"/>" class="active"><i class="fa fa-archive fa-fw"></i> <spring:message code="myStorage"/></a>
+                    <a href="<c:url value="/storage/"/>" class="active"><i class="fa fa-archive fa-fw"></i> <spring:message code="myStorage"/></a>
                 </li>
                 <li>
-                    <a href="<c:url value="../cart/"/>" class="active"><i class="fa fa-shopping-cart"></i> <spring:message code="cart"/></a>
+                    <a href="<c:url value="/cart"/>" class="active"><i class="fa fa-shopping-cart"></i> <spring:message code="cart"/></a>
                 </li>
                 <li>
-                    <a href="<c:url value="../history/"/>" class="active"><i class="fa fa-calendar"></i> <spring:message code="history"/></a>
+                    <a href="<c:url value="/history"/>" class="active"><i class="fa fa-calendar"></i> <spring:message code="history"/></a>
                 </li>
                 <c:if test="${'ROLE_PREMIUM' == userService.getCurrentUser().getRole().getAuthority()}">
                     <li>
-                        <a href="<c:url value="../analytics/"/>" class="active"><i class="fa fa-line-chart"></i> <spring:message code="analytics"/></a>
+                        <a href="<c:url value="/analytics"/>" class="active"><i class="fa fa-line-chart"></i> <spring:message code="analytics"/></a>
                     </li>
                 </c:if>
                 <li>
-                    <a href="<c:url value="../goShoppingStores/"/>"><button type="button" class="btn btn-outline btn-primary"><spring:message code="goShopping"/></button></a>
+                    <a href="<c:url value="/goShoppingStores/"/>"><button type="button" class="btn btn-outline btn-primary"><spring:message code="goShopping"/></button></a>
                 </li>
 
             </ul>

@@ -6,8 +6,8 @@ import org.apache.commons.collections.CollectionUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -19,8 +19,7 @@ import java.util.List;
  */
 @Controller
 @RequestMapping("/history")
-public class HistoryController{
-
+public class HistoryController {
     private final HistoryService historyService;
 
     public HistoryController(HistoryService historyService) {
@@ -49,9 +48,9 @@ public class HistoryController{
      * @param historyId - history unique identifier
      * @return string with appropriate view name
      */
-    @GetMapping("/delete")
-    public String deleteHistory(@RequestParam int historyId) {
+    @GetMapping("/delete/{historyId}")
+    public String deleteHistory(@PathVariable int historyId) {
         historyService.deleteHistory(historyId);
-        return "redirect: /history/";
+        return "redirect:/history";
     }
 }
