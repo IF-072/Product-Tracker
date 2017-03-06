@@ -44,11 +44,9 @@
                         </td>
                         <td class="text-center">
                             <div class="input-append">
-                                <form method="GET" action="delete">
-                                    <input type="hidden" name="historyId" value="${history.id}"/>
-                                    <a class="text-center" href="<c:url value="/history/delete"/>"
+                                    <a class="text-center" purpose="deleteRecord"
+                                       href="<c:url value="/history/delete/${history.id}"/>"
                                        productName="${history.product.name}"><i class="fa fa-trash-o fa-fw"></i></a>
-                                </form>
                             </div>
                         </td>
                         </c:forEach>
@@ -59,21 +57,3 @@
     </div>
 </div>
 
-<!-- Modal window for delete history-->
-<div id="modalDeleteHistory" class="modal fade" tabindex="-1">
-    <div class="modal-dialog modal-sm">
-        <div class="modal-content">
-            <div class="modal-header alert alert-danger" role="alert">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title">Delete</h4>
-            </div>
-            <div class="modal-body text-center">
-                Do you really want to delete "<b class="productName"></b>" from your history?
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-primary btn-confirm">Yes</button>
-            </div>
-        </div>
-    </div>
-</div>

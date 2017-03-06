@@ -21,11 +21,13 @@ $(document).ready(function () {
      */
     $("a[purpose='deleteProduct']").click(function () {
         var form = $("#purchaseDeleteForm" + $(this).attr("number"));
-        form.attr("action", "delete");
+        var href = $(this).attr("href");
+        form.attr("action", href);
         form.attr("method", "GET");
         var productName = $(this).attr("productName");
-        $("#modalDeleteProduct").modal('show');
+        $("#modalDeleteConfirm").modal('show');
         $("b.productName").text(productName);
+        $("span.pageName").text("cart");
         $(".btn-confirm").click(function () {
             form.submit();
         });

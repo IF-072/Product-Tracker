@@ -1,19 +1,18 @@
 package com.softserve.if072.restservice.service;
 
-import com.softserve.if072.common.model.History;
 import com.softserve.if072.common.model.ShoppingList;
 import com.softserve.if072.common.model.Storage;
+import com.softserve.if072.common.model.dto.HistoryDTO;
 import com.softserve.if072.common.model.dto.StorageDTO;
-import com.softserve.if072.restservice.exception.DataNotFoundException;
 import com.softserve.if072.restservice.dao.mybatisdao.StorageDAO;
+import com.softserve.if072.restservice.exception.DataNotFoundException;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.apache.commons.collections.CollectionUtils;
 
 import java.sql.Timestamp;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -66,7 +65,7 @@ public class StorageService {
 
         Storage storageDB = storageDAO.getByProductID(storage.getProduct().getId());
         int diff;
-        if ((diff = storageDB.getAmount() - storage.getAmount()) > 0) {
+        if((diff = storageDB.getAmount() - storage.getAmount()) > 0) {
             addToHistory(storage, diff);
         }
         if (storage.getEndDate() != null) {
@@ -86,13 +85,13 @@ public class StorageService {
         }
 
         Storage storage = storageDAO.getByProductID(storageDTO.getProductId());
-        if (storage == null) {
+        if(storage == null){
             LOGGER.error(String.format("Storage with product id %d doesn't exist", storageDTO.getProductId()));
             return;
         }
 
         int diff;
-        if ((diff = storage.getAmount() - storageDTO.getAmount()) > 0) {
+        if((diff = storage.getAmount() - storageDTO.getAmount()) > 0) {
             addToHistory(storage, diff);
         }
         storage.setAmount(storageDTO.getAmount());
@@ -112,13 +111,14 @@ public class StorageService {
         }
     }
 
-    private void addToHistory(Storage storage, int diff) {
-        History history = new History();
-        history.setAmount(diff);
-        history.setUser(storage.getUser());
-        history.setProduct(storage.getProduct());
-        history.setUsedDate(new Timestamp(System.currentTimeMillis()));
-        historyService.insert(history);
+    private void addToHistory(Storage storage, int diff){
+            HistoryDTO historyDTO = new HistoryDTO.Builder()
+                    .userId(storage.getUser().getId())
+                    .productId(storage.getProduct().getId())
+                    .amount(diff)
+                    .usedDate(new Timestamp(System.currentTimeMillis()))
+                    .build();
+            historyService.insert(historyDTO);
 
     }
 }

@@ -20,7 +20,7 @@
                 <div class="panel-footer">
                     <div class="btn-group btn-group-justified" role="group" aria-label="...">
                         <div class="btn-group" role="group">
-                            <a href="<c:url value='/'/>">
+                            <a href="<c:url value='/home'/>">
                                 <button type="button" class="btn btn-default">Ok</button>
                             </a>
                         </div>
