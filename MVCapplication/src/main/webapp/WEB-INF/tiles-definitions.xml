@@ -318,6 +318,7 @@
     <definition name="cart" extends="mainLayout">
         <put-attribute name="title" value="Cart"/>
         <put-attribute name="body" value="/WEB-INF/views/cart/cart.jsp"/>
+        <put-attribute name="dialog" value="/WEB-INF/templates/deleteDialog.jsp"/>
 
         <put-list-attribute name="stylesheets" inherit="true">
             <add-attribute value="/css/cart-history.css"/>
@@ -336,6 +337,7 @@
     <definition name="history" extends="mainLayout">
         <put-attribute name="title" value="History"/>
         <put-attribute name="body" value="/WEB-INF/views/history/history.jsp"/>
+        <put-attribute name="dialog" value="/WEB-INF/templates/deleteDialog.jsp"/>
 
         <put-list-attribute name="stylesheets" inherit="true">
             <add-attribute value="/css/cart-history.css"/>

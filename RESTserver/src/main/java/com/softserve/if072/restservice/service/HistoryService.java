@@ -1,6 +1,7 @@
 package com.softserve.if072.restservice.service;
 
 import com.softserve.if072.common.model.History;
+import com.softserve.if072.common.model.dto.HistoryDTO;
 import com.softserve.if072.restservice.dao.mybatisdao.HistoryDAO;
 import com.softserve.if072.restservice.exception.DataNotFoundException;
 import org.apache.logging.log4j.LogManager;
@@ -60,15 +61,15 @@ public class HistoryService {
         return histories;
     }
 
-    public void insert(History history) {
-        historyDAO.insert(history);
-        LOGGER.info(historySuccessfullyOperation, history.getId(), "inserted into");
+    public void insert(HistoryDTO historyDTO) {
+        historyDAO.insert(historyDTO);
+        LOGGER.info(historySuccessfullyOperation, historyDTO.getId(), "inserted into");
     }
 
-    public void update(History history) {
-        if (historyDAO.update(history) == 0) {
-            throw new DataNotFoundException(String.format(historyNotFound, "UPDATE", history.getId()));
+    public void update(HistoryDTO historyDTO) {
+        if (historyDAO.update(historyDTO) == 0) {
+            throw new DataNotFoundException(String.format(historyNotFound, "UPDATE", historyDTO.getId()));
         }
-        LOGGER.info(historySuccessfullyOperation, history.getId(), "updated in");
+        LOGGER.info(historySuccessfullyOperation, historyDTO.getId(), "updated in");
     }
 }

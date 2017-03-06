@@ -1,7 +1,7 @@
 <%--
     User: Pavlo Bendus;
 --%>
-
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!-- Header -->
 <div class="row">
     <div class="col-lg-12">
@@ -25,7 +25,7 @@
                     </div>
                 </div>
             </div>
-            <a href="/cart">
+            <a href="<c:url value="/cart"/>">
                 <div class="panel-footer">
                     <span class="pull-left">View Details</span>
                     <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
@@ -47,7 +47,7 @@
                     </div>
                 </div>
             </div>
-            <a href="/storage/">
+            <a href="<c:url value="/storage"/>">
                 <div class="panel-footer">
                     <span class="pull-left">View Details</span>
                     <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
@@ -69,7 +69,7 @@
                     </div>
                 </div>
             </div>
-            <a href="/shopping_list">
+            <a href="<c:url value="/shopping_list"/>">
                 <div class="panel-footer">
                     <span class="pull-left">View Details</span>
                     <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>

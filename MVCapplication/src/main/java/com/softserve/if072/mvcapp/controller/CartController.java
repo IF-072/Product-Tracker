@@ -22,7 +22,6 @@ import java.util.List;
 public class CartController {
     private final CartService cartService;
 
-
     public CartController(CartService cartService) {
         this.cartService = cartService;
     }
@@ -53,7 +52,7 @@ public class CartController {
     @PostMapping("/purchase")
     public String productPurchase(CartDTO cartDTO) {
         cartService.productPurchase(cartDTO);
-        return "redirect: /cart/";
+        return "redirect:/cart";
     }
 
     /**
@@ -65,6 +64,6 @@ public class CartController {
     @GetMapping("/delete")
     public String deleteProductFromCart(CartDTO cartDTO) {
         cartService.deleteProductFromCart(cartDTO);
-        return "redirect: /cart/";
+        return "redirect:/cart";
     }
 }
