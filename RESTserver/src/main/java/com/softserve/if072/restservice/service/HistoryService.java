@@ -26,6 +26,8 @@ public class HistoryService {
     private String historyNotFound;
     @Value("${history.SuccessfullyOperation}")
     private String historySuccessfullyOperation;
+    @Value("${history.deleteAllSuccessfullyOperation}")
+    private String deleteAllSuccessfullyOperation;
 
     public HistoryService(HistoryDAO historyDAO) {
         this.historyDAO = historyDAO;
@@ -53,6 +55,15 @@ public class HistoryService {
             throw new DataNotFoundException(String.format(historyNotFound, "DELETE", historyId));
         }
         LOGGER.info(historySuccessfullyOperation, historyId, "deleted from");
+    }
+
+    /**
+     * Make request to a History DTO for deleting all records from the history of current user
+     * @param userId - current user unique identifier
+     */
+    public void deleteAll(int userId) {
+        int count=historyDAO.deleteAll(userId);
+        LOGGER.info(deleteAllSuccessfullyOperation, count, userId);
     }
 
     public List<History> getByProductId(int userID, int productID) {

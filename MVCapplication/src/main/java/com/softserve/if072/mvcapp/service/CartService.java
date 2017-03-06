@@ -6,7 +6,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
@@ -46,7 +45,7 @@ public class CartService {
     public List<Cart> getByUserId() {
         int userId = userService.getCurrentUser().getId();
         LOGGER.info(cartRequestReceive, "retrieving", "all cart records", userId);
-        List<Cart> carts = restTemplate.getForObject(String.format(restCartURL, userId), List.class);
+        List<Cart> carts = restTemplate.getForObject(restCartURL, List.class, userId);
         LOGGER.info(cartSuccessfullyOperation, "retrieving", "all cart records", userId);
         return carts;
     }
@@ -58,7 +57,7 @@ public class CartService {
      */
     public void productPurchase(CartDTO cartDTO) {
         LOGGER.info(cartRequestReceive, "purchasing the product  with id", cartDTO.getProductId(), cartDTO.getUserId());
-        restTemplate.put(String.format(restCartPurchaseURL, cartDTO.getUserId()), cartDTO);
+        restTemplate.put(restCartPurchaseURL, cartDTO, cartDTO.getUserId(), cartDTO.getProductId());
         LOGGER.info(cartSuccessfullyOperation, "purchasing the product  with id", cartDTO.getProductId(), cartDTO.getUserId());
     }
 
@@ -67,10 +66,19 @@ public class CartService {
      *
      * @param cartDTO - an object with required information for the product delete
      */
-    @GetMapping("/delete")
     public void deleteProductFromCart(CartDTO cartDTO) {
         LOGGER.info(cartRequestReceive, "deleting the product with id", cartDTO.getProductId(), cartDTO.getUserId());
-        restTemplate.delete(String.format(restCartDeleteURL, cartDTO.getUserId(), cartDTO.getProductId()));
+        restTemplate.delete(restCartDeleteURL, cartDTO.getUserId(), cartDTO.getProductId());
         LOGGER.info(cartSuccessfullyOperation, "deleting the product with id", cartDTO.getProductId(), cartDTO.getUserId());
+    }
+
+    /**
+     * Make request to a REST server for deleting all products from the cart of current user
+     */
+    public void deleteAllProductsFromCart() {
+        int userId = userService.getCurrentUser().getId();
+        LOGGER.info(cartRequestReceive, "deleting ", "all products", userId);
+        restTemplate.delete(restCartURL, userId);
+        LOGGER.info(cartSuccessfullyOperation, "deleting ", "all products", userId);
     }
 }

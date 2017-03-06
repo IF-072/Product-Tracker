@@ -5,7 +5,6 @@ import com.softserve.if072.common.model.Storage;
 import com.softserve.if072.common.model.dto.HistoryDTO;
 import com.softserve.if072.common.model.dto.StorageDTO;
 import com.softserve.if072.restservice.dao.mybatisdao.StorageDAO;
-import com.softserve.if072.restservice.exception.DataNotFoundException;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -111,12 +110,11 @@ public class StorageService {
     }
 
     private void addToHistory(Storage storage, int diff) {
-        HistoryDTO historyDTO = new HistoryDTO.Builder()
-                .userId(storage.getUser().getId())
-                .productId(storage.getProduct().getId())
-                .amount(diff)
-                .usedDate(new Timestamp(System.currentTimeMillis()))
-                .build();
+        HistoryDTO historyDTO = new HistoryDTO();
+        historyDTO.setUserId(storage.getUser().getId());
+        historyDTO.setProductId(storage.getProduct().getId());
+        historyDTO.setAmount(diff);
+        historyDTO.setUsedDate(new Timestamp(System.currentTimeMillis()));
         historyService.insert(historyDTO);
 
     }

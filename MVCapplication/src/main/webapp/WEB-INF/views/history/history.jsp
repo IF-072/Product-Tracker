@@ -3,10 +3,11 @@
 --%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"  %>
 <!-- Header -->
 <div class="row">
     <div class="col-lg-12">
-        <h1 class="page-header">My History</h1>
+        <h1 class="page-header"><spring:message code="history.myHistory"/></h1>
     </div>
 </div>
 
@@ -19,12 +20,12 @@
                     <thead>
                     <tr>
                         <th class="text-center table-number-width">#</th>
-                        <th class="text-center">Product</th>
-                        <th class="text-center">Description</th>
-                        <th class="text-center">Category</th>
-                        <th class="text-center table-toBeBought-width">Amount</th>
-                        <th class="text-center table-bought-width">Used Date</th>
-                        <th class="text-center table-delete-width">Delete</th>
+                        <th class="text-center"><spring:message code="product"/></th>
+                        <th class="text-center"><spring:message code="product.description"/></th>
+                        <th class="text-center"><spring:message code="product.category"/></th>
+                        <th class="text-center table-toBeBought-width"><spring:message code="amount"/></th>
+                        <th class="text-center table-bought-width"><spring:message code="history.usedDate"/></th>
+                        <th class="text-center table-delete-width"><spring:message code="delete"/></th>
                     </tr>
                     </thead>
                     <tbody>
@@ -46,12 +47,18 @@
                             <div class="input-append">
                                     <a class="text-center" purpose="deleteRecord"
                                        href="<c:url value="/history/delete/${history.id}"/>"
-                                       productName="${history.product.name}"><i class="fa fa-trash-o fa-fw"></i></a>
+                                       deleteName="${history.product.name}"><i class="fa fa-trash-o fa-fw"></i></a>
+                                <c:set var="pageName" value="history" scope="request"/>
                             </div>
                         </td>
                         </c:forEach>
                     </tbody>
                 </table>
+            </div>
+            <div class="panel-footer text-right">
+                <button type="button" class="btn btn-primary" id="btn-deleteAll" href="<c:url value="/history/delete"/>"
+                        deleteName="<spring:message code="deleteDialog.messageDeleteAllHistory"/>">
+                    <spring:message code="deleteAll"/></button>
             </div>
         </div>
     </div>

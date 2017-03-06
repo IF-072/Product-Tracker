@@ -58,6 +58,16 @@ public class HistoryController {
         historyService.delete(historyId);
     }
 
+    /**
+     * Handles requests for deleting all records from the history of current user
+     */
+    @PreAuthorize("#userId == authentication.user.id")
+    @DeleteMapping()
+    @ResponseStatus(value = HttpStatus.OK)
+    public void deleteAll(@PathVariable int userId) {
+        historyService.deleteAll(userId);
+    }
+
     @PostAuthorize("#history != null && #history.user != null"
             + " && #history.user.id == authentication.user.id")
     @GetMapping("/products/{productId}")

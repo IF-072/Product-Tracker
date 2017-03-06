@@ -67,7 +67,7 @@ public interface HistoryDAO {
      * Select a record from the history table with specific id identifier
      * *
      *
-     * @param historyId - unique history identifier
+     * @param historyId - unique history record identifier
      * @return history with specific id identifier
      */
     @Select("SELECT id, user_id, product_id, amount, used_date FROM history " +
@@ -87,23 +87,35 @@ public interface HistoryDAO {
      * Insert new record into the history table
      *
      * @param historyDTO - item to be inserted to the history table
+     * @return number of inserted records
      */
     @Insert("INSERT INTO history(user_id, product_id, amount, used_date) values(#{userId}, #{productId}, #{amount}, #{usedDate})")
-    void insert(HistoryDTO historyDTO);
+    int insert(HistoryDTO historyDTO);
 
     /**
      * Update amount for current history.
      *
      * @param historyDTO - item to be updated in the history table
+     * @return number of updated records
      */
     @Update("UPDATE history SET amount=#{amount} WHERE id=#{id}")
     int update(HistoryDTO historyDTO);
 
     /**
-     * Delete current history from the history table
+     * Delete current history record from the history table
      *
-     * @param historyId unique history identifier that is going to be deleted from the history table
+     * @param historyId unique history record identifier that is going to be deleted from the history table
+     * @return number of deleted records
      */
     @Delete("DELETE FROM history WHERE id=#{historyId}")
     int delete(int historyId);
+
+    /**
+     * Delete all records from the history of current user
+     *
+     * @param userId - unique user's identifier
+     * @return number of deleted records
+     */
+    @Delete("DELETE FROM history WHERE user_id=#{userId}")
+    int deleteAll(int userId);
 }
