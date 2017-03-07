@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -52,5 +53,19 @@ public class UserController {
         User user = userService.getById(id);
 
         return new ResponseEntity<>(user, HttpStatus.OK);
+    }
+
+    /**
+     * Allows to update user details
+     *
+     * @param userId user's id
+     * @param user new user details
+     */
+    @PreAuthorize("#userId == authentication.user.id && #user != null && #user.id == #userId")
+    @RequestMapping(value = "/user/{userId}/update", method = RequestMethod.POST)
+    public ResponseEntity<?> updateUser(@PathVariable("userId") int userId, @RequestBody User user) throws DataNotFoundException {
+        LOG.debug("Updating user with id = {}", userId);
+        userService.update(user);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

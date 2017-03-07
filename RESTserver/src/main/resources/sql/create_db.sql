@@ -46,6 +46,7 @@ CREATE TABLE IF NOT EXISTS `user` (
   `password` VARCHAR(64) NOT NULL,
   `is_enabled` TINYINT(1) NOT NULL,
   `role_id` INT(11) NOT NULL,
+  `premium_expires_time` INT(11) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`, `role_id`),
   CONSTRAINT `user_roleID_fk`
     FOREIGN KEY (`role_id`)
