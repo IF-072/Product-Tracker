@@ -4,6 +4,7 @@ import com.softserve.if072.common.model.Cart;
 import com.softserve.if072.common.model.Product;
 import com.softserve.if072.common.model.ShoppingList;
 import com.softserve.if072.common.model.Store;
+import com.softserve.if072.common.model.User;
 import com.softserve.if072.restservice.dao.mybatisdao.CartDAO;
 import com.softserve.if072.restservice.dao.mybatisdao.ShoppingListDAO;
 import com.softserve.if072.restservice.dao.mybatisdao.StoreDAO;
@@ -42,42 +43,40 @@ public class GoShoppingServiceTest {
     private StoreDAO storeDAO;
     @Mock
     private CartDAO cartDAO;
-    @Mock
-    private Product product;
-    @Mock
-    private Product product2;
-    @Mock
-    private Product product3;
-    @Mock
-    private Product product4;
-    @Mock
-    private Store store;
-    @Mock
-    private ShoppingList shoppingList;
     @InjectMocks
     private GoShoppingService goShoppingService;
     private List<Product> products;
+    private Product[] arr;
+    private Store store;
+    private int userId;
 
     @Before
     public void setup(){
-        products = new ArrayList<>(Arrays.asList(product, product2, product3));
+        arr = new Product[]{new Product(), new Product(), new Product(), new Product()};
+        int i = 1;
+        for (Product product : arr) {
+            product.setId(i++);
+            product.setName(Integer.toString(i));
+        }
+        products = new ArrayList<>(Arrays.asList(arr[0], arr[1], arr[2]));
+        userId = 2;
+        store = new Store();
     }
 
     @Test
     public void testGetStoreByUserId(){
         Store store1 = new Store();
-        store1.setProducts(new ArrayList<>(Arrays.asList(product, product2)));
+        store1.setProducts(new ArrayList<>(Arrays.asList(arr[0], arr[1])));
         Store store2 = new Store();
-        store2.setProducts(new ArrayList<>(Arrays.asList(product3, product4)));
+        store2.setProducts(new ArrayList<>(Arrays.asList(arr[2], arr[3])));
 
-        int userId = 2;
         when(cartDAO.getByUserId(userId)).thenReturn(null);
         when(shoppingListDAO.getProductsByUserId(userId)).thenReturn(products);
         when(storeDAO.getAllByUser(userId)).thenReturn(new ArrayList<>(Arrays.asList(store1, store2)));
 
         List<Store> result = goShoppingService.getStoreByUserId(userId);
-        assertTrue(store1.getProducts().equals(result.get(0).getProducts()));
-        assertTrue(new ArrayList<Product>(Arrays.asList(product3)).equals(result.get(1).getProducts()));
+        assertTrue(new ArrayList<Product>(Arrays.asList(arr[0], arr[1])).equals(result.get(0).getProducts()));
+        assertTrue(new ArrayList<Product>(Arrays.asList(arr[2])).equals(result.get(1).getProducts()));
 
         verify(cartDAO, times(1)).getByUserId(userId);
         verify(shoppingListDAO, times(1)).getProductsByUserId(userId);
@@ -86,7 +85,6 @@ public class GoShoppingServiceTest {
 
     @Test
     public void testGetStoreByUserId_ShouldReturnNull(){
-        int userId = 2;
         when(cartDAO.getByUserId(userId)).thenReturn(null);
         when(shoppingListDAO.getProductsByUserId(userId)).thenReturn(null);
 
@@ -116,10 +114,10 @@ public class GoShoppingServiceTest {
         int userId = 2;
         int storeId = 3;
         ShoppingList[] args = {
-                new ShoppingList(null, product, 1),
-                new ShoppingList(null, product2, 1),
-                new ShoppingList(null, product3, 1),
-                new ShoppingList(null, product4, 1)
+                new ShoppingList(null, arr[0], 1),
+                new ShoppingList(null, arr[1], 1),
+                new ShoppingList(null, arr[2], 1),
+                new ShoppingList(null, arr[3], 1)
         };
         List<ShoppingList> selected = new ArrayList<>(Arrays.asList(args[0], args[1], args[2]));
         List<ShoppingList> shoppingLists = new ArrayList<>(selected);
@@ -141,7 +139,6 @@ public class GoShoppingServiceTest {
 
     @Test(expected = DataNotFoundException.class)
     public void testGetProducts_ShouldThrowException(){
-        int userId = 2;
         int storeId = 3;
 
         when(storeDAO.getProductsByStoreId(storeId, userId)).thenReturn(null);

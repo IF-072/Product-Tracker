@@ -3,7 +3,10 @@ package com.softserve.if072.common.model;
 import java.sql.Date;
 
 /**
- * Created by dyndyn on 17.01.2017.
+ * The Storage class stores information about product, its estimated time of ending
+ * and  amount that user contain in his storage
+ *
+ * @author Roman Dyndyn
  */
 public class Storage {
     private User user;

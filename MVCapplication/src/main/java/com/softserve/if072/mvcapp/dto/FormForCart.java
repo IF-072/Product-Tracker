@@ -9,7 +9,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by dyndyn on 15.02.2017.
+ * The FormForCart class is used to hold information from form in goShoppingProducts.jsp
+ *
+ * @author Roman Dyndyn
  */
 public class FormForCart {
     private List<Cart> carts;
