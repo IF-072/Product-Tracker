@@ -31,6 +31,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.forwardedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -70,6 +71,7 @@ public class GoShoppingPagesControllerTest {
         when(userService.getCurrentUser()).thenReturn(user);
         mockMvc.perform(get("/goShoppingStores"))
                 .andExpect(status().isOk())
+                .andExpect(forwardedUrl("/WEB-INF/views/goShoppingStores.jsp"))
                 .andExpect(view().name("goShoppingStores"))
                 .andExpect(model().attributeExists("stores"))
                 .andExpect(model().attribute("stores", hasSize(2)));
@@ -86,6 +88,7 @@ public class GoShoppingPagesControllerTest {
         mockMvc.perform(post("/goShoppingProducts")
                 .param("stores", "1"))
                 .andExpect(status().isOk())
+                .andExpect(forwardedUrl("/WEB-INF/views/goShoppingProducts.jsp"))
                 .andExpect(view().name("goShoppingProducts"))
                 .andExpect(model().attributeExists("selected"))
                 .andExpect(model().attributeExists("remained"))
@@ -120,7 +123,7 @@ public class GoShoppingPagesControllerTest {
         InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
 
         viewResolver.setViewClass(JstlView.class);
-        viewResolver.setPrefix("/WEB-INF/jsp/");
+        viewResolver.setPrefix("/WEB-INF/views/");
         viewResolver.setSuffix(".jsp");
 
         return viewResolver;

@@ -27,6 +27,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.forwardedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
@@ -56,7 +57,7 @@ public class StoragePageControllerTest {
     @Before
     public void setup() throws ClassNotFoundException, NoSuchMethodException {
         mockMvc = standaloneSetup(storagePageController)
-                .setSingleView(new InternalResourceView("/WEB-INF/views/cart/storage.jsp"))
+                .setSingleView(new InternalResourceView("/WEB-INF/views/storage.jsp"))
                 .build();
     }
 
@@ -68,6 +69,7 @@ public class StoragePageControllerTest {
         when(user.getId()).thenReturn(1);
         mockMvc.perform(get("/storage"))
                 .andExpect(status().isOk())
+                .andExpect(forwardedUrl("/WEB-INF/views/storage.jsp"))
                 .andExpect(view().name("storage"))
                 .andExpect(model().attributeExists("list"))
                 .andExpect(model().attribute("list", hasSize(3)))
