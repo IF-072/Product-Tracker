@@ -93,7 +93,6 @@ public class StoragePageControllerTest {
 
     @Test
     public void testUpdateAmount_ShouldReturnValidationProductMessage() throws Exception {
-        when(userService.getCurrentUser()).thenReturn(user);
         MvcResult result = mockMvc.perform(post("/storage/update")
                 .param("amount", "1")
                 .param("productId", "0"))
@@ -105,7 +104,6 @@ public class StoragePageControllerTest {
 
     @Test
     public void testUpdateAmount_ShouldReturnValidationAmountMessage() throws Exception {
-        when(userService.getCurrentUser()).thenReturn(user);
         MvcResult result = mockMvc.perform(post("/storage/update")
                 .param("amount", "-1")
                 .param("productId", "1"))
@@ -117,7 +115,6 @@ public class StoragePageControllerTest {
 
     @Test
     public void testUpdateAmount_ShouldReturnValidationTwoMessage() throws Exception {
-        when(userService.getCurrentUser()).thenReturn(user);
         MvcResult result = mockMvc.perform(post("/storage/update")
                 .param("amount", "-1")
                 .param("productId", "0"))
