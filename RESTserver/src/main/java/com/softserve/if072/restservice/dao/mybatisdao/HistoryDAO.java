@@ -3,6 +3,7 @@ package com.softserve.if072.restservice.dao.mybatisdao;
 import com.softserve.if072.common.model.History;
 import com.softserve.if072.common.model.Product;
 import com.softserve.if072.common.model.User;
+import com.softserve.if072.common.model.dto.HistoryDTO;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.One;
@@ -26,7 +27,7 @@ public interface HistoryDAO {
     /**
      * Select all records from the history table that belong to specific user
      *
-     * @param userId unique user's identifier
+     * @param userId - unique user's identifier
      * @return list of all history items that belong to specific user
      */
     @Select("SELECT id, user_id, product_id, amount, used_date FROM history " +
@@ -46,7 +47,7 @@ public interface HistoryDAO {
      * Select all records from the history table that belong to specific user
      * and specific product
      *
-     * @param productId unique product identifier
+     * @param productId - unique product identifier
      * @return list of all history items that belong to specific user and specific product
      */
     @Select("SELECT id, user_id, product_id, amount, used_date FROM history " +
@@ -66,7 +67,7 @@ public interface HistoryDAO {
      * Select a record from the history table with specific id identifier
      * *
      *
-     * @param historyId unique history identifier
+     * @param historyId - unique history identifier
      * @return history with specific id identifier
      */
     @Select("SELECT id, user_id, product_id, amount, used_date FROM history " +
@@ -85,18 +86,18 @@ public interface HistoryDAO {
     /**
      * Insert new record into the history table
      *
-     * @param history item to be inserted to the history table
+     * @param historyDTO - item to be inserted to the history table
      */
-    @Insert("INSERT INTO history(user_id, product_id, amount, used_date) values(#{user.id}, #{product.id}, #{amount}, #{usedDate})")
-    void insert(History history);
+    @Insert("INSERT INTO history(user_id, product_id, amount, used_date) values(#{userId}, #{productId}, #{amount}, #{usedDate})")
+    void insert(HistoryDTO historyDTO);
 
     /**
      * Update amount for current history.
      *
-     * @param history item to be updated in the history table
+     * @param historyDTO - item to be updated in the history table
      */
-    @Update("UPDATE history SET amount=#{amount} WHERE user_id=#{user.id} AND product_id=#{product.id} AND used_date=#{usedDate}")
-    int update(History history);
+    @Update("UPDATE history SET amount=#{amount} WHERE id=#{id}")
+    int update(HistoryDTO historyDTO);
 
     /**
      * Delete current history from the history table

@@ -1,19 +1,17 @@
-package com.softserve.if072.mvcapp.controller;
+package com.softserve.if072.mvcapp.service;
 
 import com.softserve.if072.common.model.User;
+import com.softserve.if072.mvcapp.controller.ExceptionHandlerController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
-/**
- * Abstract Controller class that provides access to RestTemplate bean and current logged-in user instance.
- * Should be extended by all the controllers which have access to restricted service URLs
- *
- * @author Igor Parada
- */
+@Service
+public class UserService {
 
-abstract public class BaseController {
+    private RestTemplate restTemplate;
 
     @Value("${application.authenticationCookieName}")
     private String tokenHeaderName;
@@ -22,10 +20,8 @@ abstract public class BaseController {
     private String getCurrentUserURL;
 
     @Autowired
-    protected RestTemplate template;
-
-    protected RestTemplate getRestTemplate(){
-          return template;
+    public UserService(RestTemplate restTemplate) {
+        this.restTemplate = restTemplate;
     }
 
     /**
@@ -34,12 +30,8 @@ abstract public class BaseController {
      *
      * @return current User instance
      */
-    protected User getCurrentUser(){
-        RestTemplate restTemplate = getRestTemplate();
+    public User getCurrentUser(){
         User user = restTemplate.getForObject(getCurrentUserURL, User.class);
         return user;
     }
-
-
-
 }

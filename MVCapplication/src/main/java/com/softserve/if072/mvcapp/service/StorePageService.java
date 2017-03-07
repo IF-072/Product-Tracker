@@ -17,7 +17,10 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by Nazar Vynnyk
+ * The class contains methods that handle the http requests from the MVC Application and send requests to REST
+ * Application
+ *
+ * @author Nazar Vynnyk
  */
 
 @Service
@@ -31,9 +34,6 @@ public class StorePageService {
 
     @Value("${application.restProductURL}")
     private String productUrl;
-
-    @Value("${service.user.current}")
-    private String getCurrentUser;
 
     /**
      * Method receives from Rest Controller list of user stores
@@ -125,7 +125,6 @@ public class StorePageService {
         return productResult.getBody();
     }
 
-
     /**
      * Method gets wrapedProducts object which contains list of product id. This all products will be added to
      * store and saved in Database.
@@ -186,6 +185,59 @@ public class StorePageService {
         restTemplate.put(uri, store, Store.class);
     }
 
+    /**
+     * Method receives from Rest Controller store with the same name and address as by incoming store
+     *
+     * @param store store that has fields which we check for duplicates in database
+     * @param user  owner of store
+     * @return store from
+     */
+    public Store getStoreByNameAndUserId(Store store, User user) {
+        final String getStoreByNameAndUserIdUri = storeUrl + "/byName/" + user.getId();
+        ResponseEntity<Store> oldStore = restTemplate.postForEntity(getStoreByNameAndUserIdUri, store, Store.class);
+        if (oldStore.getBody() == null) {
+            return null;
+        } else {
+            return oldStore.getBody();
+        }
+    }
+
+    /**
+     * Method checks does exist store with such fields as user want to add and checks if the store is enabled
+     *
+     * @param store store that has fields which we check for duplicates
+     * @param user  owner of store
+     * @return true if received store from Rest controller exist and is enabled
+     */
+    public boolean alreadyExist(Store store, User user) {
+        Store existStore = getStoreByNameAndUserId(store, user);
+        if (existStore != null && existStore.isEnabled()) {
+            return store.getId() != existStore.getId();
+        }
+        return false;
+    }
+
+    /**
+     * Method checks does exist store with such fields as user want to add and checks if it was deleted
+     *
+     * @param store store that user adds
+     * @param user  owner of store
+     * @return true if received store from Rest controller exist and is not enabled
+     */
+    public boolean isDeleted(Store store, User user) {
+        Store existStore = getStoreByNameAndUserId(store, user);
+        return existStore != null && !existStore.isEnabled();
+    }
+
+    /**
+     * Method retrieves store after his deleting
+     *
+     * @param storeId store that is retrieving
+     */
+    public void retrieveStore(int storeId) {
+        final String uri = storeUrl + "/retrieve";
+        Store store = getStoreById(storeId);
+        restTemplate.put(uri, store, Store.class);
+    }
 
 }
-

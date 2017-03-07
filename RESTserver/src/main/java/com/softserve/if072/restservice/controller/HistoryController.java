@@ -1,9 +1,9 @@
 package com.softserve.if072.restservice.controller;
 
 import com.softserve.if072.common.model.History;
+import com.softserve.if072.common.model.dto.HistoryDTO;
 import com.softserve.if072.restservice.service.HistoryService;
 import org.apache.commons.collections.CollectionUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -20,17 +20,25 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 /**
- * The HistoryController class is used to mapping requests for
- * history resources
+ * The HistoryController class handles requests for cart resources
  *
  * @author Igor Kryviuk
  */
 @RestController
 @RequestMapping("api/users/{userId}/histories")
 public class HistoryController {
-    @Autowired
-    private HistoryService historyService;
+    private final HistoryService historyService;
 
+    public HistoryController(HistoryService historyService) {
+        this.historyService = historyService;
+    }
+
+    /**
+     * Handles requests for retrieving all history records for current user
+     *
+     * @param userId - current user unique identifier
+     * @return list of cart records or empty list
+     */
     @PreAuthorize("hasRole('ROLE_PREMIUM') && #userId == authentication.user.id")
     @GetMapping()
     @ResponseStatus(HttpStatus.OK)
@@ -38,6 +46,17 @@ public class HistoryController {
         return historyService.getByUserId(userId);
     }
 
+    /**
+     * Handles requests for deleting a record from the history of current user
+     *
+     * @param historyId - history unique identifier
+     */
+    @PreAuthorize("@historySecurityService.hasPermissionToAccess(#historyId)")
+    @DeleteMapping("/{historyId}")
+    @ResponseStatus(value = HttpStatus.OK)
+    public void delete(@PathVariable int historyId) {
+        historyService.delete(historyId);
+    }
 
     @PostAuthorize("hasRole('ROLE_PREMIUM') && #history != null && #history.user != null"
             + " && #history.user.id == authentication.user.id")
@@ -55,21 +74,14 @@ public class HistoryController {
     @PreAuthorize("#history != null && #history.user != null && #history.user.id == authentication.user.id")
     @PostMapping()
     @ResponseStatus(value = HttpStatus.CREATED)
-    public void insert(@RequestBody History history) {
-        historyService.insert(history);
+    public void insert(@RequestBody HistoryDTO historyDTO) {
+        historyService.insert(historyDTO);
     }
 
     @PreAuthorize("#history != null && #history.user != null && #history.user.id == authentication.user.id")
     @PutMapping()
     @ResponseStatus(value = HttpStatus.OK)
-    public void update(@RequestBody History history) {
-        historyService.update(history);
-    }
-
-    @PreAuthorize("@historySecurityService.hasPermissionToAccess(#historyId)")
-    @DeleteMapping("/{historyId}")
-    @ResponseStatus(value = HttpStatus.OK)
-    public void delete(@PathVariable int historyId) {
-        historyService.delete(historyId);
+    public void update(@RequestBody HistoryDTO historyDTO) {
+        historyService.update(historyDTO);
     }
 }

@@ -2,6 +2,7 @@
   Created by Igor Kryviuk
 --%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="sf" uri="http://www.springframework.org/tags/form" %>
 
 <!-- Header -->
 <div class="row">
@@ -40,31 +41,28 @@
                             <td class="text-center">
                                     ${cart.amount} ${cart.product.unit.name}
                             </td>
-                            <td class="text-center">
-                                <div class="input-append">
-                                    <form method="POST" action="bought">
-                                        <input type="hidden" name="userId" value="${cart.user.id}"/>
-                                        <input type="hidden" name="storeId" value="${cart.store.id}"/>
-                                        <input type="hidden" name="productId" value="${cart.product.id}"/>
-                                        <input class="span2 number table-input-number-width" id="appendedInputButton"
-                                               size="16" type="number" name="amount" min="1" value="${cart.amount}"/>
-                                        <input type="hidden" name="initialAmount" value="${cart.amount}"/>
-                                        <input class="span2" type="button" class="btn btn-default boughtOkBtn"
-                                               value="Ok"/>
-                                    </form>
-                                </div>
-                            </td>
-                            <td class="text-center">
-                                <div class="input-append">
-                                    <form method="GET" action="delete">
-                                        <input type="hidden" name="userId" value="${cart.user.id}"/>
-                                        <input type="hidden" name="productId" value="${cart.product.id}"/>
-                                        <input type="hidden" name="amount" value="${cart.amount}"/>
-                                        <a class="text-center" href="<c:url value="/cart/delete"/>"
-                                           productName="${cart.product.name}"><i class="fa fa-trash-o fa-fw"></i></a>
-                                    </form>
-                                </div>
-                            </td>
+                            <c:url var="purchase"  value="/cart/purchase"/>
+                            <sf:form method="POST" action="${purchase}" modelAttribute="cartDTO" id="purchaseDeleteForm${status.count}" >
+                                <td class="text-center">
+                                    <div class="input-append">
+                                        <sf:hidden path="userId" value="${cart.user.id}"/>
+                                        <sf:hidden path="storeId" value="${cart.store.id}"/>
+                                        <sf:hidden path="productId" value="${cart.product.id}"/>
+                                        <sf:input class="span2 number table-input-number-width"
+                                                  id="appendedInputButton"
+                                                  size="16" type="number" path="amount" min="1"
+                                                  value="${cart.amount}"/>
+                                        <sf:hidden path="initialAmount" value="${cart.amount}"/>
+                                        <sf:button class="span2">Ok</sf:button>
+                                    </div>
+                                </td>
+                                <td class="text-center">
+                                    <div class="input-append">
+                                        <a class="text-center" href="<c:url value="/cart/delete"/>" purpose="deleteProduct"
+                                           number="${status.count}" productName="${cart.product.name}"><i class="fa fa-trash-o fa-fw"></i></a>
+                                    </div>
+                                </td>
+                            </sf:form>
                         </tr>
                     </c:forEach>
                     </tbody>
@@ -73,24 +71,4 @@
         </div>
     </div>
 </div>
-
-<!-- Modal window for delete product-->
-<div id="modalDeleteProduct" class="modal fade" tabindex="-1">
-    <div class="modal-dialog modal-sm">
-        <div class="modal-content">
-            <div class="modal-header alert alert-danger" role="alert">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title">Delete</h4>
-            </div>
-            <div class="modal-body text-center">
-                Do you really want to delete "<b class="productName"></b>" from your cart?
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-primary btn-confirm">Yes</button>
-            </div>
-        </div>
-    </div>
-</div>
-
 

@@ -23,10 +23,10 @@ import javax.servlet.http.HttpServletResponse;
  * @author Igor Parada
  */
 @Controller
-@RequestMapping("/login")
-public class LoginController extends BaseController {
+@RequestMapping({"/", "/login"})
+public class LoginController {
 
-    @Value("${login.invalidCredentials}")
+    @Value("login.invalidCredentials")
     private String invalidCredentialsMessage;
 
     private LoginService loginService;

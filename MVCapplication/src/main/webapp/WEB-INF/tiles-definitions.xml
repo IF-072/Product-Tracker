@@ -37,6 +37,7 @@
             <add-attribute value="/css/metisMenu.css"/>
             <add-attribute value="/css/sb-admin-2.css"/>
             <add-attribute value="/css/font-awesome.css"/>
+            <add-attribute value="/css/languages.min.css" />
         </put-list-attribute>
 
         <put-list-attribute name="javascripts">
@@ -44,6 +45,7 @@
             <add-attribute value="/js/bootstrap.js"/>
             <add-attribute value="/js/metisMenu.js"/>
             <add-attribute value="/js/sb-admin-2.js"/>
+            <add-attribute value="/js/base.js"/>
         </put-list-attribute>
 
     </definition>
@@ -65,26 +67,34 @@
     </definition>
 
     <definition name="login" extends="mainLayout">
-        <put-attribute name="header" value=""/>
+        <put-attribute name="header" value="/WEB-INF/templates/loginHeader.jsp"/>
         <put-attribute name="title" value="Please Log In to continue"/>
         <put-attribute name="body" value="/WEB-INF/views/login.jsp"/>
+        <put-list-attribute name="stylesheets" inherit="true">
+            <add-attribute value="/css/login.css"/>
+        </put-list-attribute>
     </definition>
 
     <definition name="register" extends="mainLayout">
-        <put-attribute name="header" value=""/>
+        <put-attribute name="header" value="/WEB-INF/templates/loginHeader.jsp"/>
         <put-attribute name="title" value="Sign Up"/>
         <put-attribute name="body" value="/WEB-INF/views/register.jsp"/>
+        <put-list-attribute name="stylesheets" inherit="true">
+            <add-attribute value="/css/login.css"/>
+        </put-list-attribute>
     </definition>
 
     <definition name="product" extends="mainLayout">
         <put-attribute name="title" value="Product Tracker"/>
-        <put-attribute name="body" value="/WEB-INF/views/product.jsp"/>
+        <put-attribute name="body" value="/WEB-INF/views/product/product.jsp"/>
+        <put-attribute name="dialog" value="/WEB-INF/templates/dialog.jsp"/>
 
         <put-list-attribute name="stylesheets" inherit="true">
             <add-attribute value="/css/jquery-ui.css"/>
             <add-attribute value="/css/dataTables.bootstrap.css"/>
             <add-attribute value="/css/dataTables.responsive.css"/>
             <add-attribute value="/css/jquery.dataTables.css"/>
+            <add-attribute value="/css/product.css"/>
         </put-list-attribute>
 
         <put-list-attribute name="javascripts" inherit="true">
@@ -98,7 +108,7 @@
 
     <definition name="addProduct" extends="mainLayout">
         <put-attribute name="title" value="Product Tracker Project"/>
-        <put-attribute name="body" value="/WEB-INF/views/addProduct.jsp"/>
+        <put-attribute name="body" value="/WEB-INF/views/product/addProduct.jsp"/>
 
         <put-list-attribute name="stylesheets" inherit="true">
             <add-attribute value="/css/DataTables.bootstrap.css"/>
@@ -123,7 +133,7 @@
             <add-attribute value="/css/dataTables.bootstrap.css"/>
             <add-attribute value="/css/dataTables.responsive.css"/>
             <add-attribute value="/css/jquery.dataTables.css"/>
-            <add-attribute value="/css/category.css" />
+            <add-attribute value="/css/category.css"/>
         </put-list-attribute>
 
         <put-list-attribute name="javascripts" inherit="true">
@@ -131,7 +141,7 @@
             <add-attribute value="/js/jquery.dataTables.js"/>
             <add-attribute value="/js/dataTables.bootstrap.js"/>
             <add-attribute value="/js/dataTables.responsive.js"/>
-            <add-attribute value="/js/category.js" />
+            <add-attribute value="/js/category.js"/>
         </put-list-attribute>
     </definition>
 
@@ -149,11 +159,11 @@
     </definition>
 
     <definition name="addCategory" extends="mainLayout">
-        <put-attribute name="title" value="Product Tracker" />
-        <put-attribute name="body" value="/WEB-INF/views/category/addCategory.jsp" />
+        <put-attribute name="title" value="Product Tracker"/>
+        <put-attribute name="body" value="/WEB-INF/views/category/addCategory.jsp"/>
 
         <put-list-attribute name="stylesheets" inherit="true">
-            <add-attribute value = "/css/category.css" />
+            <add-attribute value="/css/category.css"/>
         </put-list-attribute>
     </definition>
 
@@ -169,6 +179,7 @@
     <definition name="allStores" extends="mainLayout">
         <put-attribute name="title" value="Product Tracker"/>
         <put-attribute name="body" value="/WEB-INF/views/store/allStores.jsp"/>
+        <put-attribute name="dialog" value="/WEB-INF/templates/dialog.jsp"/>
         <put-list-attribute name="stylesheets" inherit="true">
             <add-attribute value="/css/dataTables.bootstrap.css"/>
             <add-attribute value="/css/dataTables.responsive.css"/>
@@ -254,7 +265,7 @@
 
     <definition name="editProduct" extends="mainLayout">
         <put-attribute name="title" value="Product Tracker Project"/>
-        <put-attribute name="body" value="/WEB-INF/views/editProduct.jsp"/>
+        <put-attribute name="body" value="/WEB-INF/views/product/editProduct.jsp"/>
 
         <put-list-attribute name="stylesheets" inherit="true">
             <add-attribute value="/css/dataTables.bootstrap.css"/>
@@ -272,12 +283,20 @@
 
     <definition name="addImage" extends="mainLayout">
         <put-attribute name="title" value="Add image"/>
-        <put-attribute name="body" value="/WEB-INF/views/addImage.jsp"/>
+        <put-attribute name="body" value="/WEB-INF/views/product/addImage.jsp"/>
+
+        <put-list-attribute name="javascripts" inherit="true">
+            <add-attribute value="/js/image.js"/>
+        </put-list-attribute>
     </definition>
 
     <definition name="editImage" extends="mainLayout">
         <put-attribute name="title" value="Edit image"/>
-        <put-attribute name="body" value="/WEB-INF/views/editImage.jsp"/>
+        <put-attribute name="body" value="/WEB-INF/views/product/editImage.jsp"/>
+
+        <put-list-attribute name="javascripts" inherit="true">
+            <add-attribute value="/js/image.js"/>
+        </put-list-attribute>
     </definition>
 
     <definition name="goShoppingProducts" extends="mainLayout">
@@ -308,6 +327,7 @@
     <definition name="cart" extends="mainLayout">
         <put-attribute name="title" value="Cart"/>
         <put-attribute name="body" value="/WEB-INF/views/cart/cart.jsp"/>
+        <put-attribute name="dialog" value="/WEB-INF/templates/deleteDialog.jsp"/>
 
         <put-list-attribute name="stylesheets" inherit="true">
             <add-attribute value="/css/cart-history.css"/>
@@ -326,6 +346,7 @@
     <definition name="history" extends="mainLayout">
         <put-attribute name="title" value="History"/>
         <put-attribute name="body" value="/WEB-INF/views/history/history.jsp"/>
+        <put-attribute name="dialog" value="/WEB-INF/templates/deleteDialog.jsp"/>
 
         <put-list-attribute name="stylesheets" inherit="true">
             <add-attribute value="/css/cart-history.css"/>
@@ -342,17 +363,18 @@
 
     <definition name="productInStores" extends="mainLayout">
         <put-attribute name="title" value="Product Tracker Project"/>
-        <put-attribute name="body" value="/WEB-INF/views/productInStores.jsp"/>
+        <put-attribute name="body" value="/WEB-INF/views/product/productInStores.jsp"/>
     </definition>
 
     <definition name="existsProduct" extends="mainLayout">
         <put-attribute name="title" value="Product Tracker Project"/>
-        <put-attribute name="body" value="/WEB-INF/views/existsProduct.jsp"/>
+        <put-attribute name="body" value="/WEB-INF/views/product/existsProduct.jsp"/>
     </definition>
 
     <definition name="productsInStore" extends="mainLayout">
         <put-attribute name="title" value="Product Tracker"/>
         <put-attribute name="body" value="/WEB-INF/views/store/productsInStore.jsp"/>
+        <put-attribute name="dialog" value="/WEB-INF/templates/dialog.jsp"/>
         <put-list-attribute name="stylesheets" inherit="true">
             <add-attribute value="/css/dataTables.bootstrap.css"/>
             <add-attribute value="/css/dataTables.responsive.css"/>
@@ -364,6 +386,18 @@
             <add-attribute value="/js/jquery-ui.js"/>
             <add-attribute value="/js/storeTable.js"/>
             <add-attribute value="/js/jquery.dataTables.js"/>
+        </put-list-attribute>
+    </definition>
+
+    <definition name="dialogWindow" extends="mainLayout">
+        <put-attribute name="title" value="Product Tracker"/>
+        <put-attribute name="body" value="/WEB-INF/views/store/dialogWindow.jsp"/>
+        <put-list-attribute name="stylesheets" inherit="true">
+            <add-attribute value="/css/dataTables.bootstrap.css"/>
+            <add-attribute value="/css/dataTables.responsive.css"/>
+            <add-attribute value="/css/jquery-ui.css"/>
+            <add-attribute value="/css/jquery.dataTables.css"/>
+            <add-attribute value="/css/store.css"/>
         </put-list-attribute>
     </definition>
 
