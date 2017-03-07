@@ -1,7 +1,9 @@
 package com.softserve.if072.restservice.controller;
 
 /**
- * Created by dyndyn on 21.01.2017.
+ * The StorageController class handles requests for storage resources
+ *
+ * @author Roman Dyndyn
  */
 
 import com.softserve.if072.common.model.Storage;

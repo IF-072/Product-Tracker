@@ -6,6 +6,7 @@ import com.softserve.if072.common.model.User;
 import com.softserve.if072.common.model.dto.StorageDTO;
 import com.softserve.if072.restservice.dao.mybatisdao.StorageDAO;
 import com.softserve.if072.restservice.exception.DataNotFoundException;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -37,37 +38,44 @@ public class StorageServiceTest {
     private ShoppingListService shoppingListService;
     @Mock
     private HistoryService historyService;
-    @Mock
-    private Storage storage;
-    @Mock
-    private StorageDTO storageDTO;
-    @Mock
-    private Storage storageDB;
-    @Mock
-    private Product product;
-    @Mock
-    private User user;
-    @Mock
-    private Date date;
     @InjectMocks
     private StorageService storageService;
 
+    private Storage storage;
+    private StorageDTO storageDTO;
+    private Storage storageDB;
+    private Product product;
+    private User user;
+    private Date date;
+
+    @Before
+    public void setup() throws ClassNotFoundException, NoSuchMethodException {
+        user = new User();
+        user.setId(2);
+        product = new Product();
+        product.setUser(user);
+        product.setId(1);
+        date = new Date(System.currentTimeMillis());
+        storage = new Storage(user, product, 5, date);
+        storageDB = new Storage(user, product, 4, date);
+        storageDTO = new StorageDTO();
+        storageDTO.setAmount(5);
+    }
+
     @Test
     public void testGetByUserId_ShouldReturnListOfStorage() {
-        int userId = 2;
         List<Storage> storages = Arrays.asList(storage, storage);
-        when(storageDAO.getByUserID(userId)).thenReturn(storages);
+        when(storageDAO.getByUserID(user.getId())).thenReturn(storages);
 
-        assertTrue(storages.equals(storageService.getByUserId(userId)));
-        verify(storageDAO, times(1)).getByUserID(userId);
+        assertTrue(storages.equals(storageService.getByUserId(user.getId())));
+        verify(storageDAO, times(1)).getByUserID(user.getId());
     }
 
     @Test(expected = DataNotFoundException.class)
     public void testGetByUserId_ShouldThrowException() throws Exception {
-        int userId = 2;
-        when(storageDAO.getByUserID(userId)).thenReturn(null);
-        storageService.getByUserId(userId);
-        verify(storageDAO, times(1)).getByUserID(userId);
+        when(storageDAO.getByUserID(user.getId())).thenReturn(null);
+        storageService.getByUserId(user.getId());
+        verify(storageDAO, times(1)).getByUserID(user.getId());
     }
 
     @Test
@@ -97,17 +105,11 @@ public class StorageServiceTest {
 
     @Test
     public void testUpdate_ShouldNotInsertInShoppingList() {
-        int amount = 5;
-        int amountDB = 4;
-        when(storage.getAmount()).thenReturn(amount);
-        when(storage.getProduct()).thenReturn(product);
-        when(storage.getEndDate()).thenReturn(date);
-        when(storageDB.getAmount()).thenReturn(amountDB);
         when(storageDAO.getByProductID(anyInt())).thenReturn(storageDB);
 
         storageService.update(storage);
 
-        verify(storageDAO, times(1)).getByProductID(anyInt());
+        verify(storageDAO, times(1)).getByProductID(storage.getProduct().getId());
         verify(storageDAO, times(1)).update(storage);
         verify(historyService, times(0)).insert(any());
         verify(shoppingListService, times(0)).insert(any());
@@ -115,17 +117,13 @@ public class StorageServiceTest {
 
     @Test
     public void testUpdate_ShouldInsertInShoppingList() {
-        int amount = 1;
-        int amountDB = 3;
-        when(storage.getAmount()).thenReturn(amount);
-        when(storage.getProduct()).thenReturn(product);
-        when(storage.getUser()).thenReturn(user);
-        when(storageDB.getAmount()).thenReturn(amountDB);
+        storage.setAmount(1);
+        storage.setEndDate(null);
         when(storageDAO.getByProductID(anyInt())).thenReturn(storageDB);
 
         storageService.update(storage);
 
-        verify(storageDAO, times(1)).getByProductID(anyInt());
+        verify(storageDAO, times(1)).getByProductID(storage.getProduct().getId());
         verify(storageDAO, times(1)).updateAmount(storage);
         verify(historyService, times(1)).insert(any());
         verify(shoppingListService, times(1)).insert(any());
@@ -133,7 +131,7 @@ public class StorageServiceTest {
 
     @Test
     public void testUpdate_ShouldNotBeExecuted() {
-        when(storage.getAmount()).thenReturn(-1);
+        storage.setAmount(-1);
 
         storageService.update(storage);
         verify(storageDAO, times(0)).getByProductID(anyInt());
@@ -145,41 +143,31 @@ public class StorageServiceTest {
 
     @Test
     public void testUpdateWithDto_ShouldNotInsertInShoppingList() {
-        int amount = 5;
-        int amountDB = 4;
-        when(storageDTO.getAmount()).thenReturn(amount);
-        when(storage.getAmount()).thenReturn(amountDB);
-        when(storageDAO.getByProductID(anyInt())).thenReturn(storage);
+        when(storageDAO.getByProductID(anyInt())).thenReturn(storageDB);
         storageService.update(storageDTO);
 
-        verify(storageDAO, times(1)).getByProductID(anyInt());
-        verify(storageDAO, times(1)).updateAmount(storage);
+        verify(storageDAO, times(1)).getByProductID(storageDTO.getProductId());
+        verify(storageDAO, times(1)).updateAmount(storageDB);
         verify(historyService, times(0)).insert(any());
         verify(shoppingListService, times(0)).insert(any());
     }
 
     @Test
     public void testUpdateWithDTO_ShouldInsertInShoppingList() {
-        int amount = 0;
-        int amountDB = 1;
-
-        when(storageDTO.getAmount()).thenReturn(amount);
-        when(storage.getAmount()).thenReturn(amountDB);
-        when(storage.getProduct()).thenReturn(product);
-        when(storage.getUser()).thenReturn(user);
-        when(storageDAO.getByProductID(anyInt())).thenReturn(storage);
+        storageDTO.setAmount(1);
+        when(storageDAO.getByProductID(anyInt())).thenReturn(storageDB);
 
         storageService.update(storageDTO);
 
-        verify(storageDAO, times(1)).getByProductID(anyInt());
-        verify(storageDAO, times(1)).updateAmount(storage);
+        verify(storageDAO, times(1)).getByProductID(storageDTO.getProductId());
+        verify(storageDAO, times(1)).updateAmount(storageDB);
         verify(historyService, times(1)).insert(any());
         verify(shoppingListService, times(1)).insert(any());
     }
 
     @Test
     public void testUpdateWithDTO_ShouldNotBeExecuted() {
-        when(storageDTO.getAmount()).thenReturn(-1);
+        storageDTO.setAmount(-1);
 
         storageService.update(storageDTO);
         verify(storageDAO, times(0)).getByProductID(anyInt());

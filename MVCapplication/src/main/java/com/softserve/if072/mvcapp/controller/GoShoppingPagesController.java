@@ -17,7 +17,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.util.List;
 import java.util.Map;
 
-
+/**
+ * The GoShoppingPagesController class handles requests for function "Go shopping" and renders appropriate view
+ *
+ * @author Roman Dyndyn
+ */
 
 @Controller
 public class GoShoppingPagesController {
