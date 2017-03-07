@@ -61,8 +61,6 @@ public class CategoryService {
 
     public Category getByNameAndUserID(String name, int userID) throws DataNotFoundException {
 
-        System.out.println("Ім'я прийшло в сервіс: " + name);
-        System.out.println("ID, який прийшов в сервіс: " + userID);
         Category category = categoryDAO.getByNameAndUserID(name, userID);
 
         if (category != null) {
@@ -83,6 +81,16 @@ public class CategoryService {
     public void update(Category category) throws IllegalArgumentException {
         if (category.getName() != null && category.getUser() != null) {
             categoryDAO.update(category);
+        } else {
+            throw new IllegalArgumentException();
+        }
+    }
+
+    public void restore(Category category) throws IllegalArgumentException {
+        if (category.getId() != 0 && category.getUser() != null) {
+            categoryDAO.restore(category);
+        } else {
+            throw new IllegalArgumentException();
         }
     }
 

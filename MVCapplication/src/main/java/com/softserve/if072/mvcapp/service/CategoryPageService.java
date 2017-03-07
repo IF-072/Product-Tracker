@@ -50,24 +50,31 @@ public class CategoryPageService {
         restTemplate.put(restCategoryURL, category, Category.class);
     }
 
+    public void restoreCategory(Category category) {
+        System.out.println("TRYING TO RESTORE CATEGORY: " + category);
+        restTemplate.put(restCategoryURL + "/restore", category, Category.class);
+    }
+
     public void deleteCategory(int id) {
         restTemplate.delete(restCategoryURL + id);
     }
 
     public boolean alreadyExists(Category category, User user) {
+
         Category existingCategory = getByNameAndUserID(category.getName(), user.getId());
 
-        return existingCategory != null && existingCategory.isEnabled() && existingCategory.getId() != category.getId();
+        return existingCategory != null && existingCategory.isEnabled();
     }
 
     public boolean isDeleted(Category category, User user) {
+
         Category deletedCategory = getByNameAndUserID(category.getName(), user.getId());
 
-        return deletedCategory != null && !deletedCategory.isEnabled() && deletedCategory.getId() == category.getId();
+        return deletedCategory != null && !deletedCategory.isEnabled();
     }
 
-    private Category getByNameAndUserID(String name, int userID) {
-        System.out.println("LINK: " + restCategoryURL + userID + "/name/" + name);
+    public Category getByNameAndUserID(String name, int userID) {
+
         return restTemplate.getForObject(restCategoryURL + userID + "/name/" + name, Category.class);
     }
 }

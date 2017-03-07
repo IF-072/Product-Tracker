@@ -73,7 +73,7 @@ public class CategoryController {
     @ResponseBody
     @ResponseStatus(value = HttpStatus.OK)
     public Category getCategoryByNameAndUserID(@PathVariable("name") String name, @PathVariable("userID") int userID) {
-        LOGGER.info("Category name - " + name);
+
         Category category = categoryService.getByNameAndUserID(name, userID);
         LOGGER.info(String.format("Category with name %s of user with id %d was found", name, userID));
         return category;
@@ -83,23 +83,32 @@ public class CategoryController {
     @PostMapping(value = "/")
     @ResponseStatus(value = HttpStatus.CREATED)
     public void insert(@RequestBody Category category)  {
-            categoryService.insert(category);
-            LOGGER.info("New category with id %d was created", category.getId());
+        categoryService.insert(category);
+        LOGGER.info("New category with id %d was created", category.getId());
     }
 
     @PreAuthorize("#category != null && #category.user != null && #category.user.id == authentication.user.id")
     @PutMapping(value = "/")
     @ResponseStatus(value = HttpStatus.OK)
-    public void update(@RequestBody Category category, HttpServletResponse response) {
+    public void update(@RequestBody Category category) {
 
         categoryService.update(category);
         LOGGER.info(String.format("Category with id %d was updated", category.getId()));
+    }
+
+    @PutMapping(value="/restore")
+    @ResponseStatus(value = HttpStatus.OK)
+    public void restore(@RequestBody Category category) {
+
+        categoryService.restore(category);
+        LOGGER.info(String.format("Category with id %d was restored", category.getId()));
     }
 
     @PreAuthorize("@categorySecurityService.hasPermissionToAccess(#id)")
     @DeleteMapping(value = "/{id}")
     @ResponseStatus(value = HttpStatus.OK)
     public void delete(@PathVariable("id") int id) {
+
         categoryService.deleteById(id);
         LOGGER.info(String.format("Category with id %d was deleted", id));
     }
