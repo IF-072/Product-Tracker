@@ -2,7 +2,10 @@ package com.softserve.if072.common.model;
 
 
 /**
- * Created by dyndyn on 18.01.2017.
+ * The ShoppingList class stores information about products and their amount
+ * that user may buy
+ *
+ * @author Roman Dyndyn
  */
 public class ShoppingList {
     private User user;

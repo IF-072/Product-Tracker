@@ -24,7 +24,9 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by dyndyn on 11.02.2017.
+ * The GoShoppingController class handles requests for function "Go shopping" resources
+ *
+ * @author Roman Dyndyn
  */
 
 @RestController

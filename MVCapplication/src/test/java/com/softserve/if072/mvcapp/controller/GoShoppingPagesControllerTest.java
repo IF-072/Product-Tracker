@@ -31,6 +31,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.forwardedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -48,63 +49,69 @@ public class GoShoppingPagesControllerTest {
     private GoShoppingPageService goShoppingPageService;
     @Mock
     private UserService userService;
-    @Mock
-    private User user;
-    @Mock
-    private Store store;
     @InjectMocks
     private GoShoppingPagesController goShoppingPagesController;
     private MockMvc mockMvc;
+    private User user;
+    private Store store;
 
     @Before
     public void setup() throws ClassNotFoundException, NoSuchMethodException {
+        user = new User();
+        user.setId(1);
+        store = new Store();
+        store.setUser(user);
         mockMvc = standaloneSetup(goShoppingPagesController)
                 .setViewResolvers(viewResolver())
                 .build();
     }
 
     @Test
-    public void testGetPageWithStores_ShouldReturnViewName() throws Exception {
+    public void getPageWithStores_ShouldReturnViewName() throws Exception {
         List<Store> storages = Arrays.asList(store, store);
         when(goShoppingPageService.getStores(anyInt())).thenReturn(storages);
         when(userService.getCurrentUser()).thenReturn(user);
         mockMvc.perform(get("/goShoppingStores"))
                 .andExpect(status().isOk())
+                .andExpect(forwardedUrl("/WEB-INF/views/goShoppingStores.jsp"))
                 .andExpect(view().name("goShoppingStores"))
                 .andExpect(model().attributeExists("stores"))
                 .andExpect(model().attribute("stores", hasSize(2)));
-        verify(goShoppingPageService, times(1)).getStores(anyInt());
+        verify(goShoppingPageService, times(1)).getStores(user.getId());
     }
 
     @Test
-    public void testGetProductList_ShouldReturnViewName() throws Exception {
+    public void getProductList_ShouldReturnViewName() throws Exception {
+        int storeId = 1;
         Map<String, List<ShoppingList>> map = new HashMap<>();
         map.put("selected", new ArrayList<>());
         map.put("remained", new ArrayList<>());
         when(userService.getCurrentUser()).thenReturn(user);
-        when(goShoppingPageService.getProducts(anyInt(), eq(1))).thenReturn(map);
+        when(goShoppingPageService.getProducts(user.getId(), storeId)).thenReturn(map);
         mockMvc.perform(post("/goShoppingProducts")
-                .param("stores", "1"))
+                .param("stores", Integer.toString(storeId)))
                 .andExpect(status().isOk())
+                .andExpect(forwardedUrl("/WEB-INF/views/goShoppingProducts.jsp"))
                 .andExpect(view().name("goShoppingProducts"))
                 .andExpect(model().attributeExists("selected"))
                 .andExpect(model().attributeExists("remained"))
                 .andExpect(model().attributeExists("cartForm"));
-        verify(goShoppingPageService, times(1)).getProducts(anyInt(), eq(1));
+        verify(goShoppingPageService, times(1)).getProducts(user.getId(), storeId);
     }
 
     @Test
-    public void testGetProductList() throws Exception {
+    public void getProductList() throws Exception {
+        int storeId = 1;
         when(userService.getCurrentUser()).thenReturn(user);
-        when(goShoppingPageService.getProducts(anyInt(), eq(1))).thenReturn(null);
+        when(goShoppingPageService.getProducts(anyInt(), eq(storeId))).thenReturn(null);
         mockMvc.perform(post("/goShoppingProducts")
-                .param("stores", "1"))
+                .param("stores", Integer.toString(storeId)))
                 .andExpect(status().isOk())
                 .andExpect(view().name("goShoppingProducts"))
                 .andExpect(model().attributeDoesNotExist("selected"))
                 .andExpect(model().attributeDoesNotExist("remained"))
                 .andExpect(model().attributeDoesNotExist("cartForm"));
-        verify(goShoppingPageService, times(1)).getProducts(anyInt(), eq(1));
+        verify(goShoppingPageService, times(1)).getProducts(anyInt(), eq(storeId));
     }
 
     @Test
@@ -120,7 +127,7 @@ public class GoShoppingPagesControllerTest {
         InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
 
         viewResolver.setViewClass(JstlView.class);
-        viewResolver.setPrefix("/WEB-INF/jsp/");
+        viewResolver.setPrefix("/WEB-INF/views/");
         viewResolver.setSuffix(".jsp");
 
         return viewResolver;

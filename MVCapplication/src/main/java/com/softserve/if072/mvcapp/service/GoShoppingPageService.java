@@ -16,7 +16,10 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by dyndyn on 26.02.2017.
+ * The GoShoppingPageService class is used to hold business logic and to retrieve appropriate resources from a
+ * REST server
+ *
+ * @author Roman Dyndyn
  */
 @Service
 public class GoShoppingPageService {
@@ -49,7 +52,6 @@ public class GoShoppingPageService {
     }
 
     public void addToCart(FormForCart formForCart){
-
         final String uri = goShoppingURL + "/cart";
         formForCart.removeUncheked();
         restTemplate.postForObject(uri, formForCart.getCarts(), Cart.class);

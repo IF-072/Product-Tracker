@@ -77,29 +77,30 @@ public class GoShoppingService {
      * @param storeId unique store's identifier
      * @return two lists of products item that belong to specific user
      */
-    public Map<String, List<ShoppingList>> getProducts(Integer userId, int storeId) throws DataNotFoundException {
-        Map<String, List<ShoppingList>> productsMap = new HashMap<>();
-
-        List<ShoppingList> shoppinList = shoppingListDAO.getByUserID(userId);
+    public Map<String, List<ShoppingList>> getProducts(int userId, int storeId) throws DataNotFoundException {
         List<Product> productsFromSelectedStore = storeDAO.getProductsByStoreId(storeId, userId);
-        List<Store> store = new ArrayList<>();
-        store.add(storeDAO.getByID(storeId));
-
         if (CollectionUtils.isEmpty(productsFromSelectedStore)) {
             throw new DataNotFoundException(String.format("Products of user with id %d, store with id %d is empty",
                     userId, storeId));
         }
 
+        Map<String, List<ShoppingList>> productsMap = new HashMap<>();
+        List<ShoppingList> shoppingLists = shoppingListDAO.getByUserID(userId);
+        List<Store> store = new ArrayList<>();
+        store.add(storeDAO.getByID(storeId));
+
+
+
         List<ShoppingList> productsToBuy = new ArrayList<>();
-        productsToBuy = shoppinList.stream().filter(element -> productsFromSelectedStore.contains(element.getProduct()))
+        productsToBuy = shoppingLists.stream().filter(element -> productsFromSelectedStore.contains(element.getProduct()))
                 .map(element -> {
                     element.getProduct().setStores(store);
                     return element;
                 }).collect(Collectors.toList());
-        shoppinList.removeAll(productsToBuy);
+        shoppingLists.removeAll(productsToBuy);
 
         productsMap.put("selected", productsToBuy);
-        productsMap.put("remained", shoppinList);
+        productsMap.put("remained", shoppingLists);
         return productsMap;
     }
 
