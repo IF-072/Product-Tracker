@@ -51,7 +51,6 @@ public class CategoryPageService {
     }
 
     public void restoreCategory(Category category) {
-        System.out.println("TRYING TO RESTORE CATEGORY: " + category);
         restTemplate.put(restCategoryURL + "/restore", category, Category.class);
     }
 
