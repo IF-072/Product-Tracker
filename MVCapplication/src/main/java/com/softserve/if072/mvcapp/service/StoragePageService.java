@@ -1,6 +1,7 @@
 package com.softserve.if072.mvcapp.service;
 
 import com.softserve.if072.common.model.Storage;
+import com.softserve.if072.common.model.User;
 import com.softserve.if072.common.model.dto.StorageDTO;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -15,7 +16,10 @@ import org.apache.commons.collections.CollectionUtils;
 import java.util.List;
 
 /**
- * Created by dyndyn on 26.02.2017.
+ * The StoragePageService class is used to hold business logic and to retrieve appropriate resources from a
+ * REST server
+ *
+ * @author Roman Dyndyn
  */
 @Service
 public class StoragePageService {
@@ -29,10 +33,12 @@ public class StoragePageService {
     private String shoppingListURL;
 
     private RestTemplate restTemplate;
+    private ShoppingListService shoppingListService;
 
     @Autowired
-    public StoragePageService(RestTemplate restTemplate) {
+    public StoragePageService(RestTemplate restTemplate, ShoppingListService shoppingListService) {
         this.restTemplate = restTemplate;
+        this.shoppingListService = shoppingListService;
     }
 
     public List<Storage> getStorages(int userId) {
@@ -47,17 +53,14 @@ public class StoragePageService {
         return storage;
     }
 
-    public String updateAmount(StorageDTO storageDTO, BindingResult result) {
-        if (result.hasErrors()) {
-            String message = "";
-            for (FieldError error : result.getFieldErrors()) {
-                message += error.getDefaultMessage() + "\r\n";
-            }
-            return message;
-        }
+    public void updateAmount(StorageDTO storageDTO) {
         final String uri = storageUrl + "dto";
         restTemplate.put(uri, storageDTO);
-        return "";
     }
 
+    public void addProductToShoppingList(User user, int productId) {
+        if (productId > 0){
+            shoppingListService.addProductToShoppingList(user, productId);
+        }
+    }
 }

@@ -5,6 +5,7 @@ import com.softserve.if072.common.model.ShoppingList;
 import com.softserve.if072.common.model.User;
 import com.softserve.if072.restservice.dao.mybatisdao.ShoppingListDAO;
 import com.softserve.if072.restservice.exception.DataNotFoundException;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -31,18 +32,26 @@ public class ShoppingListServiceTest {
 
     @Mock
     private ShoppingListDAO shoppingListDAO;
-    @Mock
-    private ShoppingList shoppingList;
-    @Mock
-    private Product product;
-    @Mock
-    private User user;
     @InjectMocks
     private ShoppingListService shoppingListService;
+    private Product product;
+    private User user;
+    private ShoppingList shoppingList;
+    private int userId;
+
+    @Before
+    public void setup() throws ClassNotFoundException, NoSuchMethodException {
+        user = new User();
+        user.setId(2);
+        product = new Product();
+        product.setUser(user);
+        product.setId(1);
+        shoppingList = new ShoppingList(user, product, 2);
+        userId = 2;
+    }
 
     @Test
     public void testGetByUserId_ShouldReturnListOfShoppingList() {
-        int userId = 2;
         List<ShoppingList> shoppingLists = Arrays.asList(shoppingList, shoppingList);
         when(shoppingListDAO.getByUserID(userId)).thenReturn(shoppingLists);
 
@@ -52,7 +61,6 @@ public class ShoppingListServiceTest {
 
     @Test(expected = DataNotFoundException.class)
     public void testGetByUserId_ShouldThrowException() throws Exception {
-        int userId = 2;
         when(shoppingListDAO.getByUserID(userId)).thenReturn(null);
         shoppingListService.getByUserId(userId);
         verify(shoppingListDAO, times(1)).getByUserID(userId);
@@ -70,7 +78,6 @@ public class ShoppingListServiceTest {
     @Test
     public void testGetByUserAndProductId_ShouldReturnShoppingList() {
         int productId = 2;
-        int userId = 2;
         when(shoppingListDAO.getByUserAndProductId(userId, productId)).thenReturn(shoppingList);
 
         assertTrue(shoppingList.equals(shoppingListDAO.getByUserAndProductId(userId, productId)));
@@ -79,7 +86,6 @@ public class ShoppingListServiceTest {
 
     @Test
     public void testGetProductsByUserId_ShouldReturnListOfProducts() {
-        int userId = 2;
         List<Product> products = Arrays.asList(product, product);
         when(shoppingListDAO.getProductsByUserId(userId)).thenReturn(products);
 
@@ -89,7 +95,6 @@ public class ShoppingListServiceTest {
 
     @Test(expected = DataNotFoundException.class)
     public void testGetProductsByUserId() {
-        int userId = 2;
         when(shoppingListDAO.getProductsByUserId(userId)).thenReturn(null);
         shoppingListService.getProductsByUserId(userId);
         verify(shoppingListDAO, times(1)).getProductsByUserId(userId);
@@ -109,11 +114,6 @@ public class ShoppingListServiceTest {
 
     @Test
     public void testUpdate() {
-        int amount = 1;
-        when(shoppingList.getAmount()).thenReturn(amount);
-        when(shoppingList.getUser()).thenReturn(user);
-        when(shoppingList.getProduct()).thenReturn(product);
-
         shoppingListService.update(shoppingList);
 
         verify(shoppingListDAO, times(1)).update(shoppingList);
@@ -121,6 +121,7 @@ public class ShoppingListServiceTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void testUpdate_ShouldThrowException() {
+        shoppingList.setAmount(-1);
         shoppingListService.update(shoppingList);
 
         verify(shoppingListDAO, times(0)).update(shoppingList);
