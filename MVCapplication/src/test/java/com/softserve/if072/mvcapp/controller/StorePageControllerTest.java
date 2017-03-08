@@ -38,9 +38,7 @@ public class StorePageControllerTest {
     private StorePageService storePageService;
     @Mock
     private UserService userService;
-    @Mock
     private Store store;
-    @Mock
     private User user;
     @InjectMocks
     StorePageController storePageController;
@@ -51,6 +49,8 @@ public class StorePageControllerTest {
         mockMvc = standaloneSetup(storePageController)
                 .setViewResolvers(new InternalResourceViewResolver("/WEB-INF/views/store/", ".jsp"))
                 .build();
+        store = new Store();
+        user = new User();
     }
 
     @Test
@@ -78,35 +78,6 @@ public class StorePageControllerTest {
                 .andExpect(model().attributeExists("store"));
         verify(storePageService, times(1)).addNewStore();
         verifyNoMoreInteractions(storePageService);
-    }
-
-    /**
-     *  @PostMapping(value = "/addStore")
-    public String addStore(@Validated @ModelAttribute("store") Store store, BindingResult result,
-    Model model) {
-    if (result.hasErrors()) {
-    model.addAttribute("errorMessages", result.getFieldErrors());
-    return "addStore";
-    }
-
-    if (storePageService.alreadyExist(store, userService.getCurrentUser())) {
-    model.addAttribute("validMessage", existMessage);
-    return "addStore";
-    }
-    if (storePageService.isDeleted(store, userService.getCurrentUser())) {
-    model.addAttribute("store", storePageService.getStoreByNameAndUserId(store, userService.getCurrentUser()));
-    return "dialogWindow";
-    }
-    storePageService.addStore(userService.getCurrentUser(), store);
-    LOGGER.info(String.format("Store of user %d was added", userService.getCurrentUser().getId()));
-
-    return "redirect:/stores/";
-    }
-     */
-
-    @Test
-    public void test_AddStore_Post_ShouldReturnViewName() throws Exception {
-
     }
 
 
