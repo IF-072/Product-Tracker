@@ -15,6 +15,7 @@
                         <th>#</th>
                         <th><spring:message code="product"/></th>
                         <th><spring:message code="amount"/></th>
+                        <th><spring:message code="category"/></th>
                         <th><spring:message code="image"/></th>
                         <th colspan="2"><spring:message code="edit"/></th>
                         <th><spring:message code="delete"/></th>
@@ -24,6 +25,7 @@
                             <td>${loop.count}</td>
                             <td>${elem.product.name}</td>
                             <td id="am${loop.count}">${elem.amount} ${elem.product.unit.name}</td>
+                            <td>${elem.product.category.name}</td>
                             <td>
                                 <c:if test="${elem.product.image != null}">
                                     <img src="<c:url value="/image/${elem.product.image.id}"/>" width="50" height="50">
@@ -32,11 +34,11 @@
                                     <img src="<c:url value="/img/noimage.jpg"/>" width="50" height="50">
                                 </c:if>
                             </td>
-                            <td><a onclick="edit(${elem.product.id}, -1, ${loop.count})"
-                                   class="fa fa-minus-square fa-lg"/></td>
-                            <td><a onclick="edit(${elem.product.id}, 1, ${loop.count})"
-                                   class="fa fa-plus-square fa-lg"/></td>
-                            <td><a prodId="${elem.product.id}" class="fa fa-times fa-lg del"/></td>
+                            <td><p class="fa fa-minus-square fa-lg fa-2x edit"
+                                   prodId="${elem.product.id}" val="-1" index="${loop.count}"/></td>
+                            <td><p class="fa fa-plus-square fa-lg fa-2x edit"
+                                   prodId="${elem.product.id}" val="1" index="${loop.count}"/></td>
+                            <td><p prodId="${elem.product.id}" class="fa fa-times fa-2x del"/></td>
                         </tr>
                     </c:forEach>
                     </tbody>
