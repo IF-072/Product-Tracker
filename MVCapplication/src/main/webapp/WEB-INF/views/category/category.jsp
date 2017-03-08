@@ -2,6 +2,8 @@
   Created by: Pavlo Bendus
 --%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+
 
 <!-- Block for empty categories -->
 <c:if test="${empty categories}">
@@ -19,7 +21,7 @@
                         <div class="btn-group btn-group-justified" role="group" aria-label="...">
                             <div class="btn-group" role="group">
                                 <a href="<c:url value='/category/add'/>">
-                                    <button type="button" class="btn btn-default">Add</button>
+                                    <button type="button" class="btn btn-default"><spring:message code="category.addNew"/></button>
                                 </a>
                             </div>
                             <div class="btn-group" role="group">
@@ -40,7 +42,7 @@
     <!-- Header -->
     <div class="row">
         <div class="col-lg-12">
-            <h1 class="page-header">My Categories</h1>
+            <h1 class="page-header"><spring:message code="category.helloMessage"/></h1>
         </div>
     </div>
 
@@ -48,17 +50,17 @@
 <div class="row">
     <div class="col-lg-6">
         <input type="button" class="btn btn-outline btn-primary" onclick="location.href = '/category/add'"
-               value="Add new">
+               value="<spring:message code="category.addNew"/>">
         <br />
         <br />
         <div class="panel panel-default">
                 <table width="100%" class="table table-striped table-bordered table-hover">
                     <thead>
                     <tr>
-                        <th class="text-center">ID</th>
-                        <th class="text-center">Name</th>
-                        <th class="text-center">Edit</th>
-                        <th class="text-center">Delete</th>
+                        <th class="text-center"><spring:message code="category.headerID"/></th>
+                        <th class="text-center"><spring:message code="category.headerName"/></th>
+                        <th class="text-center"><spring:message code="category.headerEdit"/></th>
+                        <th class="text-center"><spring:message code="category.headerDelete"/></th>
                     </tr>
                     </thead>
                     <tbody>
