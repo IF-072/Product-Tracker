@@ -15,6 +15,7 @@
                         <th>#</th>
                         <th><spring:message code="product"/></th>
                         <th><spring:message code="amount"/></th>
+                        <th><spring:message code="category"/></th>
                         <th><spring:message code="image"/></th>
                         <th colspan="2"><spring:message code="edit"/></th>
                         <th><spring:message code="delete"/></th>
@@ -24,6 +25,7 @@
                             <td>${loop.count}</td>
                             <td>${elem.product.name}</td>
                             <td id="am${loop.count}">${elem.amount} ${elem.product.unit.name}</td>
+                            <td>${elem.product.category.name}</td>
                             <td>
                                 <c:if test="${elem.product.image != null}">
                                     <img src="<c:url value="/image/${elem.product.image.id}"/>" width="50" height="50">

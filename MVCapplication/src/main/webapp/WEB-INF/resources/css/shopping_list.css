@@ -1,3 +1,7 @@
 .del, .edit {
     cursor: pointer;
 }
+
+.del:hover, .edit:hover {
+    color: #7B83EF;
+}
