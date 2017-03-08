@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -21,7 +22,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 /**
- * Created by dyndyn on 05.02.2017.
+ * The StoragePageController class handles requests for "/storage" and renders appropriate view
+ *
+ * @author Roman Dyndyn
  */
 @Controller
 @RequestMapping("/storage")
@@ -30,14 +33,12 @@ public class StoragePageController {
     private static final Logger LOGGER = LogManager.getLogger(StoragePageController.class);
 
     private StoragePageService storagePageService;
-    private ShoppingListService shoppingListService;
     private UserService userService;
 
     @Autowired
     public StoragePageController(StoragePageService storagePageService, ShoppingListService shoppingListService,
                                  UserService userService) {
         this.storagePageService = storagePageService;
-        this.shoppingListService = shoppingListService;
         this.userService = userService;
     }
 
@@ -50,15 +51,24 @@ public class StoragePageController {
     }
 
     @PostMapping("/update")
+    @ResponseStatus(value = HttpStatus.OK)
     @ResponseBody
     public String updateAmount(@Validated @ModelAttribute StorageDTO storageDTO, BindingResult result) {
+        if (result.hasErrors()) {
+            String message = "";
+            for (FieldError error : result.getFieldErrors()) {
+                message += error.getDefaultMessage() + "\r\n";
+            }
+            return message;
+        }
         storageDTO.setUserId(userService.getCurrentUser().getId());
-        return storagePageService.updateAmount(storageDTO, result);
+        storagePageService.updateAmount(storageDTO);
+        return "";
     }
 
     @PostMapping("/addToSL")
     @ResponseStatus(value = HttpStatus.OK)
     public void addToShoppingList(@RequestParam("productId") int productId) {
-        shoppingListService.addProductToShoppingList(userService.getCurrentUser(), productId);
+        storagePageService.addProductToShoppingList(userService.getCurrentUser(), productId);
     }
 }

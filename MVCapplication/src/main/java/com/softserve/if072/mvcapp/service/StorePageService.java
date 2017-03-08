@@ -195,11 +195,7 @@ public class StorePageService {
     public Store getStoreByNameAndUserId(Store store, User user) {
         final String getStoreByNameAndUserIdUri = storeUrl + "/byName/" + user.getId();
         ResponseEntity<Store> oldStore = restTemplate.postForEntity(getStoreByNameAndUserIdUri, store, Store.class);
-        if (oldStore.getBody() == null) {
-            return null;
-        } else {
-            return oldStore.getBody();
-        }
+        return oldStore.getBody();
     }
 
     /**

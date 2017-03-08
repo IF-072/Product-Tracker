@@ -1,5 +1,6 @@
 package com.softserve.if072.mvcapp.controller;
 
+import com.softserve.if072.common.model.Product;
 import com.softserve.if072.common.model.Storage;
 import com.softserve.if072.common.model.User;
 import com.softserve.if072.mvcapp.service.ShoppingListService;
@@ -17,6 +18,7 @@ import org.springframework.web.servlet.view.InternalResourceView;
 
 import java.util.Arrays;
 import java.util.List;
+import java.sql.Date;
 
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.junit.Assert.assertTrue;
@@ -27,6 +29,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.forwardedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
@@ -42,21 +45,22 @@ public class StoragePageControllerTest {
     @Mock
     private StoragePageService storagePageService;
     @Mock
-    private ShoppingListService shoppingListService;
-    @Mock
     private UserService userService;
-    @Mock
-    private Storage storage;
-    @Mock
-    private User user;
     @InjectMocks
     private StoragePageController storagePageController;
     private MockMvc mockMvc;
+    private Storage storage;
+    private User user;
+    private String productMsg = "{error.storage.product}\r\n";
+    private String amountMsg = "{error.storage.amount}\r\n";
 
     @Before
     public void setup() throws ClassNotFoundException, NoSuchMethodException {
+        user = new User();
+        user.setId(1);
+        storage = new Storage(user, new Product(), 2, new Date(System.currentTimeMillis()));
         mockMvc = standaloneSetup(storagePageController)
-                .setSingleView(new InternalResourceView("/WEB-INF/views/cart/storage.jsp"))
+                .setSingleView(new InternalResourceView("/WEB-INF/views/storage.jsp"))
                 .build();
     }
 
@@ -65,25 +69,59 @@ public class StoragePageControllerTest {
         List<Storage> storages = Arrays.asList(storage, storage, storage);
         when(storagePageService.getStorages(anyInt())).thenReturn(storages);
         when(userService.getCurrentUser()).thenReturn(user);
-        when(user.getId()).thenReturn(1);
         mockMvc.perform(get("/storage"))
                 .andExpect(status().isOk())
+                .andExpect(forwardedUrl("/WEB-INF/views/storage.jsp"))
                 .andExpect(view().name("storage"))
                 .andExpect(model().attributeExists("list"))
                 .andExpect(model().attribute("list", hasSize(3)))
                 .andExpect(model().attributeExists("storage"));
-        verify(storagePageService, times(1)).getStorages(anyInt());
+        verify(storagePageService, times(1)).getStorages(user.getId());
     }
 
     @Test
     public void testUpdateAmount_ShouldReturnEmptyString() throws Exception {
         when(userService.getCurrentUser()).thenReturn(user);
-        when(user.getId()).thenReturn(1);
-        mockMvc.perform(post("/storage/update")
+        MvcResult result = mockMvc.perform(post("/storage/update")
                 .param("amount", "1")
                 .param("productId", "1"))
-                .andExpect(status().isOk());
-        verify(storagePageService, times(1)).updateAmount(any(), any());
+                .andExpect(status().isOk())
+                .andReturn();
+        assertTrue("".equals(result.getResponse().getContentAsString()));
+        verify(storagePageService, times(1)).updateAmount(any());
+    }
+
+    @Test
+    public void testUpdateAmount_ShouldReturnValidationProductMessage() throws Exception {
+        MvcResult result = mockMvc.perform(post("/storage/update")
+                .param("amount", "1")
+                .param("productId", "0"))
+                .andExpect(status().isOk())
+                .andReturn();
+        assertTrue(productMsg.equals(result.getResponse().getContentAsString()));
+        verify(storagePageService, times(0)).updateAmount(any());
+    }
+
+    @Test
+    public void testUpdateAmount_ShouldReturnValidationAmountMessage() throws Exception {
+        MvcResult result = mockMvc.perform(post("/storage/update")
+                .param("amount", "-1")
+                .param("productId", "1"))
+                .andExpect(status().isOk())
+                .andReturn();
+        assertTrue(amountMsg.equals(result.getResponse().getContentAsString()));
+        verify(storagePageService, times(0)).updateAmount(any());
+    }
+
+    @Test
+    public void testUpdateAmount_ShouldReturnValidationTwoMessage() throws Exception {
+        MvcResult result = mockMvc.perform(post("/storage/update")
+                .param("amount", "-1")
+                .param("productId", "0"))
+                .andExpect(status().isOk())
+                .andReturn();
+        assertTrue((productMsg + amountMsg).equals(result.getResponse().getContentAsString()));
+        verify(storagePageService, times(0)).updateAmount(any());
     }
 
     @Test
@@ -92,6 +130,6 @@ public class StoragePageControllerTest {
         mockMvc.perform(post("/storage/addToSL")
                 .param("productId", "1"))
                 .andExpect(status().isOk());
-        verify(shoppingListService, times(1)).addProductToShoppingList(user, 1);
+        verify(storagePageService, times(1)).addProductToShoppingList(user, 1);
     }
 }
