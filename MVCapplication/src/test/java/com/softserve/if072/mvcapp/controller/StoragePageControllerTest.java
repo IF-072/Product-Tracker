@@ -51,8 +51,8 @@ public class StoragePageControllerTest {
     private MockMvc mockMvc;
     private Storage storage;
     private User user;
-    private String productMsg = "{error.storage.product}\r\n";
-    private String amountMsg = "{error.storage.amount}\r\n";
+    private String productMsg = "{error.storage.product}";
+    private String amountMsg = "{error.storage.amount}";
 
     @Before
     public void setup() throws ClassNotFoundException, NoSuchMethodException {
@@ -120,7 +120,8 @@ public class StoragePageControllerTest {
                 .param("productId", "0"))
                 .andExpect(status().isOk())
                 .andReturn();
-        assertTrue((productMsg + amountMsg).equals(result.getResponse().getContentAsString()));
+        assertTrue(result.getResponse().getContentAsString().contains(amountMsg));
+        assertTrue(result.getResponse().getContentAsString().contains(productMsg));
         verify(storagePageService, times(0)).updateAmount(any());
     }
 
