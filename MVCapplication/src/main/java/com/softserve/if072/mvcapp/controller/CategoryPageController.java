@@ -1,9 +1,8 @@
 package com.softserve.if072.mvcapp.controller;
 
 import com.softserve.if072.common.model.Category;
+import com.softserve.if072.mvcapp.service.CategoryPageService;
 import com.softserve.if072.mvcapp.service.UserService;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -16,8 +15,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.RestTemplate;
-
-import java.util.List;
 
 /**
  * The controller contains methods that handle http-requests from the category's page
@@ -32,15 +29,16 @@ public class CategoryPageController {
     @Value("${application.restCategoryURL}")
     private String restCategoryURL;
 
-    private RestTemplate restTemplate;
-    private UserService userService;
+    @Value("${error.categoryAlreadyExists}")
+    private String categoryAlreadyExists;
 
-    private static final Logger LOGGER = LogManager.getLogger(CategoryPageController.class);
+    private UserService userService;
+    private CategoryPageService categoryPageService;
 
     @Autowired
-    public CategoryPageController(RestTemplate template, UserService userService) {
-        this.restTemplate = template;
+    public CategoryPageController(UserService userService, CategoryPageService categoryPageService) {
         this.userService = userService;
+        this.categoryPageService = categoryPageService;
     }
 
     /**
@@ -53,9 +51,7 @@ public class CategoryPageController {
     @GetMapping
     public String getPage(ModelMap model) {
 
-        List<Category> categories = restTemplate.getForObject(restCategoryURL + userService.getCurrentUser().getId(), List.class);
-        LOGGER.info(categories);
-        model.addAttribute("categories", categories);
+        model.addAttribute("categories", categoryPageService.getAllCategories(userService.getCurrentUser().getId()));
 
         return "category";
     }
@@ -83,10 +79,22 @@ public class CategoryPageController {
             return "addCategory";
         }
 
-        category.setUser(userService.getCurrentUser());
-        category.setEnabled(true);
+        //checks if the category already exists
+        if (categoryPageService.alreadyExists(category, userService.getCurrentUser())) {
+            model.addAttribute("error", categoryAlreadyExists);
 
-        restTemplate.postForObject(restCategoryURL, category, Category.class);
+            return "addCategory";
+        }
+
+        //checks if the category is deleted
+        if (categoryPageService.isDeleted(category, userService.getCurrentUser())) {
+            model.addAttribute("category",
+                    categoryPageService.getByNameAndUserID(category.getName(), userService.getCurrentUser().getId()));
+
+            return "deletedCategory";
+        }
+
+        categoryPageService.addCategory(category, userService.getCurrentUser());
 
         return "redirect:/category";
     }
@@ -102,9 +110,7 @@ public class CategoryPageController {
     @GetMapping(value="/edit")
     public String editCategory(@RequestParam int id, ModelMap model) {
 
-        Category category = restTemplate.getForObject(restCategoryURL + "id/" + id, Category.class);
-        LOGGER.info("Category were opened for updating: " + category);
-        model.addAttribute("category", category);
+        model.addAttribute("category", categoryPageService.getCategory(id));
 
         return "editCategory";
     }
@@ -119,9 +125,8 @@ public class CategoryPageController {
     @PostMapping(value = "/edit")
     public String editCategory(@ModelAttribute Category category) {
 
-        category.setUser(userService.getCurrentUser());
-        restTemplate.put(restCategoryURL, category, Category.class);
-        LOGGER.info("Category " + category.getName() + " was updated");
+        categoryPageService.editCategory(category, userService.getCurrentUser());
+
         return "redirect:/category/";
     }
 
@@ -134,6 +139,14 @@ public class CategoryPageController {
 
     @PostMapping(value = "/delete")
     public void deleteCategory(@RequestParam int id) {
-        restTemplate.delete(restCategoryURL + id);
+        categoryPageService.deleteCategory(id);
+    }
+
+    @PostMapping(value = "/restore")
+    public String restoreCategory(@ModelAttribute Category category) {
+
+        categoryPageService.restoreCategory(category);
+
+        return "redirect:/category";
     }
 }

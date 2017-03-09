@@ -56,8 +56,12 @@ public class StoragePageController {
     public String updateAmount(@Validated @ModelAttribute StorageDTO storageDTO, BindingResult result) {
         if (result.hasErrors()) {
             String message = "";
+            int i = 0;
             for (FieldError error : result.getFieldErrors()) {
-                message += error.getDefaultMessage() + "\r\n";
+                if (i++ > 0){
+                    message += ",\r\n";
+                }
+                message += error.getDefaultMessage();
             }
             return message;
         }
