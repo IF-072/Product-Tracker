@@ -31,9 +31,6 @@ public class RegistrationController {
 
     private static final Logger LOGGER = LogManager.getLogger(RegistrationController.class);
 
-    @Value("registration.incorrectAccountType")
-    private String incorrectAccountTypeMessage;
-
     @Value("registration.alreadyExists")
     private String alreadyExistMessage;
 
@@ -58,7 +55,6 @@ public class RegistrationController {
      */
     @GetMapping
     public String getRegisterPage(Model model) {
-        model.addAttribute("roleMap", registrationService.getAvailableRoles());
         model.addAttribute("registrationForm", new UserRegistrationForm());
 
         return "register";
@@ -82,17 +78,11 @@ public class RegistrationController {
             return "redirect:/register";
         }
 
-        Role role = registrationService.getRoleByID(registrationForm.getRoleId());
-        if (role == null) {
-            redirectAttributes.addFlashAttribute("errorMessage", incorrectAccountTypeMessage);
-            return "redirect:/register";
-        }
-
         User user = new User();
         user.setEmail(registrationForm.getEmail());
         user.setName(registrationForm.getName());
         user.setPassword(registrationForm.getPassword());
-        user.setRole(role);
+        user.setRole(Role.ROLE_REGULAR);
         user.setEnabled(true);
 
         if(registrationService.performRegistration(user)){

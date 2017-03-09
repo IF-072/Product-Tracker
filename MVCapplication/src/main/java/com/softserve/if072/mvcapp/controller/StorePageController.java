@@ -99,7 +99,7 @@ public class StorePageController {
             return "dialogWindow";
         }
         storePageService.addStore(userService.getCurrentUser(), store);
-//       LOGGER.info(String.format("Store of user %d was added", userService.getCurrentUser().getId()));
+      LOGGER.info(String.format("Store of user %d was added", userService.getCurrentUser().getId()));
 
         return "redirect:/stores/";
     }

@@ -1,6 +1,5 @@
 package com.softserve.if072.mvcapp.service;
 
-import com.softserve.if072.common.model.Role;
 import com.softserve.if072.common.model.User;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,17 +9,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-
+/**
+ * This service class contains methods that handle user registration process
+ *
+ * @author Igor Parada
+ */
 @Service
 public class RegistrationService {
-
-    @Value("${service.url.getRoleById}")
-    private String getRoleByIdUrl;
-
-    @Value("${service.url.roles}")
-    private String rolesUrl;
 
     @Value("${service.url.register}")
     private String registerUrl;
@@ -30,21 +25,6 @@ public class RegistrationService {
 
     @Autowired
     private RestTemplate restTemplate;
-
-    /**
-     * Retrieves all available roles from RESTful service and returns it as a map
-     *
-     * @return map with all available for registration roles
-     */
-    public Map<Integer, String> getAvailableRoles() {
-        ResponseEntity<Role[]> responseEntity = restTemplate.getForEntity(rolesUrl, Role[].class);
-        Map<Integer, String> rolesMap = new LinkedHashMap<>();
-        Role[] roles = responseEntity.getBody();
-        for (Role role : roles)
-            rolesMap.put(role.getId(), role.getAuthority());
-
-        return rolesMap;
-    }
 
     /**
      * Performs user registration on RESTful service.
@@ -69,19 +49,5 @@ public class RegistrationService {
         }
         ResponseEntity<String> responseEntity = restTemplate.postForEntity(registerAlreadyExistsUrl, username, String.class);
         return responseEntity.hasBody() && responseEntity.getBody().equals(username);
-    }
-
-    /**
-     * Retrieves single role from RESTful service by given ID
-     *
-     * @return retrieved role
-     */
-    public Role getRoleByID(int roleId) {
-        RestTemplate template = new RestTemplate();
-        ResponseEntity<Role> responseEntity = template.getForEntity(String.format(getRoleByIdUrl, roleId), Role.class);
-        if (responseEntity == null || !responseEntity.hasBody()) {
-            return null;
-        }
-        return responseEntity.getBody();
     }
 }

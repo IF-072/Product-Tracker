@@ -13,6 +13,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -72,7 +73,31 @@ public class StorePageControllerTest {
         verifyNoMoreInteractions(storePageService);
     }
 
+    @Test
+    public void test_GetAllStoresByUserId_StoreListEmpty_ShouldReturnViewName() throws Exception {
+        List<Store> stores = new ArrayList<>();
+        when(storePageService.getAllStoresByUserId(anyInt())).thenReturn(stores);
+        when(userService.getCurrentUser()).thenReturn(user);
+        mockMvc.perform(get("/stores/"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("allStores"))
+                .andExpect(model().attributeExists("stores"))
+                .andExpect(model().attribute("stores", hasSize(0)));
+        verify(storePageService, times(1)).getAllStoresByUserId(anyInt());
+        verifyNoMoreInteractions(storePageService);
+    }
 
+    @Test
+    public void test_GetAllStoresByUserId_StoreListNull_ShouldReturnView() throws Exception {
+        List<Store> stores = null;
+        when(storePageService.getAllStoresByUserId(anyInt())).thenReturn(stores);
+        when(userService.getCurrentUser()).thenReturn(user);
+        mockMvc.perform(get("/stores/"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("allStores"));
+        verify(storePageService, times(1)).getAllStoresByUserId(anyInt());
+        verifyNoMoreInteractions(storePageService);
+    }
     @Test
     public void test_AddStore_ShouldReturnViewName() throws Exception {
         when(storePageService.addNewStore()).thenReturn(store);
@@ -98,6 +123,15 @@ public class StorePageControllerTest {
                 .andExpect(status().isFound())
                 .andExpect(redirectedUrl("/stores/"));
         verify(storePageService, times(1)).addStore(userService.getCurrentUser(), store);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void test_AddStore_Post_ParamsNull_ShouldThrowIllegalArgumentException() throws Exception {
+        mockMvc.perform(post("/addStore")
+                .param("name", null)
+                .param("address", null))
+               .andExpect(status().is4xxClientError());
+        verify(storePageService, times(0)).addStore(userService.getCurrentUser(), store);
     }
 
     @Test
@@ -188,6 +222,17 @@ public class StorePageControllerTest {
         verify(storePageService, times(0)).addStore(userService.getCurrentUser(), store);
         verify(storePageService, times(1)).getStoreByNameAndUserId(store, userService.getCurrentUser());
     }
+
+    /**
+     * @GetMapping("/stores/storeProducts")
+    public String getAllProductsByStoreId(@RequestParam("storeId") int storeId, ModelMap model) {
+    model.addAttribute("store", storePageService.getStoreById(storeId));
+    model.addAttribute("products", storePageService.getAllProductsFromStore(storeId, userService.getCurrentUser()
+    .getId()));
+    LOGGER.info(String.format("Products from store %d were found", storeId));
+    return "productsInStore";
+    }
+     */
 
     public static Store createStore(int id, String name, String address, boolean isEnabled) {
         Store store = new Store();
