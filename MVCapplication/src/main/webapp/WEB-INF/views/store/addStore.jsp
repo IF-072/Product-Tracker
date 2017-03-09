@@ -25,7 +25,7 @@
                         <c:if test="${not empty validMessage}">
                             <div class="alert alert-danger">
                                 <p><span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-                                        ${validMessage}</p>
+                                    <spring:message code="${validMessage}"/></p>
                             </div>
                         </c:if>
 

@@ -17,13 +17,16 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 import static org.mockito.internal.verification.VerificationModeFactory.times;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup;
@@ -42,7 +45,7 @@ public class StorePageControllerTest {
     private User user;
     @InjectMocks
     StorePageController storePageController;
-    MockMvc mockMvc;
+    private MockMvc mockMvc;
 
     @Before
     public void setUp() {
@@ -80,5 +83,151 @@ public class StorePageControllerTest {
         verifyNoMoreInteractions(storePageService);
     }
 
+    /**
+     * @PostMapping(value = "/addStore")
+     * public String addStore(@Validated @ModelAttribute("store") Store store, BindingResult result,
+     * Model model) {
+     * if (result.hasErrors()) {
+     * model.addAttribute("errorMessages", result.getFieldErrors());
+     * return "addStore";
+     * }
+     * <p>
+     * if (storePageService.alreadyExist(store, userService.getCurrentUser())) {
+     * model.addAttribute("validMessage", existMessage);
+     * return "addStore";
+     * }
+     * if (storePageService.isDeleted(store, userService.getCurrentUser())) {
+     * model.addAttribute("store", storePageService.getStoreByNameAndUserId(store, userService.getCurrentUser()));
+     * return "dialogWindow";
+     * }
+     * storePageService.addStore(userService.getCurrentUser(), store);
+     * LOGGER.info(String.format("Store of user %d was added", userService.getCurrentUser().getId()));
+     * <p>
+     * return "redirect:/stores/";
+     * }
+     */
+
+    @Test
+    public void test_AddStore_Post_ShouldReturnViewName() throws Exception {
+
+        when(userService.getCurrentUser()).thenReturn(user);
+        String name = createStringWithLength(9);
+        String address = createStringWithLength(34);
+        store = createStore(0, name, address, true);
+        mockMvc.perform(post("/addStore")
+                .param("name", name)
+                .param("address", address))
+                .andExpect(status().isFound())
+                .andExpect(redirectedUrl("/stores/"));
+        verify(storePageService, times(1)).addStore(userService.getCurrentUser(), store);
+    }
+
+    @Test
+    public void test_AddStore_Post_ShouldReturnValidationMessages() throws Exception {
+        mockMvc.perform(post("/addStore")
+                .param("name", "")
+                .param("address", ""))
+                .andExpect(status().isOk())
+                .andExpect(model()
+                        .attributeHasFieldErrors("store", "name", "address"))
+                .andExpect(view().name("addStore"));
+        verify(storePageService, times(0)).addStore(userService.getCurrentUser(), store);
+    }
+
+    @Test
+    public void test_AddStore_Post_ShouldReturnValidationAddressMessage() throws Exception {
+        String name = createStringWithLength(9);
+        String address = createStringWithLength(285);
+        mockMvc.perform(post("/addStore")
+                .param("name", name)
+                .param("address", address))
+                .andExpect(status().isOk())
+                .andExpect(model()
+                        .attributeHasFieldErrors("store", "address"))
+                .andExpect(view().name("addStore"));
+        verify(storePageService, times(0)).addStore(userService.getCurrentUser(), store);
+    }
+
+    @Test
+    public void test_AddStore_Post_ShouldReturnNameMessage() throws Exception {
+        String name = createStringWithLength(2);
+        String address = createStringWithLength(34);
+        mockMvc.perform(post("/addStore")
+                .param("name", name)
+                .param("address", address))
+                .andExpect(status().isOk())
+                .andExpect(model()
+                        .attributeHasFieldErrors("store", "name"))
+                .andExpect(view().name("addStore"));
+        verify(storePageService, times(0)).addStore(userService.getCurrentUser(), store);
+        verifyNoMoreInteractions(storePageService);
+    }
+
+    @Test
+    public void test_AddStore_Post_ShouldReturnTwoValidationMessages() throws Exception {
+        String name = createStringWithLength(2);
+        String address = createStringWithLength(4);
+        mockMvc.perform(post("/addStore")
+                .param("name", name)
+                .param("address", address))
+                .andExpect(status().isOk())
+                .andExpect(model()
+                        .attributeHasFieldErrors("store", "name", "address"))
+                .andExpect(view().name("addStore"));
+        verify(storePageService, times(0)).addStore(userService.getCurrentUser(), store);
+        verifyNoMoreInteractions(storePageService);
+    }
+
+    @Test
+    public void test_AddStore_Post_ShouldRedirectAlreadyExist() throws Exception {
+        when(userService.getCurrentUser()).thenReturn(user);
+        String name = createStringWithLength(9);
+        String address = createStringWithLength(34);
+        when(storePageService.alreadyExist(any(), any())).thenReturn(true);
+        mockMvc.perform(post("/addStore")
+                .param("name", name)
+                .param("address", address)
+                .content("validMessage"))
+                .andExpect(model()
+                        .attributeExists("store"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("addStore"));
+        verify(storePageService, times(0)).addStore(userService.getCurrentUser(), store);
+    }
+
+     @Test
+    public void test_AddStore_Post_ShouldRedirectStoreIsDeleted() throws Exception {
+        when(userService.getCurrentUser()).thenReturn(user);
+        String name = createStringWithLength(9);
+        String address = createStringWithLength(34);
+        store = createStore(0, name, address, false);
+        when(storePageService.isDeleted(any(), any())).thenReturn(true);
+        mockMvc.perform(post("/addStore")
+                .param("name", name)
+                .param("address", address))
+                .andExpect(status().isOk())
+                .andExpect(view().name("dialogWindow"));
+        verify(storePageService, times(0)).addStore(userService.getCurrentUser(), store);
+        verify(storePageService, times(1)).getStoreByNameAndUserId(store, userService.getCurrentUser());
+    }
+
+    public static Store createStore(int id, String name, String address, boolean isEnabled) {
+        Store store = new Store();
+        store.setId(id);
+        store.setName(name);
+        store.setAddress(address);
+        store.setEnabled(isEnabled);
+        return store;
+    }
+
+    public static String createStringWithLength(int length) {
+        StringBuilder builder = new StringBuilder();
+
+        for (int index = 0; index < length; index++) {
+            builder.append("a");
+        }
+
+        return builder.toString();
+    }
 
 }
