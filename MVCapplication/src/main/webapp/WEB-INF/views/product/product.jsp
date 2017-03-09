@@ -60,7 +60,7 @@
                                        id="goStores"><spring:message code="product.stores"/></p>
                                 </td>
                                 <td style="text-align:center; vertical-align: middle">
-                                    <button type="button" class="btn btn-default"
+                                    <button type="button" class="btn btn-outline btn-primary"
                                             onclick="addProductToShoppingList(${product.id});"
                                             id="addToShoppingList">
                                         <spring:message code="product.addTo"/><br/>
@@ -69,10 +69,10 @@
                                 </td>
                                 <td style="text-align:center; vertical-align: middle">
                                     <p onclick="document.location.href='/product/editProduct?productId=${product.id}'"
-                                       id="edit" class="fa fa-pencil fa-2x"></p>
+                                       id="edit" class="fa fa-pencil fa-lg"></p>
                                 </td>
                                 <td style="text-align:center; vertical-align: middle">
-                                    <p onclick="deleteProduct(${product.id});" class="fa fa-times fa-2x" id="delete"></p>
+                                    <p onclick="deleteProduct(${product.id});" class="fa fa-times fa-lg" id="delete"></p>
                                 </td>
                             </tr>
                         </c:forEach>
@@ -82,11 +82,16 @@
         </div>
     </div>
 </div>
-
-
-
-
-
+<div id="Show" hidden><spring:message code="table.show"/></div>
+<div id="Products" hidden><spring:message code="table.products"/></div>
+<div id="showing" hidden><spring:message code="table.showing"/></div>
+<div id="to" hidden><spring:message code="table.to"/></div>
+<div id="of" hidden><spring:message code="table.of"/></div>
+<div id="records" hidden><spring:message code="table.recordsProduct"/></div>
+<div id="search" hidden><spring:message code="table.search"/></div>
+<div id="previous" hidden><spring:message code="table.previous"/></div>
+<div id="next" hidden><spring:message code="table.next"/></div>
+<div id="non" hidden><spring:message code="table.non"/></div>
 
 
 

@@ -2,7 +2,6 @@ package com.softserve.if072.mvcapp.service;
 
 import com.softserve.if072.common.model.Image;
 import com.softserve.if072.common.model.Product;
-import com.softserve.if072.common.model.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +43,12 @@ public class ImageUploadService {
         this.productPageService = productPageService;
     }
 
+    /**
+     * This method sends data of product's image to the RESTful service for saving it in DataBase.
+     *
+     * @param userId id of user whose product's image must be saved
+     * @param image product's image
+     */
     public void uploadImage(Image image, int productId, int userId) throws IOException {
 
         Map<String, Integer> param = new HashMap<>();
@@ -71,6 +76,12 @@ public class ImageUploadService {
 
     }
 
+    /**
+     * This method sends id of product's image to the RESTful service for receiving it from DataBase.
+     *
+     * @param id id of product's image
+     * @return image
+     */
     public Image getImageById(int id) {
 
         final String uri = imageUrl + "/{imageId}";
@@ -82,6 +93,12 @@ public class ImageUploadService {
 
     }
 
+    /**
+     * This method sends data of product's image to the RESTful service for updating it in DataBase.
+     *
+     * @param productId id of product whose image must be updated
+     * @param image product's image
+     */
     public void editImage(Image image, int productId) throws IOException {
 
         MultipartFile multipartFile = image.getMultipartFile();
@@ -95,11 +112,15 @@ public class ImageUploadService {
 
         image.setId(product.getImage().getId());
 
-        //HttpEntity<Image> requestEntity = new HttpEntity<>(image);
         restTemplate.exchange(uri, HttpMethod.PUT, new HttpEntity<>(image), Image.class);
 
     }
 
+    /**
+     * This method sends id of product's image to the RESTful service for deleting it from DataBase.
+     *
+     * @param id id of product's image that must be deleted
+     */
     public void deleteImage(int id) {
 
         final String uri = imageUrl + "/delete/{imageId}";
