@@ -306,7 +306,6 @@ public class ProductPageControllerTest {
 
     @Test
     public void testGetStoresByProductId_POST_ShouldReturnViewName() throws Exception {
-        when(userService.getCurrentUser()).thenReturn(user);
         mockMvc.perform(post("/product/stores")
                 .param("productId", "1")
                 .sessionAttr("storesInProduct", new StoresInProduct())
