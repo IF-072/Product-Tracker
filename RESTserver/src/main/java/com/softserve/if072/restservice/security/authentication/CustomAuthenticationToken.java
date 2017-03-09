@@ -107,4 +107,19 @@ public class CustomAuthenticationToken implements Authentication {
     public void setAuthenticated(boolean b) throws IllegalArgumentException {
         throw new IllegalArgumentException("This operation is not supported for this object type");
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof CustomAuthenticationToken)) return false;
+
+        CustomAuthenticationToken that = (CustomAuthenticationToken) o;
+
+        return token.equals(that.token);
+    }
+
+    @Override
+    public int hashCode() {
+        return token.hashCode();
+    }
 }

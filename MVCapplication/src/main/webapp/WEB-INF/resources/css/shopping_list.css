@@ -1,7 +1,31 @@
 .del, .edit {
-    cursor: pointer;
-}
+     cursor: pointer;
+ }
 
 .del:hover, .edit:hover {
-    color: #7B83EF;
+    color: #003eff;
+}
+
+#id-col {
+    width: 3%;
+}
+
+#prod-col {
+    width: 28%;
+}
+
+#am-col {
+    width: 8%;
+}
+
+#cat-col {
+    width: 25%;
+}
+
+#edit-col {
+    width: 16%;
+}
+
+#del-col {
+    width: 8%;
 }

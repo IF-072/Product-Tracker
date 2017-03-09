@@ -29,24 +29,41 @@ public interface CategoryDAO extends DAO<Category> {
             @Result(property = "user", column = "user_id", javaType = User.class, one = @One(select = "com.softserve.if072.restservice.dao.mybatisdao.UserDAO.getByID")),
             @Result(property = "isEnabled", column = "is_enabled")
     })
-    List<Category> getByUserID(int userID);
+    List<Category> getByUserID(@Param("userID") int userID);
 
     /**
      * Selects specified category by its id
      *
      * @param id category id
-     * @return category object
+     * @return category's object
      */
 
     @Override
-    @Select("SELECT id, name, user_id FROM category WHERE id = #{id} AND is_enabled = 1")
+    @Select("SELECT id, name, user_id, is_enabled FROM category WHERE id = #{id} AND is_enabled = 1")
     @Results(value = {
             @Result(property = "id", column = "id"),
             @Result(property = "name", column = "name"),
             @Result(property = "user", column = "user_id", javaType = User.class, one = @One(select = "com.softserve.if072.restservice.dao.mybatisdao.UserDAO.getByID")),
             @Result(property = "isEnabled", column = "is_enabled")
     })
-    Category getByID(int id);
+    Category getByID(@Param("id") int id);
+
+    /**
+     * Checks whether category already was added to the database
+     *
+     * @param name category's name
+     * @param userID id of current user
+     * @return category's object
+     */
+
+    @Select("SELECT id, name, user_id, is_enabled FROM category WHERE user_id = #{userID} AND name = #{name}")
+    @Results(value = {
+            @Result(property = "id", column = "id"),
+            @Result(property = "name", column = "name"),
+            @Result(property = "user", column = "user_id", javaType = User.class, one = @One(select = "com.softserve.if072.restservice.dao.mybatisdao.UserDAO.getByID")),
+            @Result(property = "isEnabled", column = "is_enabled")
+    })
+    Category getByNameAndUserID(@Param("name") String name, @Param("userID") int userID);
 
     /**
      * Inserts new category to the database
@@ -69,6 +86,15 @@ public interface CategoryDAO extends DAO<Category> {
     void update(Category category);
 
     /**
+     * Restores deleted category from the database
+     *
+     * @param category that should be restored
+     */
+
+    @Update("UPDATE category SET is_enabled = 1 WHERE id = #{id}")
+    void restore(Category category);
+
+    /**
      * Provides soft-deleting of specified category
      *
      * @param id category's id
@@ -76,6 +102,6 @@ public interface CategoryDAO extends DAO<Category> {
 
     @Override
     @Delete("UPDATE category SET is_enabled = 0 WHERE id = #{id}")
-    void deleteById(int id);
+    void deleteById(@Param("id") int id);
 
 }

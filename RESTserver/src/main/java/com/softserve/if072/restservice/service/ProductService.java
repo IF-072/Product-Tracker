@@ -134,6 +134,7 @@ public class ProductService {
 
     public void restoreProduct(Product product) {
         if(getProductById(product.getId()) != null) {
+            System.out.println("PRODUCT: " + product);
             productDAO.restore(product);
             LOGGER.info("Product with id=" + product.getId() + " was restored");
         } else {

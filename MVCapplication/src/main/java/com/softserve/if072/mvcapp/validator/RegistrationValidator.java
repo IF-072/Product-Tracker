@@ -23,6 +23,9 @@ public class RegistrationValidator  implements Validator{
     @Value("registration.alreadyExists")
     private String alreadyExistMessage;
 
+    @Value("error.password.different")
+    private String differentPasswordsMessage;
+
     private RegistrationService registrationService;
     private MessageSource messageSource;
 
@@ -41,6 +44,9 @@ public class RegistrationValidator  implements Validator{
     public void validate(Object target, Errors errors) {
         UserRegistrationForm userForm = (UserRegistrationForm) target;
         Locale locale = LocaleContextHolder.getLocale();
+        if(!userForm.getPassword().equals(userForm.getConfirmPassword())){
+            errors.reject("confirmPassword", messageSource.getMessage(differentPasswordsMessage, new Object[0], locale));
+        }
         if(registrationService.alreadyExist(userForm.getEmail())) {
             errors.reject("email", messageSource.getMessage(alreadyExistMessage, new Object[0], locale));
         }

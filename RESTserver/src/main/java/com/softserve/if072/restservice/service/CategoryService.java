@@ -28,8 +28,11 @@ public class CategoryService {
     @Value("categories.notFound")
     private String categoriesNotFound;
 
-    @Value("categoryNotFound")
+    @Value("category.notFound")
     private String categoryNotFound;
+
+    @Value("categoryByName.notFound")
+    private String categoryByNameNotFound;
 
     @Autowired
     public CategoryService(CategoryDAO categoryDAO) {
@@ -56,6 +59,17 @@ public class CategoryService {
         }
     }
 
+    public Category getByNameAndUserID(String name, int userID) throws DataNotFoundException {
+
+        Category category = categoryDAO.getByNameAndUserID(name, userID);
+
+        if (category != null) {
+            return category;
+        } else {
+            throw new DataNotFoundException(String.format(categoryByNameNotFound, name, userID));
+        }
+    }
+
     public void insert(Category category) {
         Category category1 = categoryDAO.getByID(category.getId());
 
@@ -67,6 +81,16 @@ public class CategoryService {
     public void update(Category category) throws IllegalArgumentException {
         if (category.getName() != null && category.getUser() != null) {
             categoryDAO.update(category);
+        } else {
+            throw new IllegalArgumentException();
+        }
+    }
+
+    public void restore(Category category) throws IllegalArgumentException {
+        if (category.getId() != 0 && category.getUser() != null) {
+            categoryDAO.restore(category);
+        } else {
+            throw new IllegalArgumentException();
         }
     }
 

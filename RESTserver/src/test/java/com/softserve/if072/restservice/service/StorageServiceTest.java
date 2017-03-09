@@ -73,13 +73,6 @@ public class StorageServiceTest {
         verify(storageDAO).getByUserID(user.getId());
     }
 
-    @Test(expected = DataNotFoundException.class)
-    public void testGetByUserId_ShouldThrowException() throws Exception {
-        when(storageDAO.getByUserID(user.getId())).thenReturn(null);
-        storageService.getByUserId(user.getId());
-        verify(storageDAO).getByUserID(user.getId());
-    }
-
     @Test
     public void testGetByProductId_ShouldReturnStorage() {
         int productId = 2;

@@ -2,7 +2,6 @@ package com.softserve.if072.mvcapp.dto;
 
 import org.hibernate.validator.constraints.NotBlank;
 
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 /**
@@ -16,8 +15,9 @@ public class UserRegistrationForm extends UserLoginForm {
     @Size(min = 4, max = 64, message = "{error.name.size}")
     private String name;
 
-    @NotNull(message = "{error.role.notnull}")
-    private Integer roleId;
+    @NotBlank(message = "{error.password.confirmation.notnull}")
+    @Size(min = 4, max = 64, message = "{error.password.size}")
+    private String confirmPassword;
 
     public UserRegistrationForm() { }
 
@@ -29,11 +29,11 @@ public class UserRegistrationForm extends UserLoginForm {
         this.name = name;
     }
 
-    public Integer getRoleId() {
-        return roleId;
+    public String getConfirmPassword() {
+        return confirmPassword;
     }
 
-    public void setRoleId(Integer roleId) {
-        this.roleId = roleId;
+    public void setConfirmPassword(String confirmPassword) {
+        this.confirmPassword = confirmPassword;
     }
 }

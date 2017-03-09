@@ -111,7 +111,7 @@ public class TokenService {
      * @return String that contains renewed token
      */
     public String renewToken(CustomAuthenticationToken authenticationToken) {
-        return generateTokenFor(authenticationToken.getUserName());
+        return authenticationToken.isValid() ? generateTokenFor(authenticationToken.getUserName()) : null;
     }
 
     /**

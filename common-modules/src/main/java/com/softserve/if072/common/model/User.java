@@ -22,6 +22,7 @@ public class User {
     private List<ShoppingList> shoppingLists;
     private List<Storage> storages;
     private Role role;
+    private long premiumExpiresTime;
 
     public User() {
         /*NOP*/
@@ -123,6 +124,14 @@ public class User {
         this.role = role;
     }
 
+    public long getPremiumExpiresTime() {
+        return premiumExpiresTime;
+    }
+
+    public void setPremiumExpiresTime(long premiumExpiresTime) {
+        this.premiumExpiresTime = premiumExpiresTime;
+    }
+
     @Override
     public String toString() {
         return "User{" +
@@ -137,6 +146,7 @@ public class User {
                 ", shoppingLists=" + shoppingLists +
                 ", storages=" + storages +
                 ", role=" + role +
+                ", premiumExpiresTime="+ premiumExpiresTime +
                 '}';
     }
 }
