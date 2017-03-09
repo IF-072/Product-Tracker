@@ -49,7 +49,7 @@ public class CategoryService {
         }
     }
 
-    public Category getById(int id) throws DataNotFoundException {
+    public Category getByID(int id) throws DataNotFoundException {
         Category category = categoryDAO.getByID(id);
 
         if (category != null) {

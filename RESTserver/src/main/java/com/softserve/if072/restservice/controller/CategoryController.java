@@ -63,7 +63,7 @@ public class CategoryController {
     @ResponseStatus(value = HttpStatus.OK)
     public Category getCategoryByID(@PathVariable("categoryID") int categoryID, HttpServletResponse response) throws DataNotFoundException {
 
-        Category category = categoryService.getById(categoryID);
+        Category category = categoryService.getByID(categoryID);
         LOGGER.info(String.format("Category with id %d was found", categoryID));
         return category;
     }
