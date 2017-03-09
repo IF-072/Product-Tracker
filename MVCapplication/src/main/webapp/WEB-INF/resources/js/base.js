@@ -2,7 +2,8 @@ $(function () {
     $(".lang-choice").click(function () {
         var locale = $(this).attr("lang");
 
-        $.cookie('myLocaleCookie', locale, {path : '/'});;
+        $.cookie('myLocaleCookie', locale, {path : '/'});
+
         location.reload();
     });
 });
