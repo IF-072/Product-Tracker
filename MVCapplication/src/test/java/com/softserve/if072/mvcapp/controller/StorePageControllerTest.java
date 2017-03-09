@@ -1,7 +1,9 @@
 package com.softserve.if072.mvcapp.controller;
 
+import com.softserve.if072.common.model.Product;
 import com.softserve.if072.common.model.Store;
 import com.softserve.if072.common.model.User;
+import com.softserve.if072.mvcapp.dto.ProductsWrapper;
 import com.softserve.if072.mvcapp.service.StorePageService;
 import com.softserve.if072.mvcapp.service.UserService;
 import org.junit.Before;
@@ -44,11 +46,13 @@ public class StorePageControllerTest {
     private UserService userService;
     private Store store;
     private User user;
+    private Product product;
     @InjectMocks
-    StorePageController storePageController;
+    private StorePageController storePageController;
 
     private MockMvc mockMvc;
-
+    @Mock
+    ProductsWrapper wrapedProducts;
 
     @Before
     public void setUp() {
@@ -57,6 +61,7 @@ public class StorePageControllerTest {
                 .build();
         store = new Store();
         user = new User();
+        product = new Product();
     }
 
     @Test
@@ -89,8 +94,7 @@ public class StorePageControllerTest {
 
     @Test
     public void test_GetAllStoresByUserId_StoreListNull_ShouldReturnView() throws Exception {
-        List<Store> stores = null;
-        when(storePageService.getAllStoresByUserId(anyInt())).thenReturn(stores);
+        when(storePageService.getAllStoresByUserId(anyInt())).thenReturn(null);
         when(userService.getCurrentUser()).thenReturn(user);
         mockMvc.perform(get("/stores/"))
                 .andExpect(status().isOk())
@@ -98,6 +102,7 @@ public class StorePageControllerTest {
         verify(storePageService, times(1)).getAllStoresByUserId(anyInt());
         verifyNoMoreInteractions(storePageService);
     }
+
     @Test
     public void test_AddStore_ShouldReturnViewName() throws Exception {
         when(storePageService.addNewStore()).thenReturn(store);
@@ -130,7 +135,7 @@ public class StorePageControllerTest {
         mockMvc.perform(post("/addStore")
                 .param("name", null)
                 .param("address", null))
-               .andExpect(status().is4xxClientError());
+                .andExpect(status().is4xxClientError());
         verify(storePageService, times(0)).addStore(userService.getCurrentUser(), store);
     }
 
@@ -223,16 +228,74 @@ public class StorePageControllerTest {
         verify(storePageService, times(1)).getStoreByNameAndUserId(store, userService.getCurrentUser());
     }
 
-    /**
-     * @GetMapping("/stores/storeProducts")
-    public String getAllProductsByStoreId(@RequestParam("storeId") int storeId, ModelMap model) {
-    model.addAttribute("store", storePageService.getStoreById(storeId));
-    model.addAttribute("products", storePageService.getAllProductsFromStore(storeId, userService.getCurrentUser()
-    .getId()));
-    LOGGER.info(String.format("Products from store %d were found", storeId));
-    return "productsInStore";
+    @Test
+    public void test_GetAllProductsByStoreId_ShouldReturnViewName() throws Exception {
+        List<Product> products = Arrays.asList(product, product);
+        int storeId = 2;
+        when(storePageService.getStoreById(storeId)).thenReturn(store);
+        when(userService.getCurrentUser()).thenReturn(user);
+        when(storePageService.getAllProductsFromStore(storeId, user.getId())).thenReturn(products);
+        mockMvc.perform(get("/stores/storeProducts")
+                .param("storeId", Integer.toString(storeId)))
+                .andExpect(status().isOk())
+                .andExpect(view().name("productsInStore"))
+                .andExpect(model().attributeExists("store"))
+                .andExpect(model().attributeExists("products"))
+                .andExpect(model().attribute("products", hasSize(2)));
+        verify(storePageService, times(1)).getAllProductsFromStore(storeId, user.getId());
+        verify(storePageService, times(1)).getStoreById(storeId);
+
+        verifyNoMoreInteractions(storePageService);
     }
-     */
+
+    @Test
+    public void test_AddProductsToStore_ShouldReturnViewName() throws Exception {
+        List<Product> products = Arrays.asList(product, product);
+        int storeId = 2;
+        when(storePageService.getStoreById(storeId)).thenReturn(store);
+        when(userService.getCurrentUser()).thenReturn(user);
+        when(storePageService.getNotMappedProducts(storeId, user.getId())).thenReturn(products);
+        mockMvc.perform(get("/addProductsToStore")
+                .param("storeId", Integer.toString(storeId)))
+                .andExpect(status().isOk())
+                .andExpect(view().name("addProductsToStore"))
+                .andExpect(model().attributeExists("myStore"))
+                .andExpect(model().attributeExists("products"))
+                .andExpect(model().attribute("products", hasSize(2)))
+                .andExpect(model().attributeExists("wrapedProducts"));
+        verify(storePageService, times(1)).getNotMappedProducts(storeId, user.getId());
+        verify(storePageService, times(1)).getStoreById(storeId);
+
+        verifyNoMoreInteractions(storePageService);
+    }
+
+//    @PostMapping("/addProductsToStore")
+//    public String addProductsToStore(@RequestParam("storeId") int storeId, @ModelAttribute("wrapedProducts")
+//            ProductsWrapper wrapedProducts) {
+//        int userId = userService.getCurrentUser().getId();
+//        if (wrapedProducts.getProducts().isEmpty()) {
+//            LOGGER.info(String.format("No products have been chosen in store %d ", storeId));
+//            return "redirect:/stores/storeProducts?storeId=" + storeId;
+//        }
+//        storePageService.addProductsToStore(userId, storeId, wrapedProducts);
+//        LOGGER.info(String.format("Products of user %d added in store %d ", userId, storeId));
+//
+//        return "redirect:/stores/storeProducts?storeId=" + storeId;
+//    }
+
+    @Test
+    public void test_AddProductsToStore_Post_ShouldRedirectToStoreProducts() throws Exception {
+        when(userService.getCurrentUser()).thenReturn(user);
+        when(wrapedProducts.getProducts()).thenReturn(Arrays.asList(2, 4, 6));
+        int storeId = 2;
+        mockMvc.perform(post("/addProductsToStore")
+                .param("storeId", Integer.toString(storeId)))
+                .andExpect(status().isFound())
+                .andExpect(redirectedUrl("/stores/storeProducts?storeId=" + storeId));
+        storePageService.addProductsToStore(anyInt(), anyInt(), any());
+        verify(storePageService, times(1)).addProductsToStore(anyInt(), anyInt(), any());
+    }
+
 
     public static Store createStore(int id, String name, String address, boolean isEnabled) {
         Store store = new Store();

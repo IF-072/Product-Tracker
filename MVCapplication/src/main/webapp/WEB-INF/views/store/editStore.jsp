@@ -24,7 +24,7 @@
                         <c:if test="${not empty validMessage}">
                             <div class="alert alert-danger">
                                 <p><span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-                                        ${validMessage}</p>
+                                    <spring:message code="${validMessage}"/></p>
                             </div>
                         </c:if>
 
@@ -38,20 +38,21 @@
                         </c:if>
 
                         <div class="form-group">
-                            <label class="control-label" form="inputWarning">
-                                <spring:message code="store.name"/></label>
-                            <form:errors path="name" cssClass="form-control label-danger"/>
-                            <spring:message code='name' var="addressMessage"/>
+                            <form:errors path="name" class="alert alert-danger" aria-hidden="true" element="div"/>
+                            <label class="control-label" form="inputWarning"> <spring:message code="store.name"/>
+                            </label>
+                            <spring:message code='name' var="nameMessage"/>
                             <form:input path="name" class="form-control"
-                                        placeholder="${addressMessage}" type="text"/>
+                                        placeholder="${nameMessage}" type="text"/>
                         </div>
+
                         <div class="form-group">
+                            <form:errors path="address" class="alert alert-danger" aria-hidden="true" element="div"/>
                             <label class="control-label" form="inputWarning"><spring:message
                                     code="store.storeAddress"/></label>
-                            <form:errors path="address" cssClass="form-control label-danger"/>
-                            <spring:message code='address' var="nameMessage"/>
+                            <spring:message code='address' var="addressMessage"/>
                             <form:input path="address" class="form-control"
-                                        placeholder="${nameMessage}" type="text"/>
+                                        placeholder="${addressMessage}" type="text"/>
                         </div>
 
                         <input type="submit" class="btn btn-lg btn-success btn-success-custom" value=<spring:message

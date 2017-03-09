@@ -49,7 +49,7 @@ public class GoShoppingPagesController {
         Map<String, List<ShoppingList>> map = goShoppingPageService.getProducts(userService.getCurrentUser().getId(), store);
         if (map != null) {
             model.addAllAttributes(map);
-            model.addAttribute("cartForm", new FormForCart(map.get("selected").size()));
+            model.addAttribute("carftForm", new FormForCart(map.get("selected").size()));
         }
 
         return "goShoppingProducts";
