@@ -14,7 +14,7 @@ function acceptDeleting() {
     });
 
     $("#deleteForm").dialog("close");
-    setTimeout(function() {window.location.reload();}, 500);
+    setTimeout(function () { location.reload(true); }, 500);
 }
 
 function cancelDeleting() {
