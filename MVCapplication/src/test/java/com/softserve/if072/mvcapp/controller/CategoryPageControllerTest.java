@@ -4,6 +4,7 @@ import com.softserve.if072.common.model.Category;
 import com.softserve.if072.common.model.User;
 import com.softserve.if072.mvcapp.service.CategoryPageService;
 import org.junit.Before;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -39,5 +40,6 @@ public class CategoryPageControllerTest {
                 .build();
     }
 
-
+    @Test
+    public void stub() {}
 }
