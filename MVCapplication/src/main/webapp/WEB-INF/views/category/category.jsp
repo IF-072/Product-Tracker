@@ -12,10 +12,10 @@
             <div class="col-lg-4">
                 <div class="panel panel-primary">
                     <div class="panel-heading text-center">
-                        <h4>List of categories is empty!</h4>
+                        <h4><spring:message code="category.listIsEmpty" /></h4>
                     </div>
                     <div class="panel-body text-center">
-                        <p>You can add category or return to the homepage</p>
+                        <p><spring:message code="category.choice"/></p>
                     </div>
                     <div class="panel-footer">
                         <div class="btn-group btn-group-justified" role="group" aria-label="...">
@@ -26,7 +26,7 @@
                             </div>
                             <div class="btn-group" role="group">
                                 <a href="<c:url value='/home'/>">
-                                    <button type="button" class="btn btn-default">Homepage</button>
+                                    <button type="button" class="btn btn-default"><spring:message code="category.homepage" /></button>
                                 </a>
                             </div>
                         </div>

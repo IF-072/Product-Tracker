@@ -94,7 +94,11 @@ public class CategoryService {
         }
     }
 
-    public void deleteById(int id) {
-        categoryDAO.deleteById(id);
+    public void deleteById(int id) throws IllegalArgumentException {
+        if (id != 0) {
+            categoryDAO.deleteById(id);
+        } else {
+            throw new IllegalArgumentException();
+        }
     }
 }
