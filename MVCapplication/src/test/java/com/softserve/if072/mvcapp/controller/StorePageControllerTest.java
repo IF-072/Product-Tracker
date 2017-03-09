@@ -45,7 +45,9 @@ public class StorePageControllerTest {
     private User user;
     @InjectMocks
     StorePageController storePageController;
+
     private MockMvc mockMvc;
+
 
     @Before
     public void setUp() {
@@ -82,30 +84,6 @@ public class StorePageControllerTest {
         verify(storePageService, times(1)).addNewStore();
         verifyNoMoreInteractions(storePageService);
     }
-
-    /**
-     * @PostMapping(value = "/addStore")
-     * public String addStore(@Validated @ModelAttribute("store") Store store, BindingResult result,
-     * Model model) {
-     * if (result.hasErrors()) {
-     * model.addAttribute("errorMessages", result.getFieldErrors());
-     * return "addStore";
-     * }
-     * <p>
-     * if (storePageService.alreadyExist(store, userService.getCurrentUser())) {
-     * model.addAttribute("validMessage", existMessage);
-     * return "addStore";
-     * }
-     * if (storePageService.isDeleted(store, userService.getCurrentUser())) {
-     * model.addAttribute("store", storePageService.getStoreByNameAndUserId(store, userService.getCurrentUser()));
-     * return "dialogWindow";
-     * }
-     * storePageService.addStore(userService.getCurrentUser(), store);
-     * LOGGER.info(String.format("Store of user %d was added", userService.getCurrentUser().getId()));
-     * <p>
-     * return "redirect:/stores/";
-     * }
-     */
 
     @Test
     public void test_AddStore_Post_ShouldReturnViewName() throws Exception {
@@ -195,7 +173,7 @@ public class StorePageControllerTest {
         verify(storePageService, times(0)).addStore(userService.getCurrentUser(), store);
     }
 
-     @Test
+    @Test
     public void test_AddStore_Post_ShouldRedirectStoreIsDeleted() throws Exception {
         when(userService.getCurrentUser()).thenReturn(user);
         String name = createStringWithLength(9);
@@ -229,5 +207,5 @@ public class StorePageControllerTest {
 
         return builder.toString();
     }
-
 }
+

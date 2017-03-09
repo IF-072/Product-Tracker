@@ -27,11 +27,15 @@ function edit(prodId, val, index) {
 $(function () {
     var prodId;
 
-    $( "#dialog" ).dialog({
+    $("#dialog").dialog({
         autoOpen: false
     });
 
-    $(".del").click(function() {
+    $(".edit").click(function () {
+        edit($(this).attr("prodId"), $(this).attr("val"), $(this).attr("index"));
+    });
+
+    $(".del").click(function () {
         prodId = $(this).attr("prodId");
         $("#dialog").dialog("open");
     });
