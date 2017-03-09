@@ -1,5 +1,6 @@
 package com.softserve.if072.restservice.service;
 
+import com.softserve.if072.common.model.Role;
 import com.softserve.if072.common.model.User;
 import com.softserve.if072.restservice.dao.mybatisdao.UserDAO;
 import com.softserve.if072.restservice.exception.DataNotFoundException;
@@ -81,5 +82,12 @@ public class UserService {
 
     public String encodePassword(String password) {
         return hexBinaryAdapter.marshal(messageDigest.digest(getBytesUtf8(password)));
+    }
+
+    public void verifyPremiumAccountValidity(User user) {
+        if(user.getRole().isPremium() && user.getPremiumExpiresTime() < System.currentTimeMillis() / 1000L){
+            user.setRole(Role.ROLE_REGULAR);
+            update(user);
+        }
     }
 }

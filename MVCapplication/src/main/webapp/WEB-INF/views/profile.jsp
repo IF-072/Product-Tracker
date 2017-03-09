@@ -1,3 +1,5 @@
+<%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
+
 <div class="row">
     <div class="col-lg-2"></div>
     <div class="col-lg-8">
@@ -24,7 +26,7 @@
                         </tr>
                         <tr>
                             <td>account type</td>
-                            <td>${user.role.description}</td>
+                            <td> <spring:message code="${user.role}"/></td>
                         </tr>
                         </tbody>
                     </table>

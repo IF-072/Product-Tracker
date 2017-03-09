@@ -63,17 +63,12 @@
                                 </div>
                             </div>
 
-                            <!-- Select Basic -->
+                            <!-- Confirm Password input-->
                             <div class="form-group">
-                                <label for="roleId" class="col-md-4 control-label">
-                                    <spring:message code='accountType'/>
-                                </label>
+                                <form:label path="confirmPassword" cssClass="col-md-4 control-label"><spring:message code='confirmPassword'/></form:label>
                                 <div class="col-md-8">
-                                    <select id="roleId" name="roleId" class="form-control">
-                                        <c:forEach items="${roleMap}" var="currentRole">
-                                            <option value="${currentRole.key}"><spring:message code='${currentRole.value}'/></option>
-                                        </c:forEach>
-                                    </select>
+                                    <form:input path="confirmPassword" class="form-control" placeholder="${passwordMessage}"
+                                                name="confirmPassword" type="password" value=""/>
                                 </div>
                             </div>
                             <spring:message code='createAccountButton' var="createAccount"/>

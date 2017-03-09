@@ -4,7 +4,6 @@ import com.softserve.if072.common.model.Role;
 import com.softserve.if072.common.model.User;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Many;
-import org.apache.ibatis.annotations.One;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Result;
 import org.apache.ibatis.annotations.Results;
@@ -21,11 +20,11 @@ import java.util.List;
  */
 @Repository
 public interface UserDAO {
-    String SELECT_ALL = "SELECT id, name, email, password, role_id, is_enabled FROM user";
-    String SELECT_BY_ID = "SELECT id, name, email, password, role_id, is_enabled FROM user WHERE id = #{id}";
-    String SELECT_BY_USERNAME = "SELECT id, name, email, password, role_id, is_enabled FROM user WHERE email = #{username}";
-    String INSERT = "INSERT INTO user (name, email, password, role_id, is_enabled) VALUES (#{name}, #{email}, #{password}, #{role.id}, #{isEnabled})";
-    String UPDATE = "UPDATE user SET name = #{name}, email = #{email}, password = #{password}, role_id = #{role.id}, isEnabled = #{isEnabled} WHERE id=#{id}";
+    String SELECT_ALL = "SELECT id, name, email, password, role, is_enabled, premium_expires_time FROM user";
+    String SELECT_BY_ID = "SELECT id, name, email, password, role, is_enabled, premium_expires_time FROM user WHERE id = #{id}";
+    String SELECT_BY_USERNAME = "SELECT id, name, email, password, role, is_enabled, premium_expires_time FROM user WHERE email = #{username}";
+    String INSERT = "INSERT INTO user (name, email, password, role, is_enabled) VALUES (#{name}, #{email}, #{password}, #{role}, #{isEnabled})";
+    String UPDATE = "UPDATE user SET name = #{name}, email = #{email}, password = #{password}, role = #{role}, is_enabled = #{isEnabled}, premium_expires_time = #{premiumExpiresTime} WHERE id=#{id}";
     String DELETE = "UPDATE user SET is_enabled = 0 WHERE id = #{id}";
 
     /**
@@ -39,8 +38,9 @@ public interface UserDAO {
             @Result(property = "name", column = "name"),
             @Result(property = "email", column = "email"),
             @Result(property = "password", column = "password"),
-            @Result(property = "role", column = "role_id", javaType = Role.class, one = @One(select = "com.softserve.if072.restservice.dao.mybatisdao.RoleDAO.getByID")),
+            @Result(property = "role", column = "role", javaType = Role.class, typeHandler=org.apache.ibatis.type.EnumTypeHandler.class),
             @Result(property = "isEnabled", column = "is_enabled"),
+            @Result(property = "premiumExpiresTime", column = "premium_expires_time"),
             @Result(property = "stores", column = "id", javaType = List.class,
                     many = @Many(select = "com.softserve.if072.restservice.dao.mybatisdao.StorageDAO.getAllStoresByUser")),
             @Result(property = "products", column = "id", javaType = List.class,
@@ -52,7 +52,7 @@ public interface UserDAO {
             @Result(property = "shoppingLists", column = "id", javaType = List.class,
                     many = @Many(select = "com.softserve.if072.restservice.dao.mybatisdao.ShoppingListDAO.getByUserID")),
             @Result(property = "storages", column = "id", javaType = List.class,
-                    many = @Many(select = "com.softserve.if072.restservice.dao.mybatisdao.StorageDAO.getByUserID")),
+                    many = @Many(select = "com.softserve.if072.restservice.dao.mybatisdao.StorageDAO.getByUserID"))
     })
     List<User> getAll();
 
@@ -68,8 +68,9 @@ public interface UserDAO {
             @Result(property = "name", column = "name"),
             @Result(property = "email", column = "email"),
             @Result(property = "password", column = "password"),
-            @Result(property = "role", column = "role_id", javaType = Role.class, one = @One(select = "com.softserve.if072.restservice.dao.mybatisdao.RoleDAO.getByID")),
+            @Result(property = "role", column = "role", javaType = Role.class, typeHandler=org.apache.ibatis.type.EnumTypeHandler.class),
             @Result(property = "isEnabled", column = "is_enabled"),
+            @Result(property = "premiumExpiresTime", column = "premium_expires_time")
     })
     User getByID(int id);
 
@@ -109,8 +110,9 @@ public interface UserDAO {
             @Result(property = "name", column = "name"),
             @Result(property = "email", column = "email"),
             @Result(property = "password", column = "password"),
-            @Result(property = "role", column = "role_id", javaType = Role.class, one = @One(select = "com.softserve.if072.restservice.dao.mybatisdao.RoleDAO.getByID")),
+            @Result(property = "role", column = "role", javaType = Role.class, typeHandler=org.apache.ibatis.type.EnumTypeHandler.class),
             @Result(property = "isEnabled", column = "is_enabled"),
+            @Result(property = "premiumExpiresTime", column = "premium_expires_time")
     })
     User getByUsername(@Param("username") String username);
 }

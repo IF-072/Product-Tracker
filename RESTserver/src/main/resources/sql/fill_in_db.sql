@@ -1,24 +1,17 @@
 -- 26/02/17
 
 -- -----------------------------------------------------
--- Fill in role table
--- -----------------------------------------------------
-INSERT INTO role(id, name, description) VALUES(1,'ROLE_REGULAR', 'Regular account');
-INSERT INTO role(id, name, description) VALUES(2,'ROLE_PREMIUM', 'Premium account');
-
-
--- -----------------------------------------------------
 -- Fill in user table
 -- -----------------------------------------------------
-INSERT INTO if072java.user (id, name, email, password, is_enabled, role_id) VALUES (1, 'Igor  Parada', 'igorParada@gmail.com', 'B59C67BF196A4758191E42F76670CEBA', 1, 2);
-INSERT INTO if072java.user (id,name, email, password, is_enabled, role_id) VALUES (2, 'Roman Dyndyn', 'romanDyndyn@gmail.com', '934B535800B1CBA8F96A5D72F72F1611', 1, 2);
-INSERT INTO if072java.user (id,name, email, password, is_enabled, role_id) VALUES (3, 'Pavlo Bendus', 'pavloBendus@gmail.com', '2BE9BD7A3434F7038CA27D1918DE58BD', 1, 2);
-INSERT INTO if072java.user (id,name, email, password, is_enabled, role_id) VALUES (4, 'Igor Kryviuk', 'igorKryviuk@gmail.com', 'DBC4D84BFCFE2284BA11BEFFB853A8C4', 1, 2);
-INSERT INTO if072java.user (id,name, email, password, is_enabled, role_id) VALUES (5, 'Oleh Pochernin', 'olehPochernin@gmail.com', '6074C6AA3488F3C2DDDFF2A7CA821AAB', 1, 2);
-INSERT INTO if072java.user (id,name, email, password, is_enabled, role_id) VALUES (6, 'Vitaliy Malisevych', 'vitaliyMalisevych@gmail.com', 'E9510081AC30FFA83F10B68CDE1CAC07', 1, 2);
-INSERT INTO if072java.user (id,name, email, password, is_enabled, role_id) VALUES (7, 'Nazar Vynnyk', 'nazarVynnyk@gmail.com', 'D79C8788088C2193F0244D8F1F36D2DB', 1, 2);
-INSERT INTO if072java.user (id,name, email, password, is_enabled, role_id) VALUES (8, 'Java Bean', 'javaBean@oracle.com', '20D50A5D6A5D4105C84C3069AAFE8998', 1, 1);
-INSERT INTO if072java.user (id,name, email, password, is_enabled, role_id) VALUES (9,'Billy', 'billGates@microsoft.com', 'B59C67BF196A4758191E42F76670CEBA', 1, 1);
+INSERT INTO if072java.user (id, name, email, password, is_enabled, role) VALUES (1, 'Igor  Parada', 'igorParada@gmail.com', 'B59C67BF196A4758191E42F76670CEBA', 1, 'ROLE_PREMIUM');
+INSERT INTO if072java.user (id,name, email, password, is_enabled, role) VALUES (2, 'Roman Dyndyn', 'romanDyndyn@gmail.com', '934B535800B1CBA8F96A5D72F72F1611', 1, 'ROLE_PREMIUM');
+INSERT INTO if072java.user (id,name, email, password, is_enabled, role) VALUES (3, 'Pavlo Bendus', 'pavloBendus@gmail.com', '2BE9BD7A3434F7038CA27D1918DE58BD', 1, 'ROLE_PREMIUM');
+INSERT INTO if072java.user (id,name, email, password, is_enabled, role) VALUES (4, 'Igor Kryviuk', 'igorKryviuk@gmail.com', 'DBC4D84BFCFE2284BA11BEFFB853A8C4', 1, 'ROLE_PREMIUM');
+INSERT INTO if072java.user (id,name, email, password, is_enabled, role) VALUES (5, 'Oleh Pochernin', 'olehPochernin@gmail.com', '6074C6AA3488F3C2DDDFF2A7CA821AAB', 1, 'ROLE_PREMIUM');
+INSERT INTO if072java.user (id,name, email, password, is_enabled, role) VALUES (6, 'Vitaliy Malisevych', 'vitaliyMalisevych@gmail.com', 'E9510081AC30FFA83F10B68CDE1CAC07', 1, 'ROLE_PREMIUM');
+INSERT INTO if072java.user (id,name, email, password, is_enabled, role) VALUES (7, 'Nazar Vynnyk', 'nazarVynnyk@gmail.com', 'D79C8788088C2193F0244D8F1F36D2DB', 1, 'ROLE_PREMIUM');
+INSERT INTO if072java.user (id,name, email, password, is_enabled, role) VALUES (8, 'Java Bean', 'javaBean@oracle.com', '20D50A5D6A5D4105C84C3069AAFE8998', 1, 'ROLE_PREMIUM');
+INSERT INTO if072java.user (id,name, email, password, is_enabled, role) VALUES (9,'Billy', 'billGates@microsoft.com', 'B59C67BF196A4758191E42F76670CEBA', 1, 'ROLE_REGULAR');
 
 
 -- -----------------------------------------------------

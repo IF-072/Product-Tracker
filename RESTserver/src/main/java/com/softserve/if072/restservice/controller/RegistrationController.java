@@ -2,6 +2,7 @@ package com.softserve.if072.restservice.controller;
 
 import com.softserve.if072.common.model.User;
 import com.softserve.if072.restservice.service.UserService;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +28,8 @@ public class RegistrationController {
 
     @RequestMapping(value = "/", method = RequestMethod.POST)
     public ResponseEntity<String> performRegistration(@RequestBody User user) {
-        if (user == null) {
+        if (user == null || user.getRole() == null || StringUtils.isBlank(user.getEmail()) ||
+                StringUtils.isBlank(user.getName()) || StringUtils.isBlank(user.getPassword())) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
@@ -51,6 +53,4 @@ public class RegistrationController {
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
-
-
 }
