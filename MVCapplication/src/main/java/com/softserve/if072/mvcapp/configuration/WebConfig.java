@@ -125,20 +125,6 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     }
 
     /**
-     * Add {@link org.springframework.web.servlet.i18n.LocaleChangeInterceptor}
-     * for pre- and post-processing of controller method invocations.
-     *
-     * @param registry helps with configuring a list of mapped interceptors
-     */
-    @Override
-    public void addInterceptors(InterceptorRegistry registry) {
-        LocaleChangeInterceptor interceptor = new LocaleChangeInterceptor();
-        interceptor.setParamName("mylocale");
-        registry.addInterceptor(interceptor);
-    }
-
-
-    /**
      * Creates a validator instance with custom message source
      *
      * @return validator's instance
