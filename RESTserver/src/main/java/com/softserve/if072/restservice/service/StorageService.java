@@ -38,7 +38,7 @@ public class StorageService {
     public List<Storage> getByUserId(int user_id) {
         List<Storage> list = storageDAO.getByUserID(user_id);
         if (CollectionUtils.isEmpty(list)) {
-            LOGGER.error("Storage of user with id {} not found", user_id);
+            LOGGER.warn("Storage of user with id {} not found", user_id);
         }
         return list;
     }
@@ -85,7 +85,7 @@ public class StorageService {
 
         Storage storage = storageDAO.getByProductID(storageDTO.getProductId());
         if (storage == null) {
-            LOGGER.error(String.format("Storage with product id %d doesn't exist", storageDTO.getProductId()));
+            LOGGER.warn(String.format("Storage with product id %d doesn't exist", storageDTO.getProductId()));
             return;
         }
 

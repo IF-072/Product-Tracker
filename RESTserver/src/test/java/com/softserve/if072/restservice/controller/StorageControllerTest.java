@@ -96,17 +96,6 @@ public class StorageControllerTest {
     }
 
     @Test
-    public void getByUserId_ShouldReturnNull() throws Exception {
-        when(storageService.getByUserId(user.getId())).thenThrow(new DataNotFoundException());
-        MvcResult result = mockMvc.perform(get("/api/storage/" + user.getId()))
-                .andExpect(status().isOk())
-                .andReturn();
-        assertTrue(result.getResponse().getContentAsString().isEmpty());
-        verify(storageService).getByUserId(user.getId());
-        verifyZeroInteractions(storageService);
-    }
-
-    @Test
     public void getByProductId_ShouldReturnStorage() throws Exception {
         when(storageService.getByProductId(storage1.getProduct().getId())).thenReturn(storage1);
         mockMvc.perform(get("/api/storage/{userId}/{productId}", user.getId(), storage1.getProduct().getId()))

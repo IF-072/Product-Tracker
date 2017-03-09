@@ -55,15 +55,11 @@ public class StorageController {
     @ResponseBody
     @ResponseStatus(value = HttpStatus.OK)
     public List<Storage> getByUserId(@PathVariable int user_id, HttpServletResponse response) {
-        try {
-            List<Storage> storage = storageService.getByUserId(user_id);
-            LOGGER.info(String.format("All Storages of user with id %d were found", user_id));
-            return storage;
-        } catch (DataNotFoundException e) {
-            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-            LOGGER.error(String.format("Storages of user with id %d were not found", user_id), e);
-            return null;
-        }
+
+        List<Storage> storage = storageService.getByUserId(user_id);
+        LOGGER.info(String.format("All Storages of user with id %d were found", user_id));
+        return storage;
+
     }
 
     @PreAuthorize("#user_id == authentication.user.id")
