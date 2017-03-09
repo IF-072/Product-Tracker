@@ -1,7 +1,5 @@
 package com.softserve.if072.mvcapp.controller;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.softserve.if072.common.model.Category;
 import com.softserve.if072.common.model.Product;
 import com.softserve.if072.common.model.Unit;
@@ -15,13 +13,9 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
-import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.web.servlet.view.InternalResourceView;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
-import java.io.IOException;
-import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -30,10 +24,10 @@ import java.util.Map;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
 /**
  * The class is used to test ProductPageController class methods
@@ -312,7 +306,6 @@ public class ProductPageControllerTest {
 
     @Test
     public void testGetStoresByProductId_POST_ShouldReturnViewName() throws Exception {
-        when(userService.getCurrentUser()).thenReturn(user);
         mockMvc.perform(post("/product/stores")
                 .param("productId", "1")
                 .sessionAttr("storesInProduct", new StoresInProduct())
