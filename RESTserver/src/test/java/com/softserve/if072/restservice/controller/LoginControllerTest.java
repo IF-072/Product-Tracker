@@ -50,7 +50,7 @@ public class LoginControllerTest {
         mockMvc.perform(post("/login/").param("login", "test@user.com").param("password", "test"))
                 .andExpect(status().isOk())
                 .andExpect(content().string("SOME_TOKEN"));
-        verify(tokenService, times(1)).generateTokenFor(anyString());
+        verify(tokenService).generateTokenFor(anyString());
     }
 
     @Test
@@ -58,7 +58,7 @@ public class LoginControllerTest {
         mockMvc.perform(post("/login/").param("login", "test@user.com"))
                 .andExpect(status().is4xxClientError())
                 .andExpect(content().string(""));
-        verify(tokenService, times(0)).generateTokenFor(anyString());
+        verify(tokenService, never()).generateTokenFor(anyString());
     }
 
     @Test
@@ -66,7 +66,7 @@ public class LoginControllerTest {
         mockMvc.perform(post("/login/").param("login", "test@user.com").param("password", "wrong_password"))
                 .andExpect(status().is4xxClientError())
                 .andExpect(content().string("Wrong password"));
-        verify(userService, times(1)).getByUsername("test@user.com");
+        verify(userService).getByUsername("test@user.com");
         verifyZeroInteractions(tokenService);
     }
 }

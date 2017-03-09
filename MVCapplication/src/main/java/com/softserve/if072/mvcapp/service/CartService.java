@@ -62,7 +62,7 @@ public class CartService {
         LOGGER.info(cartSuccessfullyOperation, "purchasing the product  with id", cartDTO.getProductId(), cartDTO.getUserId());
     }
 
-    /**
+    /**С
      * Make request to a REST server for deleting a product from the cart of current user
      *
      * @param cartDTO - an object with required information for the product delete

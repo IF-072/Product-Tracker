@@ -9,3 +9,8 @@
 .lang-choice:hover {
     background-color: lightgray;
 }
+
+span.lang-sm.lang-lbl-full.lang-choice {
+    margin-left: 5px; !important;
+    margin-right: 5px; !important;
+}
