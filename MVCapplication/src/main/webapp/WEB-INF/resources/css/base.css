@@ -1,3 +1,11 @@
 #lang-dropdown-btn {
     width: 150px
 }
+
+.lang-choice {
+    cursor: pointer;
+}
+
+.lang-choice:hover {
+    background-color: lightgray;
+}
