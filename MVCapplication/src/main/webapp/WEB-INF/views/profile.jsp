@@ -5,7 +5,7 @@
     <div class="col-lg-8">
         <div class="panel panel-default">
             <div class="panel-heading">
-                Information about your profile
+                <spring:message code="profile.info"/>
             </div>
             <!-- /.panel-heading -->
             <div class="panel-body">
@@ -17,7 +17,7 @@
                             <td>${user.id}</td>
                         </tr>
                         <tr>
-                            <td>name</td>
+                            <td><spring:message code="profile.name"/></td>
                             <td>${user.name}</td>
                         </tr>
                         <tr>
@@ -25,7 +25,7 @@
                             <td>${user.email}</td>
                         </tr>
                         <tr>
-                            <td>account type</td>
+                            <td><spring:message code="profile.acc.type"/></td>
                             <td> <spring:message code="${user.role}"/></td>
                         </tr>
                         </tbody>
