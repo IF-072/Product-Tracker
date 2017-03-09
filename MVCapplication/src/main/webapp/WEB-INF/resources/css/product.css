@@ -1,4 +1,5 @@
 #image, #edit,#delete, #goStores, #addImage, #addImage, #addToShoppingList {text-align:center; cursor: pointer}
+#goStores:hover {text-decoration: underline}
 #image {text-align:center}
 
 #productData td {vertical-align: middle}

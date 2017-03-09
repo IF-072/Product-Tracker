@@ -3,6 +3,7 @@ $(function () {
         var locale = $(this).attr("lang");
 
         $.cookie('myLocaleCookie', locale, {path : '/'});
+
         location.reload();
     });
 });

@@ -26,11 +26,10 @@ import java.util.Map;
  *
  * @author Vitaliy Malisevych
  */
-
 @Service
 public class ProductPageService {
 
-    private static final Logger LOGGER = LogManager.getLogger(ProductPageService.class);
+    //private static final Logger LOGGER = LogManager.getLogger(ProductPageService.class);
 
     @Value("${application.restProductURL}")
     private String productUrl;
@@ -57,7 +56,6 @@ public class ProductPageService {
      * @param userId id of user whose products must be received
      * @return all user's products
      */
-
     public List<Product> getAllProducts(int userId) {
 
         final String uri = productUrl + "/user/{userId}";
@@ -74,7 +72,6 @@ public class ProductPageService {
      * @param productId id of product that must be received
      * @return product
      */
-
     public Product getProduct(int productId) {
 
         final String getProductUri = productUrl + "/{productId}";
@@ -91,7 +88,6 @@ public class ProductPageService {
      * @param userId id of user whose categories must be received
      * @return all user's categories
      */
-
     public List<Category> getAllCategories(int userId) {
 
         final String categoryUri = categoryUrl + "{userId}";
@@ -112,7 +108,6 @@ public class ProductPageService {
      *
      * @return all user's units
      */
-
     public List<Unit> getAllUnits() {
 
         final String unitUri = unitUrl + "/";
@@ -131,7 +126,6 @@ public class ProductPageService {
      * @param product new product that user want to add to the database
      * @param user    user whose product must be added
      */
-
     public void addProduct(Product product, User user) {
 
         final String categoryByIdUri = categoryUrl + "/id/{categoryId}";
@@ -169,7 +163,6 @@ public class ProductPageService {
      * @param product new product that user want to edit in the database
      * @param user    user whose product must be edited
      */
-
     public void editProduct(Product product, User user) {
 
         final String categoryByIdUri = categoryUrl + "/id/{categoryId}";
@@ -206,7 +199,6 @@ public class ProductPageService {
      *
      * @param productId ID of product that user want to delete from the database
      */
-
     public void delProduct(int productId) {
 
         final String uri = productUrl + "/{productId}";
@@ -222,7 +214,6 @@ public class ProductPageService {
      * @param userId user whose stores must be received
      * @return list of stores
      */
-
     public List<Store> getAllStores(int userId) {
 
         final String getAllStoresUri = storeUrl + "/user/{userId}";
@@ -242,7 +233,6 @@ public class ProductPageService {
      * @param userId user whose store's IDs must be received
      * @return list of store's IDs
      */
-
     public Map<Integer, String> getAllStoresId(int userId) {
         Map<Integer, String> allStoresById = new HashMap<>();
         List<Store> allStores = getAllStores(userId);
@@ -260,7 +250,6 @@ public class ProductPageService {
      *
      * @param productId product that user can buy in received stores
      */
-
     public StoresInProduct getStoresInProduct(int productId) {
 
         Product product = getProduct(productId);
@@ -288,7 +277,6 @@ public class ProductPageService {
      * @param productId       ID of product that mapped on stores
      * @param storesInProduct new list of store's IDs mapped on product
      */
-
     public void updateStoresInProduct(StoresInProduct storesInProduct, int productId) {
 
         final String getStoreByIdUri = storeUrl + "/{storeId}";
@@ -340,7 +328,6 @@ public class ProductPageService {
      * @param user    user whose product must be received
      * @return product
      */
-
     public Product getProductByNameAndUserId(Product product, User user) {
 
         final String getProductByNameAndUserIdUri = productUrl + "/{userId}/getByName/{productName}";
@@ -360,7 +347,6 @@ public class ProductPageService {
      * @param user    user whose product must be checked
      * @return boolean value
      */
-
     public boolean isAlreadyExist(Product product, User user) {
 
         Product existsProduct = getProductByNameAndUserId(product, user);
@@ -380,7 +366,6 @@ public class ProductPageService {
      * @param user    user whose product must be checked
      * @return boolean value
      */
-
     public boolean isDeleted(Product product, User user) {
         Product existsProduct = getProductByNameAndUserId(product, user);
 
@@ -393,7 +378,6 @@ public class ProductPageService {
      *
      * @param product product, which was deleted
      */
-
     public void restoreProduct(Product product) {
 
         final String restoreProductUri = productUrl + "/restore";
