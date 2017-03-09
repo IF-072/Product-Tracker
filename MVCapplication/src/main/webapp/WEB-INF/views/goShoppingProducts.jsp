@@ -42,7 +42,7 @@
                 </table>
                 <button type="button" class="btn btn-default" id="selectAll"><spring:message code="selectAll"/></button>
                 <button type="button" class="btn btn-default" id="prevStep"><spring:message code="previousStep"/></button>
-                <input type="submit" class="btn btn-default btn-success" value="<spring:message code="AddToCart"/>">
+                <input type="submit" class="btn btn-default btn-primary" value="<spring:message code="AddToCart"/>">
             </form:form>
 
 

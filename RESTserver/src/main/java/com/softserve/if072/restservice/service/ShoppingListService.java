@@ -59,7 +59,7 @@ public class ShoppingListService {
 
     public void insert(ShoppingList shoppingList) {
         ShoppingList list = shoppingListDAO.getByClass(shoppingList);
-        if (list == null) {
+        if (list == null && shoppingList != null) {
             shoppingListDAO.insert(shoppingList);
         }
     }
@@ -82,6 +82,7 @@ public class ShoppingListService {
     }
 
     public void delete(int productId) {
-        shoppingListDAO.deleteByProductId(productId);
+        if (productId > 0)
+            shoppingListDAO.deleteByProductId(productId);
     }
 }

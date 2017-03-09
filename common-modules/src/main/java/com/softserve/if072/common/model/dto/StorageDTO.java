@@ -3,7 +3,10 @@ package com.softserve.if072.common.model.dto;
 import javax.validation.constraints.Min;
 
 /**
- * Created by dyndyn on 24.02.2017.
+ * The StorageDTO class is used to simplify data transfer operations
+ * between MVCapplication and RESTserver
+ *
+ * @author Roman Dyndyn
  */
 public class StorageDTO {
     private int userId;

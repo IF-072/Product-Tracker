@@ -35,7 +35,7 @@
                             </form:form>
                         </td>
                         <td>
-                            <button type="button" class="btn btn-default btn-success"
+                            <button type="button" class="btn btn-default btn-primary"
                                     onclick="addToShoppingList(${storage.product.id});">
                                 <spring:message code="add"/>
                             </button>
