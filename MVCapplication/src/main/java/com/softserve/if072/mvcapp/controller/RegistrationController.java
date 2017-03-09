@@ -55,7 +55,6 @@ public class RegistrationController {
      */
     @GetMapping
     public String getRegisterPage(Model model) {
-        model.addAttribute("roles", registrationService.getAvailableRoles());
         model.addAttribute("registrationForm", new UserRegistrationForm());
 
         return "register";

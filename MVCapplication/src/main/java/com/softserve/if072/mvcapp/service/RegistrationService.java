@@ -1,6 +1,5 @@
 package com.softserve.if072.mvcapp.service;
 
-import com.softserve.if072.common.model.Role;
 import com.softserve.if072.common.model.User;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,15 +25,6 @@ public class RegistrationService {
 
     @Autowired
     private RestTemplate restTemplate;
-
-    /**
-     * Returns an array with all available roles
-     *
-     * @return array with all available for registration roles
-     */
-    public Role[] getAvailableRoles() {
-        return  Role.class.getEnumConstants();
-    }
 
     /**
      * Performs user registration on RESTful service.

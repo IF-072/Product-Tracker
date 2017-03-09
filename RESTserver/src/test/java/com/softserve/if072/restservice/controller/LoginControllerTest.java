@@ -46,7 +46,7 @@ public class LoginControllerTest {
     }
 
     @Test
-    public void testGetAuthenticationTokenSuccessWithCorrectCredentials() throws Exception {
+    public void getAuthenticationToken_ShouldReturnTokenWhenCorrectCredentials() throws Exception {
         mockMvc.perform(post("/login/").param("login", "test@user.com").param("password", "test"))
                 .andExpect(status().isOk())
                 .andExpect(content().string("SOME_TOKEN"));
@@ -54,7 +54,7 @@ public class LoginControllerTest {
     }
 
     @Test
-    public void testGetAuthenticationFailWhenNoRequestParamethersPresent() throws Exception {
+    public void getAuthenticationToken_ShouldFailWhenNoRequestParamethersPresent() throws Exception {
         mockMvc.perform(post("/login/").param("login", "test@user.com"))
                 .andExpect(status().is4xxClientError())
                 .andExpect(content().string(""));
@@ -62,7 +62,7 @@ public class LoginControllerTest {
     }
 
     @Test
-    public void testGetAuthenticationTokenFailWhenCredentialsAreInvalid() throws Exception {
+    public void getAuthenticationToken_ShouldFailWhenCredentialsAreInvalid() throws Exception {
         mockMvc.perform(post("/login/").param("login", "test@user.com").param("password", "wrong_password"))
                 .andExpect(status().is4xxClientError())
                 .andExpect(content().string("Wrong password"));

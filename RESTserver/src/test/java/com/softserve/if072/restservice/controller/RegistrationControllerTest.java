@@ -58,7 +58,7 @@ public class RegistrationControllerTest {
     }
 
     @Test
-    public void testPerformRegistrationFailsWhenUserAlreadyExist() throws Exception {
+    public void performRegistration_ShouldFailWhenUserAlreadyExist() throws Exception {
 
         mockMvc.perform(post("/register/").contentType(
                 MediaType.APPLICATION_JSON).content(mapper.writeValueAsString(user))).andExpect(
@@ -67,7 +67,7 @@ public class RegistrationControllerTest {
     }
 
     @Test
-    public void testPerformRegistrationSuccessful() throws Exception {
+    public void performRegistration_ShouldReturnStatus200WhenSuccessful() throws Exception {
         User newUser = new User();
         newUser.setEmail("new@user.com");
         newUser.setPassword("newpassword");
@@ -81,7 +81,7 @@ public class RegistrationControllerTest {
     }
 
     @Test
-    public void testFindUsernameReturnEmptyStringWhenUsernameNotExists() throws Exception {
+    public void findUsername_ShouldReturnEmptyStringWhenUsernameNotExists() throws Exception {
         mockMvc.perform(post("/register/findUsername").content("another@user.com"))
                 .andExpect(status().isOk())
                 .andExpect(content().string(""));
@@ -89,7 +89,7 @@ public class RegistrationControllerTest {
     }
 
     @Test
-    public void testFindUsernameWhenUsernameAlreadyExists() throws Exception {
+    public void findUsername_ShouldReturnUsernameWhenUsernameAlreadyExists() throws Exception {
         mockMvc.perform(post("/register/findUsername").content("test@user.com"))
                 .andExpect(status().isOk())
                 .andExpect(content().string("test@user.com"));

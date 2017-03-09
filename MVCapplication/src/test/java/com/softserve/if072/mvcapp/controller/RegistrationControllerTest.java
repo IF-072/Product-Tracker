@@ -29,9 +29,9 @@ public class RegistrationControllerTest {
 
     @Mock
     private RegistrationService registrationService;
-    private RegistrationController registrationController;
     @Mock
     private RegistrationValidator registrationValidator;
+    private RegistrationController registrationController;
     private MockMvc mockMvc;
     private UserRegistrationForm userRegistrationForm;
 
@@ -45,37 +45,37 @@ public class RegistrationControllerTest {
         userRegistrationForm = new UserRegistrationForm();
         userRegistrationForm.setEmail("test@user.com");
         userRegistrationForm.setPassword("testPassword");
+        userRegistrationForm.setConfirmPassword("testPassword");
+        userRegistrationForm.setName("name");
 
         when(registrationService.performRegistration(any())).thenReturn(true);
-        when(registrationService.alreadyExist("test@user.com")).thenReturn(true);
     }
 
     @Test
-    public void testGetRegistrationPage() throws Exception {
+    public void getRegistrationPage_ShouldReturnModelWithEmptyRegistrationForm() throws Exception {
         mockMvc.perform(get("/register"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("register"))
-                .andExpect(model().attributeExists("roles"))
                 .andExpect(model().attributeExists("registrationForm"));
     }
 
-
     @Test
-    public void testPostRegistrationPageWhenParamsAreValid() throws Exception {
+    public void postRegistrationPage_ShouldRedirectToLoginWhenParamsAreValid() throws Exception {
         mockMvc.perform(post("/register")
                 .param("email", "test@user.com")
                 .param("password", "testPassword")
                 .param("name", "Ivan")
-                .param("roleId", "1"))
+                .param("confirmPassword", "testPassword"))
                 .andExpect(model().attributeDoesNotExist("errorMessage", "validationErrors"))
                 .andExpect(redirectedUrl("/login"));
     }
 
     @Test
-    public void testPostRegistrationPageWhenParamsAreInvalid() throws Exception {
+    public void postRegistrationPage_ShouldHaveErrorsWhenParamsAreInvalid() throws Exception {
         mockMvc.perform(post("/register"))
                 .andExpect(flash().attributeExists("validationErrors"))
                 .andExpect(redirectedUrl("/register"));
         verifyZeroInteractions(registrationService);
     }
+
 }

@@ -48,7 +48,7 @@ public class LoginControllerTest {
     }
 
     @Test
-    public void testGetLoginPage() throws Exception {
+    public void getLoginPage_ShouldReturnViewName() throws Exception {
         mockMvc.perform(get("/login"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("login"))
@@ -57,7 +57,7 @@ public class LoginControllerTest {
 
 
     @Test
-    public void testPostLoginPageWhenParamsAreValid() throws Exception {
+    public void postLoginPage_ShouldRedirectToHomePageWhenParamsAreValid() throws Exception {
         mockMvc.perform(post("/login").param("email", "test@user.com").param("password", "testPassword"))
                .andExpect(redirectedUrl("/home"))
                .andExpect(cookie().value("X-Token", "TOKEN_VALUE"));
@@ -65,7 +65,7 @@ public class LoginControllerTest {
     }
 
     @Test
-    public void testPostLoginPageWhenParamsAreInvalid() throws Exception {
+    public void postLoginPage_ShouldHaveErrorsWhenParamsAreInvalid() throws Exception {
         mockMvc.perform(post("/login"))
                 .andExpect(model().attributeExists("errorMessages"))
                 .andExpect(view().name("login"));
