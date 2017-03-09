@@ -46,7 +46,7 @@ public class UserService {
      *
      * @return current User instance
      */
-    public User getCurrentUser(){
+    public User getCurrentUser() {
         User user = restTemplate.getForObject(getCurrentUserURL, User.class);
         return user;
     }
@@ -56,15 +56,12 @@ public class UserService {
      *
      * @param user user to have role updated
      */
-    public void setPremium(User user){
-        if(user.getRole() != null && user.getRole().getId() == regularRoleId){
-            Role newRole = registrationService.getRoleByID(premiumRoleId);
-            if(newRole != null){
-                user.setRole(newRole);
-                long premiumExpiresTime = System.currentTimeMillis() / 1000L + premiumDuration;
-                user.setPremiumExpiresTime(premiumExpiresTime);
-                updateUser(user);
-            }
+    public void setPremium(User user) {
+        if (user.getRole() != null && user.getRole().isRegular()) {
+            user.setRole(Role.ROLE_PREMIUM);
+            long premiumExpiresTime = System.currentTimeMillis() / 1000L + premiumDuration;
+            user.setPremiumExpiresTime(premiumExpiresTime);
+            updateUser(user);
         }
     }
 
@@ -73,11 +70,11 @@ public class UserService {
      *
      * @param user user to have premium period updated
      */
-    public void prolongPremium(User user){
-        if(user.getRole() != null && user.getRole().getId() == premiumRoleId){
-                long premiumExpiresTime = System.currentTimeMillis() / 1000L + premiumDuration;
-                user.setPremiumExpiresTime(premiumExpiresTime);
-                updateUser(user);
+    public void prolongPremium(User user) {
+        if (user.getRole() != null && user.getRole().isPremium()) {
+            long premiumExpiresTime = System.currentTimeMillis() / 1000L + premiumDuration;
+            user.setPremiumExpiresTime(premiumExpiresTime);
+            updateUser(user);
         }
     }
 

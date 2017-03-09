@@ -5,9 +5,7 @@ import com.softserve.if072.common.model.User;
 import com.softserve.if072.restservice.security.authentication.AuthenticatedUserProxy;
 import com.softserve.if072.restservice.security.authentication.CustomAuthenticationToken;
 import com.softserve.if072.restservice.service.TokenService;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.softserve.if072.restservice.service.UserService;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
@@ -29,14 +27,16 @@ import java.util.List;
 public class CustomRESTAuthenticationManager implements AuthenticationManager {
 
     private final TokenService tokenService;
+    private final UserService userService;
 
-    @Autowired
-    public CustomRESTAuthenticationManager(TokenService tokenService) {
+    public CustomRESTAuthenticationManager(TokenService tokenService, UserService userService) {
         this.tokenService = tokenService;
+        this.userService = userService;
     }
 
     /**
      * Performs custom authentication process based on input CustomAuthenticationToken.
+     * Also sets up the user role to 'regular' if premium account duration has expired
      *
      * @param authentication {@link CustomAuthenticationToken} instance
      * @return an instance of {@link AuthenticatedUserProxy} with user details
@@ -64,8 +64,9 @@ public class CustomRESTAuthenticationManager implements AuthenticationManager {
 
         List<GrantedAuthority> authorities = new ArrayList<>();
         authorities.add(user.getRole());
-        Authentication authenticatedUser = new AuthenticatedUserProxy(user, authenticationToken, true, authorities);
+        userService.verifyPremiumAccountValidity(user);
 
+        Authentication authenticatedUser = new AuthenticatedUserProxy(user, authenticationToken, true, authorities);
         return authenticatedUser;
     }
 }

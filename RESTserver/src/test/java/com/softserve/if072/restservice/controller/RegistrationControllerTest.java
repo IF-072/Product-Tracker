@@ -44,7 +44,7 @@ public class RegistrationControllerTest {
         user.setEmail("test@user.com");
         user.setPassword("test");
         user.setName("testname");
-        user.setRole(new Role("ROLE_REGULAR"));
+        user.setRole(Role.ROLE_REGULAR);
 
         when(userService.getByUsername("test@user.com")).thenReturn(user);
     }
@@ -72,7 +72,7 @@ public class RegistrationControllerTest {
         newUser.setEmail("new@user.com");
         newUser.setPassword("newpassword");
         newUser.setName("newname");
-        newUser.setRole(new Role("ROLE_REGULAR"));
+        newUser.setRole(Role.ROLE_REGULAR);
 
         mockMvc.perform(post("/register/").contentType(
                 MediaType.APPLICATION_JSON).content(mapper.writeValueAsString(newUser))).andExpect(

@@ -1,6 +1,5 @@
 package com.softserve.if072.mvcapp.controller;
 
-import com.softserve.if072.common.model.Role;
 import com.softserve.if072.mvcapp.dto.UserRegistrationForm;
 import com.softserve.if072.mvcapp.service.RegistrationService;
 import com.softserve.if072.mvcapp.validator.RegistrationValidator;
@@ -13,7 +12,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -48,7 +48,6 @@ public class RegistrationControllerTest {
 
         when(registrationService.performRegistration(any())).thenReturn(true);
         when(registrationService.alreadyExist("test@user.com")).thenReturn(true);
-        when(registrationService.getRoleByID(1)).thenReturn(new Role("ROLE_REGULAR"));
     }
 
     @Test
@@ -56,7 +55,7 @@ public class RegistrationControllerTest {
         mockMvc.perform(get("/register"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("register"))
-                .andExpect(model().attributeExists("roleMap"))
+                .andExpect(model().attributeExists("roles"))
                 .andExpect(model().attributeExists("registrationForm"));
     }
 
