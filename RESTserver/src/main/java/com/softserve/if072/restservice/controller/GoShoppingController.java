@@ -79,7 +79,7 @@ public class GoShoppingController {
     @PostMapping("/cart")
     @ResponseBody
     @ResponseStatus(value = HttpStatus.OK)
-    public void insertInCart(@RequestBody List<Cart> carts, HttpServletResponse response) {
+    public void insertInCart(@RequestBody List<Cart> carts) {
 
         goShoppingService.insertCart(carts);
         LOGGER.info("Cart was inserted");

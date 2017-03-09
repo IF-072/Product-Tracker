@@ -18,6 +18,7 @@ import java.util.List;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -56,14 +57,14 @@ public class ShoppingListServiceTest {
         when(shoppingListDAO.getByUserID(userId)).thenReturn(shoppingLists);
 
         assertTrue(shoppingLists.equals(shoppingListService.getByUserId(userId)));
-        verify(shoppingListDAO, times(1)).getByUserID(userId);
+        verify(shoppingListDAO).getByUserID(userId);
     }
 
     @Test(expected = DataNotFoundException.class)
     public void testGetByUserId_ShouldThrowException() throws Exception {
         when(shoppingListDAO.getByUserID(userId)).thenReturn(null);
         shoppingListService.getByUserId(userId);
-        verify(shoppingListDAO, times(1)).getByUserID(userId);
+        verify(shoppingListDAO).getByUserID(userId);
     }
 
     @Test
@@ -72,7 +73,7 @@ public class ShoppingListServiceTest {
         when(shoppingListDAO.getByProductId(productId)).thenReturn(shoppingList);
 
         assertTrue(shoppingList.equals(shoppingListDAO.getByProductId(productId)));
-        verify(shoppingListDAO, times(1)).getByProductId(productId);
+        verify(shoppingListDAO).getByProductId(productId);
     }
 
     @Test
@@ -81,7 +82,7 @@ public class ShoppingListServiceTest {
         when(shoppingListDAO.getByUserAndProductId(userId, productId)).thenReturn(shoppingList);
 
         assertTrue(shoppingList.equals(shoppingListDAO.getByUserAndProductId(userId, productId)));
-        verify(shoppingListDAO, times(1)).getByUserAndProductId(userId, productId);
+        verify(shoppingListDAO).getByUserAndProductId(userId, productId);
     }
 
     @Test
@@ -90,33 +91,33 @@ public class ShoppingListServiceTest {
         when(shoppingListDAO.getProductsByUserId(userId)).thenReturn(products);
 
         assertTrue(products.equals(shoppingListService.getProductsByUserId(userId)));
-        verify(shoppingListDAO, times(1)).getProductsByUserId(userId);
+        verify(shoppingListDAO).getProductsByUserId(userId);
     }
 
     @Test(expected = DataNotFoundException.class)
     public void testGetProductsByUserId() {
         when(shoppingListDAO.getProductsByUserId(userId)).thenReturn(null);
         shoppingListService.getProductsByUserId(userId);
-        verify(shoppingListDAO, times(1)).getProductsByUserId(userId);
+        verify(shoppingListDAO).getProductsByUserId(userId);
     }
 
     @Test
     public void testInsert() {
         shoppingListService.insert(shoppingList);
-        verify(shoppingListDAO, times(1)).insert(shoppingList);
+        verify(shoppingListDAO).insert(shoppingList);
     }
 
     @Test
     public void testInsert_ShouldNotBeExecuted() {
         shoppingListService.insert(null);
-        verify(shoppingListDAO, times(0)).insert(any());
+        verify(shoppingListDAO, never()).insert(any());
     }
 
     @Test
     public void testUpdate() {
         shoppingListService.update(shoppingList);
 
-        verify(shoppingListDAO, times(1)).update(shoppingList);
+        verify(shoppingListDAO).update(shoppingList);
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -124,32 +125,32 @@ public class ShoppingListServiceTest {
         shoppingList.setAmount(-1);
         shoppingListService.update(shoppingList);
 
-        verify(shoppingListDAO, times(0)).update(shoppingList);
+        verify(shoppingListDAO, never()).update(shoppingList);
     }
 
     @Test
     public void testDelete() {
         shoppingListService.delete(shoppingList);
-        verify(shoppingListDAO, times(1)).delete(shoppingList);
+        verify(shoppingListDAO).delete(shoppingList);
     }
 
     @Test
     public void testDelete_ShouldNotBeExecuted() {
         shoppingListService.delete(null);
-        verify(shoppingListDAO, times(0)).delete(any());
+        verify(shoppingListDAO, never()).delete(any());
     }
 
     @Test
     public void testDeleteByProductId() {
         int productId = 2;
         shoppingListService.delete(productId);
-        verify(shoppingListDAO, times(1)).deleteByProductId(productId);
+        verify(shoppingListDAO).deleteByProductId(productId);
     }
 
     @Test
     public void testDeleteByProductId_ShouldNotBeExecuted() {
         int productId = -1;
         shoppingListService.delete(productId);
-        verify(shoppingListDAO, times(0)).deleteByProductId(anyInt());
+        verify(shoppingListDAO, never()).deleteByProductId(anyInt());
     }
 }

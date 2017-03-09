@@ -37,11 +37,10 @@ public class StorageService {
 
     public List<Storage> getByUserId(int user_id) throws DataNotFoundException {
         List<Storage> list = storageDAO.getByUserID(user_id);
-        if (CollectionUtils.isNotEmpty(list)) {
-            return list;
-        } else {
-            throw new DataNotFoundException(String.format("Storages of user with id %d not found", user_id));
+        if (CollectionUtils.isEmpty(list)) {
+            LOGGER.error("Storage of user with id {} not found", user_id);
         }
+        return list;
     }
 
     public Storage getByProductId(int product_id) {
