@@ -2,6 +2,7 @@ package com.softserve.if072.restservice.controller;
 
 import com.softserve.if072.common.model.User;
 import com.softserve.if072.restservice.exception.DataNotFoundException;
+import com.softserve.if072.restservice.security.authentication.AuthenticatedUserProxy;
 import com.softserve.if072.restservice.service.UserService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -9,10 +10,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -67,5 +71,23 @@ public class UserController {
         LOG.debug("Updating user with id = {}", userId);
         userService.update(user);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+
+    /**
+     * Retrieves current principal from Spring's SecurityHolder and returns it as a response
+     *
+     * @return current logged in user entity
+     */
+    @RequestMapping(value = "/security/user/current")
+    @ResponseBody
+    public User testController() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth.isAuthenticated()) {
+            AuthenticatedUserProxy userProxy = (AuthenticatedUserProxy) auth;
+            if (userProxy != null)
+                return userProxy.getUser();
+        }
+        return null;
     }
 }

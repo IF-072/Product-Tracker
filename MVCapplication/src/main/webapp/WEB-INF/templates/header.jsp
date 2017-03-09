@@ -78,6 +78,7 @@
             <!-- /.dropdown-alerts -->
         </li>
 
+        <!-- premium account reminder -->
         <c:if test="${'ROLE_PREMIUM' == userService.getCurrentUser().getRole().getAuthority()}">
             <div class="navbar-text" id="premiumExpiresInfo" style="display:none">
                 <spring:message code="premiumExpiresIn"/>

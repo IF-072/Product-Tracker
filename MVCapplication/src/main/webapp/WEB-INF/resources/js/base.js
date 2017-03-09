@@ -33,16 +33,26 @@ function initializeClock(id){
     var premiumExpiresSpan = document.getElementById("premiumExpiresInfo");
     if(!premiumExpiresSpan)
         return;
-    var clock = document.getElementById(id);
-    var endtime = clock.innerHTML;
+    var clockDiv = document.getElementById(id);
+    var endtime = clockDiv.innerHTML;
+    displayRemainingTime();
     var timeinterval = setInterval(function(){
         premiumExpiresSpan.style.display="";
-        var t = getTimeRemaining(endtime);
-        clock.innerHTML = t.hours + ':' + t.minutes + ':' +t.seconds;
-        if(t.total<=0){
-            clearInterval(timeinterval);
-        }
+       displayRemainingTime();
     },1000);
+
+    function displayRemainingTime(){
+        premiumExpiresSpan.style.display="";
+        var t = getTimeRemaining(endtime);
+        if(t.total <= 0) {
+            clearInterval(timeinterval);
+            clockDiv.innerHTML = "00:00:00";
+        } else {
+            clockDiv.innerHTML = ('0' + t.hours).substr(-2) + ':' + ('0' + t.minutes).substr(-2) + ':' +('0'+t.seconds).substr(-2);
+        }
+    }
 }
+
+
 
 initializeClock('premiumRemaining');
