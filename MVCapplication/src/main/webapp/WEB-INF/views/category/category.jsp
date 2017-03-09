@@ -4,47 +4,12 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 
-
-<!-- Block for empty categories -->
-<c:if test="${empty categories}">
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-lg-4">
-                <div class="panel panel-primary">
-                    <div class="panel-heading text-center">
-                        <h4><spring:message code="category.listIsEmpty" /></h4>
-                    </div>
-                    <div class="panel-body text-center">
-                        <p><spring:message code="category.choice"/></p>
-                    </div>
-                    <div class="panel-footer">
-                        <div class="btn-group btn-group-justified" role="group" aria-label="...">
-                            <div class="btn-group" role="group">
-                                <a href="<c:url value='/category/add'/>">
-                                    <button type="button" class="btn btn-default"><spring:message code="category.addNew"/></button>
-                                </a>
-                            </div>
-                            <div class="btn-group" role="group">
-                                <a href="<c:url value='/home'/>">
-                                    <button type="button" class="btn btn-default"><spring:message code="category.homepage" /></button>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+<!-- Header -->
+<div class="row">
+    <div class="col-lg-12">
+        <h1 class="page-header"><spring:message code="category.helloMessage"/></h1>
     </div>
-</c:if>
-
-
-<c:if test="${not empty categories}">
-    <!-- Header -->
-    <div class="row">
-        <div class="col-lg-12">
-            <h1 class="page-header"><spring:message code="category.helloMessage"/></h1>
-        </div>
-    </div>
+</div>
 
 <!-- Table with the list of categories -->
 <div class="row">
@@ -53,6 +18,18 @@
                value="<spring:message code="category.addNew"/>">
         <br />
         <br />
+        <c:if test="${empty categories}">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    No categories found
+                </div>
+                <div class="panel-body">
+                    <p>Ooops... It seems your category list is empty. You can add a new one by clicking the button above.</p>
+                </div>
+            </div>
+        </c:if>
+
+        <c:if test="${not empty categories}">
         <div class="panel panel-default">
                 <table width="100%" class="table table-striped table-bordered table-hover">
                     <thead>
@@ -64,6 +41,7 @@
                     </tr>
                     </thead>
                     <tbody>
+
                     <c:forEach items="${categories}" var="category" varStatus="loop">
                         <tr class="gradeA">
                             <td>${loop.count}</td>
@@ -72,9 +50,11 @@
                             <td onclick="deleteCategory(${category.id})" class="text-center"><a href="#"><i  class="fa fa-trash-o fa-lg"></i></a></td>
                         </tr>
                     </c:forEach>
+
                     </tbody>
                 </table>
         </div>
+        </c:if>
     </div>
 </div>
 
@@ -87,4 +67,3 @@
         <button onclick="cancelDeleting()" class="btn btn-default btn-reset-custom">No</button>
     </div>
 </div>
-</c:if>
