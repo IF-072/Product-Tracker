@@ -3,6 +3,7 @@
 <div class="row">
     <div class="col-lg-2"></div>
     <div class="col-lg-8">
+        <br>
         <div class="panel panel-default">
             <div class="panel-heading">
                 <spring:message code="profile.info"/>

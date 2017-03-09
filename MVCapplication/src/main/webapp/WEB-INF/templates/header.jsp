@@ -94,7 +94,7 @@
 
         <!-- languages -->
         <div class="btn-group dropdown">
-            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+            <button id="lang-dropdown-btn" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
                 <spring:message code="changeLanguage"/>
                 <span class="caret"></span>
             </button>
