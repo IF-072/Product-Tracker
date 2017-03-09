@@ -21,6 +21,8 @@ import java.util.List;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -68,14 +70,14 @@ public class StorageServiceTest {
         when(storageDAO.getByUserID(user.getId())).thenReturn(storages);
 
         assertTrue(storages.equals(storageService.getByUserId(user.getId())));
-        verify(storageDAO, times(1)).getByUserID(user.getId());
+        verify(storageDAO).getByUserID(user.getId());
     }
 
     @Test(expected = DataNotFoundException.class)
     public void testGetByUserId_ShouldThrowException() throws Exception {
         when(storageDAO.getByUserID(user.getId())).thenReturn(null);
         storageService.getByUserId(user.getId());
-        verify(storageDAO, times(1)).getByUserID(user.getId());
+        verify(storageDAO).getByUserID(user.getId());
     }
 
     @Test
@@ -84,13 +86,13 @@ public class StorageServiceTest {
         when(storageDAO.getByProductID(productId)).thenReturn(storage);
 
         assertTrue(storage.equals(storageService.getByProductId(productId)));
-        verify(storageDAO, times(1)).getByProductID(productId);
+        verify(storageDAO).getByProductID(productId);
     }
 
     @Test
     public void testInsert() {
         storageService.insert(storage);
-        verify(storageDAO, times(1)).insert(storage);
+        verify(storageDAO).insert(storage);
     }
 
     @Test
@@ -100,19 +102,19 @@ public class StorageServiceTest {
         int amount = 2;
 
         storageService.insert(userId, productId, amount);
-        verify(storageDAO, times(1)).insertInParts(userId, productId, amount);
+        verify(storageDAO).insertInParts(userId, productId, amount);
     }
 
     @Test
     public void testUpdate_ShouldNotInsertInShoppingList() {
-        when(storageDAO.getByProductID(anyInt())).thenReturn(storageDB);
+        when(storageDAO.getByProductID(storage.getProduct().getId())).thenReturn(storageDB);
 
         storageService.update(storage);
 
-        verify(storageDAO, times(1)).getByProductID(storage.getProduct().getId());
-        verify(storageDAO, times(1)).update(storage);
-        verify(historyService, times(0)).insert(any());
-        verify(shoppingListService, times(0)).insert(any());
+        verify(storageDAO).getByProductID(storage.getProduct().getId());
+        verify(storageDAO).update(storage);
+        verify(historyService, never()).insert(any());
+        verify(shoppingListService, never()).insert(any());
     }
 
     @Test
@@ -123,22 +125,20 @@ public class StorageServiceTest {
 
         storageService.update(storage);
 
-        verify(storageDAO, times(1)).getByProductID(storage.getProduct().getId());
-        verify(storageDAO, times(1)).updateAmount(storage);
-        verify(historyService, times(1)).insert(any());
-        verify(shoppingListService, times(1)).insert(any());
+        verify(storageDAO).getByProductID(storage.getProduct().getId());
+        verify(storageDAO).updateAmount(storage);
+        verify(historyService).insert(any());
+        verify(shoppingListService).insert(any());
     }
 
     @Test
     public void testUpdate_ShouldNotBeExecuted() {
-        storage.setAmount(-1);
+        storage.setAmount(-2);
 
         storageService.update(storage);
-        verify(storageDAO, times(0)).getByProductID(anyInt());
-        verify(storageDAO, times(0)).updateAmount(storage);
-        verify(storageDAO, times(0)).update(storage);
-        verify(historyService, times(0)).insert(any());
-        verify(shoppingListService, times(0)).insert(any());
+        verifyZeroInteractions(storageDAO);
+        verify(historyService, never()).insert(any());
+        verify(shoppingListService, never()).insert(any());
     }
 
     @Test
@@ -146,10 +146,10 @@ public class StorageServiceTest {
         when(storageDAO.getByProductID(anyInt())).thenReturn(storageDB);
         storageService.update(storageDTO);
 
-        verify(storageDAO, times(1)).getByProductID(storageDTO.getProductId());
-        verify(storageDAO, times(1)).updateAmount(storageDB);
-        verify(historyService, times(0)).insert(any());
-        verify(shoppingListService, times(0)).insert(any());
+        verify(storageDAO).getByProductID(storageDTO.getProductId());
+        verify(storageDAO).updateAmount(storageDB);
+        verify(historyService, never()).insert(any());
+        verify(shoppingListService, never()).insert(any());
     }
 
     @Test
@@ -159,10 +159,10 @@ public class StorageServiceTest {
 
         storageService.update(storageDTO);
 
-        verify(storageDAO, times(1)).getByProductID(storageDTO.getProductId());
-        verify(storageDAO, times(1)).updateAmount(storageDB);
-        verify(historyService, times(1)).insert(any());
-        verify(shoppingListService, times(1)).insert(any());
+        verify(storageDAO).getByProductID(storageDTO.getProductId());
+        verify(storageDAO).updateAmount(storageDB);
+        verify(historyService).insert(any());
+        verify(shoppingListService).insert(any());
     }
 
     @Test
@@ -170,21 +170,20 @@ public class StorageServiceTest {
         storageDTO.setAmount(-1);
 
         storageService.update(storageDTO);
-        verify(storageDAO, times(0)).getByProductID(anyInt());
-        verify(storageDAO, times(0)).updateAmount(any());
-        verify(historyService, times(0)).insert(any());
-        verify(shoppingListService, times(0)).insert(any());
+        verifyZeroInteractions(storageDAO);
+        verify(historyService, never()).insert(any());
+        verify(shoppingListService, never()).insert(any());
     }
 
     @Test
     public void testDelete() {
         storageService.delete(storage);
-        verify(storageDAO, times(1)).delete(storage);
+        verify(storageDAO).delete(storage);
     }
 
     @Test
     public void testDelete_ShouldNotBeExecuted() {
         storageService.delete(null);
-        verify(storageDAO, times(0)).delete(any());
+        verify(storageDAO, never()).delete(any());
     }
 }

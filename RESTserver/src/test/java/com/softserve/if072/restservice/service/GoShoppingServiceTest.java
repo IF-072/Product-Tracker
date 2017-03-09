@@ -25,6 +25,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -78,9 +79,9 @@ public class GoShoppingServiceTest {
         assertTrue(new ArrayList<Product>(Arrays.asList(arr[0], arr[1])).equals(result.get(0).getProducts()));
         assertTrue(new ArrayList<Product>(Arrays.asList(arr[2])).equals(result.get(1).getProducts()));
 
-        verify(cartDAO, times(1)).getByUserId(userId);
-        verify(shoppingListDAO, times(1)).getProductsByUserId(userId);
-        verify(storeDAO, times(1)).getAllByUser(userId);
+        verify(cartDAO).getByUserId(userId);
+        verify(shoppingListDAO).getProductsByUserId(userId);
+        verify(storeDAO).getAllByUser(userId);
     }
 
     @Test
@@ -90,9 +91,9 @@ public class GoShoppingServiceTest {
 
         assertNull(goShoppingService.getStoreByUserId(userId));
 
-        verify(cartDAO, times(1)).getByUserId(userId);
-        verify(shoppingListDAO, times(1)).getProductsByUserId(userId);
-        verify(storeDAO, times(0)).getAllByUser(userId);
+        verify(cartDAO).getByUserId(userId);
+        verify(shoppingListDAO).getProductsByUserId(userId);
+        verify(storeDAO, never()).getAllByUser(userId);
     }
 
     @Test(expected = DataNotFoundException.class)
@@ -104,9 +105,9 @@ public class GoShoppingServiceTest {
 
         goShoppingService.getStoreByUserId(userId);
 
-        verify(cartDAO, times(1)).getByUserId(userId);
-        verify(shoppingListDAO, times(1)).getProductsByUserId(userId);
-        verify(storeDAO, times(1)).getAllByUser(userId);
+        verify(cartDAO).getByUserId(userId);
+        verify(shoppingListDAO).getProductsByUserId(userId);
+        verify(storeDAO).getAllByUser(userId);
     }
 
     @Test
@@ -132,9 +133,9 @@ public class GoShoppingServiceTest {
         assertTrue(new ArrayList<>(Arrays.asList(args[3]))
                 .equals(result.get("remained")));
 
-        verify(shoppingListDAO, times(1)).getByUserID(userId);
-        verify(storeDAO, times(1)).getByID(storeId);
-        verify(storeDAO, times(1)).getProductsByStoreId(storeId, userId);
+        verify(shoppingListDAO).getByUserID(userId);
+        verify(storeDAO).getByID(storeId);
+        verify(storeDAO).getProductsByStoreId(storeId, userId);
     }
 
     @Test(expected = DataNotFoundException.class)
@@ -144,9 +145,9 @@ public class GoShoppingServiceTest {
         when(storeDAO.getProductsByStoreId(storeId, userId)).thenReturn(null);
         goShoppingService.getProducts(userId, storeId);
 
-        verify(shoppingListDAO, times(0)).getByUserID(userId);
-        verify(storeDAO, times(0)).getByID(storeId);
-        verify(storeDAO, times(1)).getProductsByStoreId(storeId, userId);
+        verify(shoppingListDAO, never()).getByUserID(userId);
+        verify(storeDAO, never()).getByID(storeId);
+        verify(storeDAO).getProductsByStoreId(storeId, userId);
     }
 
     @Test
