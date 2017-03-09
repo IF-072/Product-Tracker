@@ -24,6 +24,7 @@ import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -76,7 +77,7 @@ public class StoragePageControllerTest {
                 .andExpect(model().attributeExists("list"))
                 .andExpect(model().attribute("list", hasSize(3)))
                 .andExpect(model().attributeExists("storage"));
-        verify(storagePageService, times(1)).getStorages(user.getId());
+        verify(storagePageService).getStorages(user.getId());
     }
 
     @Test
@@ -88,7 +89,7 @@ public class StoragePageControllerTest {
                 .andExpect(status().isOk())
                 .andReturn();
         assertTrue("".equals(result.getResponse().getContentAsString()));
-        verify(storagePageService, times(1)).updateAmount(any());
+        verify(storagePageService).updateAmount(any());
     }
 
     @Test
@@ -99,7 +100,7 @@ public class StoragePageControllerTest {
                 .andExpect(status().isOk())
                 .andReturn();
         assertTrue(productMsg.equals(result.getResponse().getContentAsString()));
-        verify(storagePageService, times(0)).updateAmount(any());
+        verify(storagePageService, never()).updateAmount(any());
     }
 
     @Test
@@ -110,7 +111,7 @@ public class StoragePageControllerTest {
                 .andExpect(status().isOk())
                 .andReturn();
         assertTrue(amountMsg.equals(result.getResponse().getContentAsString()));
-        verify(storagePageService, times(0)).updateAmount(any());
+        verify(storagePageService, never()).updateAmount(any());
     }
 
     @Test
@@ -122,7 +123,7 @@ public class StoragePageControllerTest {
                 .andReturn();
         assertTrue(result.getResponse().getContentAsString().contains(amountMsg));
         assertTrue(result.getResponse().getContentAsString().contains(productMsg));
-        verify(storagePageService, times(0)).updateAmount(any());
+        verify(storagePageService, never()).updateAmount(any());
     }
 
     @Test
@@ -131,6 +132,6 @@ public class StoragePageControllerTest {
         mockMvc.perform(post("/storage/addToSL")
                 .param("productId", "1"))
                 .andExpect(status().isOk());
-        verify(storagePageService, times(1)).addProductToShoppingList(user, 1);
+        verify(storagePageService).addProductToShoppingList(user, 1);
     }
 }

@@ -3,14 +3,14 @@
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
 <div class="row">
     <div class="col-lg-12">
-        <h1 class="page-header"><spring:message code="chooseProducts"/></h1>
+        <h1 class="page-header"><spring:message code="goShopping.chooseProducts"/></h1>
     </div>
 </div>
 <div class="panel panel-default">
     <div class="panel-body">
         <div class="table-responsive">
             <form:form action="../addToCart" method="post" modelAttribute="cartForm" id="addToCart">
-                <table class="table table-striped table-bordered table-hover">
+                <table class="table table-striped table-hover">
                     <thead>
                     <tr>
                         <th></th>
@@ -40,9 +40,14 @@
                     </c:forEach>
                     </tbody>
                 </table>
-                <button type="button" class="btn btn-default" id="selectAll"><spring:message code="selectAll"/></button>
-                <button type="button" class="btn btn-default" id="prevStep"><spring:message code="previousStep"/></button>
-                <input type="submit" class="btn btn-default btn-primary" value="<spring:message code="AddToCart"/>">
+                <button type="button" class="btn btn-default" id="selectAll">
+                    <spring:message code="goShopping.selectAll"/>
+                </button>
+                <button type="button" class="btn btn-default" id="prevStep">
+                    <spring:message code="goShopping.previousStep"/>
+                </button>
+                <input type="submit" class="btn btn-default btn-primary"
+                       value="<spring:message code="goShopping.AddToCart"/>">
             </form:form>
 
 
@@ -53,7 +58,7 @@
 <c:if test="${not empty remained}">
     <div class="panel panel-default">
         <div class="panel-heading">
-            <p class="fa fa-info-circle"></p><b><spring:message code="remainedroducts"/></b>
+            <p class="fa fa-info-circle"></p><b><spring:message code="goShopping.remainedProducts"/></b>
         </div>
         <div class="panel-body">
             <div class="table-responsive">
@@ -90,13 +95,13 @@
         <div class="modal-content">
             <div class="modal-header alert alert-danger" role="alert">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title"><spring:message code="info"/></h4>
+                <h4 class="modal-title"><spring:message code="storage.info"/></h4>
             </div>
             <div class="modal-body text-center">
-                <spring:message code="needChoose"/>
+                <spring:message code="goShopping.needChoose"/>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary btn-confirm"><spring:message code="ok"/></button>
+                <button type="button" class="btn btn-primary btn-confirm"><spring:message code="storage.ok"/></button>
             </div>
         </div>
     </div>

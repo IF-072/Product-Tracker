@@ -25,9 +25,9 @@ public class Product {
     private String description;
     private Image image;
     private User user;
-    @ValidCategory
+    @ValidCategory(message = "{error.productCategory.notempty}")
     private Category category;
-    @ValidUnit
+    @ValidUnit(message = "{error.productUnit.notempty}")
     private Unit unit;
     private boolean isEnabled;
     private List<Store> stores;

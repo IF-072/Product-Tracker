@@ -20,8 +20,20 @@ function deleteProduct(productId) {
 };
 
 $(document).ready(function() {
-    var table = $('#productData').DataTable();
-
+    var table = $('#productData').DataTable({
+        "language": {
+            "lengthMenu": $('#Show').text() + " _MENU_ " + $('#Products').text(),
+            "zeroRecords": $('#non').text(),
+            "info": $('#showing').text() + " _START_ " + $('#to').text() + " _END_ " + $('#of').text() + " _TOTAL_ " + $('#records').text(),
+            "paginate": {
+                "first":      "First",
+                "last":       "Last",
+                "next":       $('#next').text(),
+                "previous":   $('#previous').text()
+            },
+            "search": $('#search').text()
+        }
+    });
     $( "#dialog" ).dialog({
         autoOpen: false
     });

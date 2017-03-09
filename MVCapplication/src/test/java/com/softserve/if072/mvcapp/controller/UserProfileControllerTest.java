@@ -43,8 +43,7 @@ public class UserProfileControllerTest {
 
     @Test
     public void getUserProfilePage_shouldReturnUserProfileViewName() throws Exception {
-        Role role = new Role();
-        role.setDescription("Premium account");
+        Role role = Role.ROLE_PREMIUM;
 
         User user = new User();
         user.setId(1);
@@ -62,7 +61,7 @@ public class UserProfileControllerTest {
                         hasProperty("id", is(1)),
                         hasProperty("email", is("vasya@gmail.com")),
                         hasProperty("name", is("Vasya")),
-                        hasProperty("role", hasProperty("description", is("Premium account")))
+                        hasProperty("role", hasProperty("authority", is("ROLE_PREMIUM")))
                 )));
     }
 }

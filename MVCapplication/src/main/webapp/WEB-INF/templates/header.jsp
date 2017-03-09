@@ -78,9 +78,23 @@
             <!-- /.dropdown-alerts -->
         </li>
 
+        <!-- premium account reminder -->
+        <c:if test="${'ROLE_PREMIUM' == userService.getCurrentUser().getRole().getAuthority()}">
+            <div class="navbar-text" id="premiumExpiresInfo" style="display:none">
+                <spring:message code="premiumExpiresIn"/>
+                <span id="premiumRemaining">${userService.getCurrentUser().getPremiumExpiresTime()}</span>
+            </div>
+            <!-- Buy premium button -->
+            <a href="<c:url value='/profile/prolongPremium'/>" class="btn btn-outline btn-default"><spring:message code="prolongPremium"/></a>
+        </c:if>
+        <c:if test="${'ROLE_REGULAR' == userService.getCurrentUser().getRole().getAuthority()}">
+            <!-- Buy premium button -->
+            <a href="<c:url value='/profile/getPremium'/>" class="btn btn-outline btn-default"><spring:message code="buyPremium"/></a>
+        </c:if>
+
         <!-- languages -->
         <div class="btn-group dropdown">
-            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+            <button id="lang-dropdown-btn" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
                 <spring:message code="changeLanguage"/>
                 <span class="caret"></span>
             </button>

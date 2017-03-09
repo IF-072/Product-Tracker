@@ -38,6 +38,7 @@
             <add-attribute value="/css/sb-admin-2.css"/>
             <add-attribute value="/css/font-awesome.css"/>
             <add-attribute value="/css/languages.min.css" />
+            <add-attribute value="/css/base.css" />
         </put-list-attribute>
 
         <put-list-attribute name="javascripts">
@@ -46,6 +47,7 @@
             <add-attribute value="/js/metisMenu.js"/>
             <add-attribute value="/js/sb-admin-2.js"/>
             <add-attribute value="/js/base.js"/>
+            <add-attribute value="/js/jquery.cookie.js"/>
         </put-list-attribute>
 
     </definition>

@@ -12,13 +12,13 @@
                 <table class="table table-striped table-bordered table-hover">
                     <tbody>
                     <tr>
-                        <th>#</th>
-                        <th><spring:message code="product"/></th>
-                        <th><spring:message code="amount"/></th>
-                        <th><spring:message code="category"/></th>
+                        <th id="id-col">#</th>
+                        <th id="prod-col"><spring:message code="product"/></th>
+                        <th id="am-col"><spring:message code="amount"/></th>
+                        <th id="cat-col"><spring:message code="category"/></th>
                         <th><spring:message code="image"/></th>
-                        <th colspan="2"><spring:message code="edit"/></th>
-                        <th><spring:message code="delete"/></th>
+                        <th id="edit-col" colspan="2"><spring:message code="edit"/></th>
+                        <th id="del-col"><spring:message code="delete"/></th>
                     </tr>
                     <c:forEach items="${shoppingList}" var="elem" varStatus="loop">
                         <tr>

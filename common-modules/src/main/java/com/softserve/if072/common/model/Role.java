@@ -3,27 +3,27 @@ package com.softserve.if072.common.model;
 import org.springframework.security.core.GrantedAuthority;
 
 /**
- * This class stores information about user's role. Implements Spring Security {@link GrantedAuthority} interface.
+ * This enum stores information about user's role. Implements Spring Security {@link GrantedAuthority} interface.
+ *
+ * @author Igor Parada
  */
-public class Role implements GrantedAuthority {
+public enum Role implements GrantedAuthority {
 
-    private int id;
+    ROLE_PREMIUM("ROLE_PREMIUM"),
+    ROLE_REGULAR("ROLE_REGULAR");
+
     private String authority;
-    private String description;
 
-    public Role() {
-    }
-
-    public Role(String authority) {
+    Role(String authority) {
         this.authority = authority;
     }
 
-    public int getId() {
-        return id;
+    public boolean isPremium(){
+        return this == ROLE_PREMIUM;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public boolean isRegular(){
+        return this == ROLE_REGULAR;
     }
 
     public void setAuthority(String authority) {
@@ -35,18 +35,9 @@ public class Role implements GrantedAuthority {
         return authority;
     }
 
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
     @Override
     public String toString() {
         return "Role{" +
-                "id=" + id +
                 ", authority='" + authority + '\'' +
                 '}';
     }

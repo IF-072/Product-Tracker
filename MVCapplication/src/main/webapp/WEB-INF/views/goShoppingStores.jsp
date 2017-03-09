@@ -6,16 +6,18 @@
             <div class="col-lg-4 col-lg-offset-4">
                 <div class="panel panel-primary">
                     <div class="panel-heading text-center">
-                        <h4><spring:message code="cantGoShopping"/></h4>
+                        <h4><spring:message code="goShopping.cantGoShopping"/></h4>
                     </div>
                     <div class="panel-body text-center">
-                        <p><spring:message code="cantMessage"/></p>
+                        <p><spring:message code="goShopping.cantMessage"/></p>
                     </div>
                     <div class="panel-footer">
                         <div class="btn-group btn-group-justified" role="group" aria-label="...">
                             <div class="btn-group" role="group">
                                 <a href="<c:url value='/storage/'/>">
-                                    <button type="button" class="btn btn-default"><spring:message code="storage"/></button>
+                                    <button type="button" class="btn btn-default">
+                                        <spring:message code="goShopping.storage"/>
+                                    </button>
                                 </a>
                             </div>
                             <div class="btn-group" role="group">
@@ -34,18 +36,18 @@
 <c:if test="${not empty stores}">
     <div class="row">
         <div class="col-lg-12">
-            <h1 class="page-header"><spring:message code="chooseStore"/></h1>
+            <h1 class="page-header"><spring:message code="goShopping.chooseStore"/></h1>
         </div>
     </div>
     <div class="panel panel-default">
         <div class="panel-body">
             <div class="table-responsive">
                 <form action="../goShoppingProducts" method="post">
-                    <table class="table table-striped table-bordered table-hover">
+                    <table class="table table-striped table-hover">
                         <thead>
                         <tr>
                             <th></th>
-                            <th><spring:message code="store"/></th>
+                            <th><spring:message code="goShopping.store"/></th>
                             <th><spring:message code="address"/></th>
                             <th><spring:message code="products"/></th>
                         </tr>
@@ -69,7 +71,7 @@
                         </c:forEach>
                         </tbody>
                     </table>
-                    <input type="submit" class="btn btn-default" value="<spring:message code="next"/>">
+                    <input type="submit" class="btn btn-default" value="<spring:message code="goShopping.next"/>">
                 </form>
             </div>
         </div>
