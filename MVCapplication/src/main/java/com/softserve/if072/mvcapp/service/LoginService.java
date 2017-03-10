@@ -51,6 +51,7 @@ public class LoginService {
             ResponseEntity<String> response = restTemplate.postForEntity(loginUrl, params, String.class);
             if (HttpStatus.OK.equals(response.getStatusCode()) && response.hasBody() && !response.getBody().isEmpty()) {
                 Cookie cookie = new Cookie(cookieName, response.getBody());
+                cookie.setPath("/");
                 return cookie;
             }
         } catch (HttpClientErrorException e) {

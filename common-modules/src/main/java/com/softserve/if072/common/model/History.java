@@ -68,14 +68,11 @@ public class History {
 
     @Override
     public String toString() {
-        return "History{\nUser: " +
-                user.getName() +
-                ", email: " + user.getEmail() +
-                "\n used  " +
-                amount + " " +
-                product.getUnit().getName() +
-                " " + product.getName() +
-                " " + usedDate +
+        return "History{\nid:" + id +
+                "\nUser: " + user +
+                ";\nProduct: " + product +
+                ", amount: " + amount +
+                ", usedDate: " + usedDate +
                 "\n}";
     }
 }

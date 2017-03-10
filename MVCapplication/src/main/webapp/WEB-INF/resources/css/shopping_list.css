@@ -29,3 +29,8 @@
 #del-col {
     width: 8%;
 }
+
+.align-mid {
+    vertical-align: middle;
+    text-align: center;
+}

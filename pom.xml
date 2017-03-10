@@ -14,6 +14,12 @@
         <clean.skip>false</clean.skip>
     </properties>
 
+    <modules>
+        <module>RESTserver</module>
+        <module>MVCapplication</module>
+        <module>common-modules</module>
+    </modules>
+
 
     <dependencyManagement>
         <dependencies>
@@ -347,37 +353,5 @@
             </plugins>
         </pluginManagement>
     </build>
-
-    <profiles>
-        <!--use by default dev profile with appropriate server configuration to deploy all application-->
-        <profile>
-            <id>dev</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
-            <modules>
-                <module>RESTserver</module>
-                <module>MVCapplication</module>
-                <module>common-modules</module>
-            </modules>
-        </profile>
-
-        <!--use MVCapplication profile with appropriate server configuration to deploy only MVCapplication module-->
-        <profile>
-            <id>MVCapplication</id>
-            <modules>
-                <module>common-modules</module>
-                <module>MVCapplication</module>
-            </modules>
-        </profile>
-
-        <!--use RESTserver profile with appropriate server configuration to deploy only RESTserver module-->
-        <profile>
-            <id>RESTserver</id>
-            <modules>
-                <module>common-modules</module>
-                <module>RESTserver</module>
-            </modules>
-        </profile>
-    </profiles>
+    
 </project>

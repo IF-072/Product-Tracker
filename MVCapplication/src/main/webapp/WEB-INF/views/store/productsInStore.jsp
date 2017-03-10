@@ -7,13 +7,6 @@
   Created by Nazar Vynnyk
 --%>
 
-<style>
-    #image, #delete {
-        text-align: center;
-        cursor: pointer
-    }
-</style>
-
 <div class="row">
     <div class="col-lg-12">
         <h1 class="page-header"><spring:message code="store.products"/></h1>
@@ -68,7 +61,16 @@
     </div>
 </div>
 
-
+<div id="Show" hidden><spring:message code="table.show"/></div>
+<div id="Products" hidden><spring:message code="table.products"/></div>
+<div id="showing" hidden><spring:message code="table.showing"/></div>
+<div id="to" hidden><spring:message code="table.to"/></div>
+<div id="of" hidden><spring:message code="table.of"/></div>
+<div id="records" hidden><spring:message code="table.recordsProduct"/></div>
+<div id="search" hidden><spring:message code="table.search"/></div>
+<div id="previous" hidden><spring:message code="table.previous"/></div>
+<div id="next" hidden><spring:message code="table.next"/></div>
+<div id="non" hidden><spring:message code="table.non"/></div>
 
 
 
