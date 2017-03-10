@@ -65,3 +65,15 @@
     </div>
 </div>
 
+<div id="Show" hidden><spring:message code="table.show"/></div>
+<div id="Products" hidden><spring:message code="table.stores"/></div>
+<div id="showing" hidden><spring:message code="table.showing"/></div>
+<div id="to" hidden><spring:message code="table.to"/></div>
+<div id="of" hidden><spring:message code="table.of"/></div>
+<div id="records" hidden><spring:message code="table.recordsStores"/></div>
+<div id="search" hidden><spring:message code="table.search"/></div>
+<div id="previous" hidden><spring:message code="table.previous"/></div>
+<div id="next" hidden><spring:message code="table.next"/></div>
+<div id="non" hidden><spring:message code="table.non"/></div>
+
+

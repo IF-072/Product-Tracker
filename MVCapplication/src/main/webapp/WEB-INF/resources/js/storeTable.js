@@ -12,6 +12,25 @@ function deleteStore(storeId) {
     Id = storeId;
 };
 
+
+$(document).ready(function () {
+    var table = $('#storeTab').DataTable({
+        "language": {
+            "lengthMenu": $('#Show').text() + " _MENU_ " + $('#Products').text(),
+            "zeroRecords": $('#non').text(),
+            "info": $('#showing').text() + " _START_ " + $('#to').text() + " _END_ " + $('#of').text() + " _TOTAL_ " + $('#records').text(),
+            "paginate": {
+                "first": "First",
+                "last": "Last",
+                "next": $('#next').text(),
+                "previous": $('#previous').text()
+            },
+            "search": $('#search').text()
+        }
+    });
+    });
+
+
 $(document).ready(function () {
     var table = $('#storeTab').DataTable();
 
@@ -54,7 +73,25 @@ function dellProduct(storeId, productId) {
     });
 };
 
-$(document).ready(function() {
+
+$(document).ready(function () {
+    var table = $('#ProductInStoreTable').DataTable({
+        "language": {
+            "lengthMenu": $('#Show').text() + " _MENU_ " + $('#Products').text(),
+            "zeroRecords": $('#non').text(),
+            "info": $('#showing').text() + " _START_ " + $('#to').text() + " _END_ " + $('#of').text() + " _TOTAL_ " + $('#records').text(),
+            "paginate": {
+                "first": "First",
+                "last": "Last",
+                "next": $('#next').text(),
+                "previous": $('#previous').text()
+            },
+            "search": $('#search').text()
+        }
+    });
+});
+
+$(document).ready(function () {
     var table = $('#ProductInStoreTable').DataTable();
 });
 
