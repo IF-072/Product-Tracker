@@ -167,6 +167,10 @@
         <put-list-attribute name="stylesheets" inherit="true">
             <add-attribute value="/css/category.css"/>
         </put-list-attribute>
+
+        <put-list-attribute name="javascripts" inherit="true">
+            <add-attribute value="/js/category.js"/>
+        </put-list-attribute>
     </definition>
 
     <definition name="deletedCategory" extends="mainLayout">
@@ -175,6 +179,10 @@
 
         <put-list-attribute name="stylesheets" inherit="true">
             <add-attribute value = "/css/category.css" />
+        </put-list-attribute>
+
+        <put-list-attribute name="javascripts" inherit="true">
+            <add-attribute value="/js/category.js"/>
         </put-list-attribute>
     </definition>
 

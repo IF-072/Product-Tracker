@@ -1,24 +1,26 @@
 var id;
+$("#deleteForm").dialog({autoOpen:false});
 
-function deleteCategory(id) {
-    $("#deleteForm").dialog("open");
-    this.id = id;
-    console.log(id);
-}
-
-function acceptDeleting() {
-    $.ajax({
-        url: "category/delete",
-        method: "POST",
-        data: {id: this.id}
+$(document).ready(function () {
+    $(".categoryBtnDelete").click(function () {
+        id = $(this).attr("id");
+        $("#deleteForm").dialog("open");
     });
 
-    $("#deleteForm").dialog("close");
-    setTimeout(function () { location.reload(true); }, 500);
-}
+    $(".btnAcceptDeleting").click(function () {
+        window.location.replace("category/delete?id=" + id);
+    });
 
-function cancelDeleting() {
-    $("#deleteForm").dialog("close");
-}
+    $(".btnCancelDeleting").click(function () {
+        $("#deleteForm").dialog("close");
+    });
 
-$("#deleteForm").dialog({autoOpen:false});
+    $(".categoryBtnEdit").click(function () {
+        var id = $(this).attr("id");
+        window.location.href="/category/edit?id=" + id;
+    });
+
+    $(".addNewCategory").click(function () {
+        window.location.href="/category/add";
+    });
+});

@@ -19,14 +19,14 @@
         <sf:form role="form" modelAttribute="category" method="post" action="/category/restore">
             <fieldset>
                 <div class="form-group">
-                    <label class="control-label" for="inputWarning">Category name</label>
+                    <label class="control-label" for="inputWarning"><spring:message code="category.name"/></label>
                     <sf:input path="name" class="form-control" id="inputWarning"
                               placeholder="${nameExample}" type="text" disabled="true"/>
                     <sf:hidden path="user.id" />
                     <sf:hidden path="id" />
                 </div>
                 <input type="submit" class="btn btn-success btn-success-custom" value="<spring:message code="restore"/>"/>
-                <input type="reset" class="btn btn-default btn-reset-custom" onclick="document.location.href='/category'" value="<spring:message code="cancel"/>" />
+                <input type="reset" class="btn btn-default btn-reset-custom" onclick="window.location.href='/category'" value="<spring:message code="cancel"/>" />
             </fieldset>
         </sf:form>
     </div>

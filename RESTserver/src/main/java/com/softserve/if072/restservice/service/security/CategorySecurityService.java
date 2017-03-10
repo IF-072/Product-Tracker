@@ -8,13 +8,17 @@ import org.springframework.stereotype.Service;
 /**
  * Provides security methods for CategoryService
  *
- * @author Igor Parada
+ * @author Igor Parada, Pavlo Bendus
  */
 @Service
 public class CategorySecurityService extends BaseSecurityService {
 
-    @Autowired
     private CategoryDAO categoryDAO;
+
+    @Autowired
+    public CategorySecurityService(CategoryDAO categoryDAO) {
+        this.categoryDAO = categoryDAO;
+    }
 
     public boolean hasPermissionToAccess(int categoryID){
         Category category = categoryDAO.getByID(categoryID);
