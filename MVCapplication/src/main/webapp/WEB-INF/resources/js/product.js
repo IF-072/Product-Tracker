@@ -7,7 +7,7 @@ function addProductToShoppingList(productId) {
         url : "../shopping_list/add",
         method : "POST",
         data : {productId: productId},
-        success: function(){alert("Your product was added to shopping list!");}
+        success: function(){$("#okDialog").dialog("open");}
     });
 
 };
@@ -38,6 +38,10 @@ $(document).ready(function() {
         autoOpen: false
     });
 
+    $( "#okDialog" ).dialog({
+        autoOpen: false
+    });
+
     $("#yes").click(function () {
         window.location.replace("/product/delProduct?productId=" + prId);
         $("#dialog").dialog("close");
@@ -47,6 +51,8 @@ $(document).ready(function() {
         $("#dialog").dialog("close");
     });
 
-
+    $("#ok").click(function () {
+        $("#okDialog").dialog("close");
+    });
 
 });
