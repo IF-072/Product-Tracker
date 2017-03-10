@@ -49,7 +49,7 @@ public class CartController {
      * @param cartDTO - an object with required information for the product purchase
      * @return string with appropriate view name
      */
-    @PostMapping("/purchase")
+    @PostMapping("/purchase/{productId}")
     public String productPurchase(CartDTO cartDTO) {
         cartService.productPurchase(cartDTO);
         return "redirect:/cart";
@@ -61,9 +61,20 @@ public class CartController {
      * @param cartDTO - an object with required information for the product delete
      * @return string with appropriate view name
      */
-    @GetMapping("/delete")
+    @GetMapping("/delete/{productId}")
     public String deleteProductFromCart(CartDTO cartDTO) {
         cartService.deleteProductFromCart(cartDTO);
         return "redirect:/cart";
+    }
+
+    /**
+     * Handles requests for deleting all products from the cart of current user
+     *
+     * @return string with appropriate view name
+     */
+    @GetMapping("/delete")
+    public String deleteAllProductsFromCart() {
+        cartService.deleteAllProductsFromCart();
+        return "emptyCart";
     }
 }

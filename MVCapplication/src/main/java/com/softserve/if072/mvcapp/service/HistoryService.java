@@ -42,7 +42,7 @@ public class HistoryService {
     public List<History> getByUserId() {
         int userId = userService.getCurrentUser().getId();
         LOGGER.info(historyRequestReceive, "retrieving", "all history records", userId);
-        List<History> histories = restTemplate.getForObject(String.format(restHistoryURL, userId), List.class);
+        List<History> histories = restTemplate.getForObject(restHistoryURL, List.class, userId);
         LOGGER.info(historySuccessfullyOperation, "retrieving", "all history records", userId);
         return histories;
     }
@@ -52,10 +52,21 @@ public class HistoryService {
      *
      * @param historyId - history unique identifier
      */
-    public void deleteHistory(int historyId) {
+    public void deleteRecordFromHistory(int historyId) {
         int userId = userService.getCurrentUser().getId();
         LOGGER.info(historyRequestReceive, "deleting the record with id", historyId, userId);
-        restTemplate.delete(String.format(restHistoryDeleteURL, userId, historyId));
+        restTemplate.delete(restHistoryDeleteURL, userId, historyId);
         LOGGER.info(historySuccessfullyOperation, "deleting the record with id", historyId, userId);
     }
+
+    /**
+     * Make request to a REST server for deleting all records from the history of current user
+     */
+    public void deleteAllRecordsFromHistory() {
+        int userId = userService.getCurrentUser().getId();
+        LOGGER.info(historyRequestReceive, "deleting ", "all records", userId);
+        restTemplate.delete(restHistoryURL, userId);
+        LOGGER.info(historySuccessfullyOperation, "deleting ", "all records", userId);
+    }
 }
+

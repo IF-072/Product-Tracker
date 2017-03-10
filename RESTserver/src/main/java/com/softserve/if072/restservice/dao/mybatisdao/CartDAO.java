@@ -65,15 +65,17 @@ public interface CartDAO {
      * Insert new record into the cart table
      *
      * @param cart - item to be inserted to the cart table
+     * @return number of inserted records
      */
     @Insert("INSERT INTO cart(user_id, store_id, product_id, amount) VALUES (#{user.id}, #{store.id}, #{product.id}, #{amount})")
-    void insert(Cart cart);
+    int insert(Cart cart);
 
     /**
      * Update amount for current cart.
      * Since other columns in the cart table are keys we should update only amount column.
      *
      * @param cart - item to be updated in the cart table
+     * @return number of updated records
      */
     @Update("UPDATE cart SET amount=#{amount} WHERE product_id=#{product.id}")
     int update(Cart cart);
@@ -82,7 +84,17 @@ public interface CartDAO {
      * Delete cart item with specific product from the cart table
      *
      * @param productId - unique product identifier
+     * @return number of deleted records
      */
     @Delete("DELETE FROM cart WHERE product_id=#{productId}")
     int deleteByProductId(int productId);
+
+    /**
+     * Delete all products from the cart of current user
+     *
+     * @param userId - unique user's identifier
+     * @return number of deleted records
+     */
+    @Delete("DELETE FROM cart WHERE user_id=#{userId}")
+    int deleteAll(int userId);
 }

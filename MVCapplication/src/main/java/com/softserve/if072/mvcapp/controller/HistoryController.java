@@ -35,8 +35,8 @@ public class HistoryController {
     @GetMapping
     public String getHistories(Model model) {
         List<History> histories = historyService.getByUserId();
-        model.addAttribute("histories", histories);
         if (CollectionUtils.isNotEmpty(histories)) {
+            model.addAttribute("histories", histories);
             return "history";
         }
         return "emptyHistory";
@@ -49,8 +49,19 @@ public class HistoryController {
      * @return string with appropriate view name
      */
     @GetMapping("/delete/{historyId}")
-    public String deleteHistory(@PathVariable int historyId) {
-        historyService.deleteHistory(historyId);
+    public String deleteRecordFromHistory(@PathVariable int historyId) {
+        historyService.deleteRecordFromHistory(historyId);
         return "redirect:/history";
+    }
+
+    /**
+     * Handles requests for deleting all records from the history of current user
+     *
+     * @return string with appropriate view name
+     */
+    @GetMapping("/delete")
+    public String deleteAllRecordsFromHistory() {
+        historyService.deleteAllRecordsFromHistory();
+        return "emptyHistory";
     }
 }
