@@ -23,6 +23,7 @@
     <tiles:insertAttribute name="header" />
     <tiles:insertAttribute name="body" />
     <tiles:insertAttribute name="dialog" />
+    <tiles:insertAttribute name="dialogOk" />
 
     </div>
     </div>

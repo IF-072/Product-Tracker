@@ -118,19 +118,13 @@ public class ProductPageService {
         return units;
     }
 
-    /**
-     * This method send new product's data to the RESTful service to write them into the DataBase.
-     *
-     * @param product new product that user want to add to the database
-     * @param user    user whose product must be added
-     */
-    public void addProduct(Product product, User user) {
+    private Product setUnitAndCategory(Product product) {
 
         final String categoryByIdUri = categoryUrl + "/id/{categoryId}";
         final String UnitByIdUri = unitUrl + "/{unitId}";
-        final String addProductUri = productUrl + "/";
 
         Map<String, Integer> param = new HashMap<>();
+
         if (product.getCategory().getId() > 0) {
             param.put("categoryId", product.getCategory().getId());
             Category category = restTemplate.getForObject(categoryByIdUri, Category.class, param);
@@ -148,11 +142,24 @@ public class ProductPageService {
             product.setUnit(null);
         }
 
+        return product;
+    }
+
+    /**
+     * This method send new product's data to the RESTful service to write them into the DataBase.
+     *
+     * @param product new product that user want to add to the database
+     * @param user    user whose product must be added
+     */
+    public void addProduct(Product product, User user) {
+
+        final String addProductUri = productUrl + "/";
+
         product.setUser(user);
         product.setEnabled(true);
         product.setImage(null);
 
-        restTemplate.postForObject(addProductUri, product, Product.class);
+        restTemplate.postForObject(addProductUri, setUnitAndCategory(product), Product.class);
     }
 
     /**
@@ -163,32 +170,12 @@ public class ProductPageService {
      */
     public void editProduct(Product product, User user) {
 
-        final String categoryByIdUri = categoryUrl + "/id/{categoryId}";
-        final String UnitByIdUri = unitUrl + "/{unitId}";
         final String editProductUri = productUrl + "/";
-
-        Map<String, Integer> param = new HashMap<>();
-        if (product.getCategory().getId() > 0) {
-            param.put("categoryId", product.getCategory().getId());
-            Category category = restTemplate.getForObject(categoryByIdUri, Category.class, param);
-            product.setCategory(category);
-        } else {
-            product.setCategory(null);
-        }
-
-        if (product.getUnit().getId() > 0) {
-            param.clear();
-            param.put("unitId", product.getUnit().getId());
-            Unit unit = restTemplate.getForObject(UnitByIdUri, Unit.class, param);
-            product.setUnit(unit);
-        } else {
-            product.setUnit(null);
-        }
 
         product.setUser(user);
         product.setEnabled(true);
 
-        restTemplate.put(editProductUri, product, Product.class);
+        restTemplate.put(editProductUri, setUnitAndCategory(product), Product.class);
 
     }
 

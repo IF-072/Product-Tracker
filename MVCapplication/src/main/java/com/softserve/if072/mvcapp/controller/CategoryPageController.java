@@ -108,7 +108,7 @@ public class CategoryPageController {
      */
 
     @GetMapping(value="/edit")
-    public String editCategory(@RequestParam int id, ModelMap model) {
+    public String editCategory(@RequestParam(value = "id", required = false) int id, ModelMap model) {
 
         model.addAttribute("category", categoryPageService.getCategory(id));
 
@@ -137,9 +137,11 @@ public class CategoryPageController {
      * @return redirect to the categories list
      */
 
-    @PostMapping(value = "/delete")
-    public void deleteCategory(@RequestParam int id) {
+    @GetMapping(value = "/delete")
+    public String deleteCategory(@RequestParam int id) {
         categoryPageService.deleteCategory(id);
+
+        return "redirect:/category";
     }
 
     @PostMapping(value = "/restore")
