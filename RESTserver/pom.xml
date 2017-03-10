@@ -179,7 +179,6 @@
             <artifactId>slf4j-nop</artifactId>
         </dependency>
 
-
     </dependencies>
 
 </project>

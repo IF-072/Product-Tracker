@@ -56,7 +56,7 @@ public class GoShoppingPageServiceTest {
         when(restTemplate.getForObject(anyString(), eq(List.class))).thenReturn(stores);
 
         assertTrue(stores.equals(goShoppingPageService.getStores(userId)));
-        verify(restTemplate, times(1)).getForObject(anyString(), eq(List.class));
+        verify(restTemplate).getForObject(anyString(), eq(List.class));
     }
 
     @Test
@@ -65,15 +65,14 @@ public class GoShoppingPageServiceTest {
         when(restTemplate.getForObject(anyString(), eq(Map.class))).thenReturn(map);
 
         assertTrue(map.equals(goShoppingPageService.getProducts(userId, storeId)));
-        verify(restTemplate, times(1)).getForObject(anyString(), eq(Map.class));
+        verify(restTemplate).getForObject(anyString(), eq(Map.class));
     }
 
     @Test
     public void addToCart() {
         FormForCart formForCartMock = Mockito.spy(formForCart);
         goShoppingPageService.addToCart(formForCartMock);
-        verify(formForCartMock, times(1)).removeUncheked();
-        verify(restTemplate, times(1))
-                .postForObject(anyString(), any(), eq(Cart.class));
+        verify(formForCartMock).removeUncheked();
+        verify(restTemplate).postForObject(anyString(), any(), eq(Cart.class));
     }
 }

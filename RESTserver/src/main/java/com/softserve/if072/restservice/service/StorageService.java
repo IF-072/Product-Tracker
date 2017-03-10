@@ -35,13 +35,12 @@ public class StorageService {
         this.historyService = historyService;
     }
 
-    public List<Storage> getByUserId(int user_id) throws DataNotFoundException {
+    public List<Storage> getByUserId(int user_id) {
         List<Storage> list = storageDAO.getByUserID(user_id);
-        if (CollectionUtils.isNotEmpty(list)) {
-            return list;
-        } else {
-            throw new DataNotFoundException(String.format("Storages of user with id %d not found", user_id));
+        if (CollectionUtils.isEmpty(list)) {
+            LOGGER.error("Storage of user with id {} not found", user_id);
         }
+        return list;
     }
 
     public Storage getByProductId(int product_id) {
@@ -65,7 +64,7 @@ public class StorageService {
 
         Storage storageDB = storageDAO.getByProductID(storage.getProduct().getId());
         int diff;
-        if((diff = storageDB.getAmount() - storage.getAmount()) > 0) {
+        if ((diff = storageDB.getAmount() - storage.getAmount()) > 0) {
             addToHistory(storage, diff);
         }
         if (storage.getEndDate() != null) {
@@ -85,13 +84,13 @@ public class StorageService {
         }
 
         Storage storage = storageDAO.getByProductID(storageDTO.getProductId());
-        if(storage == null){
+        if (storage == null) {
             LOGGER.error(String.format("Storage with product id %d doesn't exist", storageDTO.getProductId()));
             return;
         }
 
         int diff;
-        if((diff = storage.getAmount() - storageDTO.getAmount()) > 0) {
+        if ((diff = storage.getAmount() - storageDTO.getAmount()) > 0) {
             addToHistory(storage, diff);
         }
         storage.setAmount(storageDTO.getAmount());
@@ -111,14 +110,14 @@ public class StorageService {
         }
     }
 
-    private void addToHistory(Storage storage, int diff){
-            HistoryDTO historyDTO = new HistoryDTO.Builder()
-                    .userId(storage.getUser().getId())
-                    .productId(storage.getProduct().getId())
-                    .amount(diff)
-                    .usedDate(new Timestamp(System.currentTimeMillis()))
-                    .build();
-            historyService.insert(historyDTO);
+    private void addToHistory(Storage storage, int diff) {
+        HistoryDTO historyDTO = new HistoryDTO.Builder()
+                .userId(storage.getUser().getId())
+                .productId(storage.getProduct().getId())
+                .amount(diff)
+                .usedDate(new Timestamp(System.currentTimeMillis()))
+                .build();
+        historyService.insert(historyDTO);
 
     }
 }

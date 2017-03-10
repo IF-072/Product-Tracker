@@ -26,7 +26,6 @@ import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -77,7 +76,7 @@ public class GoShoppingPagesControllerTest {
                 .andExpect(view().name("goShoppingStores"))
                 .andExpect(model().attributeExists("stores"))
                 .andExpect(model().attribute("stores", hasSize(2)));
-        verify(goShoppingPageService, times(1)).getStores(user.getId());
+        verify(goShoppingPageService).getStores(user.getId());
     }
 
     @Test
@@ -96,7 +95,7 @@ public class GoShoppingPagesControllerTest {
                 .andExpect(model().attributeExists("selected"))
                 .andExpect(model().attributeExists("remained"))
                 .andExpect(model().attributeExists("cartForm"));
-        verify(goShoppingPageService, times(1)).getProducts(user.getId(), storeId);
+        verify(goShoppingPageService).getProducts(user.getId(), storeId);
     }
 
     @Test
@@ -111,7 +110,7 @@ public class GoShoppingPagesControllerTest {
                 .andExpect(model().attributeDoesNotExist("selected"))
                 .andExpect(model().attributeDoesNotExist("remained"))
                 .andExpect(model().attributeDoesNotExist("cartForm"));
-        verify(goShoppingPageService, times(1)).getProducts(anyInt(), eq(storeId));
+        verify(goShoppingPageService).getProducts(anyInt(), eq(storeId));
     }
 
     @Test
@@ -120,7 +119,7 @@ public class GoShoppingPagesControllerTest {
         mockMvc.perform(post("/addToCart"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/cart/"));
-        verify(goShoppingPageService, times(1)).addToCart(any());
+        verify(goShoppingPageService).addToCart(any());
     }
 
     private ViewResolver viewResolver() {

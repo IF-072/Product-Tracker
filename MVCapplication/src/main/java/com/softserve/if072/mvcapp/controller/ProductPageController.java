@@ -22,7 +22,6 @@ import org.springframework.web.bind.annotation.RequestParam;
  *
  * @author Vitaliy Malisevych
  */
-
 @Controller
 @RequestMapping("/product")
 @PropertySource(value = {"classpath:application.properties", "classpath:message.properties"})
@@ -31,7 +30,7 @@ public class ProductPageController {
     private ProductPageService productPageService;
     private UserService userService;
 
-    @Value("${product.alreadyExists}")
+    @Value("{product.alreadyExists}")
     private String alreadyExistMessage;
 
     @Autowired
@@ -46,7 +45,6 @@ public class ProductPageController {
      * @param model model with data represented on page
      * @return product
      */
-
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String getProductPage(ModelMap model) {
 
@@ -62,7 +60,6 @@ public class ProductPageController {
      * @param model model with data represented on page
      * @return addProduct
      */
-
     @RequestMapping(value = "/addProduct", method = RequestMethod.GET)
     public String addProduct(Model model){
 
@@ -79,7 +76,6 @@ public class ProductPageController {
      * @param model model with data represented on page
      * @return product
      */
-
     @RequestMapping(value = "/addProduct", method = RequestMethod.POST)
     public String addProduct(@Validated @ModelAttribute("product") Product product, BindingResult result,
                              Model model) {
@@ -92,7 +88,6 @@ public class ProductPageController {
             return "addProduct";
         }
 
-        //if product already exists
         if(productPageService.isAlreadyExist(product, userService.getCurrentUser())) {
             model.addAttribute("errorMessage", alreadyExistMessage);
             model.addAttribute("units", productPageService.getAllUnits());
@@ -101,7 +96,6 @@ public class ProductPageController {
             return "addProduct";
         }
 
-        //if product is deleted
         if (productPageService.isDeleted(product, userService.getCurrentUser())) {
             model.addAttribute("product", productPageService.getProductByNameAndUserId(product, userService.getCurrentUser()));
 
@@ -120,7 +114,6 @@ public class ProductPageController {
      * @param model model with data represented on page
      * @return editProduct
      */
-
     @RequestMapping(value = "/editProduct", method = RequestMethod.GET)
     public String editProduct(@RequestParam int productId, Model model) {
 
@@ -139,7 +132,6 @@ public class ProductPageController {
      * @param model model with data represented on page
      * @return redirect to product's page
      */
-
     @RequestMapping(value = "/editProduct", method = RequestMethod.POST)
     public String editProduct(@Validated @ModelAttribute("product") Product product, BindingResult result,
                               Model model) {
@@ -152,7 +144,6 @@ public class ProductPageController {
             return "editProduct";
         }
 
-        //if product already exists
         if(productPageService.isAlreadyExist(product, userService.getCurrentUser())) {
             model.addAttribute("message", alreadyExistMessage);
             model.addAttribute("units", productPageService.getAllUnits());
@@ -161,7 +152,6 @@ public class ProductPageController {
             return "editProduct";
         }
 
-        //if product is deleted
         if (productPageService.isDeleted(product, userService.getCurrentUser())) {
             model.addAttribute("product", productPageService.getProductByNameAndUserId(product, userService.getCurrentUser()));
 
@@ -179,7 +169,6 @@ public class ProductPageController {
      * @param productId product to be deleted
      * @return redirect to product's page
      */
-
     @RequestMapping(value = "/delProduct", method = RequestMethod.GET)
     public String delProduct(@RequestParam int productId){
 
@@ -196,7 +185,6 @@ public class ProductPageController {
      * @param model model with data represented on page
      * @return productInStores
      */
-
     @RequestMapping(value = "/stores", method = RequestMethod.GET)
     public String getStoresByProductId(@RequestParam int productId, Model model) {
 
@@ -216,7 +204,6 @@ public class ProductPageController {
      * @param productId product which user can buy in checked stores
      * @return redirect to product's page
      */
-
     @RequestMapping(value = "/stores", method = RequestMethod.POST)
     public String getStoresByProductId(@ModelAttribute("storesInProduct") StoresInProduct storesInProduct,
                                        @RequestParam int productId) {
@@ -233,7 +220,6 @@ public class ProductPageController {
      * @param product product to restore
      * @return redirect to product's page
      */
-
     @RequestMapping(value = "/restore", method = RequestMethod.POST)
     public String restoreProduct(@ModelAttribute("product") Product product) {
 

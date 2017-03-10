@@ -63,7 +63,7 @@ public class RegistrationControllerTest {
         mockMvc.perform(post("/register/").contentType(
                 MediaType.APPLICATION_JSON).content(mapper.writeValueAsString(user))).andExpect(
                 status().is4xxClientError());
-        verify(userService, times(0)).insert(any());
+        verify(userService, never()).insert(any());
     }
 
     @Test
@@ -77,7 +77,7 @@ public class RegistrationControllerTest {
         mockMvc.perform(post("/register/").contentType(
                 MediaType.APPLICATION_JSON).content(mapper.writeValueAsString(newUser))).andExpect(
                 status().isOk());
-        verify(userService, times(1)).insert(any());
+        verify(userService).insert(any());
     }
 
     @Test
@@ -85,7 +85,7 @@ public class RegistrationControllerTest {
         mockMvc.perform(post("/register/findUsername").content("another@user.com"))
                 .andExpect(status().isOk())
                 .andExpect(content().string(""));
-        verify(userService, times(1)).getByUsername("another@user.com");
+        verify(userService).getByUsername("another@user.com");
     }
 
     @Test
@@ -93,7 +93,7 @@ public class RegistrationControllerTest {
         mockMvc.perform(post("/register/findUsername").content("test@user.com"))
                 .andExpect(status().isOk())
                 .andExpect(content().string("test@user.com"));
-        verify(userService, times(1)).getByUsername("test@user.com");
+        verify(userService).getByUsername("test@user.com");
     }
 
 }

@@ -3,7 +3,6 @@ package com.softserve.if072.mvcapp.controller;
 import com.softserve.if072.common.model.Product;
 import com.softserve.if072.common.model.Store;
 import com.softserve.if072.common.model.User;
-import com.softserve.if072.mvcapp.dto.ProductsWrapper;
 import com.softserve.if072.mvcapp.service.StorePageService;
 import com.softserve.if072.mvcapp.service.UserService;
 import org.junit.Before;
@@ -49,10 +48,7 @@ public class StorePageControllerTest {
     private Product product;
     @InjectMocks
     private StorePageController storePageController;
-
     private MockMvc mockMvc;
-    @Mock
-    ProductsWrapper wrapedProducts;
 
     @Before
     public void setUp() {
@@ -79,7 +75,7 @@ public class StorePageControllerTest {
     }
 
     @Test
-    public void test_GetAllStoresByUserId_StoreListEmpty_ShouldReturnViewName() throws Exception {
+    public void test_GetAllStoresByUserId__ShouldReturnEmptyStoreList() throws Exception {
         List<Store> stores = new ArrayList<>();
         when(storePageService.getAllStoresByUserId(anyInt())).thenReturn(stores);
         when(userService.getCurrentUser()).thenReturn(user);
@@ -93,7 +89,7 @@ public class StorePageControllerTest {
     }
 
     @Test
-    public void test_GetAllStoresByUserId_StoreListNull_ShouldReturnView() throws Exception {
+    public void test_GetAllStoresByUserId__ShouldReturnStoreListNull() throws Exception {
         when(storePageService.getAllStoresByUserId(anyInt())).thenReturn(null);
         when(userService.getCurrentUser()).thenReturn(user);
         mockMvc.perform(get("/stores/"))
@@ -166,7 +162,7 @@ public class StorePageControllerTest {
     }
 
     @Test
-    public void test_AddStore_Post_ShouldReturnNameMessage() throws Exception {
+    public void test_AddStore_Post_ShouldReturnValidationNameMessage() throws Exception {
         String name = createStringWithLength(2);
         String address = createStringWithLength(34);
         mockMvc.perform(post("/addStore")
@@ -269,33 +265,67 @@ public class StorePageControllerTest {
         verifyNoMoreInteractions(storePageService);
     }
 
-//    @PostMapping("/addProductsToStore")
-//    public String addProductsToStore(@RequestParam("storeId") int storeId, @ModelAttribute("wrapedProducts")
-//            ProductsWrapper wrapedProducts) {
-//        int userId = userService.getCurrentUser().getId();
-//        if (wrapedProducts.getProducts().isEmpty()) {
-//            LOGGER.info(String.format("No products have been chosen in store %d ", storeId));
-//            return "redirect:/stores/storeProducts?storeId=" + storeId;
-//        }
-//        storePageService.addProductsToStore(userId, storeId, wrapedProducts);
-//        LOGGER.info(String.format("Products of user %d added in store %d ", userId, storeId));
-//
-//        return "redirect:/stores/storeProducts?storeId=" + storeId;
-//    }
-
     @Test
-    public void test_AddProductsToStore_Post_ShouldRedirectToStoreProducts() throws Exception {
-        when(userService.getCurrentUser()).thenReturn(user);
-        when(wrapedProducts.getProducts()).thenReturn(Arrays.asList(2, 4, 6));
+    public void test_DeleteProductFromStore_ShouldRedirectToStoreProducts() throws Exception {
         int storeId = 2;
-        mockMvc.perform(post("/addProductsToStore")
-                .param("storeId", Integer.toString(storeId)))
-                .andExpect(status().isFound())
-                .andExpect(redirectedUrl("/stores/storeProducts?storeId=" + storeId));
-        storePageService.addProductsToStore(anyInt(), anyInt(), any());
-        verify(storePageService, times(1)).addProductsToStore(anyInt(), anyInt(), any());
+        int productId = 3;
+        mockMvc.perform(get("/stores/delProduct")
+                .param("storeId", Integer.toString(storeId))
+                .param("productId", Integer.toString(productId)))
+                .andExpect(status().isBadRequest());
+//                .andExpect(redirectedUrl("/stores/storeProducts?storeId=2"));
+        storePageService.deleteProductFromStore(storeId, productId);
+        verify(storePageService, times(1)).deleteProductFromStore(storeId, productId);
+        verifyNoMoreInteractions(storePageService);
     }
 
+    @Test
+    public void test_DeleteStore_ShouldReturnStorePage() throws Exception {
+        int storeId = 2;
+        mockMvc.perform(get("/stores/delStore")
+                .param("storeId", Integer.toString(storeId)))
+                .andExpect(status().isFound())
+                .andExpect(redirectedUrl("/stores/"));
+        verify(storePageService, times(1)).deleteStore(storeId);
+        verifyNoMoreInteractions(storePageService);
+    }
+
+    @Test
+    public void test_EditStore_ShouldReturnViewName() throws Exception {
+        int storeId = 2;
+        when(storePageService.getStoreById(anyInt())).thenReturn(store);
+        mockMvc.perform(get("/editStore?storeId=2"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("editStore"))
+                .andExpect(model().attributeExists("store"));
+        verify(storePageService, times(1)).getStoreById(anyInt());
+        verifyNoMoreInteractions(storePageService);
+    }
+
+    @Test
+    public void test_RetrieveStore_ShouldRedirectToStoresViev() throws Exception {
+        int storeId = 2;
+        storePageService.retrieveStore(anyInt());
+        mockMvc.perform(get("/retrieveStore?storeId=2"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name("redirect:/stores/"));
+        verify(storePageService, times(1)).retrieveStore(storeId);
+    }
+
+    @Test
+    public void test_EditStore_Post_ShouldReturnViewName() throws Exception {
+        int storeId = 2;
+        when(userService.getCurrentUser()).thenReturn(user);
+        String name = createStringWithLength(9);
+        String address = createStringWithLength(34);
+        store = createStore(0, name, address, true);
+        mockMvc.perform(post("/editStore?storeId=2")
+                .param("name", name)
+                .param("address", address))
+                .andExpect(status().isFound())
+                .andExpect(redirectedUrl("/stores/"));
+        verify(storePageService, times(1)).editStore(store, storeId, user);
+    }
 
     public static Store createStore(int id, String name, String address, boolean isEnabled) {
         Store store = new Store();
