@@ -7,13 +7,6 @@
   Created by Nazar Vynnyk
 --%>
 
-<%--<style>--%>
-    <%--#image, #delete {--%>
-        <%--text-align: center;--%>
-        <%--cursor: pointer--%>
-    <%--}--%>
-<%--</style>--%>
-
 <div class="row">
     <div class="col-lg-12">
         <h1 class="page-header"><spring:message code="store.products"/></h1>
