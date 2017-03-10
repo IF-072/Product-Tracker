@@ -62,9 +62,9 @@ public class CustomRESTAuthenticationManager implements AuthenticationManager {
             throw new UsernameNotFoundException("Username not found");
         }
 
+        userService.verifyPremiumAccountValidity(user);
         List<GrantedAuthority> authorities = new ArrayList<>();
         authorities.add(user.getRole());
-        userService.verifyPremiumAccountValidity(user);
 
         Authentication authenticatedUser = new AuthenticatedUserProxy(user, authenticationToken, true, authorities);
         return authenticatedUser;
