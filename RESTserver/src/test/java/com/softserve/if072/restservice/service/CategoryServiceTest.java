@@ -88,13 +88,6 @@ public class CategoryServiceTest {
         verify(categoryDAO).getByNameAndUserID(name, userID);
     }
 
-    @Test(expected = Exception.class)
-    public void getByNameAndUserID_shouldThrowAnException() throws Exception {
-        when(categoryDAO.getByNameAndUserID(name, userID)).thenReturn(null);
-        categoryService.getByNameAndUserID(name, userID);
-        verify(categoryDAO).getByNameAndUserID(name, userID);
-    }
-
     @Test
     public void insert_shouldInsertCategory() {
         categoryService.insert(category);

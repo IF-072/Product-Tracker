@@ -123,7 +123,12 @@ public class CategoryPageController {
      */
 
     @PostMapping(value = "/edit")
-    public String editCategory(@ModelAttribute Category category) {
+    public String editCategory(@Validated @ModelAttribute Category category, BindingResult result, ModelMap model) {
+
+        if (result.hasErrors()) {
+            model.addAttribute("errors", result.getAllErrors());
+            return "editCategory";
+        }
 
         categoryPageService.editCategory(category, userService.getCurrentUser());
 
