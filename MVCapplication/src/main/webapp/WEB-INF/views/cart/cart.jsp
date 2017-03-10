@@ -3,11 +3,12 @@
 --%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="sf" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
 <!-- Header -->
 <div class="row">
     <div class="col-lg-12">
-        <h1 class="page-header">My Cart</h1>
+        <h1 class="page-header"><spring:message code="cart.myCart"/></h1>
     </div>
 </div>
 
@@ -16,19 +17,19 @@
     <div class="col-lg-12">
         <div class="panel panel-default">
             <div class="panel-heading">
-                Store: ${carts[0].store.name}
+                <spring:message code="store.name"/>: ${carts[0].store.name}
             </div>
             <div class="panel-body">
                 <table class="table table-striped table-bordered table-hover table-condensed">
                     <thead>
                     <tr>
                         <th class="text-center table-number-width">#</th>
-                        <th class="text-center">Product</th>
-                        <th class="text-center">Description</th>
-                        <th class="text-center">Category</th>
-                        <th class="text-center table-toBeBought-width">To be bought</th>
-                        <th class="text-center table-bought-width">Bought</th>
-                        <th class="text-center table-delete-width">Delete</th>
+                        <th class="text-center"><spring:message code="product"/></th>
+                        <th class="text-center"><spring:message code="product.description"/></th>
+                        <th class="text-center"><spring:message code="product.category"/></th>
+                        <th class="text-center table-toBeBought-width"><spring:message code="cart.toBeBought"/></th>
+                        <th class="text-center table-bought-width"><spring:message code="cart.bought"/></th>
+                        <th class="text-center table-delete-width"><spring:message code="delete"/></th>
                     </tr>
                     </thead>
                     <tbody>
@@ -41,13 +42,13 @@
                             <td class="text-center">
                                     ${cart.amount} ${cart.product.unit.name}
                             </td>
-                            <c:url var="purchase"  value="/cart/purchase"/>
-                            <sf:form method="POST" action="${purchase}" modelAttribute="cartDTO" id="purchaseDeleteForm${status.count}" >
+                            <c:url var="purchase" value="/cart/purchase/${cart.product.id}"/>
+                            <sf:form method="POST" action="${purchase}" modelAttribute="cartDTO"
+                                     id="purchaseDeleteForm${status.count}">
                                 <td class="text-center">
                                     <div class="input-append">
                                         <sf:hidden path="userId" value="${cart.user.id}"/>
                                         <sf:hidden path="storeId" value="${cart.store.id}"/>
-                                        <sf:hidden path="productId" value="${cart.product.id}"/>
                                         <sf:input class="span2 number table-input-number-width"
                                                   id="appendedInputButton"
                                                   size="16" type="number" path="amount" min="1"
@@ -58,8 +59,11 @@
                                 </td>
                                 <td class="text-center">
                                     <div class="input-append">
-                                        <a class="text-center" href="<c:url value="/cart/delete"/>" purpose="deleteProduct"
-                                           number="${status.count}" productName="${cart.product.name}"><i class="fa fa-trash-o fa-fw"></i></a>
+                                        <a class="text-center" href="<c:url value="/cart/delete/${cart.product.id}"/>"
+                                           purpose="deleteProduct"
+                                           number="${status.count}" deleteName="${cart.product.name}">
+                                            <i class="fa fa-trash-o fa-fw"></i></a>
+                                        <c:set var="pageName" value="cart" scope="request"/>
                                     </div>
                                 </td>
                             </sf:form>
@@ -67,6 +71,11 @@
                     </c:forEach>
                     </tbody>
                 </table>
+            </div>
+            <div class="panel-footer text-right">
+                <button type="button" class="btn btn-primary" id="btn-deleteAll" href="<c:url value="/cart/delete"/>"
+                        deleteName="<spring:message code="deleteDialog.messageDeleteAllCart"/>">
+                    <spring:message code="deleteAll"/></button>
             </div>
         </div>
     </div>

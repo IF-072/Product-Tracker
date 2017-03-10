@@ -40,6 +40,8 @@ public class CartService {
     private String cartNotFound;
     @Value("${cart.SuccessfullyOperation}")
     private String cartSuccessfullyOperation;
+    @Value("${cart.deleteAllSuccessfullyOperation}")
+    private String deleteAllSuccessfullyOperation;
     @Value("${cart.foundProductId}")
     private String cartFoundProductId;
     @Value("${cart.transaction}")
@@ -130,6 +132,15 @@ public class CartService {
         LOGGER.info(cartSuccessfullyOperation, productId, "deleted from");
     }
 
+    /**
+     * Make request to a Cart DTO for deleting all product from the cart of current user
+     * @param userId - current user unique identifier
+     */
+    public void deleteAll(int userId) {
+        int count=cartDAO.deleteAll(userId);
+        LOGGER.info(deleteAllSuccessfullyOperation, count, userId);
+    }
+
     public Cart getByProductId(int productId) {
         Cart cart = cartDAO.getByProductId(productId);
         LOGGER.info(cartFoundProductId, productId);
@@ -147,6 +158,8 @@ public class CartService {
         }
         LOGGER.info(cartSuccessfullyOperation, cart.getProduct().getId(), "updated in");
     }
+
+
 }
 
 

@@ -2,6 +2,7 @@ package com.softserve.if072.mvcapp.controller;
 
 import com.softserve.if072.common.model.Cart;
 import com.softserve.if072.mvcapp.service.CartService;
+import com.softserve.if072.mvcapp.test.utils.CartBuilder;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -11,6 +12,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static org.hamcrest.Matchers.allOf;
@@ -18,7 +20,6 @@ import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasProperty;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
@@ -38,6 +39,12 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standal
  */
 @RunWith(MockitoJUnitRunner.class)
 public class CartControllerTest {
+    private static final int FIRST_CART_ITEM_ID = 1;
+    private static final int SECOND_CART_ITEM_ID = 2;
+    private static final int FIRST_CART_ITEM_AMOUNT = 5;
+    private static final int SECOND_CART_ITEM_AMOUNT = 3;
+    private static final int CURRENT_USER_ID = 4;
+    private static final int PRODUCT_ID = 32;
     @Mock
     private CartService cartService;
     private CartController cartController;
@@ -52,19 +59,9 @@ public class CartControllerTest {
     }
 
     @Test
-    public void getCarts_ShouldReturnCartViewName() throws Exception {
-        Cart cart1 = new Cart.Builder()
-                .defaultUser(1)
-                .defaultStore(1)
-                .defaultProduct(1)
-                .amount(5)
-                .build();
-        Cart cart2 = new Cart.Builder()
-                .defaultUser(2)
-                .defaultStore(2)
-                .defaultProduct(2)
-                .amount(3)
-                .build();
+    public void getCarts_ShouldReturnCartViewNameAndModelShouldHaveAppropriateAttributes() throws Exception {
+        Cart cart1 = CartBuilder.getDefaultCart(FIRST_CART_ITEM_ID, CURRENT_USER_ID, FIRST_CART_ITEM_AMOUNT);
+        Cart cart2 = CartBuilder.getDefaultCart(SECOND_CART_ITEM_ID, CURRENT_USER_ID, SECOND_CART_ITEM_AMOUNT);
         List<Cart> carts = Arrays.asList(cart1, cart2);
         when(cartService.getByUserId()).thenReturn(carts);
         mockMvc.perform(get("/cart"))
@@ -75,50 +72,63 @@ public class CartControllerTest {
                 .andExpect(model().attribute("carts", hasSize(2)))
                 .andExpect(model().attribute("carts", hasItem(
                         allOf(
-                                hasProperty("user", hasProperty("name", is("user1"))),
-                                hasProperty("store", hasProperty("name", is("store1"))),
-                                hasProperty("product", hasProperty("name", is("product1"))),
-                                hasProperty("amount", is(5))
+                                hasProperty("user", hasProperty("name"
+                                        , is(String.format("user%d", CURRENT_USER_ID)))),
+                                hasProperty("store", hasProperty("name"
+                                        , is(String.format("store%d", FIRST_CART_ITEM_ID)))),
+                                hasProperty("product", hasProperty("name"
+                                        , is(String.format("product%d", FIRST_CART_ITEM_ID)))),
+                                hasProperty("amount", is(FIRST_CART_ITEM_AMOUNT))
                         ))
                 ))
                 .andExpect(model().attribute("carts", hasItem(
                         allOf(
-                                hasProperty("user", hasProperty("name", is("user2"))),
-                                hasProperty("store", hasProperty("name", is("store2"))),
-                                hasProperty("product", hasProperty("name", is("product2"))),
-                                hasProperty("amount", is(3))
+                                hasProperty("user", hasProperty("name"
+                                        , is(String.format("user%d", CURRENT_USER_ID)))),
+                                hasProperty("store", hasProperty("name"
+                                        , is(String.format("store%d", SECOND_CART_ITEM_ID)))),
+                                hasProperty("product", hasProperty("name"
+                                        , is(String.format("product%d", SECOND_CART_ITEM_ID)))),
+                                hasProperty("amount", is(SECOND_CART_ITEM_AMOUNT))
                         ))
                 ))
                 .andExpect(model().attributeExists("cartDTO"));
-        verify(cartService, times(1)).getByUserId();
+        verify(cartService).getByUserId();
         verifyZeroInteractions(cartService);
     }
 
     @Test
     public void getCarts_ShouldReturnEmptyCartViewName() throws Exception {
-        List<Cart> carts = Arrays.asList();
-        when(cartService.getByUserId()).thenReturn(carts);
+        when(cartService.getByUserId()).thenReturn(Collections.emptyList());
         mockMvc.perform(get("/cart"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("emptyCart"))
                 .andExpect(forwardedUrl("/WEB-INF/views/cart/emptyCart.jsp"))
                 .andExpect(model().attributeDoesNotExist("carts"));
-        verify(cartService, times(1)).getByUserId();
+        verify(cartService).getByUserId();
         verifyZeroInteractions(cartService);
     }
 
     @Test
     public void productPurchase_ShouldRedirectToCartHandler() throws Exception {
-        mockMvc.perform(post("/cart/purchase"))
+        mockMvc.perform(post("/cart/purchase/{productId}", PRODUCT_ID))
                 .andExpect(status().isFound())
                 .andExpect(redirectedUrl("/cart"));
     }
 
     @Test
     public void deleteProductFromCart_ShouldRedirectToCartHandler() throws Exception {
-        mockMvc.perform(get("/cart/delete"))
+        mockMvc.perform(get("/cart/delete/{productId}", PRODUCT_ID))
                 .andExpect(status().isFound())
                 .andExpect(redirectedUrl("/cart"));
+    }
+
+    @Test
+    public void deleteAllProductsFromCart_ShouldForwardToEmptyCartPage() throws Exception {
+        mockMvc.perform(get("/cart/delete"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("emptyCart"))
+                .andExpect(forwardedUrl("/WEB-INF/views/cart/emptyCart.jsp"));
     }
 }
 

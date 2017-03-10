@@ -72,49 +72,4 @@ public class CartDTO {
                 ", amount: " + amount +
                 "}";
     }
-
-    public static class Builder {
-        private int userId;
-        private int storeId;
-        private int productId;
-        private int amount;
-        private int initialAmount;
-
-        public Builder userId(int userId) {
-            this.userId = userId;
-            return this;
-        }
-
-        public Builder storeId(int storeId) {
-            this.storeId = storeId;
-            return this;
-        }
-
-        public Builder productId(int productId) {
-            this.productId = productId;
-            return this;
-        }
-
-        public Builder amount(int amount) {
-            this.amount = amount;
-            return this;
-        }
-
-        public Builder initialAmount(int initialAmount) {
-            this.initialAmount = amount;
-            return this;
-        }
-
-        public CartDTO build() {
-            return new CartDTO(this);
-        }
-    }
-
-    private CartDTO(Builder builder) {
-        userId = builder.userId;
-        storeId = builder.storeId;
-        productId = builder.productId;
-        amount = builder.amount;
-        initialAmount = builder.initialAmount;
-    }
 }

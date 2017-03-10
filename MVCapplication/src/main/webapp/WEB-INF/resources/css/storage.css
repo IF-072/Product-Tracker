@@ -15,3 +15,10 @@ input.form-control {
     float: right;
 }
 
+
+ #image, #delete {
+     text-align: center;
+     cursor: pointer
+ }
+
+
