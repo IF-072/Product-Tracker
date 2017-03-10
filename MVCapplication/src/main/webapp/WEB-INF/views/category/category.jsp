@@ -14,8 +14,7 @@
 <!-- Table with the list of categories -->
 <div class="row">
     <div class="col-lg-6">
-        <input type="button" class="btn btn-outline btn-primary" onclick="location.href = '/category/add'"
-               value="<spring:message code="category.addNew"/>">
+        <input type="button" class="btn btn-outline btn-primary addNewCategory" value="<spring:message code="category.addNew"/>">
         <br />
         <br />
         <c:if test="${empty categories}">
@@ -46,8 +45,8 @@
                         <tr class="gradeA">
                             <td>${loop.count}</td>
                             <td>${category.name}</td>
-                            <td onclick="location.href='/category/edit?id=${category.id}'" class="text-center"><a href="#"><i class="fa fa-pencil fa-lg"></i></a></td>
-                            <td onclick="deleteCategory(${category.id})" class="text-center"><a href="#"><i  class="fa fa-trash-o fa-lg"></i></a></td>
+                            <td class="text-center"><a href="#" class="categoryBtnEdit" id="${category.id}"><i class="fa fa-pencil fa-lg"></i></a></td>
+                            <td class="text-center"><a href="#" class="categoryBtnDelete" id="${category.id}"><i  class="fa fa-trash-o fa-lg"></i></a></td>
                         </tr>
                     </c:forEach>
 
@@ -63,7 +62,9 @@
     <br />
     <br />
     <div class="center-block text-center">
-        <button onclick="acceptDeleting()" class="btn btn-success btn-reset-custom">Yes</button>
-        <button onclick="cancelDeleting()" class="btn btn-default btn-reset-custom">No</button>
+        <%--<button onclick="acceptDeleting()" class="btn btn-success btn-reset-custom btnAcceptDeleting()">Yes</button>--%>
+        <button class="btn btn-success btn-reset-custom btnAcceptDeleting"><spring:message code="yes"/></button>
+        <%--<button onclick="cancelDeleting()" class="btn btn-default btn-reset-custom">No</button>--%>
+        <button class="btn btn-default btn-reset-custom btnCancelDeleting"><spring:message code="no"/></button>
     </div>
 </div>

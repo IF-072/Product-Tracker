@@ -24,7 +24,7 @@
                               placeholder="${nameExample}" type="text"/>
                 </div>
                 <input type="submit" class="btn btn-success btn-success-custom" value="<spring:message code="submit"/>"/>
-                <input type="reset" class="btn btn-default btn-reset-custom" onclick="location.href='/category'" value="<spring:message code="cancel"/>" />
+                <input type="reset" class="btn btn-default btn-reset-custom" onclick="window.location.href='/category'" value="<spring:message code="cancel"/>" />
             </fieldset>
         </sf:form>
     </div>
