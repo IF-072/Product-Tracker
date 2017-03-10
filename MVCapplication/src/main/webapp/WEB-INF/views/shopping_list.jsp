@@ -26,7 +26,7 @@
                             <td>${elem.product.name}</td>
                             <td id="am${loop.count}">${elem.amount} ${elem.product.unit.name}</td>
                             <td>${elem.product.category.name}</td>
-                            <td>
+                            <td class="align-mid">
                                 <c:if test="${elem.product.image != null}">
                                     <img src="<c:url value="/image/${elem.product.image.id}"/>" width="50" height="50">
                                 </c:if>
@@ -34,11 +34,11 @@
                                     <img src="<c:url value="/img/noimage.jpg"/>" width="50" height="50">
                                 </c:if>
                             </td>
-                            <td><p class="fa fa-minus-square fa-lg fa-2x edit"
+                            <td class="align-mid"><p class="fa fa-minus-square fa-lg fa-lg edit"
                                    prodId="${elem.product.id}" val="-1" index="${loop.count}"/></td>
-                            <td><p class="fa fa-plus-square fa-lg fa-2x edit"
+                            <td class="align-mid"><p class="fa fa-plus-square fa-lg fa-lg edit"
                                    prodId="${elem.product.id}" val="1" index="${loop.count}"/></td>
-                            <td><p prodId="${elem.product.id}" class="fa fa-times fa-2x del"/></td>
+                            <td class="align-mid"><p prodId="${elem.product.id}" class="fa fa-times fa-lg del"/></td>
                         </tr>
                     </c:forEach>
                     </tbody>
