@@ -2,7 +2,7 @@
  *   Created by Igor Kryviuk
  */
 
-$(document).ready(function () {
+
 
     /**
      * Avoid form submit by pressing
@@ -17,16 +17,16 @@ $(document).ready(function () {
 
     /**
      * This function is used to show modal dialog window
-     * for user to confirm or cancel deleting product
+     * for user to confirm or cancel deleting a product
      */
     $("a[purpose='deleteProduct']").click(function () {
         var form = $("#purchaseDeleteForm" + $(this).attr("number"));
         var href = $(this).attr("href");
         form.attr("action", href);
         form.attr("method", "GET");
-        var productName = $(this).attr("productName");
+        var deleteName = $(this).attr("deleteName");
         $("#modalDeleteConfirm").modal('show');
-        $("b.productName").text(productName);
+        $("b.deleteName").text(deleteName);
         $("span.pageName").text("cart");
         $(".btn-confirm").click(function () {
             form.submit();
@@ -34,5 +34,20 @@ $(document).ready(function () {
         event.preventDefault();
     });
 
-});
+    /**
+     * This function is used to show modal dialog window
+     * for user to confirm or cancel deleting all product
+     */
+    $("#btn-deleteAll").click(function () {
+       var href = $(this).attr("href");
+        var deleteName = $(this).attr("deleteName");
+        $("#modalDeleteConfirm").modal('show');
+        $("b.deleteName").text(deleteName);
+        $("span.pageName").text("cart");
+        $(".btn-confirm").click(function () {
+            location.href = href;
+        });
+
+    });
+
 

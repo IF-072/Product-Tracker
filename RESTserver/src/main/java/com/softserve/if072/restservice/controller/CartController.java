@@ -51,7 +51,7 @@ public class CartController {
      * @param cartDTO - an object with required information for the product purchase
      */
     @PreAuthorize("#cartDTO != null && #cartDTO.userId == authentication.user.id")
-    @PutMapping("/purchase")
+    @PutMapping("/purchase/{productId}")
     @ResponseStatus(value = HttpStatus.OK)
     public void productPurchase(@RequestBody CartDTO cartDTO) {
         cartService.productPurchase(cartDTO);
@@ -69,12 +69,21 @@ public class CartController {
         cartService.delete(productId);
     }
 
+    /**
+     * Handles requests for deleting all product from the cart of current user
+     */
+    @PreAuthorize("#userId == authentication.user.id")
+    @DeleteMapping()
+    @ResponseStatus(value = HttpStatus.OK)
+    public void deleteAll(@PathVariable int userId) {
+        cartService.deleteAll(userId);
+    }
+
     @PostAuthorize("#cart != null && #cart.user != null && #cart.user.id == authentication.user.id")
     @GetMapping("/{productId}")
     @ResponseStatus(HttpStatus.OK)
     public Cart getByProductId(@PathVariable int productId) {
-        Cart cart = cartService.getByProductId(productId);
-        return cart;
+        return cartService.getByProductId(productId);
     }
 
     @PreAuthorize("#cart != null && #cart.user != null && #cart.user.id == authentication.user.id")
