@@ -31,6 +31,7 @@
         <put-attribute name="header" value="/WEB-INF/templates/header.jsp"/>
         <put-attribute name="body" value=""/>
         <put-attribute name="dialog" value=""/>
+        <put-attribute name="dialogOk" value=""/>
 
         <put-list-attribute name="stylesheets">
             <add-attribute value="/css/bootstrap.css"/>
@@ -90,6 +91,7 @@
         <put-attribute name="title" value="Product Tracker"/>
         <put-attribute name="body" value="/WEB-INF/views/product/product.jsp"/>
         <put-attribute name="dialog" value="/WEB-INF/templates/dialog.jsp"/>
+        <put-attribute name="dialogOk" value="/WEB-INF/views/product/OkDialog.jsp"/>
 
         <put-list-attribute name="stylesheets" inherit="true">
             <add-attribute value="/css/jquery-ui.css"/>
@@ -286,17 +288,30 @@
     <definition name="addImage" extends="mainLayout">
         <put-attribute name="title" value="Add image"/>
         <put-attribute name="body" value="/WEB-INF/views/product/addImage.jsp"/>
+        <put-attribute name="dialog" value="/WEB-INF/views/product/dialogFileType.jsp"/>
+
+        <put-list-attribute name="stylesheets" inherit="true">
+            <add-attribute value="/css/jquery-ui.css"/>
+        </put-list-attribute>
 
         <put-list-attribute name="javascripts" inherit="true">
+            <add-attribute value="/js/jquery-ui.js"/>
             <add-attribute value="/js/image.js"/>
         </put-list-attribute>
+
     </definition>
 
     <definition name="editImage" extends="mainLayout">
         <put-attribute name="title" value="Edit image"/>
         <put-attribute name="body" value="/WEB-INF/views/product/editImage.jsp"/>
+        <put-attribute name="dialog" value="/WEB-INF/views/product/dialogFileType.jsp"/>
+
+        <put-list-attribute name="stylesheets" inherit="true">
+            <add-attribute value="/css/jquery-ui.css"/>
+        </put-list-attribute>
 
         <put-list-attribute name="javascripts" inherit="true">
+            <add-attribute value="/js/jquery-ui.js"/>
             <add-attribute value="/js/image.js"/>
         </put-list-attribute>
     </definition>
