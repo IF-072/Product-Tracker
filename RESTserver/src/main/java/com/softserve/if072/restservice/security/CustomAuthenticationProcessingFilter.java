@@ -54,7 +54,7 @@ public class CustomAuthenticationProcessingFilter extends AbstractAuthentication
         //Perform a full authentication by our custom authentication manager
         Authentication authentication = getAuthenticationManager().authenticate(auth);
 
-        //send new renewed token value as a response header
+        //attach updated token value as a response header
         renewToken(response, authentication);
 
         return authentication;
