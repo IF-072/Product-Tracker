@@ -6,8 +6,6 @@ import com.softserve.if072.common.model.Store;
 import com.softserve.if072.common.model.Unit;
 import com.softserve.if072.common.model.User;
 import com.softserve.if072.mvcapp.dto.StoresInProduct;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
