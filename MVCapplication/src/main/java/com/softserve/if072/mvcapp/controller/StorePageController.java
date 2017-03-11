@@ -27,6 +27,7 @@ import java.util.List;
  * @author Nazar Vynnyk
  */
 
+@SuppressWarnings("ALL")
 @Controller
 public class StorePageController {
 
@@ -99,7 +100,7 @@ public class StorePageController {
             return "dialogWindow";
         }
         storePageService.addStore(userService.getCurrentUser(), store);
-      LOGGER.info(String.format("Store of user %d was added", userService.getCurrentUser().getId()));
+        LOGGER.info(String.format("Store of user %d was added", userService.getCurrentUser().getId()));
 
         return "redirect:/stores/";
     }
@@ -113,7 +114,7 @@ public class StorePageController {
      * @return view page that contains all products that are offered in store
      */
     @GetMapping("/stores/storeProducts")
-    public String getAllProductsByStoreId(@RequestParam("storeId") int storeId, ModelMap model) {
+    public String getAllProductsByStoreId(@RequestParam int storeId, ModelMap model) {
         model.addAttribute("store", storePageService.getStoreById(storeId));
         model.addAttribute("products", storePageService.getAllProductsFromStore(storeId, userService.getCurrentUser()
                 .getId()));
@@ -132,7 +133,7 @@ public class StorePageController {
      * @return view page that contains all products that are not represented in this store
      */
     @GetMapping("/addProductsToStore")
-    public String addProductsToStore(@RequestParam("storeId") int storeId, ModelMap model) {
+    public String addProductsToStore(@RequestParam int storeId, ModelMap model) {
 
         model.addAttribute("myStore", storePageService.getStoreById(storeId));
         List<Product> products = storePageService.getNotMappedProducts(storeId, userService.getCurrentUser().getId());
@@ -151,7 +152,7 @@ public class StorePageController {
      * @return redirect to the store view page that contains list of stores
      */
     @PostMapping("/addProductsToStore")
-    public String addProductsToStore(@RequestParam("storeId") int storeId, @ModelAttribute("wrapedProducts")
+    public String addProductsToStore(@RequestParam int storeId, @ModelAttribute("wrapedProducts")
             ProductsWrapper wrapedProducts) {
         int userId = userService.getCurrentUser().getId();
         if (wrapedProducts.getProducts().isEmpty()) {
@@ -172,13 +173,12 @@ public class StorePageController {
      * @return redirect to the store products view page that contains list of products from this store
      */
     @GetMapping(value = "/stores/delProduct")
-    public String deleteProductFromStore(@RequestParam("storeID") Integer storeID, @RequestParam("productID") Integer
+    public String deleteProductFromStore(@RequestParam Integer storeID, @RequestParam Integer
             productID) {
         storePageService.deleteProductFromStore(storeID, productID);
         LOGGER.info(String.format("Product %d from tore with id %d was deleted", productID, storeID));
 
         return "redirect:/stores/storeProducts?storeId=" + storeID;
-
     }
 
     /**
@@ -188,7 +188,7 @@ public class StorePageController {
      * @return redirect to the store view page that contains list of stores
      */
     @GetMapping(value = "/stores/delStore")
-    public String deleteStore(@RequestParam("storeId") int storeId) {
+    public String deleteStore(@RequestParam int storeId) {
         storePageService.deleteStore(storeId);
         LOGGER.info(String.format("Store with id %d was deleted", storeId));
 
@@ -203,7 +203,7 @@ public class StorePageController {
      * @return store view page that contains form for editing store
      */
     @GetMapping("/editStore")
-    public String editStore(@RequestParam("storeId") int storeId, ModelMap model) {
+    public String editStore(@RequestParam int storeId, ModelMap model) {
         model.addAttribute("store", storePageService.getStoreById(storeId));
         LOGGER.info(String.format("Editing Store %d", storeId));
 
@@ -220,7 +220,7 @@ public class StorePageController {
      */
     @PostMapping("/editStore")
     public String editStore(@Validated @ModelAttribute("store") Store store, BindingResult result, Model model,
-                            @RequestParam("storeId") int storeId) {
+                            @RequestParam int storeId) {
         if (result.hasErrors()) {
             model.addAttribute("store", storePageService.getStoreById(storeId));
             model.addAttribute("errorMessages", result.getFieldErrors());
@@ -249,9 +249,10 @@ public class StorePageController {
      * @return redirect to the store view page that contains list of stores
      */
     @GetMapping("/retrieveStore")
-    public String retrieveStore(@RequestParam("storeId") int storeId) {
+    public String retrieveStore(@RequestParam int storeId) {
         storePageService.retrieveStore(storeId);
         LOGGER.info(String.format("Store with id %d was successful retrieved", storeId));
+
         return "redirect:/stores/";
     }
 
