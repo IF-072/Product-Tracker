@@ -59,15 +59,9 @@ public class CategoryService {
         }
     }
 
-    public Category getByNameAndUserID(String name, int userID) throws DataNotFoundException {
+    public Category getByNameAndUserID(String name, int userID) {
 
-        Category category = categoryDAO.getByNameAndUserID(name, userID);
-
-        if (category != null) {
-            return category;
-        } else {
-            throw new DataNotFoundException(String.format(categoryByNameNotFound, name, userID));
-        }
+        return categoryDAO.getByNameAndUserID(name, userID);
     }
 
     public void insert(Category category) {

@@ -1,5 +1,6 @@
 <%@ taglib prefix="sf" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 <%--
   User: Pavlo Bendus
@@ -15,6 +16,15 @@
 <!-- Form -->
 <div class="col-lg-6">
     <div class="form-group has-warning">
+        <c:if test="${not empty errors}">
+            <div class="alert alert-danger">
+                <c:forEach items="${errors}" var="errorItem">
+                    <p><span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                            ${errorItem.getDefaultMessage()}</p>
+                </c:forEach>
+            </div>
+        </c:if>
+
         <spring:message code="category.nameExample" var="nameExample"/>
         <sf:form role="form" modelAttribute="category" method="post">
             <fieldset>

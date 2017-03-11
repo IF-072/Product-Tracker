@@ -27,8 +27,8 @@
                 </div>
             </div>
         </c:if>
+<c:if test="${not empty categories}">
 
-        <c:if test="${not empty categories}">
         <div class="panel panel-default">
                 <table width="100%" class="table table-striped table-bordered table-hover">
                     <thead>
