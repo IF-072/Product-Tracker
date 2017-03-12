@@ -2,6 +2,7 @@ package com.softserve.if072.restservice.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
+import com.softserve.if072.common.model.Action;
 import com.softserve.if072.common.model.History;
 import com.softserve.if072.common.model.dto.HistoryDTO;
 import com.softserve.if072.restservice.service.HistoryService;
@@ -74,11 +75,13 @@ public class HistoryControllerTest {
     @Test
     public void getByUserId_UserIdGiven_ShouldReturnNotEmptyUsersHistory() throws Exception {
         History history1 = HistoryBuilder.getDefaultHistory(FIRST_HISTORY_ITEM_ID, CURRENT_USER_ID
-                , FIRST_HISTORY_ITEM_AMOUNT, FIRST_HISTORY_ITEM_USEDDATE);
+                , FIRST_HISTORY_ITEM_AMOUNT, FIRST_HISTORY_ITEM_USEDDATE, Action.PURCHASED);
         History history2 = HistoryBuilder.getDefaultHistory(SECOND_HISTORY_ITEM_ID, CURRENT_USER_ID
-                , SECOND_HISTORY_ITEM_AMOUNT, SECOND_HISTORY_ITEM_USEDDATE);
+                , SECOND_HISTORY_ITEM_AMOUNT, SECOND_HISTORY_ITEM_USEDDATE, Action.USED);
         List<History> histories = Arrays.asList(history1, history2);
+
         when(historyService.getByUserId(anyInt())).thenReturn(histories);
+
         mockMvc.perform(get("/api/users/{userId}/histories", CURRENT_USER_ID))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(APPLICATION_JSON_UTF8))
@@ -87,10 +90,13 @@ public class HistoryControllerTest {
                 .andExpect(jsonPath("$[0]['product']['name']", is(String.format("product%d", FIRST_HISTORY_ITEM_ID))))
                 .andExpect(jsonPath("$[0]['amount']", is(FIRST_HISTORY_ITEM_AMOUNT)))
                 .andExpect(jsonPath("$[0]['usedDate']", is(FIRST_HISTORY_ITEM_USEDDATE.getTime())))
+                .andExpect(jsonPath("$[0]['action']", is("PURCHASED")))
                 .andExpect(jsonPath("$[1]['user']['name']", is(String.format("user%d", CURRENT_USER_ID))))
                 .andExpect(jsonPath("$[1]['product']['name']", is(String.format("product%d", SECOND_HISTORY_ITEM_ID))))
                 .andExpect(jsonPath("$[1]['amount']", is(SECOND_HISTORY_ITEM_AMOUNT)))
-                .andExpect(jsonPath("$[1]['usedDate']", is(SECOND_HISTORY_ITEM_USEDDATE.getTime())));
+                .andExpect(jsonPath("$[1]['usedDate']", is(SECOND_HISTORY_ITEM_USEDDATE.getTime())))
+                .andExpect(jsonPath("$[1]['action']", is("USED")));
+
         verify(historyService).getByUserId(anyInt());
         verifyZeroInteractions(historyService);
     }
@@ -98,10 +104,12 @@ public class HistoryControllerTest {
     @Test
     public void getByUserId_UserIdGiven_ShouldReturnEmptyUsersHistory() throws Exception {
         when(historyService.getByUserId(anyInt())).thenReturn(Collections.emptyList());
+
         mockMvc.perform(get("/api/users/{userId}/histories", CURRENT_USER_ID))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(APPLICATION_JSON_UTF8))
                 .andExpect(jsonPath("$", hasSize(0)));
+
         verify(historyService).getByUserId(anyInt());
         verifyZeroInteractions(historyService);
     }
@@ -110,6 +118,7 @@ public class HistoryControllerTest {
     public void delete_HistoryIdGiven_ShouldExecuteHistoryServiceDeleteExactlyOnce() throws Exception {
         mockMvc.perform(delete("/api/users/{userId}/histories/{historyId}", CURRENT_USER_ID, HISTORY_ID))
                 .andExpect(status().isOk());
+
         verify(historyService).delete(HISTORY_ID);
         verifyZeroInteractions(historyService);
     }
@@ -118,6 +127,7 @@ public class HistoryControllerTest {
     public void deleteAll_UserIdGiven_ShouldExecuteHistoryServiceDeleteAllExactlyOnce() throws Exception {
         mockMvc.perform(delete("/api/users/{userId}/histories/", CURRENT_USER_ID))
                 .andExpect(status().isOk());
+
         verify(historyService).deleteAll(CURRENT_USER_ID);
         verifyZeroInteractions(historyService);
     }
@@ -125,11 +135,13 @@ public class HistoryControllerTest {
     @Test
     public void getByProductId_UserIdAndHistoryIdGiven_ShouldReturnNotEmptyUsersHistory() throws Exception {
         History history1 = HistoryBuilder.getDefaultHistory(PRODUCT_ID, CURRENT_USER_ID
-                , FIRST_HISTORY_ITEM_AMOUNT, FIRST_HISTORY_ITEM_USEDDATE);
+                , FIRST_HISTORY_ITEM_AMOUNT, FIRST_HISTORY_ITEM_USEDDATE, Action.USED);
         History history2 = HistoryBuilder.getDefaultHistory(PRODUCT_ID, CURRENT_USER_ID
-                , SECOND_HISTORY_ITEM_AMOUNT, SECOND_HISTORY_ITEM_USEDDATE);
+                , SECOND_HISTORY_ITEM_AMOUNT, SECOND_HISTORY_ITEM_USEDDATE, Action.PURCHASED);
         List<History> histories = Arrays.asList(history1, history2);
+
         when(historyService.getByProductId(CURRENT_USER_ID, PRODUCT_ID)).thenReturn(histories);
+
         mockMvc.perform(get("/api/users/{userId}/histories/products/{productId}", CURRENT_USER_ID, PRODUCT_ID))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(APPLICATION_JSON_UTF8))
@@ -138,10 +150,13 @@ public class HistoryControllerTest {
                 .andExpect(jsonPath("$[0]['product']['name']", is(String.format("product%d", PRODUCT_ID))))
                 .andExpect(jsonPath("$[0]['amount']", is(FIRST_HISTORY_ITEM_AMOUNT)))
                 .andExpect(jsonPath("$[0]['usedDate']", is(FIRST_HISTORY_ITEM_USEDDATE.getTime())))
+                .andExpect(jsonPath("$[0]['action']", is("USED")))
                 .andExpect(jsonPath("$[1]['user']['name']", is(String.format("user%d", CURRENT_USER_ID))))
                 .andExpect(jsonPath("$[1]['product']['name']", is(String.format("product%d", PRODUCT_ID))))
                 .andExpect(jsonPath("$[1]['amount']", is(SECOND_HISTORY_ITEM_AMOUNT)))
-                .andExpect(jsonPath("$[1]['usedDate']", is(SECOND_HISTORY_ITEM_USEDDATE.getTime())));
+                .andExpect(jsonPath("$[1]['usedDate']", is(SECOND_HISTORY_ITEM_USEDDATE.getTime())))
+                .andExpect(jsonPath("$[1]['action']", is("PURCHASED")));
+
         verify(historyService).getByProductId(CURRENT_USER_ID, PRODUCT_ID);
         verifyZeroInteractions(historyService);
     }
@@ -149,10 +164,12 @@ public class HistoryControllerTest {
     @Test
     public void getByProductId_UserIdAndHistoryIdGiven_ShouldReturnEmptyUsersHistory() throws Exception {
         when(historyService.getByProductId(CURRENT_USER_ID, PRODUCT_ID)).thenReturn(Collections.emptyList());
+
         mockMvc.perform(get("/api/users/{userId}/histories/products/{productId}", CURRENT_USER_ID, PRODUCT_ID))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(APPLICATION_JSON_UTF8))
                 .andExpect(jsonPath("$", hasSize(0)));
+
         verify(historyService).getByProductId(CURRENT_USER_ID, PRODUCT_ID);
         verifyZeroInteractions(historyService);
     }
@@ -160,10 +177,12 @@ public class HistoryControllerTest {
     @Test
     public void insert_HistoryDTOGiven_ShouldExecuteHistoryServiceInsertExactlyOnce() throws Exception {
         String requestCartDTO = objectWriter.writeValueAsString(new HistoryDTO());
+
         mockMvc.perform(post("/api/users/{userId}/histories", CURRENT_USER_ID)
                 .contentType(APPLICATION_JSON_UTF8)
                 .content(requestCartDTO))
                 .andExpect(status().isCreated());
+
         verify(historyService).insert(any());
         verifyZeroInteractions(historyService);
     }
@@ -171,10 +190,12 @@ public class HistoryControllerTest {
     @Test
     public void update_HistoryDTOGiven_ShouldExecuteHistoryServiceUpdateExactlyOnce() throws Exception {
         String requestCartDTO = objectWriter.writeValueAsString(new HistoryDTO());
+
         mockMvc.perform(put("/api/users/{userId}/histories", CURRENT_USER_ID)
                 .contentType(APPLICATION_JSON_UTF8)
                 .content(requestCartDTO))
                 .andExpect(status().isOk());
+
         verify(historyService).update(any());
         verifyZeroInteractions(historyService);
     }

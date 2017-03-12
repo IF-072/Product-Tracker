@@ -1,5 +1,6 @@
 package com.softserve.if072.mvcapp.controller;
 
+import com.softserve.if072.common.model.Action;
 import com.softserve.if072.common.model.History;
 import com.softserve.if072.mvcapp.service.HistoryService;
 import com.softserve.if072.mvcapp.test.utils.HistoryBuilder;
@@ -63,11 +64,13 @@ public class HistoryControllerTest {
     @Test
     public void getHistories_ShouldReturnHistoryViewName_ModelShouldHaveAppropriateAttributes() throws Exception {
         History history1 = HistoryBuilder.getDefaultHistory(FIRST_HISTORY_ITEM_ID, CURRENT_USER_ID
-                , FIRST_HISTORY_ITEM_AMOUNT, FIRST_HISTORY_ITEM_USEDDATE);
+                , FIRST_HISTORY_ITEM_AMOUNT, FIRST_HISTORY_ITEM_USEDDATE, Action.PURCHASED);
         History history2 = HistoryBuilder.getDefaultHistory(SECOND_HISTORY_ITEM_ID, CURRENT_USER_ID
-                , SECOND_HISTORY_ITEM_AMOUNT, SECOND_HISTORY_ITEM_USEDDATE);
+                , SECOND_HISTORY_ITEM_AMOUNT, SECOND_HISTORY_ITEM_USEDDATE, Action.USED);
         List<History> histories = Arrays.asList(history1, history2);
+
         when(historyService.getByUserId()).thenReturn(histories);
+
         mockMvc.perform(get("/history"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("history"))
@@ -82,7 +85,8 @@ public class HistoryControllerTest {
                                 hasProperty("product", hasProperty("name"
                                         , is(String.format("product%d", FIRST_HISTORY_ITEM_ID)))),
                                 hasProperty("amount", is(FIRST_HISTORY_ITEM_AMOUNT)),
-                                hasProperty("usedDate", is(FIRST_HISTORY_ITEM_USEDDATE))
+                                hasProperty("usedDate", is(FIRST_HISTORY_ITEM_USEDDATE)),
+                                hasProperty("action", is(Action.PURCHASED))
                         ))
                 ))
                 .andExpect(model().attribute("histories", hasItem(
@@ -93,9 +97,11 @@ public class HistoryControllerTest {
                                 hasProperty("product", hasProperty("name"
                                         , is(String.format("product%d", SECOND_HISTORY_ITEM_ID)))),
                                 hasProperty("amount", is(SECOND_HISTORY_ITEM_AMOUNT)),
-                                hasProperty("usedDate", is(SECOND_HISTORY_ITEM_USEDDATE))
+                                hasProperty("usedDate", is(SECOND_HISTORY_ITEM_USEDDATE)),
+                                hasProperty("action", is(Action.USED))
                         ))
                 ));
+
         verify(historyService).getByUserId();
         verifyZeroInteractions(historyService);
     }
@@ -103,11 +109,13 @@ public class HistoryControllerTest {
     @Test
     public void getHistories_ShouldReturnEmptyHistoryViewName() throws Exception {
         when(historyService.getByUserId()).thenReturn(Collections.emptyList());
+
         mockMvc.perform(get("/history"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("emptyHistory"))
                 .andExpect(forwardedUrl("/WEB-INF/views/history/emptyHistory.jsp"))
                 .andExpect(model().attributeDoesNotExist("histories"));
+
         verify(historyService).getByUserId();
         verifyZeroInteractions(historyService);
     }
