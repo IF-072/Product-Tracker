@@ -59,10 +59,11 @@ public class HistoryService {
 
     /**
      * Make request to a History DTO for deleting all records from the history of current user
+     *
      * @param userId - current user unique identifier
      */
     public void deleteAll(int userId) {
-        int count=historyDAO.deleteAll(userId);
+        int count = historyDAO.deleteAll(userId);
         LOGGER.info(deleteAllSuccessfullyOperation, count, userId);
     }
 
@@ -74,13 +75,13 @@ public class HistoryService {
 
     public void insert(HistoryDTO historyDTO) {
         historyDAO.insert(historyDTO);
-        LOGGER.info(historySuccessfullyOperation, historyDTO.getId(), "inserted into");
+        LOGGER.info(historySuccessfullyOperation, historyDTO.getProductId(), historyDTO.getAction(), "inserted into");
     }
 
     public void update(HistoryDTO historyDTO) {
         if (historyDAO.update(historyDTO) == 0) {
             throw new DataNotFoundException(String.format(historyNotFound, "UPDATE", historyDTO.getId()));
         }
-        LOGGER.info(historySuccessfullyOperation, historyDTO.getId(), "updated in");
+        LOGGER.info(historySuccessfullyOperation, historyDTO.getProductId(), historyDTO.getAction(), "updated in");
     }
 }

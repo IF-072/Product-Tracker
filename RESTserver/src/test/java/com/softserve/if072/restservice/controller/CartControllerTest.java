@@ -72,7 +72,9 @@ public class CartControllerTest {
         Cart cart1 = CartBuilder.getDefaultCart(FIRST_CART_ITEM_ID, CURRENT_USER_ID, FIRST_CART_ITEM_AMOUNT);
         Cart cart2 = CartBuilder.getDefaultCart(SECOND_CART_ITEM_ID, CURRENT_USER_ID, SECOND_CART_ITEM_AMOUNT);
         List<Cart> carts = Arrays.asList(cart1, cart2);
+
         when(cartService.getByUserId(anyInt())).thenReturn(carts);
+
         mockMvc.perform(get("/api/users/{userId}/carts", CURRENT_USER_ID))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(APPLICATION_JSON_UTF8))
@@ -85,6 +87,7 @@ public class CartControllerTest {
                 .andExpect(jsonPath("$[1]['store']['name']", is(String.format("store%d", SECOND_CART_ITEM_ID))))
                 .andExpect(jsonPath("$[1]['product']['name']", is(String.format("product%d", SECOND_CART_ITEM_ID))))
                 .andExpect(jsonPath("$[1]['amount']", is(SECOND_CART_ITEM_AMOUNT)));
+
         verify(cartService).getByUserId(anyInt());
         verifyZeroInteractions(cartService);
     }
@@ -92,10 +95,12 @@ public class CartControllerTest {
     @Test
     public void getByUserId_UserIdGiven_ShouldReturnEmptyUsersCart() throws Exception {
         when(cartService.getByUserId(anyInt())).thenReturn(Collections.emptyList());
+
         mockMvc.perform(get("/api/users/{userId}/carts", CURRENT_USER_ID))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(APPLICATION_JSON_UTF8))
                 .andExpect(jsonPath("$", hasSize(0)));
+
         verify(cartService).getByUserId(anyInt());
         verifyZeroInteractions(cartService);
     }
@@ -103,10 +108,12 @@ public class CartControllerTest {
     @Test
     public void productPurchase_CartDTOGiven_ShouldExecuteCartServiceProductPurchaseExactlyOnce() throws Exception {
         String requestCartDTO = objectWriter.writeValueAsString(new CartDTO());
+
         mockMvc.perform(put("/api/users/{userId}/carts/purchase/{productId}", CURRENT_USER_ID, PRODUCT_ID)
                 .contentType(APPLICATION_JSON_UTF8)
                 .content(requestCartDTO))
                 .andExpect(status().isOk());
+
         verify(cartService).productPurchase(any());
         verifyZeroInteractions(cartService);
     }
@@ -123,6 +130,7 @@ public class CartControllerTest {
     public void deleteAll_UserIdGiven_ShouldExecuteCartServiceDeleteAllExactlyOnce() throws Exception {
         mockMvc.perform(delete("/api/users/{userId}/carts", CURRENT_USER_ID))
                 .andExpect(status().isOk());
+
         verify(cartService).deleteAll(CURRENT_USER_ID);
         verifyZeroInteractions(cartService);
     }
@@ -131,6 +139,7 @@ public class CartControllerTest {
     public void getByProductId_ProductIdGiven_ShouldExecuteCartServiceGetByProductIdExactlyOnce() throws Exception {
         mockMvc.perform(get("/api/users/{userId}/carts/{productId}", CURRENT_USER_ID, PRODUCT_ID))
                 .andExpect(status().isOk());
+
         verify(cartService).getByProductId(PRODUCT_ID);
         verifyZeroInteractions(cartService);
     }
@@ -138,10 +147,12 @@ public class CartControllerTest {
     @Test
     public void insert_CartGiven_ShouldExecuteCartServiceInsertExactlyOnce() throws Exception {
         String requestCartDTO = objectWriter.writeValueAsString(new Cart());
+
         mockMvc.perform(post("/api/users/{userId}/carts", CURRENT_USER_ID)
                 .contentType(APPLICATION_JSON_UTF8)
                 .content(requestCartDTO))
                 .andExpect(status().isCreated());
+
         verify(cartService).insert(any());
         verifyZeroInteractions(cartService);
     }
@@ -149,10 +160,12 @@ public class CartControllerTest {
     @Test
     public void update_CartGiven_ShouldExecuteCartServiceUpdateExactlyOnce() throws Exception {
         String requestCartDTO = objectWriter.writeValueAsString(new Cart());
+
         mockMvc.perform(put("/api/users/{userId}/carts", CURRENT_USER_ID)
                 .contentType(APPLICATION_JSON_UTF8)
                 .content(requestCartDTO))
                 .andExpect(status().isOk());
+
         verify(cartService).update(any());
         verifyZeroInteractions(cartService);
     }

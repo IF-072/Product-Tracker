@@ -1,5 +1,7 @@
 package com.softserve.if072.common.model.dto;
 
+import com.softserve.if072.common.model.Action;
+
 import java.sql.Timestamp;
 
 /**
@@ -14,16 +16,18 @@ public class HistoryDTO {
     private int productId;
     private int amount;
     private Timestamp usedDate;
+    private Action action;
 
     public HistoryDTO() {
     }
 
-    public HistoryDTO(int id, int userId, int productId, int amount, Timestamp usedDate) {
+    public HistoryDTO(int id, int userId, int productId, int amount, Timestamp usedDate, Action action) {
         this.id = id;
         this.userId = userId;
         this.productId = productId;
         this.amount = amount;
         this.usedDate = usedDate;
+        this.action=action;
     }
 
     public int getId() {
@@ -66,12 +70,21 @@ public class HistoryDTO {
         this.usedDate = usedDate;
     }
 
+    public Action getAction() {
+        return action;
+    }
+
+    public void setAction(Action action) {
+        this.action = action;
+    }
+
     @Override
     public String toString() {
         return "HistoryDTO{ UserId: " + userId +
                 "; ProductId: " + productId +
                 "; amount:  " + amount +
                 "; usedDate " + usedDate +
+                "; action: " + action +
                 "}";
     }
 }

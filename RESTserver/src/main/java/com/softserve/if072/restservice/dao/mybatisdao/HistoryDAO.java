@@ -30,7 +30,7 @@ public interface HistoryDAO {
      * @param userId - unique user's identifier
      * @return list of all history items that belong to specific user
      */
-    @Select("SELECT id, user_id, product_id, amount, used_date FROM history " +
+    @Select("SELECT id, user_id, product_id, amount, used_date, action FROM history " +
             "WHERE user_id = #{userId}")
     @Results(value = {
             @Result(property = "id", column = "id"),
@@ -39,7 +39,8 @@ public interface HistoryDAO {
             @Result(property = "product", column = "product_id", javaType = Product.class,
                     one = @One(select = "com.softserve.if072.restservice.dao.mybatisdao.ProductDAO.getByID")),
             @Result(property = "amount", column = "amount"),
-            @Result(property = "usedDate", column = "used_date")
+            @Result(property = "usedDate", column = "used_date"),
+            @Result(property = "action", column = "action")
     })
     List<History> getByUserId(int userId);
 
@@ -50,7 +51,7 @@ public interface HistoryDAO {
      * @param productId - unique product identifier
      * @return list of all history items that belong to specific user and specific product
      */
-    @Select("SELECT id, user_id, product_id, amount, used_date FROM history " +
+    @Select("SELECT id, user_id, product_id, amount, used_date, action FROM history " +
             "WHERE user_id = #{userId} AND product_id = #{productId}")
     @Results(value = {
             @Result(property = "id", column = "id"),
@@ -59,7 +60,8 @@ public interface HistoryDAO {
             @Result(property = "product", column = "product_id", javaType = Product.class,
                     one = @One(select = "com.softserve.if072.restservice.dao.mybatisdao.ProductDAO.getByID")),
             @Result(property = "amount", column = "amount"),
-            @Result(property = "usedDate", column = "used_date")
+            @Result(property = "usedDate", column = "used_date"),
+            @Result(property = "action", column = "action")
     })
     List<History> getByProductId(@Param("userId") int userId, @Param("productId") int productId);
 
@@ -70,7 +72,7 @@ public interface HistoryDAO {
      * @param historyId - unique history record identifier
      * @return history with specific id identifier
      */
-    @Select("SELECT id, user_id, product_id, amount, used_date FROM history " +
+    @Select("SELECT id, user_id, product_id, amount, used_date, action FROM history " +
             "WHERE id = #{historyId}")
     @Results(value = {
             @Result(property = "id", column = "id"),
@@ -79,7 +81,8 @@ public interface HistoryDAO {
             @Result(property = "product", column = "product_id", javaType = Product.class,
                     one = @One(select = "com.softserve.if072.restservice.dao.mybatisdao.ProductDAO.getByID")),
             @Result(property = "amount", column = "amount"),
-            @Result(property = "usedDate", column = "used_date")
+            @Result(property = "usedDate", column = "used_date"),
+            @Result(property = "action", column = "action")
     })
     History getByHistoryId(int historyId);
 
@@ -89,7 +92,8 @@ public interface HistoryDAO {
      * @param historyDTO - item to be inserted to the history table
      * @return number of inserted records
      */
-    @Insert("INSERT INTO history(user_id, product_id, amount, used_date) values(#{userId}, #{productId}, #{amount}, #{usedDate})")
+    @Insert("INSERT INTO history(user_id, product_id, amount, used_date, action)" +
+            " values(#{userId}, #{productId}, #{amount}, #{usedDate}, #{action})")
     int insert(HistoryDTO historyDTO);
 
     /**

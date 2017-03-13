@@ -41,6 +41,7 @@ public class HistoryService {
      */
     public List<History> getByUserId() {
         int userId = userService.getCurrentUser().getId();
+
         LOGGER.info(historyRequestReceive, "retrieving", "all history records", userId);
         List<History> histories = restTemplate.getForObject(restHistoryURL, List.class, userId);
         LOGGER.info(historySuccessfullyOperation, "retrieving", "all history records", userId);
@@ -54,6 +55,7 @@ public class HistoryService {
      */
     public void deleteRecordFromHistory(int historyId) {
         int userId = userService.getCurrentUser().getId();
+
         LOGGER.info(historyRequestReceive, "deleting the record with id", historyId, userId);
         restTemplate.delete(restHistoryDeleteURL, userId, historyId);
         LOGGER.info(historySuccessfullyOperation, "deleting the record with id", historyId, userId);
@@ -64,6 +66,7 @@ public class HistoryService {
      */
     public void deleteAllRecordsFromHistory() {
         int userId = userService.getCurrentUser().getId();
+
         LOGGER.info(historyRequestReceive, "deleting ", "all records", userId);
         restTemplate.delete(restHistoryURL, userId);
         LOGGER.info(historySuccessfullyOperation, "deleting ", "all records", userId);

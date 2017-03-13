@@ -4,7 +4,7 @@ import java.sql.Timestamp;
 
 /**
  * The History class stores information about
- * how many units of specific product and when were used by current user
+ * how many units of specific product and when were purchased or used by current user
  *
  * @author Igor Kryviuk
  */
@@ -14,16 +14,18 @@ public class History {
     private Product product;
     private int amount;
     private Timestamp usedDate;
+    private Action action;
 
     public History() {
     }
 
-    public History(int id, User user, Product product, int amount, Timestamp usedDate) {
+    public History(int id, User user, Product product, int amount, Timestamp usedDate, Action action) {
         this.id = id;
         this.user = user;
         this.product = product;
         this.amount = amount;
         this.usedDate = usedDate;
+        this.action=action;
     }
 
     public int getId() {
@@ -66,6 +68,14 @@ public class History {
         this.usedDate = usedDate;
     }
 
+    public Action getAction() {
+        return action;
+    }
+
+    public void setAction(Action action) {
+        this.action = action;
+    }
+
     @Override
     public String toString() {
         return "History{\nid:" + id +
@@ -73,6 +83,7 @@ public class History {
                 ";\nProduct: " + product +
                 ", amount: " + amount +
                 ", usedDate: " + usedDate +
+                "; action: " + action +
                 "\n}";
     }
 }
