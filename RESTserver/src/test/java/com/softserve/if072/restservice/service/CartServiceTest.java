@@ -67,8 +67,11 @@ public class CartServiceTest {
         Cart cart1 = CartBuilder.getDefaultCart(FIRST_CART_ITEM_ID, CURRENT_USER_ID, FIRST_CART_ITEM_AMOUNT);
         Cart cart2 = CartBuilder.getDefaultCart(SECOND_CART_ITEM_ID, CURRENT_USER_ID, SECOND_CART_ITEM_AMOUNT);
         List<Cart> carts = Arrays.asList(cart1, cart2);
+
         when(cartDAO.getByUserId(CURRENT_USER_ID)).thenReturn(carts);
+
         List<Cart> actualCarts = cartService.getByUserId(CURRENT_USER_ID);
+
         assertEquals(2, actualCarts.size());
         assertEquals(String.format("user%d", CURRENT_USER_ID), actualCarts.get(0).getUser().getName());
         assertEquals(String.format("product%d", SECOND_CART_ITEM_ID), actualCarts.get(1).getProduct().getName());
@@ -79,7 +82,9 @@ public class CartServiceTest {
     @Test
     public void getByUserId_UserIdGiven_ShouldReturnEmptyUsersCart() {
         when(cartDAO.getByUserId(CURRENT_USER_ID)).thenReturn(Collections.emptyList());
+
         List<Cart> actualCarts = cartService.getByUserId(CURRENT_USER_ID);
+
         assertTrue(CollectionUtils.isEmpty(actualCarts));
         verify(cartDAO).getByUserId(CURRENT_USER_ID);
         verifyZeroInteractions(cartDAO);
@@ -90,7 +95,9 @@ public class CartServiceTest {
         when(storageService.getByProductId(anyInt())).thenReturn(null);
         doNothing().when(storageService).insert(anyInt(), anyInt(), anyInt());
         when(shoppingListService.getByProductId(anyInt())).thenReturn(null);
+
         cartService.productPurchase(cartDTO);
+
         verify(cartDAO).deleteByProductId(anyInt());
         verify(storageService).getByProductId(anyInt());
         verify(storageService).insert(anyInt(), anyInt(), anyInt());
@@ -105,7 +112,9 @@ public class CartServiceTest {
             Exception {
         when(storageService.getByProductId(anyInt())).thenReturn(storage);
         when(shoppingListService.getByProductId(anyInt())).thenReturn(shoppingList);
+
         cartService.productPurchase(cartDTO);
+
         assertFalse(cartDTO.getInitialAmount() > cartDTO.getAmount());
         verify(cartDAO).deleteByProductId(anyInt());
         verify(storageService).getByProductId(anyInt());
@@ -123,8 +132,10 @@ public class CartServiceTest {
             Exception {
         when(storageService.getByProductId(anyInt())).thenReturn(storage);
         when(shoppingListService.getByProductId(anyInt())).thenReturn(shoppingList);
+
         cartDTO.setAmount(2);
         cartService.productPurchase(cartDTO);
+
         assertTrue(cartDTO.getInitialAmount() > cartDTO.getAmount());
         verify(cartDAO).deleteByProductId(anyInt());
         verify(storageService).getByProductId(anyInt());
@@ -143,7 +154,9 @@ public class CartServiceTest {
         when(storageService.getByProductId(anyInt())).thenReturn(null);
         doNothing().when(storageService).insert(anyInt(), anyInt(), anyInt());
         when(shoppingListService.getByProductId(anyInt())).thenThrow(new DataNotFoundException());
+
         cartService.productPurchase(cartDTO);
+
         verify(cartDAO).deleteByProductId(anyInt());
         verify(storageService).getByProductId(anyInt());
         verify(storageService).insert(anyInt(), anyInt(), anyInt());
@@ -156,7 +169,9 @@ public class CartServiceTest {
     @Test
     public void delete_ProductIdGiven_ShouldExecuteCartDAODeleteExactlyOnce() throws Exception {
         when(cartDAO.deleteByProductId(PRODUCT_ID)).thenReturn(1);
+
         cartService.delete(PRODUCT_ID);
+
         verify(cartDAO).deleteByProductId(PRODUCT_ID);
         verifyZeroInteractions(cartDAO);
     }
@@ -164,7 +179,9 @@ public class CartServiceTest {
     @Test
     public void deleteAll_UserIdGiven_ShouldExecuteCartDAODeleteAllExactlyOnce() throws Exception {
         when(cartDAO.deleteAll(CURRENT_USER_ID)).thenReturn(1);
+
         cartService.deleteAll(CURRENT_USER_ID);
+
         verify(cartDAO).deleteAll(CURRENT_USER_ID);
         verifyZeroInteractions(cartDAO);
     }
@@ -173,7 +190,9 @@ public class CartServiceTest {
     public void getByProductId_ProductIdGiven_ShouldExecuteCartDAOGetByProductIdExactlyOnce() throws Exception {
         Cart cart = CartBuilder.getDefaultCart(FIRST_CART_ITEM_ID, CURRENT_USER_ID, FIRST_CART_ITEM_AMOUNT);
         when(cartDAO.getByProductId(PRODUCT_ID)).thenReturn(cart);
+
         Cart actualCart = cartService.getByProductId(PRODUCT_ID);
+
         assertEquals(String.format("user%d", CURRENT_USER_ID), actualCart.getUser().getName());
         assertEquals(String.format("store%d", FIRST_CART_ITEM_ID), actualCart.getStore().getName());
         assertEquals(String.format("product%d", FIRST_CART_ITEM_ID), actualCart.getProduct().getName());
@@ -188,7 +207,9 @@ public class CartServiceTest {
         product.setId(PRODUCT_ID);
         Cart cart = new Cart();
         cart.setProduct(product);
+
         cartService.insert(cart);
+
         verify(cartDAO).insert(cart);
         verifyZeroInteractions(cartDAO);
     }
@@ -200,7 +221,9 @@ public class CartServiceTest {
         Cart cart = new Cart();
         cart.setProduct(product);
         when(cartDAO.update(cart)).thenReturn(1);
+
         cartService.update(cart);
+
         verify(cartDAO).update(cart);
         verifyZeroInteractions(cartDAO);
     }

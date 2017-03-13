@@ -52,9 +52,12 @@ public class HistoryServiceTest {
     public void getByUserId_ShouldReturnNoEmptyList() throws Exception {
        History history1 = HistoryBuilder.getDefaultHistory(FIRST_HISTORY_ITEM_ID, CURRENT_USER_ID);
        History history2 = HistoryBuilder.getDefaultHistory(SECOND_HISTORY_ITEM_ID, CURRENT_USER_ID);
-        List<History> histories = Arrays.asList(history1, history2);
+       List<History> histories = Arrays.asList(history1, history2);
+
         when(restTemplate.getForObject(REST_HISTORY_ULR, List.class, CURRENT_USER_ID)).thenReturn(histories);
+
         List<History> actualHistories = historyService.getByUserId();
+
         assertEquals(2, actualHistories.size());
         assertEquals(String.format("user%d", CURRENT_USER_ID), actualHistories.get(0).getUser().getName());
         assertEquals(String.format("product%d", SECOND_HISTORY_ITEM_ID), actualHistories.get(1).getProduct().getName());
@@ -65,7 +68,9 @@ public class HistoryServiceTest {
     @Test
     public void getByUserId_ShouldReturnEmptyList() throws Exception {
         when(restTemplate.getForObject(REST_HISTORY_ULR, List.class, CURRENT_USER_ID)).thenReturn(Collections.emptyList());
+
         List<History> actualHistories = historyService.getByUserId();
+
         assertTrue(CollectionUtils.isEmpty(actualHistories));
         verify(restTemplate).getForObject(null, List.class, CURRENT_USER_ID);
         verifyZeroInteractions(restTemplate);
@@ -74,6 +79,7 @@ public class HistoryServiceTest {
     @Test
     public void deleteRecordFromHistory_HistoryIdGiven_ShouldExecuteRestTemplateDeleteExactlyOnce() throws Exception {
         historyService.deleteRecordFromHistory(HISTORY_ID);
+
         verify(restTemplate).delete(REST_HISTORY_ULR, CURRENT_USER_ID, HISTORY_ID);
         verifyZeroInteractions(restTemplate);
     }
@@ -81,6 +87,7 @@ public class HistoryServiceTest {
     @Test
     public void deleteAllRecordsFromHistory_ShouldExecuteRestTemplateDeleteAllExactlyOnce() throws Exception {
         historyService.deleteAllRecordsFromHistory();
+
         verify(restTemplate).delete(REST_HISTORY_ULR, CURRENT_USER_ID);
         verifyZeroInteractions(restTemplate);
     }

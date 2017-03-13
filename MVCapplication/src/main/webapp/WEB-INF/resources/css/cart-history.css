@@ -1,20 +1,20 @@
-.table-number-width{
+.table-number-width {
     width: 1%;
 }
 
-.table-toBeBought-width{
+.table-toBeBought-width {
     width: 7%;
 }
 
-.table-bought-width{
+.table-bought-width {
     width: 7%;
 }
 
-.table-delete-width{
+.table-delete-width {
     width: 1%;
 }
 
-.table-input-number-width{
+.table-input-number-width {
     width: 40px;
 }
 
@@ -28,9 +28,50 @@
     position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-50%,-50%);
+    transform: translate(-50%, -50%);
 }
+
 .modal-open .modal {
     overflow-x: auto;
     overflow-y: auto;
 }
+
+tr.USED {
+    color: red;
+}
+
+tr.PURCHASED {
+    color: green;
+}
+
+#btn-deleteAll {
+    margin-top: 3px;
+}
+
+.square_USED, .square_PURCHASED {
+    display: block;
+    width: 15px;
+    height: 15px;
+    border: thin solid;
+    margin-right: 5px;
+    position: relative;
+}
+
+.square_USED {
+    background: red;
+    margin-top: 2px;
+}
+
+.square_PURCHASED {
+    background: green;
+    margin-bottom: 2px;
+}
+
+.color_USED {
+    color: red;
+}
+
+.color_PURCHASED {
+    color: green;
+}
+

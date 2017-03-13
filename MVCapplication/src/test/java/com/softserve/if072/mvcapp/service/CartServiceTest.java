@@ -56,8 +56,11 @@ public class CartServiceTest {
         Cart cart1 = CartBuilder.getDefaultCart(FIRST_CART_ITEM_ID, CURRENT_USER_ID, FIRST_CART_ITEM_AMOUNT);
         Cart cart2 = CartBuilder.getDefaultCart(SECOND_CART_ITEM_ID, CURRENT_USER_ID, SECOND_CART_ITEM_AMOUNT);
         List<Cart> carts = Arrays.asList(cart1, cart2);
+
         when(restTemplate.getForObject(REST_CART_ULR, List.class, CURRENT_USER_ID)).thenReturn(carts);
+
         List<Cart> actualCarts = cartService.getByUserId();
+
         assertEquals(2, actualCarts.size());
         assertEquals(String.format("user%d", CURRENT_USER_ID), actualCarts.get(0).getUser().getName());
         assertEquals(String.format("product%d", SECOND_CART_ITEM_ID), actualCarts.get(1).getProduct().getName());
@@ -68,7 +71,9 @@ public class CartServiceTest {
     @Test
     public void getByUserId_ShouldReturnEmptyList() throws Exception {
         when(restTemplate.getForObject(REST_CART_ULR, List.class, CURRENT_USER_ID)).thenReturn(Collections.emptyList());
+
         List<Cart> actualCarts = cartService.getByUserId();
+
         assertTrue(CollectionUtils.isEmpty(actualCarts));
         verify(restTemplate).getForObject(REST_CART_ULR, List.class, CURRENT_USER_ID);
         verifyZeroInteractions(restTemplate);
@@ -77,7 +82,9 @@ public class CartServiceTest {
     @Test
     public void productPurchase_CartDTOGiven_ShouldExecuteRestTemplatePutExactlyOnce() throws Exception {
         CartDTO cartDTO = new CartDTO(CURRENT_USER_ID, 2, PRODUCT_ID, 4, 4);
+
         cartService.productPurchase(cartDTO);
+
         verify(restTemplate).put(REST_CART_ULR, cartDTO, CURRENT_USER_ID, PRODUCT_ID);
         verifyZeroInteractions(restTemplate);
     }
@@ -85,7 +92,9 @@ public class CartServiceTest {
     @Test
     public void deleteProductFromCart_CartDTOGiven_ShouldExecuteRestTemplateDeleteExactlyOnce() throws Exception {
         CartDTO cartDTO = new CartDTO(CURRENT_USER_ID, 2, PRODUCT_ID, 4, 4);
+
         cartService.deleteProductFromCart(cartDTO);
+
         verify(restTemplate).delete(REST_CART_ULR, CURRENT_USER_ID, PRODUCT_ID);
         verifyZeroInteractions(restTemplate);
     }
@@ -93,6 +102,7 @@ public class CartServiceTest {
     @Test
     public void deleteAllProductsFromCart_ShouldExecuteRestTemplateDeleteAllExactlyOnce() throws Exception {
         cartService.deleteAllProductsFromCart();
+
         verify(restTemplate).delete(REST_CART_ULR, CURRENT_USER_ID);
         verifyZeroInteractions(restTemplate);
     }

@@ -63,6 +63,7 @@ public class CartService {
      */
     public List<Cart> getByUserId(int userId) {
         List<Cart> carts = cartDAO.getByUserId(userId);
+
         LOGGER.info(cartContainsProduct, userId, carts.size());
         return carts;
     }
@@ -82,39 +83,43 @@ public class CartService {
      */
     @Transactional(rollbackFor = Exception.class)
     public void productPurchase(CartDTO cartDTO) {
+        int productId = cartDTO.getProductId();
+        int userId = cartDTO.getUserId();
+        int amount = cartDTO.getAmount();
+
         try {
             if (TransactionSynchronizationManager.isActualTransactionActive()) {
-                LOGGER.info(cartTransaction, cartDTO.getProductId(), "has");
+                LOGGER.info(cartTransaction, productId, "has");
             } else {
-                LOGGER.warn(cartTransaction, cartDTO.getProductId(), "has not");
+                LOGGER.warn(cartTransaction, productId, "has not");
             }
-            cartDAO.deleteByProductId(cartDTO.getProductId());
-            LOGGER.info(cartDeleteProduct, cartDTO.getProductId(), "cart", cartDTO.getUserId());
+            cartDAO.deleteByProductId(productId);
+            LOGGER.info(cartDeleteProduct, productId, "cart", userId);
 
-            Storage storage = storageService.getByProductId(cartDTO.getProductId());
+            Storage storage = storageService.getByProductId(productId);
             if (storage == null) {
-                storageService.insert(cartDTO.getUserId(), cartDTO.getProductId(), cartDTO.getAmount());
-                LOGGER.info(cartInsertProduct, cartDTO.getAmount(), cartDTO.getProductId(), cartDTO.getUserId());
+                storageService.insert(userId, productId, amount);
+                LOGGER.info(cartInsertProduct, amount, productId, userId);
             } else {
-                storage.setAmount(storage.getAmount() + cartDTO.getAmount());
+                storage.setAmount(storage.getAmount() + amount);
                 storageService.update(storage);
-                LOGGER.info(cartUpdateProductAmount, cartDTO.getProductId(), "storage", cartDTO.getUserId());
+                LOGGER.info(cartUpdateProductAmount, productId, "storage", userId);
             }
 
-            ShoppingList shoppingList = shoppingListService.getByProductId(cartDTO.getProductId());
+            ShoppingList shoppingList = shoppingListService.getByProductId(productId);
             if (shoppingList != null) {
-                LOGGER.info(cartProductExist, cartDTO.getProductId(), cartDTO.getUserId());
-                if (cartDTO.getInitialAmount() > cartDTO.getAmount()) {
-                    shoppingList.setAmount(cartDTO.getInitialAmount() - cartDTO.getAmount());
+                LOGGER.info(cartProductExist, productId, userId);
+                if (cartDTO.getInitialAmount() > amount) {
+                    shoppingList.setAmount(cartDTO.getInitialAmount() - amount);
                     shoppingListService.update(shoppingList);
-                    LOGGER.info(cartUpdateProductAmount, cartDTO.getProductId(), "shopping list", cartDTO.getUserId());
+                    LOGGER.info(cartUpdateProductAmount, productId, "shopping list", userId);
                 } else {
                     shoppingListService.delete(shoppingList);
-                    LOGGER.info(cartDeleteProduct, cartDTO.getProductId(), "shopping list", cartDTO.getUserId());
+                    LOGGER.info(cartDeleteProduct, productId, "shopping list", userId);
                 }
             }
         } catch (Exception e) {
-            LOGGER.error(cartProductPurchaseErrorOccur, e, cartDTO.getProductId());
+            LOGGER.error(cartProductPurchaseErrorOccur, e, productId);
             throw e;
         }
     }

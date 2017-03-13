@@ -1,5 +1,6 @@
 package com.softserve.if072.restservice.service;
 
+import com.softserve.if072.common.model.Action;
 import com.softserve.if072.common.model.ShoppingList;
 import com.softserve.if072.common.model.Storage;
 import com.softserve.if072.common.model.dto.HistoryDTO;
@@ -115,7 +116,7 @@ public class StorageService {
         historyDTO.setProductId(storage.getProduct().getId());
         historyDTO.setAmount(diff);
         historyDTO.setUsedDate(new Timestamp(System.currentTimeMillis()));
+        historyDTO.setAction(Action.USED);
         historyService.insert(historyDTO);
-
     }
 }

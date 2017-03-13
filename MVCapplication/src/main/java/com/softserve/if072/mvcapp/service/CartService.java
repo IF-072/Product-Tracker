@@ -32,7 +32,7 @@ public class CartService {
     @Value("${cart.successfullyOperation}")
     private String cartSuccessfullyOperation;
 
-    public CartService(RestTemplate restTemplate, UserService userService) {
+  public CartService(RestTemplate restTemplate, UserService userService) {
         this.restTemplate = restTemplate;
         this.userService = userService;
     }
@@ -44,6 +44,7 @@ public class CartService {
      */
     public List<Cart> getByUserId() {
         int userId = userService.getCurrentUser().getId();
+
         LOGGER.info(cartRequestReceive, "retrieving", "all cart records", userId);
         List<Cart> carts = restTemplate.getForObject(restCartURL, List.class, userId);
         LOGGER.info(cartSuccessfullyOperation, "retrieving", "all cart records", userId);
@@ -56,9 +57,12 @@ public class CartService {
      * @param cartDTO - an object with required information for the product purchase
      */
     public void productPurchase(CartDTO cartDTO) {
-        LOGGER.info(cartRequestReceive, "purchasing the product  with id", cartDTO.getProductId(), cartDTO.getUserId());
-        restTemplate.put(restCartPurchaseURL, cartDTO, cartDTO.getUserId(), cartDTO.getProductId());
-        LOGGER.info(cartSuccessfullyOperation, "purchasing the product  with id", cartDTO.getProductId(), cartDTO.getUserId());
+        int productId = cartDTO.getProductId();
+        int userId = cartDTO.getUserId();
+
+        LOGGER.info(cartRequestReceive, "purchasing the product  with id", productId, userId);
+        restTemplate.put(restCartPurchaseURL, cartDTO, userId, productId);
+        LOGGER.info(cartSuccessfullyOperation, "purchasing the product  with id", productId, userId);
     }
 
     /**С
@@ -67,9 +71,12 @@ public class CartService {
      * @param cartDTO - an object with required information for the product delete
      */
     public void deleteProductFromCart(CartDTO cartDTO) {
-        LOGGER.info(cartRequestReceive, "deleting the product with id", cartDTO.getProductId(), cartDTO.getUserId());
-        restTemplate.delete(restCartDeleteURL, cartDTO.getUserId(), cartDTO.getProductId());
-        LOGGER.info(cartSuccessfullyOperation, "deleting the product with id", cartDTO.getProductId(), cartDTO.getUserId());
+        int productId = cartDTO.getProductId();
+        int userId = cartDTO.getUserId();
+
+        LOGGER.info(cartRequestReceive, "deleting the product with id", productId, userId);
+        restTemplate.delete(restCartDeleteURL, userId, productId);
+        LOGGER.info(cartSuccessfullyOperation, "deleting the product with id", productId, userId);
     }
 
     /**
@@ -77,6 +84,7 @@ public class CartService {
      */
     public void deleteAllProductsFromCart() {
         int userId = userService.getCurrentUser().getId();
+
         LOGGER.info(cartRequestReceive, "deleting ", "all products", userId);
         restTemplate.delete(restCartURL, userId);
         LOGGER.info(cartSuccessfullyOperation, "deleting ", "all products", userId);

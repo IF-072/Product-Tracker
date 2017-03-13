@@ -63,7 +63,9 @@ public class CartControllerTest {
         Cart cart1 = CartBuilder.getDefaultCart(FIRST_CART_ITEM_ID, CURRENT_USER_ID, FIRST_CART_ITEM_AMOUNT);
         Cart cart2 = CartBuilder.getDefaultCart(SECOND_CART_ITEM_ID, CURRENT_USER_ID, SECOND_CART_ITEM_AMOUNT);
         List<Cart> carts = Arrays.asList(cart1, cart2);
+
         when(cartService.getByUserId()).thenReturn(carts);
+
         mockMvc.perform(get("/cart"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("cart"))
@@ -93,6 +95,7 @@ public class CartControllerTest {
                         ))
                 ))
                 .andExpect(model().attributeExists("cartDTO"));
+
         verify(cartService).getByUserId();
         verifyZeroInteractions(cartService);
     }
@@ -100,11 +103,13 @@ public class CartControllerTest {
     @Test
     public void getCarts_ShouldReturnEmptyCartViewName() throws Exception {
         when(cartService.getByUserId()).thenReturn(Collections.emptyList());
+
         mockMvc.perform(get("/cart"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("emptyCart"))
                 .andExpect(forwardedUrl("/WEB-INF/views/cart/emptyCart.jsp"))
                 .andExpect(model().attributeDoesNotExist("carts"));
+
         verify(cartService).getByUserId();
         verifyZeroInteractions(cartService);
     }
