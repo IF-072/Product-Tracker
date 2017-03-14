@@ -219,6 +219,7 @@ CREATE TABLE IF NOT EXISTS `if072java`.`history` (
   `product_id` INT(11) NOT NULL,
   `amount` INT(11) NOT NULL,
   `used_date` DATETIME NOT NULL,
+  `action` ENUM('PURCHASED', 'USED'),
   PRIMARY KEY (`id`, `user_id`, `product_id`),
   CONSTRAINT `analytics_productID_fk`
     FOREIGN KEY (`product_id`)
