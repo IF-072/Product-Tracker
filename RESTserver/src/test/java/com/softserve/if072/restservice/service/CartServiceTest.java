@@ -49,6 +49,8 @@ public class CartServiceTest {
     @Mock
     private ShoppingListService shoppingListService;
     @Mock
+    private HistoryService historyService;
+    @Mock
     private Storage storage;
     @Mock
     private ShoppingList shoppingList;
@@ -57,7 +59,7 @@ public class CartServiceTest {
 
     @Before
     public void setup() {
-        cartService = new CartService(cartDAO, storageService, shoppingListService);
+        cartService = new CartService(cartDAO, storageService, shoppingListService, historyService);
         when(cartDAO.deleteByProductId(anyInt())).thenReturn(1);
         cartDTO = new CartDTO(CURRENT_USER_ID, 22, PRODUCT_ID, FIRST_CART_ITEM_AMOUNT, FIRST_CART_ITEM_INITIALAMOUNT);
     }

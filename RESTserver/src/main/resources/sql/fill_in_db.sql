@@ -443,13 +443,13 @@ INSERT INTO cart(user_id, product_id, amount, store_id) VALUES(4, 33, 5, 22);
 -- -----------------------------------------------------
 -- for user with id 4
 -- ----------------------------------------------------
-INSERT INTO history(user_id, product_id, amount, used_date) VALUES(4, 21, 1, '2017-01-18');
-INSERT INTO history(user_id, product_id, amount, used_date) VALUES(4, 21, 2, '2017-01-20');
-INSERT INTO history(user_id, product_id, amount, used_date) VALUES(4, 23, 2, '2017-01-28');
-INSERT INTO history(user_id, product_id, amount, used_date) VALUES(4, 24, 3, '2017-01-28');
-INSERT INTO history(user_id, product_id, amount, used_date) VALUES(4, 27, 2, '2017-01-28');
-INSERT INTO history(user_id, product_id, amount, used_date) VALUES(4, 30, 1, '2017-02-10');
-INSERT INTO history(user_id, product_id, amount, used_date) VALUES(4, 32, 2, '2017-02-05');
-INSERT INTO history(user_id, product_id, amount, used_date) VALUES(4, 32, 1, '2017-02-12');
-INSERT INTO history(user_id, product_id, amount, used_date) VALUES(4, 33, 2, '2017-01-10');
-INSERT INTO history(user_id, product_id, amount, used_date) VALUES(4, 33, 2, '2017-01-20');
+INSERT INTO history(user_id, product_id, amount, used_date, action) VALUES(4, 21, 1, '2017-01-18','PURCHASED');
+INSERT INTO history(user_id, product_id, amount, used_date, action) VALUES(4, 21, 2, '2017-01-20','PURCHASED');
+INSERT INTO history(user_id, product_id, amount, used_date, action) VALUES(4, 23, 2, '2017-01-28','USED');
+INSERT INTO history(user_id, product_id, amount, used_date, action) VALUES(4, 24, 3, '2017-01-28','PURCHASED');
+INSERT INTO history(user_id, product_id, amount, used_date, action) VALUES(4, 27, 2, '2017-01-28','PURCHASED');
+INSERT INTO history(user_id, product_id, amount, used_date, action) VALUES(4, 30, 1, '2017-02-10', 'USED');
+INSERT INTO history(user_id, product_id, amount, used_date, action) VALUES(4, 32, 2, '2017-02-05', 'USED');
+INSERT INTO history(user_id, product_id, amount, used_date, action) VALUES(4, 32, 1, '2017-02-12', 'PURCHASED');
+INSERT INTO history(user_id, product_id, amount, used_date, action) VALUES(4, 33, 2, '2017-01-10', 'USED');
+INSERT INTO history(user_id, product_id, amount, used_date, action) VALUES(4, 33, 2, '2017-01-20', 'USED');
