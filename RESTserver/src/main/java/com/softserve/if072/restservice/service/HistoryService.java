@@ -84,4 +84,32 @@ public class HistoryService {
         }
         LOGGER.info(historySuccessfullyOperation, historyDTO.getProductId(), historyDTO.getAction(), "updated in");
     }
+
+    /**
+     * Return records from the history table that belong to specific user. Records are divided in pages, were number
+     * of records is equal to limit.
+     *
+     * @param userId   - unique user's identifier
+     * @param startRow - record from which begins select
+     * @param limit    - number of records
+     * @return list of history items that belong to specific user
+     */
+    public List<History> getByUserIdPages(int userId, int startRow, int limit) {
+        List<History> histories = historyDAO.getByUserIdPages(userId, startRow, limit);
+        LOGGER.info(historyContainsRecords, "user", userId, histories.size());
+
+        return histories;
+    }
+
+    /**
+     * Select count of records from the history table that belong to specific user.
+     *
+     * @param userId - unique user's identifier
+     * @return number of records
+     */
+    public int getNumberOfRecordsByUserId(int userId) {
+        int recordsNumber = historyDAO.getNumberOfRecordsByUserId(userId);
+
+        return recordsNumber;
+    }
 }
