@@ -70,7 +70,7 @@ public class CustomAuthenticationProcessingFilter extends AbstractAuthentication
         if(authentication != null && authentication instanceof AuthenticatedUserProxy && authentication.isAuthenticated()) {
             CustomAuthenticationToken authenticationToken = ((AuthenticatedUserProxy) authentication).getAuthenticationToken();
             if(authenticationToken.isValid()) {
-                response.addHeader(tokenHeaderName, tokenService.renewToken(authenticationToken));
+                response.setHeader(tokenHeaderName, tokenService.renewToken(authenticationToken));
             }
         }
     }

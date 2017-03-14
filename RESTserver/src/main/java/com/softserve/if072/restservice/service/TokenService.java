@@ -74,7 +74,8 @@ public class TokenService {
             token.setConfirmationKey(tokenParts[2]);
             String expectedKey = buildTokenConfirmationKey(token.getUserName(), token.getExpirationDate());
             if (!expectedKey.equals(token.getConfirmationKey())) {
-                LOGGER.warn("Received key does not match the expected one: " + token.getConfirmationKey() + " <> " + expectedKey);
+                LOGGER.error("Received key does not match the expected one: " + token.getConfirmationKey() + " <> " + expectedKey);
+                LOGGER.error("Details: token is " + token);
                 return;
             }
 

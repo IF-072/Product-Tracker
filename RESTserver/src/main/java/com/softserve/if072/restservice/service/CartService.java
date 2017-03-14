@@ -1,9 +1,11 @@
 package com.softserve.if072.restservice.service;
 
+import com.softserve.if072.common.model.Action;
 import com.softserve.if072.common.model.Cart;
 import com.softserve.if072.common.model.ShoppingList;
 import com.softserve.if072.common.model.Storage;
 import com.softserve.if072.common.model.dto.CartDTO;
+import com.softserve.if072.common.model.dto.HistoryDTO;
 import com.softserve.if072.restservice.dao.mybatisdao.CartDAO;
 import com.softserve.if072.restservice.exception.DataNotFoundException;
 import org.apache.logging.log4j.LogManager;
@@ -13,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 /**
@@ -26,6 +29,7 @@ public class CartService {
     private final CartDAO cartDAO;
     private final StorageService storageService;
     private final ShoppingListService shoppingListService;
+    private final HistoryService historyService;
     @Value("${cart.containsProduct}")
     private String cartContainsProduct;
     @Value("${cart.deleteProduct}")
@@ -49,10 +53,12 @@ public class CartService {
     @Value("${cart.productPurchaseErrorOccur}")
     private String cartProductPurchaseErrorOccur;
 
-    public CartService(CartDAO cartDAO, StorageService storageService, ShoppingListService shoppingListService) {
+    public CartService(CartDAO cartDAO, StorageService storageService, ShoppingListService shoppingListService
+            , HistoryService historyService) {
         this.cartDAO = cartDAO;
         this.storageService = storageService;
         this.shoppingListService = shoppingListService;
+        this.historyService=historyService;
     }
 
     /**
@@ -118,6 +124,9 @@ public class CartService {
                     LOGGER.info(cartDeleteProduct, productId, "shopping list", userId);
                 }
             }
+
+            addToHistory(cartDTO);
+
         } catch (Exception e) {
             LOGGER.error(cartProductPurchaseErrorOccur, e, productId);
             throw e;
@@ -164,6 +173,19 @@ public class CartService {
         LOGGER.info(cartSuccessfullyOperation, cart.getProduct().getId(), "updated in");
     }
 
+    /**
+     * Add a record to the history of the current user about the product that has been purchased
+     * @param cartDTO - an object with required information for the product purchase
+     */
+    private void addToHistory(CartDTO cartDTO) {
+        HistoryDTO historyDTO = new HistoryDTO();
+        historyDTO.setUserId(cartDTO.getUserId());
+        historyDTO.setProductId(cartDTO.getProductId());
+        historyDTO.setAmount(cartDTO.getAmount());
+        historyDTO.setUsedDate(new Timestamp(System.currentTimeMillis()));
+        historyDTO.setAction(Action.PURCHASED);
+        historyService.insert(historyDTO);
+    }
 
 }
 
