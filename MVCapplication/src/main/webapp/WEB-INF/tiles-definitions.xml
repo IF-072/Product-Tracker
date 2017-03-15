@@ -49,6 +49,9 @@
             <add-attribute value="/js/sb-admin-2.js"/>
             <add-attribute value="/js/base.js"/>
             <add-attribute value="/js/jquery.cookie.js"/>
+            <add-attribute value="/js/sockjs.js"/>
+            <add-attribute value="/js/stomp.js"/>
+            <add-attribute value="/js/listener.js"/>
         </put-list-attribute>
 
     </definition>
