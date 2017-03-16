@@ -122,4 +122,15 @@ public class CustomAuthenticationToken implements Authentication {
     public int hashCode() {
         return token.hashCode();
     }
+
+    @Override
+    public String toString() {
+        return "CustomAuthenticationToken{" +
+                "token='" + token + '\'' +
+                ", userName='" + userName + '\'' +
+                ", expirationDate=" + expirationDate +
+                ", confirmationKey='" + confirmationKey + '\'' +
+                ", isValid=" + isValid +
+                '}';
+    }
 }
