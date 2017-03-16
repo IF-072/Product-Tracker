@@ -101,18 +101,6 @@ public class StorageServiceTest {
     }
 
     @Test
-    public void testUpdate_ShouldNotInsertInShoppingList() {
-        when(storageDAO.getByProductID(storage.getProduct().getId())).thenReturn(storageDB);
-
-        storageService.update(storage);
-
-        verify(storageDAO).getByProductID(storage.getProduct().getId());
-        verify(storageDAO).update(storage);
-        verify(historyService, never()).insert(any());
-        verify(shoppingListService, never()).insert(any());
-    }
-
-    @Test
     public void testUpdate_ShouldInsertInShoppingList() {
         storage.setAmount(1);
         storage.setEndDate(null);
@@ -132,17 +120,6 @@ public class StorageServiceTest {
 
         storageService.update(storage);
         verifyZeroInteractions(storageDAO);
-        verify(historyService, never()).insert(any());
-        verify(shoppingListService, never()).insert(any());
-    }
-
-    @Test
-    public void testUpdateWithDto_ShouldNotInsertInShoppingList() {
-        when(storageDAO.getByProductID(anyInt())).thenReturn(storageDB);
-        storageService.update(storageDTO);
-
-        verify(storageDAO).getByProductID(storageDTO.getProductId());
-        verify(storageDAO).updateAmount(storageDB);
         verify(historyService, never()).insert(any());
         verify(shoppingListService, never()).insert(any());
     }
