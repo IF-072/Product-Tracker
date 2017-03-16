@@ -16,7 +16,7 @@ span.lang-sm.lang-lbl-full.lang-choice {
 }
 
 #container-notification {
-    position: absolute;
+    position: fixed;
     bottom: 15px;
     right: 15px;
     z-index: 100;

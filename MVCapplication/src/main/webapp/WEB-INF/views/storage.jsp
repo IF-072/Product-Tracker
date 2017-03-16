@@ -1,6 +1,7 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <c:if test="${empty list}">
     <div class="container-fluid">
         <div class="row">
@@ -52,19 +53,23 @@
                         <tr>
                             <td>${loop.count}</td>
                             <td>${storage.product.name}</td>
-                            <td>${storage.endDate}</td>
+                            <td>
+                                <jsp:useBean id="dateValue" class="java.util.Date"/>
+                                <jsp:setProperty name="dateValue" property="time" value="${storage.endDate}"/>
+                                <fmt:formatDate value="${dateValue}" pattern="MM/dd/yyyy"/>
+                            </td>
                             <td>
                                 <form:form method="post" action="update" modelAttribute="storage">
                                     <form:hidden path="productId" value="${storage.product.id}"/>
                                     <input type="number" path="amount" name="amount" min="0" value="${storage.amount}"
-                                           class="form-control" onchange="allowBtn(${loop.count}, ${storage.amount})"/>
-                                    <form:button class="btn disabled btn-default" id="confirm">
+                                           class="form-control num" init="${storage.amount}"/>
+                                    <form:button class="btn disabled btn-default confirm">
                                         <spring:message code="storage.confirm"/></form:button>
                                 </form:form>
                             </td>
                             <td>
-                                <button type="button" class="btn btn-default btn-primary"
-                                        onclick="addToShoppingList(${storage.product.id});">
+                                <button type="button" class="btn btn-default btn-primary addToSH"
+                                        product="${storage.product.id}">
                                     <spring:message code="storage.add"/>
                                 </button>
                             </td>

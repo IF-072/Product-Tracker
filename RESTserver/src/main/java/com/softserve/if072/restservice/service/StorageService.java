@@ -70,7 +70,9 @@ public class StorageService {
         Storage storageDB = storageDAO.getByProductID(storage.getProduct().getId());
         int diff;
         if ((diff = storageDB.getAmount() - storage.getAmount()) > 0) {
-            addToHistory(storage, diff);
+            addToHistory(storage, diff, Action.USED);
+        } else {
+            addToHistory(storage, -diff, Action.PURCHASED);
         }
         if (storage.getEndDate() != null) {
             storageDAO.update(storage);
@@ -96,7 +98,9 @@ public class StorageService {
 
         int diff;
         if ((diff = storage.getAmount() - storageDTO.getAmount()) > 0) {
-            addToHistory(storage, diff);
+            addToHistory(storage, diff, Action.USED);
+        } else {
+            addToHistory(storage, -diff, Action.PURCHASED);
         }
         storage.setAmount(storageDTO.getAmount());
         storageDAO.updateAmount(storage);
@@ -117,13 +121,13 @@ public class StorageService {
         }
     }
 
-    private void addToHistory(Storage storage, int diff) {
+    private void addToHistory(Storage storage, int diff, Action action) {
         HistoryDTO historyDTO = new HistoryDTO();
         historyDTO.setUserId(storage.getUser().getId());
         historyDTO.setProductId(storage.getProduct().getId());
         historyDTO.setAmount(diff);
         historyDTO.setUsedDate(new Timestamp(System.currentTimeMillis()));
-        historyDTO.setAction(Action.USED);
+        historyDTO.setAction(action);
         historyService.insert(historyDTO);
     }
 }

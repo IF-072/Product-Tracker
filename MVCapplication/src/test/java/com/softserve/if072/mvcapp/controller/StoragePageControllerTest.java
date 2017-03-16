@@ -3,7 +3,6 @@ package com.softserve.if072.mvcapp.controller;
 import com.softserve.if072.common.model.Product;
 import com.softserve.if072.common.model.Storage;
 import com.softserve.if072.common.model.User;
-import com.softserve.if072.mvcapp.service.ShoppingListService;
 import com.softserve.if072.mvcapp.service.StoragePageService;
 import com.softserve.if072.mvcapp.service.UserService;
 import org.junit.Before;
@@ -16,9 +15,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.web.servlet.view.InternalResourceView;
 
+import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.List;
-import java.sql.Date;
 
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.junit.Assert.assertTrue;
@@ -59,7 +58,7 @@ public class StoragePageControllerTest {
     public void setup() throws ClassNotFoundException, NoSuchMethodException {
         user = new User();
         user.setId(1);
-        storage = new Storage(user, new Product(), 2, new Date(System.currentTimeMillis()));
+        storage = new Storage(user, new Product(), 2, new Timestamp(System.currentTimeMillis()));
         mockMvc = standaloneSetup(storagePageController)
                 .setSingleView(new InternalResourceView("/WEB-INF/views/storage.jsp"))
                 .build();

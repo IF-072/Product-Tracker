@@ -57,7 +57,12 @@
                     <i class="fa fa-bell fa-fw"></i> <i class="fa fa-caret-down"></i>
                 </a>
                 <ul class="dropdown-menu dropdown-alerts" id="notification">
-
+                    <li>
+                        <a class="text-center" href="#" id="remove-all">
+                            <strong><spring:message code="removeAll"/></strong>
+                            <i class="fa fa-angle-right"></i>
+                        </a>
+                    </li>
                 </ul>
                 <!-- /.dropdown-alerts -->
             </li>
@@ -72,8 +77,8 @@
                             code="userProfile"/></a>
                     </li>
                     <li class="divider"></li>
-                    <li><a href="<c:url value="/logout"/>"><i class="fa fa-sign-out fa-fw"></i> <spring:message
-                            code="logout"/></a>
+                    <li id="logout"><a href="<c:url value="/logout"/>"><i class="fa fa-sign-out fa-fw"></i>
+                        <spring:message code="logout"/></a>
                     </li>
                 </ul>
                 <!-- /.dropdown-user -->
@@ -141,8 +146,4 @@
     <div id="page-wrapper" style="min-height: 158px;">
 
         <div class="panel-body" id="container-notification">
-            <div class="alert alert-info alert-dismissable">
-                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit. <a href="#" class="alert-link">Alert Link</a>.
-            </div>
         </div>
