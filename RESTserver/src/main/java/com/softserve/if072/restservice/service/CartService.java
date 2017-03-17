@@ -19,7 +19,7 @@ import java.sql.Timestamp;
 import java.util.List;
 
 /**
- * The CartService class is used to hold business logic for working with the cart DAO
+ * The CartService class is used to hold business logic for working with the cart DAOInterfaces
  *
  * @author Igor Kryviuk
  */
@@ -62,7 +62,7 @@ public class CartService {
     }
 
     /**
-     * Make request to a Cart DAO for retrieving all cart records for current user
+     * Make request to a Cart DAOInterfaces for retrieving all cart records for current user
      *
      * @param userId - current user unique identifier
      * @return list of cart records or empty list

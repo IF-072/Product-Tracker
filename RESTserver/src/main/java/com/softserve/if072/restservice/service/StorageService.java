@@ -16,7 +16,7 @@ import java.sql.Timestamp;
 import java.util.List;
 
 /**
- * The StorageService class is used to hold business logic for working with the storage DAO
+ * The StorageService class is used to hold business logic for working with the storage DAOInterfaces
  *
  * @author Roman Dyndyn
  */

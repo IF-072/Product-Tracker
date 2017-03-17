@@ -1,5 +1,14 @@
 package com.softserve.if072.common.model;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 import java.sql.Timestamp;
 
 /**
@@ -8,12 +17,32 @@ import java.sql.Timestamp;
  *
  * @author Igor Kryviuk
  */
+
+@Entity
+@Table(name = "history")
 public class History {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private int id;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id")
     private User user;
+
+    @ManyToOne
+//            (fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_id")
     private Product product;
+
+    @Column(name = "amount")
     private int amount;
+
+    @Column(name = "used_date")
     private Timestamp usedDate;
+
+    @Column(name = "action")
     private Action action;
 
     public History() {
@@ -25,7 +54,7 @@ public class History {
         this.product = product;
         this.amount = amount;
         this.usedDate = usedDate;
-        this.action=action;
+        this.action = action;
     }
 
     public int getId() {

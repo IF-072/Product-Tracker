@@ -3,14 +3,34 @@ package com.softserve.if072.common.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.Transient;
+
+@Entity
+@Table(name = "image")
 public class Image {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private int id;
+
+    @Column(name = "file_name")
     private String fileName;
+
+    @Column(name = "content_type")
     private String contentType;
-    private MultipartFile multipartFile;
+
+    @Column(name = "image_data")
     private byte[] imageData;
 
+    @Transient
+    private MultipartFile multipartFile;
 
     public Image() {
 

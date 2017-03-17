@@ -1,5 +1,13 @@
 package com.softserve.if072.common.model;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import java.util.List;
 
 /**
@@ -8,20 +16,46 @@ import java.util.List;
  * @author Oleh Pochernin
  * @author Igor Parada
  */
+
+@Entity
+@Table(name = "user")
 public class User {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private int id;
+
+    @Column(name = "name")
     private String name;
     private String email;
     private String password;
+
+    @Column(name = "is_enabled")
     private boolean isEnabled;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
     private List<Store> stores;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
     private List<Product> products;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
     private List<Cart> carts;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
     private List<Category> categories;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
     private List<ShoppingList> shoppingLists;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
     private List<Storage> storages;
+
+    @Column(name = "role")
     private Role role;
+
+    @Column(name = "premium_expires_time")
     private long premiumExpiresTime;
 
     public User() {
@@ -146,7 +180,7 @@ public class User {
                 ", shoppingLists=" + shoppingLists +
                 ", storages=" + storages +
                 ", role=" + role +
-                ", premiumExpiresTime="+ premiumExpiresTime +
+                ", premiumExpiresTime=" + premiumExpiresTime +
                 '}';
     }
 }

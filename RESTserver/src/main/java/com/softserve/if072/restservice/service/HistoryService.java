@@ -2,7 +2,7 @@ package com.softserve.if072.restservice.service;
 
 import com.softserve.if072.common.model.History;
 import com.softserve.if072.common.model.dto.HistoryDTO;
-import com.softserve.if072.restservice.dao.mybatisdao.HistoryDAO;
+import com.softserve.if072.restservice.dao.mybatisdao.HistoryDAOMybatis;
 import com.softserve.if072.restservice.exception.DataNotFoundException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -12,14 +12,14 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 /**
- * The HistoryService class is used to hold business logic for working with the history DAO
+ * The HistoryService class is used to hold business logic for working with the history DAOInterfaces
  *
  * @author Igor Kryviuk
  */
 @Service
 public class HistoryService {
     private static final Logger LOGGER = LogManager.getLogger();
-    private final HistoryDAO historyDAO;
+    private final HistoryDAOMybatis historyDAOMybatis;
     @Value("${history.containsRecords}")
     private String historyContainsRecords;
     @Value("${history.notFound}")
@@ -29,18 +29,18 @@ public class HistoryService {
     @Value("${history.deleteAllSuccessfullyOperation}")
     private String deleteAllSuccessfullyOperation;
 
-    public HistoryService(HistoryDAO historyDAO) {
-        this.historyDAO = historyDAO;
+    public HistoryService(HistoryDAOMybatis historyDAOMybatis) {
+        this.historyDAOMybatis = historyDAOMybatis;
     }
 
     /**
-     * Make request to a History DAO for retrieving all history records for current user
+     * Make request to a History DAOInterfaces for retrieving all history records for current user
      *
      * @param userID - current user unique identifier
      * @return list of cart records or empty list
      */
     public List<History> getByUserId(int userID) {
-        List<History> histories = historyDAO.getByUserId(userID);
+        List<History> histories = historyDAOMybatis.getByUserId(userID);
         LOGGER.info(historyContainsRecords, "user", userID, histories.size());
         return histories;
     }
@@ -51,7 +51,7 @@ public class HistoryService {
      * @param historyId - history unique identifier
      */
     public void delete(int historyId) {
-        if (historyDAO.delete(historyId) == 0) {
+        if (historyDAOMybatis.delete(historyId) == 0) {
             throw new DataNotFoundException(String.format(historyNotFound, "DELETE", historyId));
         }
         LOGGER.info(historySuccessfullyOperation, historyId, "deleted from");
@@ -63,23 +63,23 @@ public class HistoryService {
      * @param userId - current user unique identifier
      */
     public void deleteAll(int userId) {
-        int count = historyDAO.deleteAll(userId);
+        int count = historyDAOMybatis.deleteAll(userId);
         LOGGER.info(deleteAllSuccessfullyOperation, count, userId);
     }
 
     public List<History> getByProductId(int userID, int productID) {
-        List<History> histories = historyDAO.getByProductId(userID, productID);
+        List<History> histories = historyDAOMybatis.getByProductId(userID, productID);
         LOGGER.info(historyContainsRecords, "product", productID, histories.size());
         return histories;
     }
 
     public void insert(HistoryDTO historyDTO) {
-        historyDAO.insert(historyDTO);
+        historyDAOMybatis.insert(historyDTO);
         LOGGER.info(historySuccessfullyOperation, historyDTO.getProductId(), historyDTO.getAction(), "inserted into");
     }
 
     public void update(HistoryDTO historyDTO) {
-        if (historyDAO.update(historyDTO) == 0) {
+        if (historyDAOMybatis.update(historyDTO) == 0) {
             throw new DataNotFoundException(String.format(historyNotFound, "UPDATE", historyDTO.getId()));
         }
         LOGGER.info(historySuccessfullyOperation, historyDTO.getProductId(), historyDTO.getAction(), "updated in");
@@ -95,7 +95,7 @@ public class HistoryService {
      * @return list of history items that belong to specific user
      */
     public List<History> getByUserIdPages(int userId, int startRow, int limit) {
-        List<History> histories = historyDAO.getByUserIdPages(userId, startRow, limit);
+        List<History> histories = historyDAOMybatis.getByUserIdPages(userId, startRow, limit);
         LOGGER.info(historyContainsRecords, "user", userId, histories.size());
 
         return histories;
@@ -108,7 +108,7 @@ public class HistoryService {
      * @return number of records
      */
     public int getNumberOfRecordsByUserId(int userId) {
-        int recordsNumber = historyDAO.getNumberOfRecordsByUserId(userId);
+        int recordsNumber = historyDAOMybatis.getNumberOfRecordsByUserId(userId);
 
         return recordsNumber;
     }

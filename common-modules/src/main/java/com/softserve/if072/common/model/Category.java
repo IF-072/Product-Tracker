@@ -3,20 +3,41 @@ package com.softserve.if072.common.model;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+
 /**
  * The class contains information about product's category
  *
  * @author Pavlo Bendus
  */
 
+@Entity
+@Table(name = "category")
 public class Category {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private int id;
 
     @NotBlank(message = "{error.categoryName.notBlank}")
     @Length(min = 3, max = 64, message = "{error.categoryName.length}")
+    @Column(name = "name")
     private String name;
+
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id")
     private User user;
+
+    @Column(name = "is_enabled")
     private boolean isEnabled;
 
     public Category() {}

@@ -1,15 +1,52 @@
 package com.softserve.if072.common.model;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinColumns;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+import java.io.Serializable;
+
 /**
  * The Cart class stores information about products and their amount
  * that user is going to buy in current store
  *
  * @author Igor Kryviuk
  */
-public class Cart {
+@Entity
+@Table(name = "cart")
+public class Cart implements Serializable {
+
+    @Id
+    @JoinColumns({
+            @JoinColumn(
+                    name = "user_id",
+                    referencedColumnName = "user_id"),
+            @JoinColumn(
+                    name = "store_id",
+                    referencedColumnName = "store_id"),
+            @JoinColumn(
+                    name = "product_id",
+                    referencedColumnName = "product_id")
+    })
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id")
     private User user;
+
+    @OneToOne
+    @JoinColumn(name = "store_id")
     private Store store;
+
+    @OneToOne
+    @JoinColumn(name = "product_id")
     private Product product;
+
+    @Column(name = "amount")
     private int amount;
 
     public Cart() {
@@ -59,7 +96,7 @@ public class Cart {
         return "Cart{\nUser: " + user +
                 ";\nStore:  " + store +
                 ";\nProduct: " + product +
-                  ", amount: " + amount +
+                ", amount: " + amount +
                 "\n}";
     }
 }

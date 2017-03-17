@@ -1,7 +1,7 @@
 package com.softserve.if072.restservice.service.security;
 
 import com.softserve.if072.common.model.History;
-import com.softserve.if072.restservice.dao.mybatisdao.HistoryDAO;
+import com.softserve.if072.restservice.dao.mybatisdao.HistoryDAOMybatis;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,10 +13,10 @@ import org.springframework.stereotype.Service;
 @Service
 public class HistorySecurityService extends BaseSecurityService {
     @Autowired
-    private HistoryDAO historyDAO;
+    private HistoryDAOMybatis historyDAOMybatis;
 
     public boolean hasPermissionToAccess(int historyId) {
-        History history = historyDAO.getByHistoryId(historyId);
+        History history = historyDAOMybatis.getByHistoryId(historyId);
         return history != null && history.getUser() != null && history.getUser().getId() == getCurrentUser().getId();
     }
 }

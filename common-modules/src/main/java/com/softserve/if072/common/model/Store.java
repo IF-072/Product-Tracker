@@ -2,6 +2,18 @@ package com.softserve.if072.common.model;
 
 import org.hibernate.validator.constraints.NotBlank;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 import javax.validation.constraints.Size;
 import java.util.List;
 
@@ -12,20 +24,42 @@ import java.util.List;
  * @author Nazar Vynnyk
  */
 
+
+@Entity
+@Table(name = "store")
 public class Store {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private int id;
 
     @NotBlank(message = "{error.name.notnull}")
     @Size(min = 3, max = 64, message = "{error.name.size}")
+    @Column(name = "name")
     private String name;
 
     @Size(min = 5, max = 255, message = "{error.address.size}")
+    @Column(name = "address")
     private String address;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id")
     private User user;
+
+    @Column(name = "is_enabled")
     private boolean isEnabled;
+
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(name="stores_products",
+            joinColumns = @JoinColumn(name="store_id"),
+            inverseJoinColumns = @JoinColumn(name="product_id"))
     private List<Product> products;
+
+    @Column(name = "latitude")
     private String latitude;
+
+    @Column(name = "longitude")
     private String longitude;
 
     public Store() {

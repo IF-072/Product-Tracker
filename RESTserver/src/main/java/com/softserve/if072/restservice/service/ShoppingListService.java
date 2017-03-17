@@ -13,7 +13,7 @@ import org.apache.commons.collections.CollectionUtils;
 import java.util.List;
 
 /**
- * The ShoppingListService class is used to hold business logic for working with the ShoppingList DAO
+ * The ShoppingListService class is used to hold business logic for working with the ShoppingList DAOInterfaces
  *
  * @author Roman Dyndyn
  */

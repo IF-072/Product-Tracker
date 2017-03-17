@@ -5,6 +5,19 @@ import com.softserve.if072.common.model.validation.product.ValidUnit;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
 import java.util.List;
 
 /**
@@ -13,23 +26,49 @@ import java.util.List;
  *
  * @author Vitaliy Malisevych
  */
-
+@Entity
+@Table(name = "product")
 public class Product {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private int id;
 
     @NotBlank(message = "{error.productName.notblank}")
     @Length(min = 3, max = 64, message = "{error.productName.length}")
+    @Column(name = "name")
     private String name;
+
     @Length(max = 255, message = "{error.productDescription.length}")
+    @Column(name = "description")
     private String description;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "image_id")
     private Image image;
+
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id")
     private User user;
+
     @ValidCategory(message = "{error.productCategory.notempty}")
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "category_id")
     private Category category;
+
     @ValidUnit(message = "{error.productUnit.notempty}")
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "unit_id")
     private Unit unit;
+
+    @Column(name = "is_enabled")
     private boolean isEnabled;
+
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(name="stores_products",
+            joinColumns = @JoinColumn(name="product_id"),
+            inverseJoinColumns = @JoinColumn(name="store_id"))
     private List<Store> stores;
 
     public Product() {
