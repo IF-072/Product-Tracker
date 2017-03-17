@@ -284,6 +284,13 @@
                 <version>1.7.24</version>
             </dependency>
 
+            <dependency>
+                <groupId>org.apache.tomcat</groupId>
+                <artifactId>tomcat-jsp-api</artifactId>
+                <version>8.5.11</version>
+                <scope>compile</scope>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 
