@@ -61,6 +61,7 @@
                             <td>
                                 <form:form method="post" action="update" modelAttribute="storage">
                                     <form:hidden path="productId" value="${storage.product.id}"/>
+                                    <form:hidden path="productName" value="${storage.product.name}"/>
                                     <input type="number" path="amount" name="amount" min="0" value="${storage.amount}"
                                            class="form-control num" init="${storage.amount}"/>
                                     <form:button class="btn disabled btn-default confirm">

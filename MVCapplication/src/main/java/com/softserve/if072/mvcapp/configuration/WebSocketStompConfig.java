@@ -1,4 +1,4 @@
-package com.softserve.if072.restservice.configuration;
+package com.softserve.if072.mvcapp.configuration;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.socket.config.annotation.AbstractWebSocketMessageBrokerConfigurer;
@@ -15,14 +15,19 @@ import org.springframework.messaging.simp.config.MessageBrokerRegistry;
 @EnableWebSocketMessageBroker
 public class WebSocketStompConfig extends AbstractWebSocketMessageBrokerConfigurer {
 
+    /**
+     * Register /tracker as a STOMP endpoint.
+     */
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/rest").withSockJS();
+        registry.addEndpoint("/tracker").withSockJS();
     }
 
+    /**
+     * Configure the message broker, set prefix for messages from server to client.
+     */
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
         registry.enableSimpleBroker("/queue");
-//        registry.setApplicationDestinationPrefixes("/app");
     }
 }

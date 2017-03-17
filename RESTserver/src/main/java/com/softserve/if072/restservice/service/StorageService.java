@@ -26,18 +26,15 @@ public class StorageService {
     private StorageDAO storageDAO;
     private ShoppingListService shoppingListService;
     private HistoryService historyService;
-    private MessageService messageService;
-    private UserService userService;
+//    private MessageService messageService;
 
     @Autowired
     public StorageService(StorageDAO storageDAO, ShoppingListService shoppingListService,
-                          HistoryService historyService, MessageService messageService,
-                          UserService userService) {
+                          HistoryService historyService/*, MessageService messageService*/) {
         this.storageDAO = storageDAO;
         this.shoppingListService = shoppingListService;
         this.historyService = historyService;
-        this.messageService = messageService;
-        this.userService = userService;
+//        this.messageService = messageService;
     }
 
     public List<Storage> getByUserId(int user_id) {
@@ -109,7 +106,7 @@ public class StorageService {
             shoppingListService.insert(new ShoppingList(storage.getUser(), storage.getProduct(), 1));
         }
 
-        messageService.broadcastSpittle("storage updated", userService.getById(storageDTO.getUserId()));
+//        messageService.broadcastSpittle("storage updated", userService.getById(storageDTO.getUserId()));
     }
 
     public void delete(Storage storage) {

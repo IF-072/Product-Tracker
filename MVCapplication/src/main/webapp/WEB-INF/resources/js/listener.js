@@ -1,4 +1,4 @@
-var socket = new SockJS('/rest/rest');
+var socket = new SockJS('/tracker');
 var stompClient = Stomp.over(socket);
 if (screen.width > 1170){
     $("#container-notification").css("width", "350");
@@ -23,7 +23,6 @@ if (sessionUl != null && sessionUl.trim() != "" && sessionUl.indexOf('<li class=
 }
 
 stompClient.connect({}, function (frame) {
-    console.log('Connected: ' + frame);
     stompClient.subscribe('/queue/notifications/' + id, function (frame) {
         var msg = JSON.parse(frame.body);
         msg.date = new Date(msg.date);

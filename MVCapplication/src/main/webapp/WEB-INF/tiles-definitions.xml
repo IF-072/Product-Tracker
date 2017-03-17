@@ -79,6 +79,9 @@
         <put-list-attribute name="stylesheets" inherit="true">
             <add-attribute value="/css/login.css"/>
         </put-list-attribute>
+        <put-list-attribute name="javascripts" inherit="true">
+            <add-attribute value="/js/login.js"/>
+        </put-list-attribute>
     </definition>
 
     <definition name="register" extends="mainLayout">

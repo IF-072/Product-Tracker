@@ -38,10 +38,6 @@ public class StorageServiceTest {
     private ShoppingListService shoppingListService;
     @Mock
     private HistoryService historyService;
-    @Mock
-    private MessageService messageService;
-    @Mock
-    private UserService userService;
     @InjectMocks
     private StorageService storageService;
 

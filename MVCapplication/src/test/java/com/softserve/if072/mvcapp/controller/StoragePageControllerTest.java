@@ -3,6 +3,7 @@ package com.softserve.if072.mvcapp.controller;
 import com.softserve.if072.common.model.Product;
 import com.softserve.if072.common.model.Storage;
 import com.softserve.if072.common.model.User;
+import com.softserve.if072.mvcapp.service.MessageService;
 import com.softserve.if072.mvcapp.service.StoragePageService;
 import com.softserve.if072.mvcapp.service.UserService;
 import org.junit.Before;
@@ -15,6 +16,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.web.servlet.view.InternalResourceView;
 
+import javax.servlet.http.Cookie;
 import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.List;
@@ -23,8 +25,8 @@ import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -46,6 +48,8 @@ public class StoragePageControllerTest {
     private StoragePageService storagePageService;
     @Mock
     private UserService userService;
+    @Mock
+    private MessageService messageService;
     @InjectMocks
     private StoragePageController storagePageController;
     private MockMvc mockMvc;
@@ -81,14 +85,17 @@ public class StoragePageControllerTest {
 
     @Test
     public void testUpdateAmount_ShouldReturnEmptyString() throws Exception {
+        String locale = "uk";
         when(userService.getCurrentUser()).thenReturn(user);
         MvcResult result = mockMvc.perform(post("/storage/update")
                 .param("amount", "1")
-                .param("productId", "1"))
+                .param("productId", "1")
+                .cookie(new Cookie("myLocaleCookie", locale)))
                 .andExpect(status().isOk())
                 .andReturn();
         assertTrue("".equals(result.getResponse().getContentAsString()));
         verify(storagePageService).updateAmount(any());
+        verify(messageService).broadcast(any(), eq(locale), anyInt(), any(), any());
     }
 
     @Test
