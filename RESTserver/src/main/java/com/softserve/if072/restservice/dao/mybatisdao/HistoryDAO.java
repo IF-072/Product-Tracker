@@ -122,4 +122,40 @@ public interface HistoryDAO {
      */
     @Delete("DELETE FROM history WHERE user_id=#{userId}")
     int deleteAll(int userId);
+
+
+    /**
+     * Select all records from the history table that belong to specific user and matches given search params
+     *
+     * @param userId - unique user's identifier
+     * @param name product name
+     * @param description product's description keywords
+     * @param category product's category
+     * @param dateFrom starting date
+     * @param dateTo ending date
+     * @return list of all history items that belong to specific user
+     */
+    @Select("SELECT h.id, h.user_id, h.product_id, h.amount, h.used_date, h.action\n" +
+            "FROM history h\n" +
+            "  INNER JOIN product p ON h.product_id = p.id\n" +
+            "WHERE h.user_id = #{userId} " +
+            "AND (#{name} IS NULL OR p.name LIKE CONCAT('%',#{name},'%')) " +
+            "AND (#{description} IS NULL OR p.description LIKE CONCAT('%',#{description},'%')) " +
+            "AND (#{category} IS NULL OR p.category_id = #{category}) " +
+            "AND (#{dateFrom} IS NULL OR h.used_date >= #{dateFrom}) " +
+            "AND (#{dateTo} IS NULL OR h.used_date <= #{dateTo}) "
+            )
+    @Results(value = {
+            @Result(property = "id", column = "id"),
+            @Result(property = "user", column = "user_id", javaType = User.class,
+                    one = @One(select = "com.softserve.if072.restservice.dao.mybatisdao.UserDAO.getByID")),
+            @Result(property = "product", column = "product_id", javaType = Product.class,
+                    one = @One(select = "com.softserve.if072.restservice.dao.mybatisdao.ProductDAO.getByID")),
+            @Result(property = "amount", column = "amount"),
+            @Result(property = "usedDate", column = "used_date"),
+            @Result(property = "action", column = "action")
+    })
+    List<History> searchAllByUserIdAndParams(@Param("userId") int userId, @Param("name") String name,
+                                             @Param("description") String description, @Param("category") String category,
+                                             @Param("dateFrom") String dateFrom, @Param("dateTo") String dateTo);
 }

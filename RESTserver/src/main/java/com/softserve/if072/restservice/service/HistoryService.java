@@ -46,6 +46,24 @@ public class HistoryService {
     }
 
     /**
+     * Make request to a History DAO for retrieving all history records by given search fields
+     *
+     * @param userID - current user unique identifier
+     * @param name product name
+     * @param description product's description keywords
+     * @param category product's category
+     * @param dateFrom starting date
+     * @param dateTo ending date
+     * @return list of cart records or empty list
+     */
+    public List<History> getByUserIdAndSearchParams(int userID, String name, String description, String category,
+                                                          String dateFrom, String dateTo) {
+        List<History> histories = historyDAO.searchAllByUserIdAndParams(userID, name, description, category, dateFrom, dateTo);
+        LOGGER.info(historyContainsRecords, "user", userID, histories.size());
+        return histories;
+    }
+
+    /**
      * Make request to a History DTO for deleting a record from the history of current user
      *
      * @param historyId - history unique identifier
