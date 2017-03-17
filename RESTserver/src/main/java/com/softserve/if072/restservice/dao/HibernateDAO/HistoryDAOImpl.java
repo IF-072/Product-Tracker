@@ -2,7 +2,7 @@ package com.softserve.if072.restservice.dao.HibernateDAO;
 
 import com.softserve.if072.common.model.History;
 import com.softserve.if072.common.model.dto.HistoryDTO;
-import com.softserve.if072.restservice.dao.DAOInterfaces.HistoryDAO;
+import com.softserve.if072.restservice.dao.DAOInterfaces.HistoryDAOIn;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,14 +16,11 @@ import java.util.List;
  */
 
 @Repository
-public class HistoryDAOImpl implements HistoryDAO {
-    @Autowired
+public class HistoryDAOImpl implements HistoryDAOIn {
+
     private SessionFactory sessionFactory;
 
-    public HistoryDAOImpl(){
-
-    }
-
+//    @Autowired
     public HistoryDAOImpl(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
     }
@@ -32,12 +29,12 @@ public class HistoryDAOImpl implements HistoryDAO {
     @Transactional
     public List<History> getByUserId(int userId) {
 
-        String hql = "FROM history H WHERE H.user.id = :userId";
+        String hql = "select  h from History h WHERE h.user.id = :userId";
         Query query = sessionFactory.getCurrentSession().createQuery(hql);
         query.setParameter("userId", userId);
 
         @SuppressWarnings("unchecked")
-        List<History> histories = (List<History>) query.list();
+        List<History> histories = (List<History>) query.getResultList();
 
         return histories;
     }

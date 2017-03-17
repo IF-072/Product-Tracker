@@ -278,6 +278,12 @@
                 <version>5.2.5.Final</version>
             </dependency>
 
+            <dependency>
+                <groupId>org.aspectj</groupId>
+                <artifactId>aspectjweaver</artifactId>
+                <version>1.7.2</version>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 
@@ -359,5 +365,5 @@
             </plugins>
         </pluginManagement>
     </build>
-    
+
 </project>

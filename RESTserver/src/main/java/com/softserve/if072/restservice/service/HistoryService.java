@@ -2,8 +2,7 @@ package com.softserve.if072.restservice.service;
 
 import com.softserve.if072.common.model.History;
 import com.softserve.if072.common.model.dto.HistoryDTO;
-import com.softserve.if072.restservice.dao.mybatisdao.HistoryDAOMybatis;
-import com.softserve.if072.restservice.exception.DataNotFoundException;
+import com.softserve.if072.restservice.dao.HibernateDAO.HistoryDAOImpl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,7 +18,7 @@ import java.util.List;
 @Service
 public class HistoryService {
     private static final Logger LOGGER = LogManager.getLogger();
-    private final HistoryDAOMybatis historyDAOMybatis;
+    private final HistoryDAOImpl historyDAO;
     @Value("${history.containsRecords}")
     private String historyContainsRecords;
     @Value("${history.notFound}")
@@ -29,8 +28,9 @@ public class HistoryService {
     @Value("${history.deleteAllSuccessfullyOperation}")
     private String deleteAllSuccessfullyOperation;
 
-    public HistoryService(HistoryDAOMybatis historyDAOMybatis) {
-        this.historyDAOMybatis = historyDAOMybatis;
+
+    public HistoryService(HistoryDAOImpl historyDAO) {
+        this.historyDAO = historyDAO;
     }
 
     /**
@@ -40,7 +40,7 @@ public class HistoryService {
      * @return list of cart records or empty list
      */
     public List<History> getByUserId(int userID) {
-        List<History> histories = historyDAOMybatis.getByUserId(userID);
+        List<History> histories = historyDAO.getByUserId(userID);
         LOGGER.info(historyContainsRecords, "user", userID, histories.size());
         return histories;
     }
@@ -51,9 +51,10 @@ public class HistoryService {
      * @param historyId - history unique identifier
      */
     public void delete(int historyId) {
-        if (historyDAOMybatis.delete(historyId) == 0) {
-            throw new DataNotFoundException(String.format(historyNotFound, "DELETE", historyId));
-        }
+//        if (historyDAO.delete(historyId) == 0) {
+//            throw new DataNotFoundException(String.format(historyNotFound, "DELETE", historyId));
+//        }
+        historyDAO.delete(historyId);
         LOGGER.info(historySuccessfullyOperation, historyId, "deleted from");
     }
 
@@ -63,53 +64,55 @@ public class HistoryService {
      * @param userId - current user unique identifier
      */
     public void deleteAll(int userId) {
-        int count = historyDAOMybatis.deleteAll(userId);
-        LOGGER.info(deleteAllSuccessfullyOperation, count, userId);
+//        int count = historyDAO.deleteAll(userId);
+//        LOGGER.info(deleteAllSuccessfullyOperation, count, userId);
+        historyDAO.deleteAll(userId);
     }
 
     public List<History> getByProductId(int userID, int productID) {
-        List<History> histories = historyDAOMybatis.getByProductId(userID, productID);
+        List<History> histories = historyDAO.getByProductId(userID, productID);
         LOGGER.info(historyContainsRecords, "product", productID, histories.size());
         return histories;
     }
 
     public void insert(HistoryDTO historyDTO) {
-        historyDAOMybatis.insert(historyDTO);
+        historyDAO.insert(historyDTO);
         LOGGER.info(historySuccessfullyOperation, historyDTO.getProductId(), historyDTO.getAction(), "inserted into");
     }
 
     public void update(HistoryDTO historyDTO) {
-        if (historyDAOMybatis.update(historyDTO) == 0) {
-            throw new DataNotFoundException(String.format(historyNotFound, "UPDATE", historyDTO.getId()));
-        }
+//        if (historyDAO.update(historyDTO) == 0) {
+//            throw new DataNotFoundException(String.format(historyNotFound, "UPDATE", historyDTO.getId()));
+//        }
+        historyDAO.update(historyDTO);
         LOGGER.info(historySuccessfullyOperation, historyDTO.getProductId(), historyDTO.getAction(), "updated in");
     }
 
-    /**
-     * Return records from the history table that belong to specific user. Records are divided in pages, were number
-     * of records is equal to limit.
-     *
-     * @param userId   - unique user's identifier
-     * @param startRow - record from which begins select
-     * @param limit    - number of records
-     * @return list of history items that belong to specific user
-     */
-    public List<History> getByUserIdPages(int userId, int startRow, int limit) {
-        List<History> histories = historyDAOMybatis.getByUserIdPages(userId, startRow, limit);
-        LOGGER.info(historyContainsRecords, "user", userId, histories.size());
-
-        return histories;
-    }
-
-    /**
-     * Select count of records from the history table that belong to specific user.
-     *
-     * @param userId - unique user's identifier
-     * @return number of records
-     */
-    public int getNumberOfRecordsByUserId(int userId) {
-        int recordsNumber = historyDAOMybatis.getNumberOfRecordsByUserId(userId);
-
-        return recordsNumber;
-    }
+//    /**
+//     * Return records from the history table that belong to specific user. Records are divided in pages, were number
+//     * of records is equal to limit.
+//     *
+//     * @param userId   - unique user's identifier
+//     * @param startRow - record from which begins select
+//     * @param limit    - number of records
+//     * @return list of history items that belong to specific user
+//     */
+//    public List<History> getByUserIdPages(int userId, int startRow, int limit) {
+//        List<History> histories = historyDAO.getByUserIdPages(userId, startRow, limit);
+//        LOGGER.info(historyContainsRecords, "user", userId, histories.size());
+//
+//        return histories;
+//    }
+//
+//    /**
+//     * Select count of records from the history table that belong to specific user.
+//     *
+//     * @param userId - unique user's identifier
+//     * @return number of records
+//     */
+//    public int getNumberOfRecordsByUserId(int userId) {
+//        int recordsNumber = historyDAO.getNumberOfRecordsByUserId(userId);
+//
+//        return recordsNumber;
+//    }
 }

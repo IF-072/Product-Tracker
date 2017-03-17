@@ -23,7 +23,7 @@ import java.util.List;
  * @author Igor Kryviuk
  */
 @Repository
-public interface HistoryDAOMybatis {
+public interface HistoryDAO {
     /**
      * Select all records from the history table that belong to specific user
      *
