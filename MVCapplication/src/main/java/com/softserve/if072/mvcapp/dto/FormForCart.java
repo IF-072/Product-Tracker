@@ -61,9 +61,16 @@ public class FormForCart {
 
     public int getUserId() {
         if (carts.get(0) != null && carts.get(0).getUser() != null) {
-            carts.get(0).getUser().getId();
+            return carts.get(0).getUser().getId();
         }
         return -1;
+    }
+
+    public String getStoreName() {
+        if (carts.get(0) != null && carts.get(0).getStore() != null) {
+            return carts.get(0).getStore().getName();
+        }
+        return "store";
     }
 
     public void removeUncheked() {

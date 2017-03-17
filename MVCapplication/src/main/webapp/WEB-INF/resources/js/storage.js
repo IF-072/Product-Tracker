@@ -1,8 +1,7 @@
-function allowBtn(index, amount) {
-    var tr = document.getElementsByTagName("tr");
-    var jtr = $(tr[index]);
-    var value = jtr.find(' input[type=number]').val();
-    var jbtn = jtr.find(' button#confirm');
+function allowBtn() {
+    var amount = $(this).attr("init");
+    var value = $(this).val();
+    var jbtn = $(this).parent().find('button.confirm');
 
     if (amount == value) {
         jbtn.addClass("disabled");
@@ -17,6 +16,7 @@ function subForm(e) {
     var url = $(this).closest('form').attr('action'),
         data = $(this).closest('form').serialize();
     var jbtn = $(this).find('button');
+    var inputNum = $(this).find(".num");
     $.ajax({
         url: url,
         type: 'post',
@@ -32,7 +32,9 @@ function subForm(e) {
                 });
             } else {
                 jbtn.addClass("disabled");
+                inputNum.attr("init", inputNum.val());
             }
+
         },
         error: function (jqXHR, exception) {
             console.log(jqXHR);
@@ -48,7 +50,8 @@ function subForm(e) {
     });
 }
 
-function addToShoppingList(productId) {
+function addToShoppingList() {
+    var productId = $(this).attr("product");
     $.ajax({
         url: "addToSL",
         method: "POST",
@@ -78,6 +81,8 @@ function addToShoppingList(productId) {
 
 }
 
-Array.prototype.slice.call(document.getElementsByTagName("form")).forEach(function (item) {
-    item.addEventListener("submit", subForm);
+$(document).ready(function () {
+    $("form").on("submit", subForm);
+    $(".addToSH").on("click", addToShoppingList);
+    $(".num").on("change", allowBtn);
 });

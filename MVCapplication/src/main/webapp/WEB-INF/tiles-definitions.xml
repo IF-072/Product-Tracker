@@ -49,6 +49,9 @@
             <add-attribute value="/js/sb-admin-2.js"/>
             <add-attribute value="/js/base.js"/>
             <add-attribute value="/js/jquery.cookie.js"/>
+            <add-attribute value="/js/sockjs.js"/>
+            <add-attribute value="/js/stomp.js"/>
+            <add-attribute value="/js/listener.js"/>
         </put-list-attribute>
 
     </definition>
@@ -75,6 +78,9 @@
         <put-attribute name="body" value="/WEB-INF/views/login.jsp"/>
         <put-list-attribute name="stylesheets" inherit="true">
             <add-attribute value="/css/login.css"/>
+        </put-list-attribute>
+        <put-list-attribute name="javascripts" inherit="true">
+            <add-attribute value="/js/login.js"/>
         </put-list-attribute>
     </definition>
 

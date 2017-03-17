@@ -222,6 +222,18 @@
                 <version>4.2.1.RELEASE</version>
             </dependency>
 
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-websocket</artifactId>
+                <version>4.2.1.RELEASE</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-messaging</artifactId>
+                <version>4.2.1.RELEASE</version>
+            </dependency>
+
             <!-- https://mvnrepository.com/artifact/commons-dbcp/commons-dbcp -->
             <!-- is used to provide a pooled data source -->
             <dependency>
