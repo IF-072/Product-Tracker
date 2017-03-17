@@ -5,7 +5,6 @@ import com.softserve.if072.common.model.Product;
 import com.softserve.if072.common.model.Storage;
 import com.softserve.if072.common.model.User;
 import com.softserve.if072.common.model.dto.StorageDTO;
-import com.softserve.if072.restservice.exception.DataNotFoundException;
 import com.softserve.if072.restservice.service.StorageService;
 import org.junit.Before;
 import org.junit.Test;
@@ -15,15 +14,13 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 
 import java.nio.charset.Charset;
-import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.Arrays;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyZeroInteractions;
@@ -66,12 +63,12 @@ public class StorageControllerTest {
         Product product = new Product();
         product.setId(1);
         product.setName("Product1");
-        storage1 = new Storage(user, product, 5, new Date(117, 3, 5));
+        storage1 = new Storage(user, product, 5, new Timestamp(System.currentTimeMillis()));
 
         Product product2 = new Product();
         product2.setId(2);
         product2.setName("Product2");
-        storage2 = new Storage(user, product2, 3, new Date(System.currentTimeMillis()));
+        storage2 = new Storage(user, product2, 3, new Timestamp(System.currentTimeMillis()));
     }
 
     @Test

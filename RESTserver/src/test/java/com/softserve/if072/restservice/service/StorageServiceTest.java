@@ -5,7 +5,6 @@ import com.softserve.if072.common.model.Storage;
 import com.softserve.if072.common.model.User;
 import com.softserve.if072.common.model.dto.StorageDTO;
 import com.softserve.if072.restservice.dao.mybatisdao.StorageDAO;
-import com.softserve.if072.restservice.exception.DataNotFoundException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -14,7 +13,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.List;
 
@@ -24,7 +23,6 @@ import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 /**
@@ -48,7 +46,7 @@ public class StorageServiceTest {
     private Storage storageDB;
     private Product product;
     private User user;
-    private Date date;
+    private Timestamp date;
 
     @Before
     public void setup() throws ClassNotFoundException, NoSuchMethodException {
@@ -57,7 +55,7 @@ public class StorageServiceTest {
         product = new Product();
         product.setUser(user);
         product.setId(1);
-        date = new Date(System.currentTimeMillis());
+        date = new Timestamp(System.currentTimeMillis());
         storage = new Storage(user, product, 5, date);
         storageDB = new Storage(user, product, 4, date);
         storageDTO = new StorageDTO();
@@ -99,18 +97,6 @@ public class StorageServiceTest {
     }
 
     @Test
-    public void testUpdate_ShouldNotInsertInShoppingList() {
-        when(storageDAO.getByProductID(storage.getProduct().getId())).thenReturn(storageDB);
-
-        storageService.update(storage);
-
-        verify(storageDAO).getByProductID(storage.getProduct().getId());
-        verify(storageDAO).update(storage);
-        verify(historyService, never()).insert(any());
-        verify(shoppingListService, never()).insert(any());
-    }
-
-    @Test
     public void testUpdate_ShouldInsertInShoppingList() {
         storage.setAmount(1);
         storage.setEndDate(null);
@@ -130,17 +116,6 @@ public class StorageServiceTest {
 
         storageService.update(storage);
         verifyZeroInteractions(storageDAO);
-        verify(historyService, never()).insert(any());
-        verify(shoppingListService, never()).insert(any());
-    }
-
-    @Test
-    public void testUpdateWithDto_ShouldNotInsertInShoppingList() {
-        when(storageDAO.getByProductID(anyInt())).thenReturn(storageDB);
-        storageService.update(storageDTO);
-
-        verify(storageDAO).getByProductID(storageDTO.getProductId());
-        verify(storageDAO).updateAmount(storageDB);
         verify(historyService, never()).insert(any());
         verify(shoppingListService, never()).insert(any());
     }
