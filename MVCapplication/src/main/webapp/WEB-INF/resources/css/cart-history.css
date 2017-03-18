@@ -36,11 +36,11 @@
     overflow-y: auto;
 }
 
-tr.USED {
+td.USED {
     color: red;
 }
 
-tr.PURCHASED {
+td.PURCHASED {
     color: green;
 }
 

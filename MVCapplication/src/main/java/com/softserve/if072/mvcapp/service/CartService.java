@@ -21,6 +21,7 @@ public class CartService {
     private static final Logger LOGGER = LogManager.getLogger();
     private final RestTemplate restTemplate;
     private final UserService userService;
+    private final AnalyticsService analyticsService;
     @Value("${application.restCartURL}")
     private String restCartURL;
     @Value("${application.restCartPurchaseURL}")
@@ -32,9 +33,10 @@ public class CartService {
     @Value("${cart.successfullyOperation}")
     private String cartSuccessfullyOperation;
 
-  public CartService(RestTemplate restTemplate, UserService userService) {
+    public CartService(RestTemplate restTemplate, UserService userService, AnalyticsService analyticsService) {
         this.restTemplate = restTemplate;
         this.userService = userService;
+        this.analyticsService = analyticsService;
     }
 
     /**
@@ -62,10 +64,12 @@ public class CartService {
 
         LOGGER.info(cartRequestReceive, "purchasing the product  with id", productId, userId);
         restTemplate.put(restCartPurchaseURL, cartDTO, userId, productId);
+        analyticsService.cleanProductStatisticsSessionObject();
         LOGGER.info(cartSuccessfullyOperation, "purchasing the product  with id", productId, userId);
     }
 
-    /**С
+    /**
+     * С
      * Make request to a REST server for deleting a product from the cart of current user
      *
      * @param cartDTO - an object with required information for the product delete

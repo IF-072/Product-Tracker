@@ -425,7 +425,7 @@
 
     <definition name="analytics" extends="mainLayout">
         <put-attribute name="title" value="Product Tracker"/>
-        <put-attribute name="body" value="/WEB-INF/views/analytics.jsp"/>
+        <put-attribute name="body" value="/WEB-INF/views/analytics/analytics.jsp"/>
         <put-list-attribute name="stylesheets" inherit="true">
             <add-attribute value="/css/dataTables.bootstrap.css"/>
             <add-attribute value="/css/dataTables.responsive.css"/>
@@ -436,6 +436,21 @@
         <put-list-attribute name="javascripts" inherit="true">
             <add-attribute value="/js/jquery-ui.js"/>
             <add-attribute value="/js/jquery.dataTables.js"/>
+            <add-attribute value="/js/analytics.js"/>
+        </put-list-attribute>
+    </definition>
+
+    <definition name="emptyAnalytics" extends="mainLayout">
+        <put-attribute name="title" value="Analytics"/>
+        <put-attribute name="body" value="/WEB-INF/views/analytics/emptyAnalytics.jsp"/>
+    </definition>
+
+    <definition name="selectProductForAnalytics" extends="mainLayout">
+        <put-attribute name="title" value="Analytics"/>
+        <put-attribute name="body" value="/WEB-INF/views/analytics/selectProductForAnalytics.jsp"/>
+
+        <put-list-attribute name="javascripts" inherit="true">
+            <add-attribute value="/js/analytics.js"/>
         </put-list-attribute>
     </definition>
 

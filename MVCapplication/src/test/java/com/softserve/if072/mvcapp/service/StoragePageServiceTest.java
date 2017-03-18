@@ -35,6 +35,8 @@ public class StoragePageServiceTest {
     private RestTemplate restTemplate;
     @Mock
     private ShoppingListService shoppingListService;
+    @Mock
+    private AnalyticsService analyticsService;
     @InjectMocks
     private StoragePageService storagePageService;
     private Storage storage;
