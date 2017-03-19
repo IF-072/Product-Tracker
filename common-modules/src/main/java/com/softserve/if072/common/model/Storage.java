@@ -1,6 +1,6 @@
 package com.softserve.if072.common.model;
 
-import java.sql.Date;
+import java.sql.Timestamp;
 
 /**
  * The Storage class stores information about product, its estimated time of ending
@@ -12,9 +12,9 @@ public class Storage {
     private User user;
     private Product product;
     private int amount;
-    private Date endDate;
+    private Timestamp endDate;
 
-    public Storage(User user, Product product, int amount, Date endDate) {
+    public Storage(User user, Product product, int amount, Timestamp endDate) {
         this.user = user;
         this.product = product;
         this.amount = amount;
@@ -48,11 +48,11 @@ public class Storage {
         this.amount = amount;
     }
 
-    public Date getEndDate() {
+    public Timestamp getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(Date endDate) {
+    public void setEndDate(Timestamp endDate) {
         this.endDate = endDate;
     }
 

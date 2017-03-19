@@ -222,6 +222,18 @@
                 <version>4.2.1.RELEASE</version>
             </dependency>
 
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-websocket</artifactId>
+                <version>4.2.1.RELEASE</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-messaging</artifactId>
+                <version>4.2.1.RELEASE</version>
+            </dependency>
+
             <!-- https://mvnrepository.com/artifact/commons-dbcp/commons-dbcp -->
             <!-- is used to provide a pooled data source -->
             <dependency>
@@ -270,6 +282,13 @@
                 <groupId>org.slf4j</groupId>
                 <artifactId>slf4j-nop</artifactId>
                 <version>1.7.24</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.tomcat</groupId>
+                <artifactId>tomcat-jsp-api</artifactId>
+                <version>8.5.11</version>
+                <scope>compile</scope>
             </dependency>
 
         </dependencies>

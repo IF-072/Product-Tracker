@@ -4,6 +4,7 @@ import com.softserve.if072.common.model.ShoppingList;
 import com.softserve.if072.common.model.Store;
 import com.softserve.if072.common.model.User;
 import com.softserve.if072.mvcapp.service.GoShoppingPageService;
+import com.softserve.if072.mvcapp.service.MessageService;
 import com.softserve.if072.mvcapp.service.UserService;
 import org.junit.Before;
 import org.junit.Test;
@@ -48,6 +49,8 @@ public class GoShoppingPagesControllerTest {
     private GoShoppingPageService goShoppingPageService;
     @Mock
     private UserService userService;
+    @Mock
+    private MessageService messageService;
     @InjectMocks
     private GoShoppingPagesController goShoppingPagesController;
     private MockMvc mockMvc;
@@ -116,7 +119,8 @@ public class GoShoppingPagesControllerTest {
     @Test
     public void updateAmount_ShouldReturnNonEmptyString() throws Exception {
         when(userService.getCurrentUser()).thenReturn(user);
-        mockMvc.perform(post("/addToCart"))
+        mockMvc.perform(post("/addToCart")
+                .param("carts[0].user.id", "1"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/cart/"));
         verify(goShoppingPageService).addToCart(any());

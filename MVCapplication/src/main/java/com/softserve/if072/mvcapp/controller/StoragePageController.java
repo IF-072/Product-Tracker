@@ -1,6 +1,7 @@
 package com.softserve.if072.mvcapp.controller;
 
 import com.softserve.if072.common.model.dto.StorageDTO;
+import com.softserve.if072.mvcapp.service.MessageService;
 import com.softserve.if072.mvcapp.service.ShoppingListService;
 import com.softserve.if072.mvcapp.service.StoragePageService;
 import com.softserve.if072.mvcapp.service.UserService;
@@ -13,6 +14,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -34,12 +36,14 @@ public class StoragePageController {
 
     private StoragePageService storagePageService;
     private UserService userService;
+    private MessageService messageService;
 
     @Autowired
     public StoragePageController(StoragePageService storagePageService, ShoppingListService shoppingListService,
-                                 UserService userService) {
+                                 UserService userService, MessageService messageService) {
         this.storagePageService = storagePageService;
         this.userService = userService;
+        this.messageService = messageService;
     }
 
     @GetMapping
@@ -53,7 +57,8 @@ public class StoragePageController {
     @PostMapping("/update")
     @ResponseStatus(value = HttpStatus.OK)
     @ResponseBody
-    public String updateAmount(@Validated @ModelAttribute StorageDTO storageDTO, BindingResult result) {
+    public String updateAmount(@Validated @ModelAttribute StorageDTO storageDTO, BindingResult result,
+                               @CookieValue(value="myLocaleCookie", required = false) String locale) {
         if (result.hasErrors()) {
             String message = "";
             int i = 0;
@@ -67,6 +72,8 @@ public class StoragePageController {
         }
         storageDTO.setUserId(userService.getCurrentUser().getId());
         storagePageService.updateAmount(storageDTO);
+        messageService.broadcast("storage.update", locale, storageDTO.getUserId(), storageDTO.getProductName(),
+                storageDTO.getAmount());
         return "";
     }
 
