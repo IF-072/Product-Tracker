@@ -29,7 +29,7 @@
      * This function is used to show modal dialog window
      * for user to confirm or cancel deleting all records
      */
-    $("#btn-deleteAll").click(function () {
+    /*$("#btn-deleteAll").click(function () {
         var href = $(this).attr("href");
         var deleteName = $(this).attr("deleteName");
         $("#modalDeleteConfirm").modal('show');
@@ -39,7 +39,7 @@
             location.href = href;
         });
 
-    });
+    });*/
     /**
      * This function is used to init and configure bootstrap-datepicker
      */
@@ -75,3 +75,11 @@
     $('input[name="toDate"]').on('cancel.daterangepicker', function(ev, picker) {
         $(this).val('');
     });
+
+    /**
+     * This function is used to send request for creating PDF file
+     */
+    $("#pdfButton").click(function () {
+     var href = $(this).attr("href");
+        location.href = href;
+     });

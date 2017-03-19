@@ -20,9 +20,11 @@
     <div class="col-lg-12">
         <div class="panel panel-default">
             <div class="panel-body">
-                    <input type="button" class="btn btn-outline btn-primary"
-                           onClick="window.location.href = '/product/addProduct'"
-                           value=<spring:message code="product.addNewProductBut"/>>
+                <p>
+                        <input type="button" class="btn btn-outline btn-primary"
+                               onClick="window.location.href = '/product/addProduct'"
+                               value=<spring:message code="product.addNewProductBut"/>>
+                </p>
                     <table width="100%" class="table table-striped table-bordered table-hover" id="productData">
                         <thead>
                         <tr>
