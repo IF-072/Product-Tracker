@@ -2,6 +2,7 @@ package com.softserve.if072.restservice.service;
 
 import com.softserve.if072.common.model.History;
 import com.softserve.if072.common.model.dto.HistoryDTO;
+import com.softserve.if072.common.model.dto.HistorySearchDTO;
 import com.softserve.if072.restservice.dao.mybatisdao.HistoryDAO;
 import com.softserve.if072.restservice.exception.DataNotFoundException;
 import org.apache.logging.log4j.LogManager;
@@ -9,6 +10,8 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -49,16 +52,12 @@ public class HistoryService {
      * Make request to a History DAO for retrieving all history records by given search fields
      *
      * @param userID - current user unique identifier
-     * @param name product name
-     * @param description product's description keywords
-     * @param category product's category
-     * @param dateFrom starting date
-     * @param dateTo ending date
+     * @param searchData DTO that contains search criterias
      * @return list of cart records or empty list
      */
-    public List<History> getByUserIdAndSearchParams(int userID, String name, String description, String category,
-                                                          String dateFrom, String dateTo) {
-        List<History> histories = historyDAO.searchAllByUserIdAndParams(userID, name, description, category, dateFrom, dateTo);
+    public List<History> getByUserIdAndSearchParams(int userID, HistorySearchDTO searchData) {
+        List<History> histories = historyDAO.searchAllByUserIdAndParams(userID, searchData.getName(),
+                searchData.getDescription(), searchData.getCategoryId(), searchData.getFromDate(), searchData.getToDate());
         LOGGER.info(historyContainsRecords, "user", userID, histories.size());
         return histories;
     }

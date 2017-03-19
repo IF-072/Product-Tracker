@@ -375,8 +375,11 @@
 
         <put-list-attribute name="stylesheets" inherit="true">
             <add-attribute value="/css/cart-history.css"/>
+            <add-attribute value="/css/daterangepicker.css"/>
         </put-list-attribute>
         <put-list-attribute name="javascripts" inherit="true">
+            <add-attribute value="/js/moment.min.js"/>
+            <add-attribute value="/js/daterangepicker.js"/>
             <add-attribute value="/js/history.js"/>
         </put-list-attribute>
     </definition>

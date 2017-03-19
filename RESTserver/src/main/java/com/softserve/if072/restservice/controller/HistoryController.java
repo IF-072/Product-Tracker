@@ -2,6 +2,7 @@ package com.softserve.if072.restservice.controller;
 
 import com.softserve.if072.common.model.History;
 import com.softserve.if072.common.model.dto.HistoryDTO;
+import com.softserve.if072.common.model.dto.HistorySearchDTO;
 import com.softserve.if072.restservice.service.HistoryService;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.http.HttpStatus;
@@ -14,7 +15,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -48,26 +48,17 @@ public class HistoryController {
     }
 
     /**
-     * Handles requests for search history records by given parameters
+     * Handles requests for search history records by given criterias
      *
      * @param userId - current user unique identifier
-     * @param name product name
-     * @param description product's description keywords
-     * @param category product's category
-     * @param dateFrom starting date
-     * @param dateTo ending date
+     * @param searchData DTO that contains search params
      * @return list of found cart records or empty list
      */
     @PreAuthorize("#userId == authentication.user.id")
     @PostMapping("/search")
     @ResponseStatus(HttpStatus.OK)
-    public List<History> postSearchForm(@PathVariable("userId") int userId,
-                                        @RequestParam(value = "name", required = false) String name,
-                                        @RequestParam(value = "description", required = false) String description,
-                                        @RequestParam(value = "category", required = false) String category,
-                                        @RequestParam(value = "dateFrom", required = false) String dateFrom,
-                                        @RequestParam(value = "dateTo", required = false) String dateTo) {
-        return historyService.getByUserIdAndSearchParams(userId, name, description, category, dateFrom, dateTo);
+    public List<History> postSearchForm(@PathVariable("userId") int userId, @RequestBody HistorySearchDTO searchData) {
+        return historyService.getByUserIdAndSearchParams(userId, searchData);
     }
 
     /**

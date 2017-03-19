@@ -14,6 +14,8 @@ import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 import org.springframework.stereotype.Repository;
 
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -130,18 +132,18 @@ public interface HistoryDAO {
      * @param userId - unique user's identifier
      * @param name product name
      * @param description product's description keywords
-     * @param category product's category
+     * @param categoryId product's category id
      * @param dateFrom starting date
      * @param dateTo ending date
      * @return list of all history items that belong to specific user
      */
-    @Select("SELECT h.id, h.user_id, h.product_id, h.amount, h.used_date, h.action\n" +
-            "FROM history h\n" +
-            "  INNER JOIN product p ON h.product_id = p.id\n" +
+    @Select("SELECT h.id, h.user_id, h.product_id, h.amount, h.used_date, h.action " +
+            "FROM history h " +
+            "  INNER JOIN product p ON h.product_id = p.id " +
             "WHERE h.user_id = #{userId} " +
             "AND (#{name} IS NULL OR p.name LIKE CONCAT('%',#{name},'%')) " +
             "AND (#{description} IS NULL OR p.description LIKE CONCAT('%',#{description},'%')) " +
-            "AND (#{category} IS NULL OR p.category_id = #{category}) " +
+            "AND (#{categoryId} IS NULL OR #{categoryId} = 0 OR p.category_id = #{categoryId}) " +
             "AND (#{dateFrom} IS NULL OR h.used_date >= #{dateFrom}) " +
             "AND (#{dateTo} IS NULL OR h.used_date <= #{dateTo}) "
             )
@@ -156,6 +158,6 @@ public interface HistoryDAO {
             @Result(property = "action", column = "action")
     })
     List<History> searchAllByUserIdAndParams(@Param("userId") int userId, @Param("name") String name,
-                                             @Param("description") String description, @Param("category") String category,
-                                             @Param("dateFrom") String dateFrom, @Param("dateTo") String dateTo);
+                                             @Param("description") String description, @Param("categoryId") int categoryId,
+                                             @Param("dateFrom") Date dateFrom, @Param("dateTo") Date dateTo);
 }

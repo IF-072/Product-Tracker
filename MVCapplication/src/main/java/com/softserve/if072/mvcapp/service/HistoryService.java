@@ -1,9 +1,15 @@
 package com.softserve.if072.mvcapp.service;
 
 import com.softserve.if072.common.model.History;
+import com.softserve.if072.common.model.Store;
+import com.softserve.if072.common.model.dto.HistorySearchDTO;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -22,6 +28,8 @@ public class HistoryService {
     private final UserService userService;
     @Value("${application.restHistoryURL}")
     private String restHistoryURL;
+    @Value("${application.restHistorySearchURL}")
+    private String restHistorySearchURL;
     @Value("${application.restHistoryDeleteURL}")
     private String restHistoryDeleteURL;
     @Value("${history.requestReceive}")
@@ -44,6 +52,20 @@ public class HistoryService {
 
         LOGGER.info(historyRequestReceive, "retrieving", "all history records", userId);
         List<History> histories = restTemplate.getForObject(restHistoryURL, List.class, userId);
+        LOGGER.info(historySuccessfullyOperation, "retrieving", "all history records", userId);
+        return histories;
+    }
+
+    /**
+     * Sends request to the REST server for retrieving all history records that match given search attributes
+     *
+     * @return list of history records or empty list
+     */
+    public List<History> getByUserIdAndSearchParams(HistorySearchDTO searchDTO) {
+        int userId = userService.getCurrentUser().getId();
+
+        LOGGER.info(historyRequestReceive, "searching", "history records", userId);
+        List<History> histories = restTemplate.postForObject(restHistorySearchURL, searchDTO, List.class, userId);
         LOGGER.info(historySuccessfullyOperation, "retrieving", "all history records", userId);
         return histories;
     }

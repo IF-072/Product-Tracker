@@ -75,3 +75,13 @@ tr.PURCHASED {
     color: green;
 }
 
+div.search-item {
+   padding-right: 0px;
+}
+
+tr.noitems {
+    background: rgba(255,0,0,0.3) !important;
+    text-align: center;
+}
+
+
