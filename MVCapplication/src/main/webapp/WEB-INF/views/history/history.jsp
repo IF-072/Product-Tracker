@@ -141,10 +141,8 @@
                         </table>
                     </div>
                     <div class="col-md-4">
-                        <button type="button" class="btn btn-primary" id="btn-deleteAll"
-                                href="<c:url value="/history/delete"/>"
-                                deleteName="<spring:message code="deleteDialog.messageDeleteAllHistory"/>">
-                            <spring:message code="deleteAll"/></button>
+                        <button type="button" class="btn btn-primary" id="pdfButton" href="<c:url value="/history/getpdf"/>">
+                            PDF</button>
                     </div>
                 </div>
             </div>

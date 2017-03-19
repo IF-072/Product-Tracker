@@ -5,6 +5,7 @@ import com.softserve.if072.common.model.Category;
 import com.softserve.if072.common.model.History;
 import com.softserve.if072.common.model.User;
 import com.softserve.if072.mvcapp.service.HistoryService;
+import com.softserve.if072.mvcapp.service.PdfCreatorService;
 import com.softserve.if072.mvcapp.service.ProductPageService;
 import com.softserve.if072.mvcapp.service.UserService;
 import com.softserve.if072.mvcapp.test.utils.HistoryBuilder;
@@ -60,12 +61,14 @@ public class HistoryControllerTest {
     private ProductPageService productPageService;
     @Mock
     private UserService userService;
+    @Mock
+    private PdfCreatorService pdfCreatorService;
     private HistoryController historyController;
     private MockMvc mockMvc;
 
     @Before
     public void setup() throws ClassNotFoundException, NoSuchMethodException {
-        historyController = new HistoryController(historyService, productPageService, userService);
+        historyController = new HistoryController(historyService, productPageService, userService, pdfCreatorService);
         mockMvc = standaloneSetup(historyController)
                 .setViewResolvers(new InternalResourceViewResolver("/WEB-INF/views/history/", ".jsp"))
                 .build();

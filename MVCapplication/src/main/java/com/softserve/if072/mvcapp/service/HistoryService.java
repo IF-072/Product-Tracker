@@ -1,15 +1,10 @@
 package com.softserve.if072.mvcapp.service;
 
 import com.softserve.if072.common.model.History;
-import com.softserve.if072.common.model.Store;
 import com.softserve.if072.common.model.dto.HistorySearchDTO;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
