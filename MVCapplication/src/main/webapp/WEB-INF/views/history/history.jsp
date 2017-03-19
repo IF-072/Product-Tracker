@@ -30,7 +30,7 @@
             <div class="col-lg-3 search-item">
                 <div class="form-group">
                     <sf:select path="categoryId" class="form-control" placeholder="Category">
-                        <option value="0" selected disabled hidden><spring:message code="history.filter.category"/></option>
+                        <option value="0" selected><spring:message code="history.filter.category"/></option>
                         <sf:options items="${categories}" itemLabel="name" itemValue="id"/>
                     </sf:select>
                 </div>
