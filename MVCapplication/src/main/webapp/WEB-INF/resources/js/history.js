@@ -40,3 +40,38 @@
         });
 
     });
+    /**
+     * This function is used to init and configure bootstrap-datepicker
+     */
+    $('input[name="fromDate"]').daterangepicker({
+        singleDatePicker: true,
+        autoUpdateInput: false,
+        locale: {
+            cancelLabel: 'Clear'
+        }
+    });
+
+    $('input[name="toDate"]').daterangepicker({
+        singleDatePicker: true,
+        autoUpdateInput: false,
+        locale: {
+            cancelLabel: 'Clear'
+        }
+    });
+
+    $('input[name="fromDate"]').on('apply.daterangepicker', function(ev, picker) {
+        $(this).val(picker.startDate.format('MM/DD/YYYY'));
+        console.log(new Date(picker.startDate.format('MM/DD/YYYY')).getTime());
+    });
+
+    $('input[name="fromDate"]').on('cancel.daterangepicker', function(ev, picker) {
+        $(this).val('');
+    });
+
+    $('input[name="toDate"]').on('apply.daterangepicker', function(ev, picker) {
+        $(this).val(picker.startDate.format('MM/DD/YYYY'));
+    });
+
+    $('input[name="toDate"]').on('cancel.daterangepicker', function(ev, picker) {
+        $(this).val('');
+    });
