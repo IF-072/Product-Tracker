@@ -18,7 +18,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
@@ -26,7 +26,8 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 /**
- * The GoShoppingPageServiceTest class is used to test GoShoppingPageService class methods
+ * The GoShoppingPageServiceTest class is used to test
+ * GoShoppingPageService class methods.
  *
  * @author Roman Dyndyn
  */
@@ -54,22 +55,22 @@ public class GoShoppingPageServiceTest {
     public void testGetStores() {
         when(restTemplate.getForObject(anyString(), eq(List.class))).thenReturn(stores);
 
-        assertTrue(stores.equals(goShoppingPageService.getStores(userId)));
+        assertEquals(stores, goShoppingPageService.getStores(userId));
         verify(restTemplate).getForObject(anyString(), eq(List.class));
     }
 
     @Test
     public void testGetProducts() {
-        int storeId = 1;
+        final int storeId = 1;
         when(restTemplate.getForObject(anyString(), eq(Map.class))).thenReturn(map);
 
-        assertTrue(map.equals(goShoppingPageService.getProducts(userId, storeId)));
+        assertEquals(map, goShoppingPageService.getProducts(userId, storeId));
         verify(restTemplate).getForObject(anyString(), eq(Map.class));
     }
 
     @Test
     public void addToCart() {
-        FormForCart formForCartMock = Mockito.spy(formForCart);
+        final FormForCart formForCartMock = Mockito.spy(formForCart);
         goShoppingPageService.addToCart(formForCartMock);
         verify(formForCartMock).removeUncheked();
         verify(restTemplate).postForObject(anyString(), any(), eq(Cart.class));
