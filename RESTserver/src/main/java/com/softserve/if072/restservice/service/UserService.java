@@ -4,13 +4,13 @@ import com.softserve.if072.common.model.Role;
 import com.softserve.if072.common.model.User;
 import com.softserve.if072.restservice.dao.mybatisdao.UserDAO;
 import com.softserve.if072.restservice.exception.DataNotFoundException;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.xml.bind.annotation.adapters.HexBinaryAdapter;
-import java.security.MessageDigest;
 import java.util.List;
 
 import static org.apache.commons.codec.binary.StringUtils.getBytesUtf8;
@@ -29,14 +29,17 @@ public class UserService {
     @Value("${user.notfound}")
     private String userNotFound;
 
-    @Autowired
+    @Value("${security.messageDigestAlgorithm}")
+    private String messageDigestAlgorithm;
+
     private UserDAO userDAO;
-
-    @Autowired
-    private MessageDigest messageDigest;
-
-    @Autowired
     private HexBinaryAdapter hexBinaryAdapter;
+
+    @Autowired
+    public UserService(UserDAO userDAO, HexBinaryAdapter hexBinaryAdapter) {
+        this.userDAO = userDAO;
+        this.hexBinaryAdapter = hexBinaryAdapter;
+    }
 
     public List<User> getAll() throws DataNotFoundException {
         List<User> users = userDAO.getAll();
@@ -81,7 +84,7 @@ public class UserService {
     }
 
     public String encodePassword(String password) {
-        return hexBinaryAdapter.marshal(messageDigest.digest(getBytesUtf8(password)));
+        return hexBinaryAdapter.marshal(DigestUtils.getDigest(messageDigestAlgorithm).digest(getBytesUtf8(password)));
     }
 
     public void verifyPremiumAccountValidity(User user) {

@@ -1,8 +1,12 @@
 package com.softserve.if072.mvcapp.controller;
 
 import com.softserve.if072.common.model.Action;
+import com.softserve.if072.common.model.Category;
 import com.softserve.if072.common.model.History;
+import com.softserve.if072.common.model.User;
 import com.softserve.if072.mvcapp.service.HistoryService;
+import com.softserve.if072.mvcapp.service.ProductPageService;
+import com.softserve.if072.mvcapp.service.UserService;
 import com.softserve.if072.mvcapp.test.utils.HistoryBuilder;
 import org.junit.Before;
 import org.junit.Test;
@@ -13,6 +17,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -22,6 +27,7 @@ import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasProperty;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
@@ -50,15 +56,24 @@ public class HistoryControllerTest {
     private static final int HISTORY_ID = 32;
     @Mock
     private HistoryService historyService;
+    @Mock
+    private ProductPageService productPageService;
+    @Mock
+    private UserService userService;
     private HistoryController historyController;
     private MockMvc mockMvc;
 
     @Before
     public void setup() throws ClassNotFoundException, NoSuchMethodException {
-        historyController = new HistoryController(historyService);
+        historyController = new HistoryController(historyService, productPageService, userService);
         mockMvc = standaloneSetup(historyController)
                 .setViewResolvers(new InternalResourceViewResolver("/WEB-INF/views/history/", ".jsp"))
                 .build();
+
+        User user = new User();
+        user.setId(1);
+        when(userService.getCurrentUser()).thenReturn(user);
+        when(productPageService.getAllCategories(anyInt())).thenReturn(new ArrayList<Category>());
     }
 
     @Test
@@ -76,6 +91,8 @@ public class HistoryControllerTest {
                 .andExpect(view().name("history"))
                 .andExpect(forwardedUrl("/WEB-INF/views/history/history.jsp"))
                 .andExpect(model().attributeExists("histories"))
+                .andExpect(model().attributeExists("categories"))
+                .andExpect(model().attributeExists("historySearchDTO"))
                 .andExpect(model().attribute("histories", hasSize(2)))
                 .andExpect(model().attribute("histories", hasItem(
                         allOf(

@@ -23,8 +23,6 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 import javax.xml.bind.annotation.adapters.HexBinaryAdapter;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 
 /**
  * Configuration class for Spring Security framework
@@ -43,9 +41,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Value("${security.tokenHeaderName}")
     private String tokenHeaderName;
-
-    @Value("${security.messageDigestAlgorithm}")
-    private String messageDigestAlgorithm;
 
     @Autowired
     private CustomRESTAuthenticationManager customRESTAuthenticationManager;
@@ -101,22 +96,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         filter.setAuthenticationSuccessHandler(getAuthenticationSuccessHandler());
         filter.setAuthenticationFailureHandler(getAuthenticationFailureHandler());
         return filter;
-    }
-
-    /**
-     * Creates MessageDigest bean based on pre-defined digest algorithm
-     *
-     * @return created MessageDigest instance
-     */
-    @Bean
-    public MessageDigest messageDigest() {
-        MessageDigest messageDigest;
-        try {
-            messageDigest = MessageDigest.getInstance(messageDigestAlgorithm);
-        } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException("Can't find message digest instance for " + messageDigestAlgorithm, e);
-        }
-        return messageDigest;
     }
 
     /**

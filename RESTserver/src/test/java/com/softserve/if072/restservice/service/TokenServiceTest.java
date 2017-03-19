@@ -14,10 +14,8 @@ import org.springframework.core.env.Environment;
 import org.springframework.test.context.ContextConfiguration;
 
 import javax.xml.bind.annotation.adapters.HexBinaryAdapter;
-import java.security.MessageDigest;
 
 import static org.junit.Assert.*;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 
@@ -34,8 +32,6 @@ public class TokenServiceTest {
     private Environment environment;
     @Mock
     private UserDAO userDAO;
-    @Mock
-    private MessageDigest messageDigest;
     private HexBinaryAdapter hexBinaryAdapter;
 
     private TokenService tokenService;
@@ -51,12 +47,13 @@ public class TokenServiceTest {
         when(environment.getProperty("security.tokenEncryptionKey")).thenReturn("somekey");
         when(environment.getProperty("security.tokenDelimiter")).thenReturn(":");
         when(environment.getProperty("security.tokenValidityTimeInSeconds")).thenReturn("3600");
+        when(environment.getProperty("security.messageDigestAlgorithm")).thenReturn("MD5");
         when(userDAO.getByUsername("test@user.com")).thenReturn(user);
-        when(messageDigest.digest(any())).thenReturn("ENCRYPTED_STRING".getBytes());
 
-
-        tokenService = new TokenService(environment,userDAO, messageDigest, hexBinaryAdapter);
+        tokenService = new TokenService(environment, userDAO, hexBinaryAdapter);
     }
+
+
 
 
     @Test
