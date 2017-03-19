@@ -20,7 +20,7 @@ import java.util.List;
 
 /**
  * The ShoppingListDAO interface is used to configure
- * mapped SQL statements for ShoppingList class
+ * mapped SQL statements for ShoppingList class.
  *
  * @author Roman Dyndyn
  */
@@ -28,7 +28,8 @@ import java.util.List;
 public interface ShoppingListDAO extends DAO<ShoppingList> {
 
     /**
-     * Select record from the shopping_list table that belong to specific product
+     * Select record from the shopping_list table
+     * that belong to specific product.
      *
      * @param productId unique product's identifier
      * @return ShoppingList item that belong to specific product
@@ -36,21 +37,22 @@ public interface ShoppingListDAO extends DAO<ShoppingList> {
     @Select("SELECT amount, user_id, product_id FROM shopping_list WHERE product_id = #{productId}")
     @Results(value = {
             @Result(property = "amount", column = "amount"),
-            @Result(property = "user", column = "user_id", javaType=User.class,
-                    one=@One(select="com.softserve.if072.restservice.dao.mybatisdao.UserDAO.getByID")),
-            @Result(property = "product", column = "product_id", javaType=Product.class,
-                    one=@One(select="com.softserve.if072.restservice.dao.mybatisdao.ProductDAO.getByID"))
+            @Result(property = "user", column = "user_id", javaType = User.class,
+                    one = @One(select = "com.softserve.if072.restservice.dao.mybatisdao.UserDAO.getByID")),
+            @Result(property = "product", column = "product_id", javaType = Product.class,
+                    one = @One(select = "com.softserve.if072.restservice.dao.mybatisdao.ProductDAO.getByID"))
     })
     ShoppingList getByProductId(int productId);
 
     /**
-     * Select all records from the shopping_list table that belong to specific user
+     * Select all records from the shopping_list
+     * table that belong to specific user.
      *
      * @param userId unique user's identifier
      * @return list of all shoppingList items that belong to specific user
      */
-    @Select("SELECT amount, shopping_list.user_id, product_id FROM shopping_list LEFT JOIN product" +
-            " ON product_id=id WHERE shopping_list.user_id = #{userId} AND is_enabled=1")
+    @Select("SELECT amount, shopping_list.user_id, product_id FROM shopping_list LEFT JOIN product"
+            + " ON product_id=id WHERE shopping_list.user_id = #{userId} AND is_enabled=1")
     @Results(value = {
             @Result(property = "amount", column = "amount"),
             @Result(property = "user", column = "user_id", javaType = User.class,
@@ -61,9 +63,10 @@ public interface ShoppingListDAO extends DAO<ShoppingList> {
     List<ShoppingList> getByUserID(int userId);
 
     /**
-     * Select record from the shopping_list table that belong to specific user and product
+     * Select record from the shopping_list table
+     * that belong to specific user and product.
      *
-     * @param userId unique user's identifier
+     * @param userId    unique user's identifier
      * @param productId unique product's identifier
      * @return ShoppingList item that belong to specific product
      */
@@ -78,26 +81,28 @@ public interface ShoppingListDAO extends DAO<ShoppingList> {
     ShoppingList getByUserAndProductId(@Param("userId") Integer userId, @Param("productId") Integer productId);
 
     /**
-     * Select all products from the product table that belong to specific user's rows of shopping_list table
+     * Select all products from the product table that
+     * belong to specific user's rows of shopping_list table.
      *
      * @param userId unique user's identifier
      * @return list of all product items that belong to specific user
      */
     @Select("SELECT id, name, shopping_list.user_id, is_enabled FROM product RIGHT JOIN "
-            + "shopping_list ON product.id = shopping_list.product_id WHERE shopping_list.user_id = #{userId} " +
-            "AND is_enabled = 1")
+            + "shopping_list ON product.id = shopping_list.product_id WHERE shopping_list.user_id = #{userId} "
+            + "AND is_enabled = 1")
     @Results(value = {
             @Result(property = "id", column = "id"),
             @Result(property = "isEnabled", column = "is_enabled"),
             @Result(property = "stores", column = "id", javaType = List.class,
-                    many = @Many(select = "com.softserve.if072.restservice.dao.mybatisdao.ProductDAO." +
-                            "getStoresByProductId"))
+                    many = @Many(select = "com.softserve.if072.restservice.dao.mybatisdao.ProductDAO."
+                            + "getStoresByProductId"))
 
     })
     List<Product> getProductsByUserId(int userId);
 
     /**
-     * Select record from the shopping_list table that belong to specific user and product
+     * Select record from the shopping_list table
+     * that belong to specific user and product.
      *
      * @param shoppingList the object being inspected
      * @return ShoppingList item that belong to specific product
@@ -113,7 +118,7 @@ public interface ShoppingListDAO extends DAO<ShoppingList> {
     ShoppingList getByClass(ShoppingList shoppingList);
 
     /**
-     * Insert new record into the shopping_list table
+     * Insert new record into the shopping_list table.
      *
      * @param shoppingList item to be inserted to the shopping_list table
      */
@@ -132,7 +137,7 @@ public interface ShoppingListDAO extends DAO<ShoppingList> {
     void update(ShoppingList shoppingList);
 
     /**
-     * Delete current shoppingList from the shopping_list table
+     * Delete current shoppingList from the shopping_list table.
      *
      * @param shoppingList item to be deleted from the shopping_list table
      */
@@ -140,7 +145,7 @@ public interface ShoppingListDAO extends DAO<ShoppingList> {
     void delete(ShoppingList shoppingList);
 
     /**
-     * Delete shoppingList with current product from the shopping_list table
+     * Delete shoppingList with current product from the shopping_list table.
      *
      * @param productId unique product's identifier
      */

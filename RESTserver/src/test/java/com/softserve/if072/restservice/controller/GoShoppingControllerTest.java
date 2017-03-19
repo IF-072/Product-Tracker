@@ -40,7 +40,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup;
 
 /**
- * The GoShoppingControllerTest class is used to test GoShoppingController class methods
+ * The GoShoppingControllerTest class is used to test
+ * GoShoppingController class methods
  *
  * @author Roman Dyndyn
  */
@@ -78,12 +79,12 @@ public class GoShoppingControllerTest {
     }
 
     @Test
-    public void getByUserId_ShouldReturnAllUsersStores() throws Exception {
-        Store store1 = new Store();
+    public void getStores_ShouldReturnAllUsersStores() throws Exception {
+        final Store store1 = new Store();
         store1.setId(1);
         store1.setUser(user);
         store1.setProducts(Arrays.asList(product1, product2));
-        Store store2 = new Store();
+        final Store store2 = new Store();
         store2.setId(2);
         store2.setUser(user);
         store2.setProducts(Arrays.asList(product1, product3));
@@ -111,10 +112,10 @@ public class GoShoppingControllerTest {
     }
 
     @Test
-    public void getByUserId_ShouldReturnNull() throws Exception {
+    public void getStores_ShouldReturnNull() throws Exception {
         when(goShoppingService.getStoreByUserId(user.getId())).thenThrow(new DataNotFoundException());
-        MvcResult result = mockMvc.perform(get("/api/goShopping/stores/{userId}", user.getId()))
-                .andExpect(status().isOk())
+        final MvcResult result = mockMvc.perform(get("/api/goShopping/stores/{userId}", user.getId()))
+                .andExpect(status().isNotFound())
                 .andReturn();
         assertTrue(result.getResponse().getContentAsString().isEmpty());
         verify(goShoppingService).getStoreByUserId(user.getId());
@@ -123,11 +124,11 @@ public class GoShoppingControllerTest {
 
     @Test
     public void getProducts_ShouldReturnAllStoresProducts() throws Exception {
-        int storeId = 2;
-        ShoppingList shoppingList1 = new ShoppingList(user, product1, 1);
-        ShoppingList shoppingList2 = new ShoppingList(user, product2, 2);
-        ShoppingList shoppingList3 = new ShoppingList(user, product3, 3);
-        Map<String, List<ShoppingList>> map = new HashMap<>();
+        final int storeId = 2;
+        final ShoppingList shoppingList1 = new ShoppingList(user, product1, 1);
+        final ShoppingList shoppingList2 = new ShoppingList(user, product2, 2);
+        final ShoppingList shoppingList3 = new ShoppingList(user, product3, 3);
+        final Map<String, List<ShoppingList>> map = new HashMap<>();
         map.put("selected", Arrays.asList(shoppingList1, shoppingList2));
         map.put("remained", Arrays.asList(shoppingList3));
         when(goShoppingService.getProducts(user.getId(), storeId)).thenReturn(map);
@@ -165,11 +166,11 @@ public class GoShoppingControllerTest {
 
     @Test
     public void getProducts_ShouldReturnNull() throws Exception {
-        int storeId = 1;
+        final int storeId = 1;
         when(goShoppingService.getProducts(user.getId(), storeId)).thenThrow(new DataNotFoundException());
-        MvcResult result = mockMvc.perform(
+        final MvcResult result = mockMvc.perform(
                 get("/api/goShopping/{storeId}/products/{userId}", storeId, user.getId()))
-                .andExpect(status().isOk())
+                .andExpect(status().isNotFound())
                 .andReturn();
         assertTrue(result.getResponse().getContentAsString().isEmpty());
         verify(goShoppingService).getProducts(user.getId(), storeId);
@@ -178,7 +179,7 @@ public class GoShoppingControllerTest {
 
     @Test
     public void insert_ShouldReturnStatusCreated() throws Exception {
-        ObjectMapper mapper = new ObjectMapper();
+        final ObjectMapper mapper = new ObjectMapper();
         mockMvc.perform(
                 post("/api/goShopping/cart")
                         .contentType(MediaType.APPLICATION_JSON)

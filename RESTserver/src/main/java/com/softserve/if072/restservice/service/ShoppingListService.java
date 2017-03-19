@@ -13,58 +13,97 @@ import org.apache.commons.collections.CollectionUtils;
 import java.util.List;
 
 /**
- * The ShoppingListService class is used to hold business logic for working with the ShoppingList DAO
+ * The ShoppingListService class is used to hold
+ * business logic for working with the ShoppingList DAO.
  *
  * @author Roman Dyndyn
  */
 @Service
 public class ShoppingListService {
     private static final Logger LOGGER = LogManager.getLogger(ShoppingListService.class);
-    private ShoppingListDAO shoppingListDAO;
+    private final ShoppingListDAO shoppingListDAO;
 
     @Autowired
-    public ShoppingListService(ShoppingListDAO shoppingListDAO) {
+    public ShoppingListService(final ShoppingListDAO shoppingListDAO) {
         this.shoppingListDAO = shoppingListDAO;
     }
 
-    public List<ShoppingList> getByUserId(int user_id) throws DataNotFoundException {
-        List<ShoppingList> list = shoppingListDAO.getByUserID(user_id);
+    /**
+     * Make request to a Shopping List DAO for retrieving
+     * all shopping list records for current user.
+     *
+     * @param userId - current user unique identifier
+     * @return list of shopping list records
+     */
+    public List<ShoppingList> getByUserId(final int userId) {
+        final List<ShoppingList> list = shoppingListDAO.getByUserID(userId);
         if (CollectionUtils.isNotEmpty(list)) {
             return list;
         } else {
-            throw new DataNotFoundException(String.format("ShoppingLists of user with id %d not found", user_id));
+            throw new DataNotFoundException(String.format("ShoppingLists of user with id %d not found", userId));
         }
     }
 
-    public ShoppingList getByProductId(int product_id) {
-        return shoppingListDAO.getByProductId(product_id);
+    /**
+     * Make request to a Shopping List DAO for retrieving
+     * shopping list record for product.
+     *
+     * @param productId - product unique identifier
+     * @return shopping list record
+     */
+    public ShoppingList getByProductId(final int productId) {
+        return shoppingListDAO.getByProductId(productId);
     }
 
-    public ShoppingList getByUserAndProductId(int user_id, int product_id) throws DataNotFoundException {
-        ShoppingList list = shoppingListDAO.getByUserAndProductId(user_id, product_id);
-
-        return list;
+    /**
+     * Make request to a Shopping List DAO for retrieving
+     * shopping list records for product and current user.
+     *
+     * @param productId - product unique identifier
+     * @param userId    - current user unique identifier
+     * @return shopping list record
+     */
+    public ShoppingList getByUserAndProductId(final int userId, final int productId) {
+        return shoppingListDAO.getByUserAndProductId(userId, productId);
     }
 
-    public List<Product> getProductsByUserId(int user_id) throws DataNotFoundException {
-        List<Product> list = shoppingListDAO.getProductsByUserId(user_id);
+    /**
+     * Make request to a Shopping List DAO for retrieving
+     * all records of products containing in shopping list for current user.
+     *
+     * @param userId - current user unique identifier
+     * @return list of product records
+     */
+    public List<Product> getProductsByUserId(final int userId) {
+        final List<Product> list = shoppingListDAO.getProductsByUserId(userId);
         if (CollectionUtils.isNotEmpty(list)) {
             return list;
         } else {
             throw new DataNotFoundException(String.format("Product not found of user with id %d in shoppinglist",
-                    user_id));
+                    userId));
         }
     }
 
-
-    public void insert(ShoppingList shoppingList) {
-        ShoppingList list = shoppingListDAO.getByClass(shoppingList);
+    /**
+     * Make request to a Shopping List DAO for inserting
+     * shopping list record.
+     *
+     * @param shoppingList - shopping list that must be inserted
+     */
+    public void insert(final ShoppingList shoppingList) {
+        final ShoppingList list = shoppingListDAO.getByClass(shoppingList);
         if (list == null && shoppingList != null) {
             shoppingListDAO.insert(shoppingList);
         }
     }
 
-    public void update(ShoppingList shoppingList) throws IllegalArgumentException {
+    /**
+     * Make request to a Shopping List DAO for updating
+     * shopping list record.
+     *
+     * @param shoppingList - shopping list that must be updated
+     */
+    public void update(final ShoppingList shoppingList) {
         if ((shoppingList.getAmount() <= 0) || (shoppingList.getProduct() == null)
                 || (shoppingList.getUser() == null)) {
             throw new IllegalArgumentException("Incorrect fields by ShoppingList");
@@ -73,7 +112,13 @@ public class ShoppingListService {
         }
     }
 
-    public void delete(ShoppingList shoppingList) {
+    /**
+     * Make request to a Shopping List DAO for deleting
+     * shopping list record.
+     *
+     * @param shoppingList - shopping list that must be deleted
+     */
+    public void delete(final ShoppingList shoppingList) {
         if (shoppingList != null) {
             shoppingListDAO.delete(shoppingList);
         } else {
@@ -81,8 +126,15 @@ public class ShoppingListService {
         }
     }
 
-    public void delete(int productId) {
-        if (productId > 0)
+    /**
+     * Make request to a Shopping List DAO for deleting
+     * shopping list record that is related with current product.
+     *
+     * @param productId - product unique identifier
+     */
+    public void delete(final int productId) {
+        if (productId > 0) {
             shoppingListDAO.deleteByProductId(productId);
+        }
     }
 }

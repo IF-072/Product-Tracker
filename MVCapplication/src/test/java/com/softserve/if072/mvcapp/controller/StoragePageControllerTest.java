@@ -22,6 +22,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
@@ -38,7 +39,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup;
 
 /**
- * The StoragePageControllerTest class is used to test StoragePageController class methods
+ * The StoragePageControllerTest class is used to test
+ * StoragePageController class methods.
  *
  * @author Roman Dyndyn
  */
@@ -55,8 +57,9 @@ public class StoragePageControllerTest {
     private MockMvc mockMvc;
     private Storage storage;
     private User user;
-    private String productMsg = "{error.storage.product}";
-    private String amountMsg = "{error.storage.amount}";
+    private final String productMsg = "{error.storage.product}";
+    private final String amountMsg = "{error.storage.amount}";
+    private final String update = "/storage/update";
 
     @Before
     public void setup() throws ClassNotFoundException, NoSuchMethodException {
@@ -85,44 +88,44 @@ public class StoragePageControllerTest {
 
     @Test
     public void testUpdateAmount_ShouldReturnEmptyString() throws Exception {
-        String locale = "uk";
+        final String locale = "uk";
         when(userService.getCurrentUser()).thenReturn(user);
-        MvcResult result = mockMvc.perform(post("/storage/update")
+        final MvcResult result = mockMvc.perform(post(update)
                 .param("amount", "1")
                 .param("productId", "1")
                 .cookie(new Cookie("myLocaleCookie", locale)))
                 .andExpect(status().isOk())
                 .andReturn();
-        assertTrue("".equals(result.getResponse().getContentAsString()));
+        assertEquals("", result.getResponse().getContentAsString());
         verify(storagePageService).updateAmount(any());
         verify(messageService).broadcast(any(), eq(locale), anyInt(), any(), any());
     }
 
     @Test
     public void testUpdateAmount_ShouldReturnValidationProductMessage() throws Exception {
-        MvcResult result = mockMvc.perform(post("/storage/update")
+        final MvcResult result = mockMvc.perform(post(update)
                 .param("amount", "1")
                 .param("productId", "0"))
                 .andExpect(status().isOk())
                 .andReturn();
-        assertTrue(productMsg.equals(result.getResponse().getContentAsString()));
+        assertEquals(productMsg, result.getResponse().getContentAsString());
         verify(storagePageService, never()).updateAmount(any());
     }
 
     @Test
     public void testUpdateAmount_ShouldReturnValidationAmountMessage() throws Exception {
-        MvcResult result = mockMvc.perform(post("/storage/update")
+        final MvcResult result = mockMvc.perform(post(update)
                 .param("amount", "-1")
                 .param("productId", "1"))
                 .andExpect(status().isOk())
                 .andReturn();
-        assertTrue(amountMsg.equals(result.getResponse().getContentAsString()));
+        assertEquals(amountMsg, result.getResponse().getContentAsString());
         verify(storagePageService, never()).updateAmount(any());
     }
 
     @Test
     public void testUpdateAmount_ShouldReturnValidationTwoMessage() throws Exception {
-        MvcResult result = mockMvc.perform(post("/storage/update")
+        final MvcResult result = mockMvc.perform(post(update)
                 .param("amount", "-1")
                 .param("productId", "0"))
                 .andExpect(status().isOk())

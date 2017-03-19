@@ -3,7 +3,7 @@ package com.softserve.if072.common.model;
 
 /**
  * The ShoppingList class stores information about products and their amount
- * that user may buy
+ * that user may buy.
  *
  * @author Roman Dyndyn
  */
@@ -12,19 +12,20 @@ public class ShoppingList {
     private Product product;
     private int amount;
 
-    public ShoppingList(User user, Product product, int amount) {
+    public ShoppingList(final User user, final Product product, final int amount) {
         this.user = user;
         this.product = product;
         this.amount = amount;
     }
 
-    public ShoppingList(){}
+    public ShoppingList() {
+    }
 
     public User getUser() {
         return user;
     }
 
-    public void setUser(User user) {
+    public void setUser(final User user) {
         this.user = user;
     }
 
@@ -32,7 +33,7 @@ public class ShoppingList {
         return product;
     }
 
-    public void setProduct(Product product) {
+    public void setProduct(final Product product) {
         this.product = product;
     }
 
@@ -40,7 +41,7 @@ public class ShoppingList {
         return amount;
     }
 
-    public void setAmount(int amount) {
+    public void setAmount(final int amount) {
         this.amount = amount;
     }
 
