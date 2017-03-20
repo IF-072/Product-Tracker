@@ -57,7 +57,9 @@ public class UserService {
      * @param user user to have role updated
      */
     public void setPremium(User user) {
-        if (user.getRole() != null && user.getRole().isRegular()) {
+        if (user.getRole() != null
+//                && user.getRole().isRegular()
+                ) {
             user.setRole(Role.ROLE_PREMIUM);
             long premiumExpiresTime = System.currentTimeMillis() / 1000L + premiumDuration;
             user.setPremiumExpiresTime(premiumExpiresTime);
@@ -71,7 +73,9 @@ public class UserService {
      * @param user user to have premium period updated
      */
     public void prolongPremium(User user) {
-        if (user.getRole() != null && user.getRole().isPremium()) {
+        if (user.getRole() != null
+//                && user.getRole().isPremium()
+                ) {
             long premiumExpiresTime = System.currentTimeMillis() / 1000L + premiumDuration;
             user.setPremiumExpiresTime(premiumExpiresTime);
             updateUser(user);

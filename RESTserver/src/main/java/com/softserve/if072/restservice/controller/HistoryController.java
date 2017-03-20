@@ -51,7 +51,7 @@ public class HistoryController {
      *
      * @param historyId - history unique identifier
      */
-    @PreAuthorize("@historySecurityService.hasPermissionToAccess(#historyId)")
+//    @PreAuthorize("@historySecurityService.hasPermissionToAccess(#historyId)")
     @DeleteMapping("/{historyId}")
     @ResponseStatus(value = HttpStatus.OK)
     public void delete(@PathVariable int historyId) {
