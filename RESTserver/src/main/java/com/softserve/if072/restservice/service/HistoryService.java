@@ -45,7 +45,7 @@ public class HistoryService {
     @Autowired
     private HistoryRepository historyRepository;
 
-    public Page<History> getPage (Integer pageNumber) {
+    public Page<History> getPage(Integer pageNumber) {
         Pageable request =
                 new PageRequest(pageNumber - 1, PAGE_SIZE);
         return historyRepository.findAll(request);
@@ -68,13 +68,14 @@ public class HistoryService {
     /**
      * Make request to a History DAO for retrieving all history records by given search fields
      *
-     * @param userID - current user unique identifier
+     * @param userID     - current user unique identifier
      * @param searchData DTO that contains search criterias
      * @return list of cart records or empty list
      */
     public List<History> getByUserIdAndSearchParams(int userID, HistorySearchDTO searchData) {
         List<History> histories = historyDAO.searchAllByUserIdAndParams(userID, searchData.getName(),
-                searchData.getDescription(), searchData.getCategoryId(), searchData.getFromDate(), searchData.getToDate());
+                searchData.getDescription(), searchData.getCategoryId(), searchData.getFromDate(), searchData
+                        .getToDate());
         LOGGER.info(historyContainsRecords, "user", userID, histories.size());
         return histories;
     }
@@ -85,10 +86,9 @@ public class HistoryService {
      * @param historyId - history unique identifier
      */
     public void delete(int historyId) {
-//        if (historyDAOMybatis.delete(historyId) == 0) {
-//            throw new DataNotFoundException(String.format(historyNotFound, "DELETE", historyId));
-//        }
-        historyDAO.delete(historyId);
+        if (historyDAO.delete(historyId) == 0) {
+            throw new DataNotFoundException(String.format(historyNotFound, "DELETE", historyId));
+        }
         LOGGER.info(historySuccessfullyOperation, historyId, "deleted from");
     }
 
