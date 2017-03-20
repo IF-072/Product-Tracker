@@ -15,17 +15,16 @@ import org.springframework.web.client.RestTemplate;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.Assert.assertTrue;
-import static org.mockito.ArgumentMatchers.any;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 /**
- * The StoragePageServiceTest class is used to test StoragePageServiceTest class methods
+ * The StoragePageServiceTest class is used to test
+ * StoragePageServiceTest class methods.
  *
  * @author Roman Dyndyn
  */
@@ -47,33 +46,33 @@ public class StoragePageServiceTest {
 
     @Test
     public void getStorages(){
-        int userId = 2;
-        List<Storage> storages = Arrays.asList(storage, storage);
+        final int userId = 2;
+        final List<Storage> storages = Arrays.asList(storage, storage);
         when(restTemplate.getForObject(anyString(), eq(List.class))).thenReturn(storages);
 
-        assertTrue(storages.equals(storagePageService.getStorages(userId)));
+        assertEquals(storages, storagePageService.getStorages(userId));
         verify(restTemplate).getForObject(anyString(), eq(List.class));
     }
 
     @Test
     public void updateAmount(){
-        StorageDTO storageDTO = new StorageDTO();
+        final StorageDTO storageDTO = new StorageDTO();
         storagePageService.updateAmount(storageDTO);
         verify(restTemplate).put(anyString(), eq(storageDTO));
     }
 
     @Test
     public void addProductToShoppingList_ShouldInsert(){
-        User user = new User();
-        int productId = 2;
+        final User user = new User();
+        final int productId = 2;
         storagePageService.addProductToShoppingList(user, productId);
         verify(shoppingListService).addProductToShoppingList(user, productId);
     }
 
     @Test
     public void addProductToShoppingList_ShouldNotInsert(){
-        User user = new User();
-        int productId = 0;
+        final User user = new User();
+        final int productId = 0;
         storagePageService.addProductToShoppingList(user, productId);
         verify(shoppingListService, never()).addProductToShoppingList(user, productId);
     }

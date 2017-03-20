@@ -2,6 +2,7 @@
 <%@ taglib prefix="sf" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
 <%@ page isELIgnored="false" %>
+<%@ taglib prefix="ht" uri="hashtag.tld" %>
 
 <%--
   Created by Vitaliy Malisevych
@@ -19,9 +20,11 @@
     <div class="col-lg-12">
         <div class="panel panel-default">
             <div class="panel-body">
-                    <input type="button" class="btn btn-outline btn-primary"
-                           onClick="window.location.href = '/product/addProduct'"
-                           value=<spring:message code="product.addNewProductBut"/>>
+                <p>
+                        <input type="button" class="btn btn-outline btn-primary"
+                               onClick="window.location.href = '/product/addProduct'"
+                               value=<spring:message code="product.addNewProductBut"/>>
+                </p>
                     <table width="100%" class="table table-striped table-bordered table-hover" id="productData">
                         <thead>
                         <tr>
@@ -40,7 +43,7 @@
                         <c:forEach items="${products}" var="product">
                             <tr class="gradeA">
                                 <td>${product.name}</td>
-                                <td>${product.description}</td>
+                                <td><ht:hashtagResolver>${product.description}</ht:hashtagResolver></td>
                                 <td>${product.category.name}</td>
                                 <td>${product.unit.name}</td>
                                 <td id="image">

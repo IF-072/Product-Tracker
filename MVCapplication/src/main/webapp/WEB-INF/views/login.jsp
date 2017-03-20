@@ -49,7 +49,7 @@
                                 <spring:message code='password' var="passwordMessage"/>
                                 <form:input path="password" class="form-control" placeholder="${passwordMessage}" name="password" type="password" value=""/>
                             </div>
-                            <input type="submit" class="btn btn-lg btn-success btn-block" value="<spring:message code="login"/>"/>
+                            <input type="submit" class="btn btn-lg btn-success btn-block" value="<spring:message code="login"/>" id="loginbtn"/>
                         </fieldset>
                     </form:form>
                     <div style="margin-top:8px;"><a href="<c:url value="../register"/>"><spring:message code="createAccount"/></a></div>

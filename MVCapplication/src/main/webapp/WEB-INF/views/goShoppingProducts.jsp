@@ -28,6 +28,8 @@
                                        id="checkbox${loop.index}" class="checkbox">
                                 <input type="hidden" value="${shoppingList.product.stores[0].id}"
                                        name="carts[${loop.index}].store.id">
+                                <input type="hidden"name="carts[${loop.index}].store.name"
+                                       value="${shoppingList.product.stores[0].name}">
                             </td>
                             <td><input type="hidden"name="carts[${loop.index}].product.id"
                                        value="${shoppingList.product.id}"> ${shoppingList.product.name}

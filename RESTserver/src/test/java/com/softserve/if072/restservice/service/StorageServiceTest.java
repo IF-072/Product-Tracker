@@ -5,7 +5,6 @@ import com.softserve.if072.common.model.Storage;
 import com.softserve.if072.common.model.User;
 import com.softserve.if072.common.model.dto.StorageDTO;
 import com.softserve.if072.restservice.dao.mybatisdao.StorageDAO;
-import com.softserve.if072.restservice.exception.DataNotFoundException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -14,17 +13,16 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 /**
@@ -46,18 +44,16 @@ public class StorageServiceTest {
     private Storage storage;
     private StorageDTO storageDTO;
     private Storage storageDB;
-    private Product product;
     private User user;
-    private Date date;
 
     @Before
     public void setup() throws ClassNotFoundException, NoSuchMethodException {
         user = new User();
         user.setId(2);
-        product = new Product();
+        Product product = new Product();
         product.setUser(user);
         product.setId(1);
-        date = new Date(System.currentTimeMillis());
+        Timestamp date = new Timestamp(System.currentTimeMillis());
         storage = new Storage(user, product, 5, date);
         storageDB = new Storage(user, product, 4, date);
         storageDTO = new StorageDTO();
@@ -66,19 +62,19 @@ public class StorageServiceTest {
 
     @Test
     public void testGetByUserId_ShouldReturnListOfStorage() {
-        List<Storage> storages = Arrays.asList(storage, storage);
+        final List<Storage> storages = Arrays.asList(storage, storage);
         when(storageDAO.getByUserID(user.getId())).thenReturn(storages);
 
-        assertTrue(storages.equals(storageService.getByUserId(user.getId())));
+        assertEquals(storages, storageService.getByUserId(user.getId()));
         verify(storageDAO).getByUserID(user.getId());
     }
 
     @Test
     public void testGetByProductId_ShouldReturnStorage() {
-        int productId = 2;
+        final int productId = 2;
         when(storageDAO.getByProductID(productId)).thenReturn(storage);
 
-        assertTrue(storage.equals(storageService.getByProductId(productId)));
+        assertEquals(storage, storageService.getByProductId(productId));
         verify(storageDAO).getByProductID(productId);
     }
 
@@ -90,24 +86,12 @@ public class StorageServiceTest {
 
     @Test
     public void testInsertInParts() {
-        int productId = 2;
-        int userId = 2;
-        int amount = 2;
+        final int productId = 2;
+        final int userId = 2;
+        final int amount = 2;
 
         storageService.insert(userId, productId, amount);
         verify(storageDAO).insertInParts(userId, productId, amount);
-    }
-
-    @Test
-    public void testUpdate_ShouldNotInsertInShoppingList() {
-        when(storageDAO.getByProductID(storage.getProduct().getId())).thenReturn(storageDB);
-
-        storageService.update(storage);
-
-        verify(storageDAO).getByProductID(storage.getProduct().getId());
-        verify(storageDAO).update(storage);
-        verify(historyService, never()).insert(any());
-        verify(shoppingListService, never()).insert(any());
     }
 
     @Test
@@ -130,17 +114,6 @@ public class StorageServiceTest {
 
         storageService.update(storage);
         verifyZeroInteractions(storageDAO);
-        verify(historyService, never()).insert(any());
-        verify(shoppingListService, never()).insert(any());
-    }
-
-    @Test
-    public void testUpdateWithDto_ShouldNotInsertInShoppingList() {
-        when(storageDAO.getByProductID(anyInt())).thenReturn(storageDB);
-        storageService.update(storageDTO);
-
-        verify(storageDAO).getByProductID(storageDTO.getProductId());
-        verify(storageDAO).updateAmount(storageDB);
         verify(historyService, never()).insert(any());
         verify(shoppingListService, never()).insert(any());
     }

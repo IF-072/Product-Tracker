@@ -4,6 +4,7 @@ import com.softserve.if072.common.model.User;
 import com.softserve.if072.restservice.dao.mybatisdao.UserDAO;
 import com.softserve.if072.restservice.security.authentication.CustomAuthenticationToken;
 import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.joda.time.DateTime;
@@ -12,7 +13,6 @@ import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import javax.xml.bind.annotation.adapters.HexBinaryAdapter;
-import java.security.MessageDigest;
 
 import static org.apache.commons.codec.binary.StringUtils.getBytesUtf8;
 import static org.apache.commons.lang3.StringUtils.isBlank;
@@ -30,21 +30,21 @@ public class TokenService {
 
     private final String SECURITY_KEY;
     private final String TOKEN_DELIMITER;
+    private final String MESSAGE_DIGEST_ALGORITHM;
     private final int TOKEN_VALIDITY_TIME;
 
     private Environment environment;
     private UserDAO userDAO;
-    private MessageDigest messageDigest;
     private HexBinaryAdapter hexBinaryAdapter;
 
     @Autowired
-    public TokenService(Environment environment, UserDAO userDAO, MessageDigest messageDigest, HexBinaryAdapter adapter) {
+    public TokenService(Environment environment, UserDAO userDAO, HexBinaryAdapter adapter) {
         this.environment = environment;
         this.userDAO = userDAO;
-        this.messageDigest = messageDigest;
         this.hexBinaryAdapter = adapter;
         this.SECURITY_KEY = environment.getProperty("security.tokenEncryptionKey");
         this.TOKEN_DELIMITER = environment.getProperty("security.tokenDelimiter");
+        this.MESSAGE_DIGEST_ALGORITHM = environment.getProperty("security.messageDigestAlgorithm");
         this.TOKEN_VALIDITY_TIME = Integer.parseInt(environment.getProperty("security.tokenValidityTimeInSeconds"));
     }
 
@@ -150,15 +150,13 @@ public class TokenService {
      */
     private String buildToken(String username, long expirationDate) {
         String tokenConfirmationKey = buildTokenConfirmationKey(username, expirationDate);
-        String token = new StringBuilder()
+        return new StringBuilder()
                 .append(username)
                 .append(TOKEN_DELIMITER)
                 .append(expirationDate)
                 .append(TOKEN_DELIMITER)
                 .append(tokenConfirmationKey)
                 .toString();
-
-        return token;
     }
 
     /**
@@ -174,6 +172,6 @@ public class TokenService {
                 .append(SECURITY_KEY)
                 .toString();
 
-        return hexBinaryAdapter.marshal(messageDigest.digest(getBytesUtf8(token)));
+        return hexBinaryAdapter.marshal(DigestUtils.getDigest(MESSAGE_DIGEST_ALGORITHM).digest(getBytesUtf8(token)));
     }
 }

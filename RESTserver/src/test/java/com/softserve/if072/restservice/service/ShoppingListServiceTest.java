@@ -15,16 +15,16 @@ import org.mockito.junit.MockitoJUnitRunner;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 /**
- * The ShoppingListServiceTest class is used to test ShoppingListService class methods
+ * The ShoppingListServiceTest class is used to test
+ * ShoppingListService class methods
  *
  * @author Roman Dyndyn
  */
@@ -53,10 +53,10 @@ public class ShoppingListServiceTest {
 
     @Test
     public void testGetByUserId_ShouldReturnListOfShoppingList() {
-        List<ShoppingList> shoppingLists = Arrays.asList(shoppingList, shoppingList);
+        final List<ShoppingList> shoppingLists = Arrays.asList(shoppingList, shoppingList);
         when(shoppingListDAO.getByUserID(userId)).thenReturn(shoppingLists);
 
-        assertTrue(shoppingLists.equals(shoppingListService.getByUserId(userId)));
+        assertEquals(shoppingLists, shoppingListService.getByUserId(userId));
         verify(shoppingListDAO).getByUserID(userId);
     }
 
@@ -69,28 +69,28 @@ public class ShoppingListServiceTest {
 
     @Test
     public void testGetByProductId_ShouldReturnShoppingList() {
-        int productId = 2;
+        final int productId = 2;
         when(shoppingListDAO.getByProductId(productId)).thenReturn(shoppingList);
 
-        assertTrue(shoppingList.equals(shoppingListDAO.getByProductId(productId)));
+        assertEquals(shoppingList, shoppingListDAO.getByProductId(productId));
         verify(shoppingListDAO).getByProductId(productId);
     }
 
     @Test
     public void testGetByUserAndProductId_ShouldReturnShoppingList() {
-        int productId = 2;
+        final int productId = 2;
         when(shoppingListDAO.getByUserAndProductId(userId, productId)).thenReturn(shoppingList);
 
-        assertTrue(shoppingList.equals(shoppingListDAO.getByUserAndProductId(userId, productId)));
+        assertEquals(shoppingList, shoppingListDAO.getByUserAndProductId(userId, productId));
         verify(shoppingListDAO).getByUserAndProductId(userId, productId);
     }
 
     @Test
     public void testGetProductsByUserId_ShouldReturnListOfProducts() {
-        List<Product> products = Arrays.asList(product, product);
+        final List<Product> products = Arrays.asList(product, product);
         when(shoppingListDAO.getProductsByUserId(userId)).thenReturn(products);
 
-        assertTrue(products.equals(shoppingListService.getProductsByUserId(userId)));
+        assertEquals(products, shoppingListService.getProductsByUserId(userId));
         verify(shoppingListDAO).getProductsByUserId(userId);
     }
 
@@ -142,14 +142,14 @@ public class ShoppingListServiceTest {
 
     @Test
     public void testDeleteByProductId() {
-        int productId = 2;
+        final int productId = 2;
         shoppingListService.delete(productId);
         verify(shoppingListDAO).deleteByProductId(productId);
     }
 
     @Test
     public void testDeleteByProductId_ShouldNotBeExecuted() {
-        int productId = -1;
+        final int productId = -1;
         shoppingListService.delete(productId);
         verify(shoppingListDAO, never()).deleteByProductId(anyInt());
     }

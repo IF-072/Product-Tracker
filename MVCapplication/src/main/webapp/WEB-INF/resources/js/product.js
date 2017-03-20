@@ -32,7 +32,10 @@ $(document).ready(function() {
                 "previous":   $('#previous').text()
             },
             "search": $('#search').text()
-        }
+        },
+        "columnDefs": [
+            { "orderable": false, "targets": [4, 5, 6, 7, 8] }
+        ]
     });
     $( "#dialog" ).dialog({
         autoOpen: false

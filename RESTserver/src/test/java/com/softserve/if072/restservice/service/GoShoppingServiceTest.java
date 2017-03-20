@@ -4,7 +4,6 @@ import com.softserve.if072.common.model.Cart;
 import com.softserve.if072.common.model.Product;
 import com.softserve.if072.common.model.ShoppingList;
 import com.softserve.if072.common.model.Store;
-import com.softserve.if072.common.model.User;
 import com.softserve.if072.restservice.dao.mybatisdao.CartDAO;
 import com.softserve.if072.restservice.dao.mybatisdao.ShoppingListDAO;
 import com.softserve.if072.restservice.dao.mybatisdao.StoreDAO;
@@ -21,8 +20,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
@@ -52,10 +51,10 @@ public class GoShoppingServiceTest {
     private int userId;
 
     @Before
-    public void setup(){
+    public void setup() {
         arr = new Product[]{new Product(), new Product(), new Product(), new Product()};
         int i = 1;
-        for (Product product : arr) {
+        for (final Product product : arr) {
             product.setId(i++);
             product.setName(Integer.toString(i));
         }
@@ -65,19 +64,19 @@ public class GoShoppingServiceTest {
     }
 
     @Test
-    public void testGetStoreByUserId(){
-        Store store1 = new Store();
+    public void testGetStoreByUserId() {
+        final Store store1 = new Store();
         store1.setProducts(new ArrayList<>(Arrays.asList(arr[0], arr[1])));
-        Store store2 = new Store();
+        final Store store2 = new Store();
         store2.setProducts(new ArrayList<>(Arrays.asList(arr[2], arr[3])));
 
         when(cartDAO.getByUserId(userId)).thenReturn(null);
         when(shoppingListDAO.getProductsByUserId(userId)).thenReturn(products);
         when(storeDAO.getAllByUser(userId)).thenReturn(new ArrayList<>(Arrays.asList(store1, store2)));
 
-        List<Store> result = goShoppingService.getStoreByUserId(userId);
-        assertTrue(new ArrayList<Product>(Arrays.asList(arr[0], arr[1])).equals(result.get(0).getProducts()));
-        assertTrue(new ArrayList<Product>(Arrays.asList(arr[2])).equals(result.get(1).getProducts()));
+        final List<Store> result = goShoppingService.getStoreByUserId(userId);
+        assertEquals(new ArrayList<>(Arrays.asList(arr[0], arr[1])), (result.get(0).getProducts()));
+        assertEquals(new ArrayList<>(Arrays.asList(arr[2])), result.get(1).getProducts());
 
         verify(cartDAO).getByUserId(userId);
         verify(shoppingListDAO).getProductsByUserId(userId);
@@ -85,7 +84,7 @@ public class GoShoppingServiceTest {
     }
 
     @Test
-    public void testGetStoreByUserId_ShouldReturnNull(){
+    public void testGetStoreByUserId_ShouldReturnNull() {
         when(cartDAO.getByUserId(userId)).thenReturn(null);
         when(shoppingListDAO.getProductsByUserId(userId)).thenReturn(null);
 
@@ -97,8 +96,8 @@ public class GoShoppingServiceTest {
     }
 
     @Test(expected = DataNotFoundException.class)
-    public void testGetStoreByUserId_ShouldThrowException(){
-        int userId = 2;
+    public void testGetStoreByUserId_ShouldThrowException() {
+        final int userId = 2;
         when(cartDAO.getByUserId(userId)).thenReturn(null);
         when(shoppingListDAO.getProductsByUserId(userId)).thenReturn(products);
         when(storeDAO.getAllByUser(userId)).thenReturn(null);
@@ -111,27 +110,26 @@ public class GoShoppingServiceTest {
     }
 
     @Test
-    public void testGetProducts(){
-        int userId = 2;
-        int storeId = 3;
-        ShoppingList[] args = {
+    public void testGetProducts() {
+        final int userId = 2;
+        final int storeId = 3;
+        final ShoppingList[] args = {
                 new ShoppingList(null, arr[0], 1),
                 new ShoppingList(null, arr[1], 1),
                 new ShoppingList(null, arr[2], 1),
                 new ShoppingList(null, arr[3], 1)
         };
-        List<ShoppingList> selected = new ArrayList<>(Arrays.asList(args[0], args[1], args[2]));
-        List<ShoppingList> shoppingLists = new ArrayList<>(selected);
+        final List<ShoppingList> selected = new ArrayList<>(Arrays.asList(args[0], args[1], args[2]));
+        final List<ShoppingList> shoppingLists = new ArrayList<>(selected);
         shoppingLists.add(args[3]);
 
         when(shoppingListDAO.getByUserID(userId)).thenReturn(shoppingLists);
         when(storeDAO.getProductsByStoreId(storeId, userId)).thenReturn(products);
         when(storeDAO.getByID(storeId)).thenReturn(store);
 
-        Map<String ,List<ShoppingList>> result = goShoppingService.getProducts(userId, storeId);
-        assertTrue(selected.equals(result.get("selected")));
-        assertTrue(new ArrayList<>(Arrays.asList(args[3]))
-                .equals(result.get("remained")));
+        final Map<String, List<ShoppingList>> result = goShoppingService.getProducts(userId, storeId);
+        assertEquals(selected, result.get("selected"));
+        assertEquals(new ArrayList<>(Arrays.asList(args[3])), result.get("remained"));
 
         verify(shoppingListDAO).getByUserID(userId);
         verify(storeDAO).getByID(storeId);
@@ -139,8 +137,8 @@ public class GoShoppingServiceTest {
     }
 
     @Test(expected = DataNotFoundException.class)
-    public void testGetProducts_ShouldThrowException(){
-        int storeId = 3;
+    public void testGetProducts_ShouldThrowException() {
+        final int storeId = 3;
 
         when(storeDAO.getProductsByStoreId(storeId, userId)).thenReturn(null);
         goShoppingService.getProducts(userId, storeId);
@@ -151,7 +149,7 @@ public class GoShoppingServiceTest {
     }
 
     @Test
-    public void testInsertCart(){
+    public void testInsertCart() {
         goShoppingService.insertCart(Arrays.asList(mock(Cart.class), mock(Cart.class), mock(Cart.class)));
         verify(cartDAO, times(3)).insert(any());
     }

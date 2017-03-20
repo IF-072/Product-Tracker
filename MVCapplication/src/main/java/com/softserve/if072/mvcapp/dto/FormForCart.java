@@ -9,7 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * The FormForCart class is used to hold information from form in goShoppingProducts.jsp
+ * The FormForCart class is used to hold information
+ * from form in goShoppingProducts.jsp.
  *
  * @author Roman Dyndyn
  */
@@ -22,10 +23,10 @@ public class FormForCart {
         checkbox = new ArrayList<Integer>();
     }
 
-    public FormForCart(int size) {
+    public FormForCart(final int size) {
         carts = new ArrayList<Cart>();
         for (int i = 0; i < size; i++) {
-            Cart cart = new Cart();
+            final Cart cart = new Cart();
             cart.setProduct(new Product());
             cart.setStore(new Store());
             carts.add(cart);
@@ -41,7 +42,7 @@ public class FormForCart {
         return checkbox;
     }
 
-    public void setCheckbox(List<Integer> checkbox) {
+    public void setCheckbox(final List<Integer> checkbox) {
         this.checkbox = checkbox;
     }
 
@@ -49,40 +50,48 @@ public class FormForCart {
         return carts;
     }
 
-    public void setCarts(List<Cart> carts) {
+    public void setCarts(final List<Cart> carts) {
         this.carts = carts;
     }
 
-    public void setUser(User user) {
-        for (Cart cart : carts) {
+    public void setUser(final User user) {
+        for (final Cart cart : carts) {
             cart.setUser(user);
         }
     }
 
     public int getUserId() {
         if (carts.get(0) != null && carts.get(0).getUser() != null) {
-            carts.get(0).getUser().getId();
+            return carts.get(0).getUser().getId();
         }
         return -1;
     }
 
+    public String getStoreName() {
+        if (carts.get(0) != null && carts.get(0).getStore() != null) {
+            return carts.get(0).getStore().getName();
+        }
+        return "store";
+    }
+
     public void removeUncheked() {
-        List<Cart> list = new ArrayList<Cart>();
+        final List<Cart> list = new ArrayList<Cart>();
         for (Integer i : checkbox) {
-            if (i != null)
+            if (i != null) {
                 list.add(carts.get(i));
+            }
         }
         setCarts(list);
     }
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
+        final StringBuilder sb = new StringBuilder(60);
         sb.append("FormForCart{");
         for (Cart cart : carts) {
-            sb.append("Cart{productId=" + cart.getProduct().getId());
-            sb.append(", storeId=" + cart.getStore().getId());
-            sb.append(", amount=" + cart.getAmount() + "}");
+            sb.append("Cart{productId=").append(cart.getProduct().getId())
+                    .append(", storeId=").append(cart.getStore().getId())
+                    .append(", amount=").append(cart.getAmount()).append("}");
         }
         return sb.append(", checkbox=" + checkbox +
                 '}').toString();
