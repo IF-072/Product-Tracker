@@ -3,7 +3,7 @@ package com.softserve.if072.restservice.service;
 import com.softserve.if072.common.model.Action;
 import com.softserve.if072.common.model.History;
 import com.softserve.if072.common.model.dto.HistoryDTO;
-import com.softserve.if072.restservice.dao.mybatisdao.HistoryDAOMybatis;
+import com.softserve.if072.restservice.dao.mybatisdao.HistoryDAO;
 import com.softserve.if072.restservice.test.utils.HistoryBuilder;
 import org.apache.commons.collections.CollectionUtils;
 import org.junit.Before;
@@ -41,11 +41,11 @@ public class HistoryServiceTest {
     private static final int HISTORY_ID = 32;
     HistoryService historyService;
     @Mock
-    HistoryDAOMybatis historyDAOMybatis;
+    HistoryDAO historyDAO;
 
     @Before
     public void setup() {
-        historyService = new HistoryService(historyDAOMybatis);
+        historyService = new HistoryService(historyDAO);
     }
 
     @Test
@@ -54,46 +54,46 @@ public class HistoryServiceTest {
         History history2 = HistoryBuilder.getDefaultHistory(SECOND_HISTORY_ITEM_ID, CURRENT_USER_ID);
         List<History> histories = Arrays.asList(history1, history2);
 
-        when(historyDAOMybatis.getByUserId(CURRENT_USER_ID)).thenReturn(histories);
+        when(historyDAO.getByUserId(CURRENT_USER_ID)).thenReturn(histories);
 
         List<History> actualHistories = historyService.getByUserId(CURRENT_USER_ID);
 
         assertEquals(2, actualHistories.size());
         assertEquals(String.format("user%d", CURRENT_USER_ID), actualHistories.get(0).getUser().getName());
         assertEquals(String.format("product%d", SECOND_HISTORY_ITEM_ID), actualHistories.get(1).getProduct().getName());
-        verify(historyDAOMybatis).getByUserId(CURRENT_USER_ID);
-        verifyZeroInteractions(historyDAOMybatis);
+        verify(historyDAO).getByUserId(CURRENT_USER_ID);
+        verifyZeroInteractions(historyDAO);
     }
 
     @Test
     public void getByUserId_UserIdGiven_ShouldReturnEmptyList() throws Exception {
-        when(historyDAOMybatis.getByUserId(CURRENT_USER_ID)).thenReturn(Collections.emptyList());
+        when(historyDAO.getByUserId(CURRENT_USER_ID)).thenReturn(Collections.emptyList());
 
         List<History> actualHistories = historyService.getByUserId(CURRENT_USER_ID);
 
         assertTrue(CollectionUtils.isEmpty(actualHistories));
-        verify(historyDAOMybatis).getByUserId(CURRENT_USER_ID);
-        verifyZeroInteractions(historyDAOMybatis);
+        verify(historyDAO).getByUserId(CURRENT_USER_ID);
+        verifyZeroInteractions(historyDAO);
     }
 
     @Test
     public void delete_HistoryIdGiven_ShouldExecuteHistoryDAODeleteExactlyOnce() throws Exception {
-        when(historyDAOMybatis.delete(HISTORY_ID)).thenReturn(1);
+        when(historyDAO.delete(HISTORY_ID)).thenReturn(1);
 
         historyService.delete(HISTORY_ID);
 
-        verify(historyDAOMybatis).delete(HISTORY_ID);
-        verifyZeroInteractions(historyDAOMybatis);
+        verify(historyDAO).delete(HISTORY_ID);
+        verifyZeroInteractions(historyDAO);
     }
 
     @Test
     public void deleteAll_UserIdGiven_ShouldExecuteHistoryDAODeleteAllExactlyOnce() throws Exception {
-        when(historyDAOMybatis.deleteAll(CURRENT_USER_ID)).thenReturn(1);
+        when(historyDAO.deleteAll(CURRENT_USER_ID)).thenReturn(1);
 
         historyService.deleteAll(CURRENT_USER_ID);
 
-        verify(historyDAOMybatis).deleteAll(CURRENT_USER_ID);
-        verifyZeroInteractions(historyDAOMybatis);
+        verify(historyDAO).deleteAll(CURRENT_USER_ID);
+        verifyZeroInteractions(historyDAO);
     }
 
     @Test
@@ -104,7 +104,7 @@ public class HistoryServiceTest {
                 , SECOND_HISTORY_ITEM_AMOUNT, SECOND_HISTORY_ITEM_USEDDATE, Action.PURCHASED);
         List<History> histories = Arrays.asList(history1, history2);
 
-        when(historyDAOMybatis.getByProductId(CURRENT_USER_ID, PRODUCT_ID)).thenReturn(histories);
+        when(historyDAO.getByProductId(CURRENT_USER_ID, PRODUCT_ID)).thenReturn(histories);
 
         List<History> actualHistories = historyService.getByProductId(CURRENT_USER_ID, PRODUCT_ID);
 
@@ -119,19 +119,19 @@ public class HistoryServiceTest {
         assertEquals(SECOND_HISTORY_ITEM_AMOUNT, actualHistories.get(1).getAmount());
         assertEquals(SECOND_HISTORY_ITEM_USEDDATE, actualHistories.get(1).getUsedDate());
         assertEquals(Action.PURCHASED, actualHistories.get(1).getAction());
-        verify(historyDAOMybatis).getByProductId(CURRENT_USER_ID, PRODUCT_ID);
-        verifyZeroInteractions(historyDAOMybatis);
+        verify(historyDAO).getByProductId(CURRENT_USER_ID, PRODUCT_ID);
+        verifyZeroInteractions(historyDAO);
     }
 
     @Test
     public void getByProductId_ProductIdGiven_ShouldReturnEmptyUsersHistory() throws Exception {
-        when(historyDAOMybatis.getByProductId(CURRENT_USER_ID, PRODUCT_ID)).thenReturn(Collections.emptyList());
+        when(historyDAO.getByProductId(CURRENT_USER_ID, PRODUCT_ID)).thenReturn(Collections.emptyList());
 
         List<History> actualHistories = historyService.getByProductId(CURRENT_USER_ID, PRODUCT_ID);
 
         assertTrue(CollectionUtils.isEmpty(actualHistories));
-        verify(historyDAOMybatis).getByProductId(CURRENT_USER_ID, PRODUCT_ID);
-        verifyZeroInteractions(historyDAOMybatis);
+        verify(historyDAO).getByProductId(CURRENT_USER_ID, PRODUCT_ID);
+        verifyZeroInteractions(historyDAO);
     }
 
     @Test
@@ -141,8 +141,8 @@ public class HistoryServiceTest {
 
         historyService.insert(historyDTO);
 
-        verify(historyDAOMybatis).insert(historyDTO);
-        verifyZeroInteractions(historyDAOMybatis);
+        verify(historyDAO).insert(historyDTO);
+        verifyZeroInteractions(historyDAO);
     }
 
     @Test
@@ -150,11 +150,11 @@ public class HistoryServiceTest {
         HistoryDTO historyDTO = new HistoryDTO(HISTORY_ID, CURRENT_USER_ID, PRODUCT_ID, FIRST_HISTORY_ITEM_AMOUNT
                 , FIRST_HISTORY_ITEM_USEDDATE, Action.PURCHASED);
 
-       when(historyDAOMybatis.update(historyDTO)).thenReturn(1);
+       when(historyDAO.update(historyDTO)).thenReturn(1);
 
         historyService.update(historyDTO);
 
-        verify(historyDAOMybatis).update(historyDTO);
-        verifyZeroInteractions(historyDAOMybatis);
+        verify(historyDAO).update(historyDTO);
+        verifyZeroInteractions(historyDAO);
     }
 }
