@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -45,7 +46,7 @@ public class HistoryService {
     private HistoryRepository historyRepository;
 
     public Page<History> getPage (Integer pageNumber) {
-        PageRequest request =
+        Pageable request =
                 new PageRequest(pageNumber - 1, PAGE_SIZE);
         return historyRepository.findAll(request);
     }
@@ -60,6 +61,7 @@ public class HistoryService {
         List<History> histories = historyDAO.getByUserId(userID);
         LOGGER.info(historyContainsRecords, "user", userID, histories.size());
 
+        System.out.println(getPage(1).toString());
         return histories;
     }
 

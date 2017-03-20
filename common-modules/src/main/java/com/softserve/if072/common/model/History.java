@@ -2,6 +2,8 @@ package com.softserve.if072.common.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -31,8 +33,7 @@ public class History {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToOne
-//            (fetch = FetchType.LAZY)
+    @ManyToOne (fetch = FetchType.EAGER)
     @JoinColumn(name = "product_id")
     private Product product;
 
@@ -42,7 +43,7 @@ public class History {
     @Column(name = "used_date")
     private Timestamp usedDate;
 
-    @Column(name = "action")
+    @Enumerated(EnumType.STRING)
     private Action action;
 
     public History() {

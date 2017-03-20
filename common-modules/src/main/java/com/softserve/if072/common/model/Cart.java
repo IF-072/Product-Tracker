@@ -38,11 +38,11 @@ public class Cart implements Serializable {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToOne
+    @OneToOne (fetch = FetchType.LAZY)
     @JoinColumn(name = "store_id")
     private Store store;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "product_id")
     private Product product;
 

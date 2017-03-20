@@ -50,7 +50,7 @@ public class Store {
     @Column(name = "is_enabled")
     private boolean isEnabled;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(name="stores_products",
             joinColumns = @JoinColumn(name="store_id"),
             inverseJoinColumns = @JoinColumn(name="product_id"))
