@@ -60,12 +60,12 @@ public class StorageControllerTest {
         user = new User();
         user.setName("Roman");
         user.setId(2);
-        Product product = new Product();
+        final Product product = new Product();
         product.setId(1);
         product.setName("Product1");
         storage1 = new Storage(user, product, 5, new Timestamp(System.currentTimeMillis()));
 
-        Product product2 = new Product();
+        final Product product2 = new Product();
         product2.setId(2);
         product2.setName("Product2");
         storage2 = new Storage(user, product2, 3, new Timestamp(System.currentTimeMillis()));
@@ -109,7 +109,7 @@ public class StorageControllerTest {
 
     @Test
     public void insert_ShouldReturnStatusCreated() throws Exception {
-        ObjectMapper mapper = new ObjectMapper();
+        final ObjectMapper mapper = new ObjectMapper();
         mockMvc.perform(
                 post("/api/storage/")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -121,7 +121,7 @@ public class StorageControllerTest {
 
     @Test
     public void update_ShouldReturnStatusOk() throws Exception {
-        ObjectMapper mapper = new ObjectMapper();
+        final ObjectMapper mapper = new ObjectMapper();
         mockMvc.perform(
                 put("/api/storage/")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -133,7 +133,7 @@ public class StorageControllerTest {
 
     @Test
     public void updateByDTO_ShouldReturnStatusOk() throws Exception {
-        ObjectMapper mapper = new ObjectMapper();
+        final ObjectMapper mapper = new ObjectMapper();
         mockMvc.perform(
                 put("/api/storage/dto")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -145,7 +145,7 @@ public class StorageControllerTest {
 
     @Test
     public void delete_ShouldReturnStatusOk() throws Exception {
-        ObjectMapper mapper = new ObjectMapper();
+        final ObjectMapper mapper = new ObjectMapper();
         mockMvc.perform(
                 delete("/api/storage/")
                         .contentType(MediaType.APPLICATION_JSON)

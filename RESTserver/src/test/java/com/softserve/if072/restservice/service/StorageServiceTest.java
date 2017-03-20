@@ -17,7 +17,7 @@ import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.never;
@@ -44,18 +44,16 @@ public class StorageServiceTest {
     private Storage storage;
     private StorageDTO storageDTO;
     private Storage storageDB;
-    private Product product;
     private User user;
-    private Timestamp date;
 
     @Before
     public void setup() throws ClassNotFoundException, NoSuchMethodException {
         user = new User();
         user.setId(2);
-        product = new Product();
+        Product product = new Product();
         product.setUser(user);
         product.setId(1);
-        date = new Timestamp(System.currentTimeMillis());
+        Timestamp date = new Timestamp(System.currentTimeMillis());
         storage = new Storage(user, product, 5, date);
         storageDB = new Storage(user, product, 4, date);
         storageDTO = new StorageDTO();
@@ -64,19 +62,19 @@ public class StorageServiceTest {
 
     @Test
     public void testGetByUserId_ShouldReturnListOfStorage() {
-        List<Storage> storages = Arrays.asList(storage, storage);
+        final List<Storage> storages = Arrays.asList(storage, storage);
         when(storageDAO.getByUserID(user.getId())).thenReturn(storages);
 
-        assertTrue(storages.equals(storageService.getByUserId(user.getId())));
+        assertEquals(storages, storageService.getByUserId(user.getId()));
         verify(storageDAO).getByUserID(user.getId());
     }
 
     @Test
     public void testGetByProductId_ShouldReturnStorage() {
-        int productId = 2;
+        final int productId = 2;
         when(storageDAO.getByProductID(productId)).thenReturn(storage);
 
-        assertTrue(storage.equals(storageService.getByProductId(productId)));
+        assertEquals(storage, storageService.getByProductId(productId));
         verify(storageDAO).getByProductID(productId);
     }
 
@@ -88,9 +86,9 @@ public class StorageServiceTest {
 
     @Test
     public void testInsertInParts() {
-        int productId = 2;
-        int userId = 2;
-        int amount = 2;
+        final int productId = 2;
+        final int userId = 2;
+        final int amount = 2;
 
         storageService.insert(userId, productId, amount);
         verify(storageDAO).insertInParts(userId, productId, amount);

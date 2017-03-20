@@ -2,6 +2,7 @@ package com.softserve.if072.restservice.controller;
 
 import com.softserve.if072.common.model.History;
 import com.softserve.if072.common.model.dto.HistoryDTO;
+import com.softserve.if072.common.model.dto.HistorySearchDTO;
 import com.softserve.if072.restservice.service.HistoryService;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.http.HttpStatus;
@@ -44,6 +45,20 @@ public class HistoryController {
     @ResponseStatus(HttpStatus.OK)
     public List<History> getByUserId(@PathVariable int userId) {
         return historyService.getByUserId(userId);
+    }
+
+    /**
+     * Handles requests for search history records by given criterias
+     *
+     * @param userId - current user unique identifier
+     * @param searchData DTO that contains search params
+     * @return list of found cart records or empty list
+     */
+    @PreAuthorize("#userId == authentication.user.id")
+    @PostMapping("/search")
+    @ResponseStatus(HttpStatus.OK)
+    public List<History> postSearchForm(@PathVariable("userId") int userId, @RequestBody HistorySearchDTO searchData) {
+        return historyService.getByUserIdAndSearchParams(userId, searchData);
     }
 
     /**

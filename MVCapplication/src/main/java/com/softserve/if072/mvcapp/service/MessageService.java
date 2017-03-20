@@ -9,20 +9,34 @@ import org.springframework.stereotype.Service;
 import java.util.Date;
 import java.util.Locale;
 
+/**
+ * The MessageService class is used to send messages to user.
+ *
+ * @author Roman Dyndyn
+ */
 @Service
 public class MessageService {
-    private SimpMessagingTemplate messaging;
-    private MessageSource messageSource;
+    private final SimpMessagingTemplate messaging;
+    private final MessageSource messageSource;
 
     @Autowired
-    public MessageService(SimpMessagingTemplate messaging, MessageSource messageSource) {
+    public MessageService(final SimpMessagingTemplate messaging, final MessageSource messageSource) {
         this.messaging = messaging;
         this.messageSource = messageSource;
     }
 
-    public void broadcast(String code, String locale, int user, Object... args) {
+    /**
+     * Sends message to user.
+     *
+     * @param code - the code to lookup up in messageSource
+     * @param locale - the locale in which to do the lookup
+     * @param user - current user unique identifier
+     * @param args - an array of arguments that will be filled in
+     *             for params within the message, or null if none.
+     */
+    public void broadcast(final String code, String locale, final int user, final Object... args) {
         locale = locale == null ? "en" : locale;
-        String msg = messageSource.getMessage(code, args, new Locale(locale));
+        final String msg = messageSource.getMessage(code, args, new Locale(locale));
         messaging.convertAndSend("/queue/notifications/" + user,
                 new Message(msg, new Date()));
     }
