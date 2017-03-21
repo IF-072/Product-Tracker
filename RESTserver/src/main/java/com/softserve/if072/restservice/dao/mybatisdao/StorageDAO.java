@@ -19,7 +19,7 @@ import java.util.List;
 
 /**
  * The StorageDAO interface is used to configure
- * mapped SQL statements for Storage class
+ * mapped SQL statements for Storage class.
  *
  * @author Roman Dyndyn
  */
@@ -27,25 +27,25 @@ import java.util.List;
 public interface StorageDAO extends DAO<Storage> {
 
     /**
-     * Select all records from the storage table that belong to specific user
+     * Select all records from the storage table that belong to specific user.
      *
      * @param userId unique user's identifier
      * @return list of all storage items that belong to specific user
      */
-    @Select("SELECT end_date, amount, storage.user_id, product_id FROM storage LEFT JOIN product " +
-            "ON product_id=id WHERE storage.user_id = #{userId} AND is_enabled=1")
+    @Select("SELECT end_date, amount, storage.user_id, product_id FROM storage LEFT JOIN product "
+            + "ON product_id=id WHERE storage.user_id = #{userId} AND is_enabled=1")
     @Results(value = {
             @Result(property = "endDate", column = "end_date"),
             @Result(property = "amount", column = "amount"),
-            @Result(property = "user", column = "user_id", javaType=User.class,
-                    one=@One(select="com.softserve.if072.restservice.dao.mybatisdao.UserDAO.getByID")),
-            @Result(property = "product", column = "product_id", javaType=Product.class,
-                    one=@One(select="com.softserve.if072.restservice.dao.mybatisdao.ProductDAO.getByID"))
+            @Result(property = "user", column = "user_id", javaType = User.class,
+                    one = @One(select = "com.softserve.if072.restservice.dao.mybatisdao.UserDAO.getByID")),
+            @Result(property = "product", column = "product_id", javaType = Product.class,
+                    one = @One(select = "com.softserve.if072.restservice.dao.mybatisdao.ProductDAO.getByID"))
     })
     List<Storage> getByUserID(int userId);
 
     /**
-     * Select record from the storage table that belong to specific product
+     * Select record from the storage table that belong to specific product.
      *
      * @param productId unique product's identifier
      * @return storage item that belong to specific product
@@ -54,15 +54,15 @@ public interface StorageDAO extends DAO<Storage> {
     @Results(value = {
             @Result(property = "endDate", column = "end_date"),
             @Result(property = "amount", column = "amount"),
-            @Result(property = "user", column = "user_id", javaType=User.class,
-                    one=@One(select="com.softserve.if072.restservice.dao.mybatisdao.UserDAO.getByID")),
-            @Result(property = "product", column = "product_id", javaType=Product.class,
-                    one=@One(select="com.softserve.if072.restservice.dao.mybatisdao.ProductDAO.getByID"))
+            @Result(property = "user", column = "user_id", javaType = User.class,
+                    one = @One(select = "com.softserve.if072.restservice.dao.mybatisdao.UserDAO.getByID")),
+            @Result(property = "product", column = "product_id", javaType = Product.class,
+                    one = @One(select = "com.softserve.if072.restservice.dao.mybatisdao.ProductDAO.getByID"))
     })
     Storage getByProductID(int productId);
 
     /**
-     * Insert new record into the storage table
+     * Insert new record into the storage table.
      *
      * @param storage item to be inserted to the storage table
      */
@@ -72,11 +72,11 @@ public interface StorageDAO extends DAO<Storage> {
     void insert(Storage storage);
 
     /**
-     * Insert new record into the storage table
+     * Insert new record into the storage table.
      *
-     * @param userId unique user's identifier
+     * @param userId    unique user's identifier
      * @param productId unique product's identifier
-     * @param amount amount of product in storage
+     * @param amount    amount of product in storage
      */
     @Insert("INSERT INTO storage (user_id, product_id, amount) VALUES (#{userId}, #{productId}, #{amount})")
     @Options(useGeneratedKeys = true)
@@ -100,10 +100,10 @@ public interface StorageDAO extends DAO<Storage> {
     void updateAmount(Storage storage);
 
     /**
-     * Delete current storage from the storage table
+     * Delete current storage from the storage table.
      *
      * @param storage item to be deleted from the storage table
      */
     @Delete("DELETE FROM storage WHERE user_id=#{user.id} AND product_id=#{product.id}")
-    void delete(Storage storage) ;
+    void delete(Storage storage);
 }

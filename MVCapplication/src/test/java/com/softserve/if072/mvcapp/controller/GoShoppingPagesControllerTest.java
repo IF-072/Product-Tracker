@@ -4,6 +4,7 @@ import com.softserve.if072.common.model.ShoppingList;
 import com.softserve.if072.common.model.Store;
 import com.softserve.if072.common.model.User;
 import com.softserve.if072.mvcapp.service.GoShoppingPageService;
+import com.softserve.if072.mvcapp.service.MessageService;
 import com.softserve.if072.mvcapp.service.UserService;
 import org.junit.Before;
 import org.junit.Test;
@@ -38,7 +39,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup;
 
 /**
- * The GoShoppingPagesControllerTest class is used to test GoShoppingPagesController class methods
+ * The GoShoppingPagesControllerTest class is used to
+ * test GoShoppingPagesController class methods.
  *
  * @author Roman Dyndyn
  */
@@ -48,6 +50,8 @@ public class GoShoppingPagesControllerTest {
     private GoShoppingPageService goShoppingPageService;
     @Mock
     private UserService userService;
+    @Mock
+    private MessageService messageService;
     @InjectMocks
     private GoShoppingPagesController goShoppingPagesController;
     private MockMvc mockMvc;
@@ -67,22 +71,23 @@ public class GoShoppingPagesControllerTest {
 
     @Test
     public void getPageWithStores_ShouldReturnViewName() throws Exception {
-        List<Store> storages = Arrays.asList(store, store);
+        final String attribute = "stores";
+        final List<Store> storages = Arrays.asList(store, store);
         when(goShoppingPageService.getStores(anyInt())).thenReturn(storages);
         when(userService.getCurrentUser()).thenReturn(user);
         mockMvc.perform(get("/goShoppingStores"))
                 .andExpect(status().isOk())
                 .andExpect(forwardedUrl("/WEB-INF/views/goShoppingStores.jsp"))
                 .andExpect(view().name("goShoppingStores"))
-                .andExpect(model().attributeExists("stores"))
-                .andExpect(model().attribute("stores", hasSize(2)));
+                .andExpect(model().attributeExists(attribute))
+                .andExpect(model().attribute(attribute, hasSize(2)));
         verify(goShoppingPageService).getStores(user.getId());
     }
 
     @Test
     public void getProductList_ShouldReturnViewName() throws Exception {
-        int storeId = 1;
-        Map<String, List<ShoppingList>> map = new HashMap<>();
+        final int storeId = 1;
+        final Map<String, List<ShoppingList>> map = new HashMap<>();
         map.put("selected", new ArrayList<>());
         map.put("remained", new ArrayList<>());
         when(userService.getCurrentUser()).thenReturn(user);
@@ -100,7 +105,7 @@ public class GoShoppingPagesControllerTest {
 
     @Test
     public void getProductList() throws Exception {
-        int storeId = 1;
+        final int storeId = 1;
         when(userService.getCurrentUser()).thenReturn(user);
         when(goShoppingPageService.getProducts(anyInt(), eq(storeId))).thenReturn(null);
         mockMvc.perform(post("/goShoppingProducts")
@@ -116,14 +121,15 @@ public class GoShoppingPagesControllerTest {
     @Test
     public void updateAmount_ShouldReturnNonEmptyString() throws Exception {
         when(userService.getCurrentUser()).thenReturn(user);
-        mockMvc.perform(post("/addToCart"))
+        mockMvc.perform(post("/addToCart")
+                .param("carts[0].user.id", "1"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/cart/"));
         verify(goShoppingPageService).addToCart(any());
     }
 
     private ViewResolver viewResolver() {
-        InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
+        final InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
 
         viewResolver.setViewClass(JstlView.class);
         viewResolver.setPrefix("/WEB-INF/views/");

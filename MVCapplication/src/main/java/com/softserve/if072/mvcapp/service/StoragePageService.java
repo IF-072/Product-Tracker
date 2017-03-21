@@ -8,16 +8,14 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.client.RestTemplate;
 import org.apache.commons.collections.CollectionUtils;
 
 import java.util.List;
 
 /**
- * The StoragePageService class is used to hold business logic and to retrieve appropriate resources from a
- * REST server
+ * The StoragePageService class is used to hold business logic
+ * and to retrieve appropriate resources from a REST server.
  *
  * @author Roman Dyndyn
  */
@@ -32,18 +30,25 @@ public class StoragePageService {
     @Value("${application.restShoppingListURL}")
     private String shoppingListURL;
 
-    private RestTemplate restTemplate;
-    private ShoppingListService shoppingListService;
+    private final RestTemplate restTemplate;
+    private final ShoppingListService shoppingListService;
 
     @Autowired
-    public StoragePageService(RestTemplate restTemplate, ShoppingListService shoppingListService) {
+    public StoragePageService(final RestTemplate restTemplate, final ShoppingListService shoppingListService) {
         this.restTemplate = restTemplate;
         this.shoppingListService = shoppingListService;
     }
 
-    public List<Storage> getStorages(int userId) {
+    /**
+     * Make request to a REST server for retrieving all all storage records
+     * for current user.
+     *
+     * @param userId - current user unique identifier
+     * @return list of storage records
+     */
+    public List<Storage> getStorages(final int userId) {
         final String uri = storageUrl + userId;
-        List<Storage> storage = restTemplate.getForObject(uri, List.class);
+        final List<Storage> storage = restTemplate.getForObject(uri, List.class);
 
         if (CollectionUtils.isEmpty(storage)) {
             LOGGER.error("Storage' list of user with id {} is empty", userId);
@@ -53,13 +58,24 @@ public class StoragePageService {
         return storage;
     }
 
-    public void updateAmount(StorageDTO storageDTO) {
+    /**
+     * Make request to a REST server for updating storage record.
+     *
+     * @param storageDTO - storage record
+     */
+    public void updateAmount(final StorageDTO storageDTO) {
         final String uri = storageUrl + "dto";
         restTemplate.put(uri, storageDTO);
     }
 
-    public void addProductToShoppingList(User user, int productId) {
-        if (productId > 0){
+    /**
+     * Inserts product in shopping list.
+     *
+     * @param productId - product unique identifier
+     * @param user      - current user
+     */
+    public void addProductToShoppingList(final User user, final int productId) {
+        if (productId > 0) {
             shoppingListService.addProductToShoppingList(user, productId);
         }
     }
