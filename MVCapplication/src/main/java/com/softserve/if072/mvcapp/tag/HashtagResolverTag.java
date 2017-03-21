@@ -8,9 +8,22 @@ import java.io.StringWriter;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * The HashtagResolverTag defines behavior of hashtagResolver custom tag.
+ * This tag converts all hashtags which tag's body contains into hyperlinks.
+ *
+ * @author Oleh Pochernin
+ */
 public class HashtagResolverTag extends SimpleTagSupport {
-    private static final String HREF_TEMPLATE = "<a href=%s>%s</a>";
+    private static final String HREF_TEMPLATE = "<a href=/history%s>%s</a>";
 
+    /**
+     * This method converts all hashtags which tag's body contains into hyperlinks.
+     * It is called once and only once for any given tag invocation.
+     *
+     * @throws JspException
+     * @throws IOException
+     */
     public void doTag() throws JspException, IOException {
         StringWriter sw = new StringWriter();
         getJspBody().invoke(sw);

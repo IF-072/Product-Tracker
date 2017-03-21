@@ -4,6 +4,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@ taglib prefix="ht" uri="hashtag.tld" %>
 <!-- Header -->
 <div class="row">
     <div class="col-lg-12">
@@ -38,7 +39,7 @@
                         </c:if>
                         <td>${status.count}</td>
                         <td>${history.product.name}</td>
-                        <td>${history.product.description}</td>
+                        <td><ht:hashtagResolver>${history.product.description}</ht:hashtagResolver></td>
                         <td>${history.product.category.name}</td>
                         <td class="text-center">
                                 ${history.amount} ${history.product.unit.name}
