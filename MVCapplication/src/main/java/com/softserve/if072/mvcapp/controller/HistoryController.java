@@ -131,7 +131,8 @@ public class HistoryController {
      *
      */
     @RequestMapping(value="/getpdf", method= RequestMethod.GET)
-    public void getPDF(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public void getPDF(HttpServletRequest request, HttpServletResponse response,
+                       @CookieValue(value = "myLocaleCookie", required = false) final String locale) throws IOException {
 
         HttpSession session = request.getSession();
         List<History> histories = (List) session.getAttribute("historiesSession");
@@ -145,7 +146,7 @@ public class HistoryController {
         response.setHeader("Content-disposition", "attachment; filename="+ fileName);
 
         try {
-            pdfCreatorService.createPDF(temperotyFilePath+"\\"+fileName, histories);
+            pdfCreatorService.createPDF(temperotyFilePath+"\\"+fileName, histories, locale);
             ByteArrayOutputStream baos = pdfCreatorService.convertPDFToByteArrayOutputStream(temperotyFilePath+"\\"+fileName);
             OutputStream os = response.getOutputStream();
             baos.writeTo(os);
