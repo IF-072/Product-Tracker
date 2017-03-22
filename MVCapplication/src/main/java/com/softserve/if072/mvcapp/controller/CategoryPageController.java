@@ -79,19 +79,39 @@ public class CategoryPageController {
             return "addCategory";
         }
 
-        //checks if the category already exists
-        if (categoryPageService.alreadyExists(category, userService.getCurrentUser())) {
-            model.addAttribute("error", categoryAlreadyExists);
+//        //checks if the category already exists
+//        if (categoryPageService.alreadyExists(category, userService.getCurrentUser())) {
+//            model.addAttribute("error", categoryAlreadyExists);
+//
+//            return "addCategory";
+//        }
+//
+//        //checks if the category is deleted
+//        if (categoryPageService.isDeleted(category, userService.getCurrentUser())) {
+//            model.addAttribute("category",
+//                    categoryPageService.getByNameAndUserID(category.getName(), userService.getCurrentUser().getId()));
+//
+//            return "deletedCategory";
+//        }
 
-            return "addCategory";
-        }
+        String str = categoryPageService.alreadyExistsOrIsDeleted(category, userService.getCurrentUser());
 
-        //checks if the category is deleted
-        if (categoryPageService.isDeleted(category, userService.getCurrentUser())) {
-            model.addAttribute("category",
-                    categoryPageService.getByNameAndUserID(category.getName(), userService.getCurrentUser().getId()));
+        if (str != null) {
+            switch (str) {
+                case "exists" : {
 
-            return "deletedCategory";
+                    model.addAttribute("error", "value");
+
+                    return "addCategory";
+                }
+
+                case "deleted" : {
+                    model.addAttribute("category",
+                            categoryPageService.getByNameAndUserID(category.getName(), userService.getCurrentUser().getId()));
+
+                    return "deletedCategory";
+                }
+            }
         }
 
         categoryPageService.addCategory(category, userService.getCurrentUser());

@@ -194,6 +194,25 @@
         </put-list-attribute>
     </definition>
 
+    <definition name="analytics" extends="mainLayout">
+        <put-attribute name="title" value="Product Tracker"/>
+        <put-attribute name="body" value="/WEB-INF/views/analytics.jsp"/>
+        <put-list-attribute name="stylesheets" inherit="true">
+            <add-attribute value="/css/dataTables.bootstrap.css"/>
+            <add-attribute value="/css/dataTables.responsive.css"/>
+            <!--<add-attribute value="/css/jquery-ui.css"/>-->
+            <!--<add-attribute value="/css/jquery.dataTables.css"/>-->
+            <add-attribute value="/css/analytics.css"/>
+            <add-attribute value="/css/daterangepicker.css"/>
+        </put-list-attribute>
+        <put-list-attribute name="javascripts" inherit="true">
+            <!--<add-attribute value="/js/jquery-ui.js"/>-->
+            <!--<add-attribute value="/js/jquery.dataTables.js"/>-->
+            <add-attribute value="/js/moment.min.js"/>
+            <add-attribute value="/js/daterangepicker.js"/>
+        </put-list-attribute>
+    </definition>
+
     <definition name="allStores" extends="mainLayout">
         <put-attribute name="title" value="Product Tracker"/>
         <put-attribute name="body" value="/WEB-INF/views/store/allStores.jsp"/>
@@ -419,22 +438,6 @@
         <put-list-attribute name="javascripts" inherit="true">
             <add-attribute value="/js/jquery-ui.js"/>
             <add-attribute value="/js/storeTable.js"/>
-            <add-attribute value="/js/jquery.dataTables.js"/>
-        </put-list-attribute>
-    </definition>
-
-    <definition name="analytics" extends="mainLayout">
-        <put-attribute name="title" value="Product Tracker"/>
-        <put-attribute name="body" value="/WEB-INF/views/analytics.jsp"/>
-        <put-list-attribute name="stylesheets" inherit="true">
-            <add-attribute value="/css/dataTables.bootstrap.css"/>
-            <add-attribute value="/css/dataTables.responsive.css"/>
-            <add-attribute value="/css/jquery-ui.css"/>
-            <add-attribute value="/css/jquery.dataTables.css"/>
-            <add-attribute value="/css/analytics.css"/>
-        </put-list-attribute>
-        <put-list-attribute name="javascripts" inherit="true">
-            <add-attribute value="/js/jquery-ui.js"/>
             <add-attribute value="/js/jquery.dataTables.js"/>
         </put-list-attribute>
     </definition>
