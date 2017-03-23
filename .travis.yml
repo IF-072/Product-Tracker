@@ -4,7 +4,7 @@ jdk:
 - oraclejdk8
 
 script:
-- travis encrypt 598761995054b92f7bcf1b5fe736adb38346c325 --add sonar.github.oauth
+- travis encrypt 3e9a3119f0eef85e8b9f8e4b1530f55bce4cd7ff --add sonar.github.oauth
 - mvn clean install jacoco:report coveralls:report
 - mvn sonar:sonar -Dsonar.github.repository=IF-072/Product-Tracker
 
@@ -19,7 +19,7 @@ addons:
     token:
       secure: e4b42b14e2a272475313264e881033f038fd523b
     github_token:
-      secure: 598761995054b92f7bcf1b5fe736adb38346c325
+      secure: 3e9a3119f0eef85e8b9f8e4b1530f55bce4cd7ff
     branches:
         - master
         - develop
