@@ -4,6 +4,7 @@ jdk:
 - oraclejdk8
 
 before_install:
+  - composer self-update -q
   - composer config --global github-oauth.github.com "$GITHUB_TOKEN"
 
 script:
