@@ -2,7 +2,6 @@
 <%@ taglib prefix="sf" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
 <%@ page isELIgnored="false" %>
-<%@ taglib prefix="ht" uri="hashtag.tld" %>
 
 <%--
   Created by Vitaliy Malisevych
@@ -43,7 +42,7 @@
                         <c:forEach items="${products}" var="product">
                             <tr class="gradeA">
                                 <td>${product.name}</td>
-                                <td><ht:hashtagResolver>${product.description}</ht:hashtagResolver></td>
+                                <td>${product.description}</td>
                                 <td>${product.category.name}</td>
                                 <td>${product.unit.name}</td>
                                 <td id="image">
