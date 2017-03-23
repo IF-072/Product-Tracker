@@ -9,7 +9,6 @@ script:
                 -Dsonar.github.pullRequest=$PULL_REQUEST_ID
                 -Dsonar.github.repository=IF-072/Product-Tracker
                 -Dsonar.github.oauth=$GITHUB_TOKEN
-#                -Dsonar.host.url=https://sonarqube.com
                 -Dsonar.login=$SONAR_TOKEN
 
 cache:
