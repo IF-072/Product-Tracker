@@ -400,15 +400,16 @@
                         <failurePriority>2</failurePriority>
                         <verbose>true</verbose>
                         <targetDirectory>${basedir}/target/pmd</targetDirectory>
+                        <failOnViolation>false</failOnViolation>
                     </configuration>
-                    <!--<executions>-->
-                        <!--<execution>-->
-                            <!--<goals>-->
-                                <!--<goal>check</goal>-->
-                                <!--<goal>cpd-check</goal>-->
-                            <!--</goals>-->
-                        <!--</execution>-->
-                    <!--</executions>-->
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>check</goal>
+                                <goal>cpd-check</goal>
+                            </goals>
+                        </execution>
+                    </executions>
                 </plugin>
             </plugins>
         </pluginManagement>

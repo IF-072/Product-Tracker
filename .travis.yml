@@ -3,10 +3,6 @@ language: java
 jdk:
 - oraclejdk8
 
-#before_install:
-#  - composer self-update -q
-#  - composer config --global github-oauth.github.com "$GITHUB_TOKEN"
-
 script:
 - mvn clean install jacoco:report coveralls:report pmd:pmd checkstyle:checkstyle sonar:sonar
 
@@ -24,3 +20,9 @@ addons:
         - master
         - develop
         - rdyn
+        - igorp
+        - ikryv
+        - nvyn
+        - pben
+        - vmali
+        - opoch
