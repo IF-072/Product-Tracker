@@ -1,7 +1,36 @@
 language: java
 
 jdk:
-  - oraclejdk8
+- oraclejdk8
 
-after_success:
-  - mvn clean test jacoco:report coveralls:report
+script:
+- mvn clean install jacoco:report coveralls:report
+- sonar-scanner -Dsonar.analysis.mode=preview
+                -Dsonar.github.pullRequest=$PULL_REQUEST_ID
+                -Dsonar.github.repository=IF-072/Product-Tracker
+                -Dsonar.github.oauth=$GITHUB_TOKEN
+                -Dsonar.host.url=https://sonarqube.com
+                -Dsonar.login=$SONAR_TOKEN
+
+cache:
+  directories:
+  - "$HOME/.m2/repository"
+  - "$HOME/.sonar/cache"
+
+addons:
+  sonarqube:
+    organization: "dyndyn-github"
+    token:
+      secure: e4b42b14e2a272475313264e881033f038fd523b
+    github_token:
+      secure: 82cc739e2ab78f2ad8b0897865b5bd0a6e5f644b
+    branches:
+        - master
+        - develop
+        - rdyn
+        - igorp
+        - ikryv
+        - nvyn
+        - pben
+        - vmali
+        - opoch
