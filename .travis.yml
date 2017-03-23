@@ -1,7 +1,28 @@
 language: java
 
 jdk:
-  - oraclejdk8
+- oraclejdk8
 
-after_success:
-  - mvn clean test jacoco:report coveralls:report
+script:
+- mvn clean install jacoco:report coveralls:report pmd:pmd checkstyle:checkstyle sonar:sonar
+
+cache:
+  directories:
+  - "$HOME/.m2/repository"
+  - "$HOME/.sonar/cache"
+
+addons:
+  sonarqube:
+    organization: "dyndyn-github"
+    token:
+      secure: e4b42b14e2a272475313264e881033f038fd523b
+    branches:
+        - master
+        - develop
+        - rdyn
+        - igorp
+        - ikryv
+        - nvyn
+        - pben
+        - vmali
+        - opoch
