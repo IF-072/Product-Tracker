@@ -5,7 +5,7 @@ jdk:
 
 script:
 - mvn clean install jacoco:report coveralls:report
-- sonar-scanner
+- mvn sonar:sonar
 
 cache:
   directories:
