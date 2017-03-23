@@ -7,9 +7,8 @@ sudo: required
 group: legacy
 
 script:
-- travis encrypt $GITHUB_TOKEN --add sonar.github.oauth
 - mvn clean install jacoco:report coveralls:report
-- mvn sonar:sonar -Dsonar.github.repository=IF-072/Product-Tracker
+- mvn sonar:sonar -Dsonar.github.repository=IF-072/Product-Tracker -Dsonar.github.oauth=$GITHUB_TOKEN
 
 cache:
   directories:
