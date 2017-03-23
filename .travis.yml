@@ -16,6 +16,8 @@ addons:
     organization: "dyndyn-github"
     token:
       secure: e4b42b14e2a272475313264e881033f038fd523b
+    github_token:
+      secure: 82cc739e2ab78f2ad8b0897865b5bd0a6e5f644b
     branches:
         - master
         - develop
