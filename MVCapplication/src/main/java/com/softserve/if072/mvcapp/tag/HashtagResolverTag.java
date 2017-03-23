@@ -15,14 +15,14 @@ import java.util.regex.Pattern;
  * @author Oleh Pochernin
  */
 public class HashtagResolverTag extends SimpleTagSupport {
-    private static final String HREF_TEMPLATE = "<a href=/history%s>%s</a>";
+    private static final String HREF_TEMPLATE = "<a class=\"search\" hashtag=\"%s\" href=#>%s</a>";
 
     /**
      * This method converts all hashtags which tag's body contains into hyperlinks.
      * It is called once and only once for any given tag invocation.
      *
-     * @throws JspException
-     * @throws IOException
+     * @throws JspException a generic exception known to the JSP engine
+     * @throws IOException general class of exceptions produced by failed or interrupted I/O operations
      */
     public void doTag() throws JspException, IOException {
         StringWriter sw = new StringWriter();
@@ -37,7 +37,7 @@ public class HashtagResolverTag extends SimpleTagSupport {
         while (matcher.find()) {
             hashtag = matcher.group();
             description = description.replace(
-                    hashtag, String.format(HREF_TEMPLATE, "#", hashtag));
+                    hashtag, String.format(HREF_TEMPLATE, hashtag, hashtag));
         }
 
         JspWriter out = getJspContext().getOut();

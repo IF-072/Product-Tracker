@@ -12,10 +12,9 @@
 </div>
 
 <!-- Search form -->
-<sf:form role="form" modelAttribute="historySearchDTO" method="post">
+<sf:form role="form" modelAttribute="historySearchDTO" method="get" action="/history/search">
     <fieldset>
         <div class="row">
-
             <div class="col-lg-2 search-item">
                 <div class="form-group">
                     <spring:message code='history.filter.name' var="filterName"/>
