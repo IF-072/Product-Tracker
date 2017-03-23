@@ -3,9 +3,16 @@ language: java
 jdk:
 - oraclejdk8
 
-#after_success:
+before_install:
+  - composer config --global github-oauth.github.com "$GITHUB_TOKEN"
+
 script:
 - mvn clean install jacoco:report coveralls:report sonar:sonar
+
+cache:
+  directories:
+  - "$HOME/.m2/repository"
+  - "$HOME/.sonar/cache"
 
 addons:
   sonarqube:
@@ -16,3 +23,6 @@ addons:
         - master
         - develop
         - rdyn
+
+install:
+- mvn dependency:go-offline
