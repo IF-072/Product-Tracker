@@ -24,6 +24,3 @@ addons:
         - master
         - develop
         - rdyn
-
-install:
-- mvn dependency:go-offline
