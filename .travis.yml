@@ -1,7 +1,31 @@
 language: java
-
 jdk:
-  - oraclejdk8
-
-after_success:
-  - mvn clean test jacoco:report coveralls:report
+- oraclejdk8
+script:
+- mvn clean install jacoco:report coveralls:report
+- mvn sonar:sonar -Dsonar.analysis.mode=preview -Dsonar.github.repository=IF-072/Product-Tracker
+cache:
+  directories:
+  - "$HOME/.m2/repository"
+  - "$HOME/.sonar/cache"
+addons:
+  sonarqube:
+    organization: dyndyn-github
+    token:
+      secure: 9bd1d29bacc878a35f311c724f185a5a8d2c1db3
+    github_token:
+      secure: QU9yFHPnC2SkmzR/5db7HAUM9tqgpPC7XFSetBiaeOdl/o+wjm1PTL8rT7Z4s4KEWh2L+06AXC9+CCoL/js3iDFkxoqdEkEn2/aRMyFzZaEXvScqT81ZmVrpWDmmYrv0ZVU/SrW9z5mv9/zkuVVqG0igrPjo8ZD57LmCSllJV+oGuzttCHU7CHENFYJ/WZ4LHU7dcrEWOqDiUY1WoPovIqC5ho25Jl2xP6kauWwlLaCloyJ2X9YPhD6Kp8UxYiRG9ExUM4CERxBDbzuFpxf8qd7ls1YRMsb0rJ6nN5qbaV+fXXL1cI6ykhdOowhHsi8i1vimZQ6DgoAwgQTiQ99MnEU8Xg3Mf2bvM3+v3i5+brD+611RXz2v61AVUxhuEy6vmbYKwpKRRhvNaK2mchQjWIKMR3YNTZjjyKPA9jw6bPDOj5djKR43IE0srEAOtT42/dovzTnyFng0CcvOmeXwv42WRWRtgN3BjSjm8eUwQpNPTpf9Zxh0FuGyE3cRzZElPU4zkyadcd/FpmB+1L5N7yPMuz7GwzSS3g40YseoHi8rqHSmRCU+cyaJeHoWG/IRFuPOMFd6jyjok2+Y6Q2FxeQGXMswp42a+RYkOlkJB4LbPdrE3YhWx8timsgLUyfKuYEB8OwJkMd9evfj7fF4DPkOp222KNkfeBNuY3Wp2MY=
+    branches:
+    - master
+    - develop
+    - rdyn
+    - igorp
+    - ikryv
+    - nvyn
+    - pben
+    - vmali
+    - opoch
+sonar:
+  github:
+    oauth:
+      secure: QU9yFHPnC2SkmzR/5db7HAUM9tqgpPC7XFSetBiaeOdl/o+wjm1PTL8rT7Z4s4KEWh2L+06AXC9+CCoL/js3iDFkxoqdEkEn2/aRMyFzZaEXvScqT81ZmVrpWDmmYrv0ZVU/SrW9z5mv9/zkuVVqG0igrPjo8ZD57LmCSllJV+oGuzttCHU7CHENFYJ/WZ4LHU7dcrEWOqDiUY1WoPovIqC5ho25Jl2xP6kauWwlLaCloyJ2X9YPhD6Kp8UxYiRG9ExUM4CERxBDbzuFpxf8qd7ls1YRMsb0rJ6nN5qbaV+fXXL1cI6ykhdOowhHsi8i1vimZQ6DgoAwgQTiQ99MnEU8Xg3Mf2bvM3+v3i5+brD+611RXz2v61AVUxhuEy6vmbYKwpKRRhvNaK2mchQjWIKMR3YNTZjjyKPA9jw6bPDOj5djKR43IE0srEAOtT42/dovzTnyFng0CcvOmeXwv42WRWRtgN3BjSjm8eUwQpNPTpf9Zxh0FuGyE3cRzZElPU4zkyadcd/FpmB+1L5N7yPMuz7GwzSS3g40YseoHi8rqHSmRCU+cyaJeHoWG/IRFuPOMFd6jyjok2+Y6Q2FxeQGXMswp42a+RYkOlkJB4LbPdrE3YhWx8timsgLUyfKuYEB8OwJkMd9evfj7fF4DPkOp222KNkfeBNuY3Wp2MY=
