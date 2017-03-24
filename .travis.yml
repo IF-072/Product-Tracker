@@ -1,7 +1,31 @@
 language: java
 
 jdk:
-  - oraclejdk8
+- oraclejdk8
 
-after_success:
-  - mvn clean test jacoco:report coveralls:report
+script:
+- mvn clean install jacoco:report coveralls:report
+- mvn sonar:sonar -Dsonar.github.repository=IF-072/Product-Tracker
+
+cache:
+  directories:
+  - "$HOME/.m2/repository"
+  - "$HOME/.sonar/cache"
+
+addons:
+  sonarqube:
+    organization: "dyndyn-github"
+    token:
+      secure: gfQGlk+ewl3gROzxDG7hGVADjVXFYdbJq2zZmDGkLVVPvn6ACKF6GYZep3CsAGbvTxlU5viuzmF+f7WWQ8sjgTU+ZUZgjyAiyUijFfZ671+sTYFg91EHprx40KRFzviHyfDd5IaEpxAOVFYghXY7UwwNRUjSVe7bLemQSm0vG+Nx4or19KakNsnySS6PUPlzpLFM3MoO2c1V83ONIvHIpJJi4LuiVOBeauj8e0LYqUoJoeZzZiwfULE9APWHAf9aawGGqpy/5DL+lhLAcGTX8vCAJObA9iQykLAQHKOpbpznxR68JmDMeNYcWfQEAecEELu3DWihJm1Ye5ArlxLvRwy+OppoljFe1H9kHKN55YYES1DD80gTUjYZPHy8jQ4mA6UdxiNLBDpQe79jzpzr+hphN20T/8d+jROrL483QxM21/4nO4CV5NHwtSO47OdUFbj1gO9oQ5sf54PgNkB/tzkyAPa0DtoPQ/ymPOFE5e9vkPvb80rC3nB75Tyc2mEDBfbfuPAaNChAkaHIq4n5xG2qBktMVYBYRzzzSzm8vOc9IRgBUOVDR/UmT64ZzY222qEJt0qRrVCRsCIO6DHotKVcxvf+l46QTjCSa0bMIC4pqE75X3jiappaHSu6n6RYboN6onUUXBDicv7wI0npHXHcU5ZXeBoa8g9q83bo74s=
+    github_token:
+      secure: bihrIA/4s9XseoKTg/5ekUhSUw2fyXop+VD8/9rButKKeU+SHI0MpXEWwURuIg2XyRKofI9nLY6PtiBFoIFBePkLZHfP5J1/XqIL5/J1kuQ3kUmJThGsvoe22Ph8jxlxCGvEvGLEk/PeZnM9wBFgxH7uR3pHSuW4wlHxtNgHGF1ZILff9CguevuMUO0xyQwgDVR7cNI8vEEwUh0g16rTNJW2rJQUaQPT0RVNvzN/jMB2h4PCYMq13WTsDW8KL+fsJ1jv1qy8MKtuRwuZgDcGAnRIsybcNuRJ+MVZKslgHSazxi7/0eOkxvstPKb7DMVZOyUtlwFRquPwwyu6BvfR9xy3bF6PaJbwGCvcPnJyYO28zJU8dyd7Ag5Rdaa6rj3+UZQVKMJpnToO0vdUl5WNlbpR9gfIwdbDvCKZPNaP3f+s7dMaJFnZ2EWgJj9qaMM00GdPfdRztTQydSH3LHULCjtN9H6huMiig7XqmuJKpD+nvMygNiTtxVqF/ZGnS+64TLcnPCz9O2ScPd08j165ideVntzyLN1PFe1CkTkhbva3ZttvsmRPypw7rWLeaOx/Y93/D3Tn1krcJZ89Dk14l19UXeJUVRUbrfsjvrTCOXxyf3aOF7QZe/UB4C4nstLGppxitKl9YY0V0Lg4R0b+O9lLeENjZNWqy07jpgP59Vo=
+    branches:
+        - master
+        - develop
+        - rdyn
+        - igorp
+        - ikryv
+        - nvyn
+        - pben
+        - vmali
+        - opoch
