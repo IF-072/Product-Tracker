@@ -20,6 +20,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -61,8 +63,8 @@ public class GoShoppingController {
             return list;
         } catch (DataNotFoundException e) {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-            LOGGER.error(e.getMessage());
-            return null;
+            LOGGER.error(e.getMessage(), e);
+            return new ArrayList<>();
         }
     }
 
@@ -86,8 +88,8 @@ public class GoShoppingController {
             return map;
         } catch (DataNotFoundException e) {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-            LOGGER.error(e.getMessage());
-            return null;
+            LOGGER.error(e.getMessage(), e);
+            return new HashMap<>();
         }
     }
 

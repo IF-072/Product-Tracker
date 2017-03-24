@@ -53,13 +53,13 @@ public class GoShoppingService {
      */
     public List<Store> getStoreByUserId(final int userId) {
         if (CollectionUtils.isNotEmpty(cartDAO.getByUserId(userId))) {
-            return null;
+            return new ArrayList<>();
         }
 
         final List<Product> shoppingList = shoppingListDAO.getProductsByUserId(userId);
         if (CollectionUtils.isEmpty(shoppingList)) {
             LOGGER.info(String.format("Shopping list of user with id %d is empty", userId));
-            return null;
+            return new ArrayList<>();
         }
         final List<Store> storeList = storeDAO.getAllByUser(userId);
 

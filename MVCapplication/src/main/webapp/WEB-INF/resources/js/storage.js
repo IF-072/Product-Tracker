@@ -37,8 +37,6 @@ function subForm(e) {
 
         },
         error: function (jqXHR, exception) {
-            console.log(jqXHR);
-            console.log(exception);
             $("#message").text("Something went wrong!!!");
             $("#error").modal('show');
 
@@ -68,8 +66,6 @@ function addToShoppingList() {
             });
         },
         error: function (jqXHR, exception) {
-            console.log(jqXHR);
-            console.log(exception);
             $("#error").modal('show');
 
             $(".btn-confirm").click(function () {
