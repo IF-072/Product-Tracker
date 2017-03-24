@@ -34,9 +34,9 @@ public class MessageService {
      * @param args - an array of arguments that will be filled in
      *             for params within the message, or null if none.
      */
-    public void broadcast(final String code, final String locale, final int user, final Object... args) {
-        String notNullLocale = locale == null ? "en" : locale;
-        final String msg = messageSource.getMessage(code, args, new Locale(notNullLocale));
+    public void broadcast(final String code, String locale, final int user, final Object... args) {
+        locale = locale == null ? "en" : locale;
+        final String msg = messageSource.getMessage(code, args, new Locale(locale));
         messaging.convertAndSend("/queue/notifications/" + user,
                 new Message(msg, new Date()));
     }
