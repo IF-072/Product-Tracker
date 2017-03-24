@@ -3,7 +3,7 @@ jdk:
 - oraclejdk8
 script:
 - mvn clean install jacoco:report coveralls:report
-- mvn sonar:sonar
+- mvn sonar:sonar -Dsonar.analysis.mode=preview -Dsonar.github.pullRequest=1 -Dsonar.github.repository=IF-072/Product-Tracker
 cache:
   directories:
   - "$HOME/.m2/repository"
