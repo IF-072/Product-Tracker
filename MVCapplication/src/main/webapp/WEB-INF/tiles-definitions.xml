@@ -200,16 +200,20 @@
         <put-list-attribute name="stylesheets" inherit="true">
             <add-attribute value="/css/dataTables.bootstrap.css"/>
             <add-attribute value="/css/dataTables.responsive.css"/>
-            <!--<add-attribute value="/css/jquery-ui.css"/>-->
+            <add-attribute value="/css/morris.css"/>
+            <add-attribute value="/css/jquery-ui.css"/>
             <!--<add-attribute value="/css/jquery.dataTables.css"/>-->
             <add-attribute value="/css/analytics.css"/>
             <add-attribute value="/css/daterangepicker.css"/>
         </put-list-attribute>
         <put-list-attribute name="javascripts" inherit="true">
-            <!--<add-attribute value="/js/jquery-ui.js"/>-->
+            <add-attribute value="/js/jquery-ui.js"/>
             <!--<add-attribute value="/js/jquery.dataTables.js"/>-->
             <add-attribute value="/js/moment.min.js"/>
             <add-attribute value="/js/daterangepicker.js"/>
+            <add-attribute value="/js/raphael.js"/>
+            <add-attribute value="/js/morris.js"/>
+            <add-attribute value="/js/analytics.js"/>
         </put-list-attribute>
     </definition>
 

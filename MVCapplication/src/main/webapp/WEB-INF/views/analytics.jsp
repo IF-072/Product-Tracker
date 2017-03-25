@@ -24,10 +24,10 @@
                         <option value="0" selected>default text</option>
                         <sf:options items="${products}" itemLabel="name" itemValue="id" />
                     </sf:select>
-                        <%--<c:forEach items="${products}" var="product">--%>
-                        <%--<c:out value="${product}" />--%>
-                        <%--<br />--%>
-                        <%--</c:forEach>--%>
+                        <c:forEach items="${products}" var="product">
+                        <c:out value="${product}" />
+                        <br />
+                        </c:forEach>
                 </div>
             </div>
 
@@ -39,18 +39,21 @@
                 <%--</div>--%>
             <%--</div>--%>
 
-            <%--<div class="col-lg-2 search-item">--%>
-                <%--<div class="form-group has-feedback">--%>
-                    <%--<spring:message code='history.filter.dateTo' var="filterDateTo"/>--%>
-                    <%--<sf:input path="toDate" class="form-control" type="text" name="toDate" placeholder="${filterDateTo}"/>--%>
-                    <%--<i class="glyphicon glyphicon-calendar form-control-feedback"></i>--%>
-                <%--</div>--%>
-            <%--</div>--%>
+            <%--&lt;%&ndash;<div class="col-lg-2 search-item">&ndash;%&gt;--%>
+                <%--&lt;%&ndash;<div class="form-group has-feedback">&ndash;%&gt;--%>
+                    <%--&lt;%&ndash;<spring:message code='history.filter.dateTo' var="filterDateTo"/>&ndash;%&gt;--%>
+                    <%--&lt;%&ndash;<sf:input path="toDate" class="form-control" type="text" name="toDate" placeholder="${filterDateTo}"/>&ndash;%&gt;--%>
+                    <%--&lt;%&ndash;<i class="glyphicon glyphicon-calendar form-control-feedback"></i>&ndash;%&gt;--%>
+                <%--&lt;%&ndash;</div>&ndash;%&gt;--%>
+            <%--&lt;%&ndash;</div>&ndash;%&gt;--%>
 
-            <%--<div class="col-lg-1">--%>
-                <%--<spring:message code='history.filter.search' var="searchButtonMessage"/>--%>
-                <%--<input type="submit" class="btn btn-primary" value="${searchButtonMessage}"/>--%>
-            <%--</div>--%>
+            <%--&lt;%&ndash;<div class="col-lg-1">&ndash;%&gt;--%>
+                <%--&lt;%&ndash;<spring:message code='history.filter.search' var="searchButtonMessage"/>&ndash;%&gt;--%>
+                <%--&lt;%&ndash;<input type="submit" class="btn btn-primary" value="${searchButtonMessage}"/>&ndash;%&gt;--%>
+            <%--&lt;%&ndash;</div>&ndash;%&gt;--%>
         </div>
     </fieldset>
 </sf:form>
+
+<!-- Chart -->
+<div id="chart" class="col-lg-4" style="height: 250px;"></div>
