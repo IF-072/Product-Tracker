@@ -9,23 +9,20 @@ import java.util.Date;
  */
 public class Message {
 
-    private String message;
+    private String data;
     private Date date;
 
-    public Message(final String message, final Date date) {
-        this.message = message;
+    public Message(final String data, final Date date) {
+        this.data = data;
         this.date = date;
     }
 
-    public Message() {
+    public String getData() {
+        return data;
     }
 
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(final String message) {
-        this.message = message;
+    public void setData(final String data) {
+        this.data = data;
     }
 
     public Date getDate() {

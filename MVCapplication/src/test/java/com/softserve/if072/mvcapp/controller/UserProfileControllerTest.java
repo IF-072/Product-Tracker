@@ -18,7 +18,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup;
 
 /**
- * The UserProfileControllerTest class is used to test UserProfile controller class.
+ * The UserProfileControllerTest class is used to test UserProfileController class.
  *
  * @author Oleh Pochernin
  */
@@ -43,13 +43,11 @@ public class UserProfileControllerTest {
 
     @Test
     public void getUserProfilePage_shouldReturnUserProfileViewName() throws Exception {
-        Role role = Role.ROLE_PREMIUM;
-
         User user = new User();
         user.setId(1);
         user.setEmail("vasya@gmail.com");
         user.setName("Vasya");
-        user.setRole(role);
+        user.setRole(Role.ROLE_PREMIUM);
 
         when(userServiceMock.getCurrentUser()).thenReturn(user);
 

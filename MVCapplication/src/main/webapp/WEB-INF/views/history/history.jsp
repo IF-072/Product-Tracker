@@ -3,6 +3,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="sf" uri="http://www.springframework.org/tags/form"%>
+<%@ taglib prefix="ht" uri="hashtag.tld" %>
 <!-- Header -->
 <div class="row">
     <div class="col-lg-12">
@@ -11,10 +12,9 @@
 </div>
 
 <!-- Search form -->
-<sf:form role="form" modelAttribute="historySearchDTO" method="post">
+<sf:form role="form" modelAttribute="historySearchDTO" method="get" action="/history/search">
     <fieldset>
         <div class="row">
-
             <div class="col-lg-2 search-item">
                 <div class="form-group">
                     <spring:message code='history.filter.name' var="filterName"/>
@@ -91,7 +91,7 @@
                         </c:if>
                         <td>${status.count}</td>
                         <td>${history.product.name}</td>
-                        <td>${history.product.description}</td>
+                        <td><ht:hashtagResolver>${history.product.description}</ht:hashtagResolver></td>
                         <td>${history.product.category.name}</td>
                         <td class="text-center">
                                 ${history.amount} ${history.product.unit.name}

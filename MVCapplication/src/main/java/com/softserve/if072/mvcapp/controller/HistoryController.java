@@ -86,7 +86,7 @@ public class HistoryController {
      * @param model - a map that will be handed off to the view for rendering the data to the client
      * @return string with appropriate view name
      */
-    @PostMapping
+    @GetMapping("/search")
     public String searchHistories(Model model, @ModelAttribute("historySearchDTO") HistorySearchDTO searchParams, BindingResult result) {
         model.addAttribute("historySearchDTO", result.hasErrors() ? new HistorySearchDTO() : searchParams);
         model.addAttribute("categories", productPageService.getAllCategories(userService.getCurrentUser().getId()));
