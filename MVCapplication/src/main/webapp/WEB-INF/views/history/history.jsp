@@ -76,13 +76,13 @@
                     </thead>
                     <tbody>
 
-                    <c:if test="${empty histories}">
+                    <c:if test="${empty histories.getContent()}">
                         <tr class="noitems">
                             <td colspan="7"><spring:message code="history.filter.empty"/></td>
                         </tr>
                     </c:if>
 
-                    <c:forEach items="${histories}" var="history" varStatus="status">
+                    <c:forEach items="${histories.getContent()}" var="history" varStatus="status">
                         <c:if test="${history.action=='PURCHASED'}">
                             <tr class="gradeA PURCHASED">
                         </c:if>
@@ -97,9 +97,7 @@
                                 ${history.amount} ${history.product.unit.name}
                         </td>
                         <td class="text-center">
-                            <jsp:useBean id="dateValue" class="java.util.Date"/>
-                            <jsp:setProperty name="dateValue" property="time" value="${history.usedDate}"/>
-                            <fmt:formatDate value="${dateValue}" pattern="MM/dd/yyyy"/>
+                            <fmt:formatDate value="${history.usedDate}" pattern="MM/dd/yyyy"/>
                         </td>
                         <td class="text-center">
                             <div class="input-append">

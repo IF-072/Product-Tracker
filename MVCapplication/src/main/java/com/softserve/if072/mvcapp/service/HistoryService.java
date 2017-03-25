@@ -1,10 +1,15 @@
 package com.softserve.if072.mvcapp.service;
 
 import com.softserve.if072.common.model.History;
+import com.softserve.if072.common.model.RestResponsePage;
 import com.softserve.if072.common.model.dto.HistorySearchDTO;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.data.domain.Page;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -93,27 +98,50 @@ public class HistoryService {
         LOGGER.info(historySuccessfullyOperation, "deleting ", "all records", userId);
     }
 
-    public List<History> getHistoryPage(int pageNumber) {
+    public Page<History> getHistoryPage(int pageNumber, int pageSize) {
         int userId = userService.getCurrentUser().getId();
 
         Map<String, String> param = new HashMap<>();
         param.put("userId", Integer.toString(userId));
         param.put("pageNumber", Integer.toString(pageNumber));
+        param.put("pageSize", Integer.toString(pageSize));
 
         LOGGER.info("getHistoryPage MVCService before method");
+        final String uri = restHistoryURL + "/pages/" + pageNumber;
+        ParameterizedTypeReference<RestResponsePage<History>> responseType = new
+                ParameterizedTypeReference<RestResponsePage<History>>() {
+        };
 
-//        ResponseEntity <List<History>> historyResult = restTemplate.exchange(historyPageURL, HttpMethod.GET, null,
-//                new ParameterizedTypeReference<List<History>>() {
-//                }, param);
-        final String uri = restHistoryURL + "/" + pageNumber;
-        List histories = restTemplate.getForObject(uri, List.class, userId);
+        ResponseEntity<RestResponsePage<History>> historyResult = restTemplate.exchange(historyPageURL, HttpMethod.GET,
+                null, responseType, param);
+
+//        Page histories = restTemplate.getForObject(uri, Page.class, userId);
         LOGGER.info("getHistoryPage MVCService after method");
-        return histories;
+        return historyResult.getBody();
     }
+
+
+//    public List<History> getHistoryPage(int pageNumber) {
+//        int userId = userService.getCurrentUser().getId();
+//
+//        Map<String, String> param = new HashMap<>();
+//        param.put("userId", Integer.toString(userId));
+//        param.put("pageNumber", Integer.toString(pageNumber));
+//
+//        LOGGER.info("getHistoryPage MVCService before method");
+//
+////        ResponseEntity <List<History>> historyResult = restTemplate.exchange(historyPageURL, HttpMethod.GET, null,
+////                new ParameterizedTypeReference<List<History>>() {
+////                }, param);
+//        final String uri = restHistoryURL + "/" + pageNumber;
+//        List histories = restTemplate.getForObject(uri, List.class, userId);
+//        LOGGER.info("getHistoryPage MVCService after method");
+//        return histories;
+//    }
 
 //    /**
 //     * Make request to a REST server for retrieving  pages with history records for current user
-//     *
+//     *Page<History>
 //     * @return page of history records or empty page
 //     */
 //    public List getHistoryPage(int pageNumber, int pageSize) {

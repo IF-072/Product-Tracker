@@ -5,6 +5,7 @@ import com.softserve.if072.common.model.dto.HistoryDTO;
 import com.softserve.if072.common.model.dto.HistorySearchDTO;
 import com.softserve.if072.restservice.service.HistoryService;
 import org.apache.commons.collections.CollectionUtils;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -121,19 +122,33 @@ public class HistoryController {
      * Handles requests for paging history records
      *
      * @param userId - current user unique identifier
-//     * @param pageNumber -
+    * @param pageNumber - number of page
+//    * @param pageSize - number of page records
      * @return list of found cart records or empty list
      */
-//    @PreAuthorize("#userId == authentication.user.id")
-    @GetMapping("/{pageNumber}")
+   @PreAuthorize("#userId == authentication.user.id")
+    @GetMapping("/pages/{pageNumber}/{pageSize}")
     @ResponseStatus(HttpStatus.OK)
-    public List<History> getPage (@PathVariable int userId, @PathVariable int pageNumber) {
+    public Page<History> getPage (@PathVariable int userId, @PathVariable int pageNumber, @PathVariable int
+           pageSize) {
         System.out.println("getPage RestController before method");
         System.out.println(userId + " --------" + pageNumber);
-         List<History> list =  historyService.getPage(userId, pageNumber).getContent();
-        System.out.println(" --------"+ list.get(1).getProduct().getName().toString());
+        Page<History> list =  historyService.getPage(userId, pageNumber, pageSize);
+        System.out.println(" --------"+ list.getContent().get(1).getProduct().getName());
         return list;
 //      return   historyService.getByUserId(userId);
     }
+
+
+//    @GetMapping("/{pageNumber}")
+//    @ResponseStatus(HttpStatus.OK)
+//    public List<History> getPage (@PathVariable int userId, @PathVariable int pageNumber) {
+//        System.out.println("getPage RestController before method");
+//        System.out.println(userId + " --------" + pageNumber);
+//        List<History> list =  historyService.getPage(userId, pageNumber).getContent();
+//        System.out.println(" --------"+ list.get(1).getProduct().getName().toString());
+//        return list;
+////      return   historyService.getByUserId(userId);
+//    }
 
 }

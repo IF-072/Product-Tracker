@@ -8,6 +8,7 @@ import com.softserve.if072.mvcapp.service.ProductPageService;
 import com.softserve.if072.mvcapp.service.UserService;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -75,14 +76,15 @@ public class HistoryController {
      */
     @GetMapping
     public String getHistories(Model model
-//            , @PathVariable int pageNumber) {
+//            , @PathVariable int pageNumber, @PathVariable int pageSize ) {
     ){
-//       Page<History> histories = historyService.getHistoryPage(1);
-        List<History> histories = historyService.getByUserId();
+       Page<History> histories = historyService.getHistoryPage(1, 6);
+
         System.out.println("++++++++++++++++++++++==");
-        System.out.println(historyService.getHistoryPage(1).size());
-//        if (histories.getTotalElements()>0) {
-        if (CollectionUtils.isNotEmpty(histories)) {
+        System.out.println(historyService.getHistoryPage(1, 6).getTotalPages());
+        System.out.println(historyService.getHistoryPage(1, 6).getContent().get(1).getProduct().getDescription());
+        if (histories.getTotalElements()>0) {
+//        if (CollectionUtils.isNotEmpty(histories)) {
             model.addAttribute("categories", productPageService.getAllCategories(userService.getCurrentUser().getId()));
             model.addAttribute("histories", histories);
             model.addAttribute("historySearchDTO", new HistorySearchDTO());

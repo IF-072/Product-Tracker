@@ -44,9 +44,9 @@ public class HistoryService {
         this.historyRepository = historyRepository;
     }
 
-    public Page<History> getPage(int userId, int pageNumber) {
+    public Page<History> getPage(int userId, int pageNumber, int pageSize) {
 
-        Pageable request = new PageRequest(pageNumber - 1, 5);
+        Pageable request = new PageRequest(pageNumber - 1, pageSize);
 
         Page<History> page = historyRepository.findByUserId(userId, request);
         LOGGER.info(historyContainsPages, "user", userId, page.getTotalPages());

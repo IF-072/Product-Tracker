@@ -1,5 +1,6 @@
 package com.softserve.if072.common.model;
 
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -136,4 +137,5 @@ public class History implements Serializable {
         result = 31 * result + product.hashCode();
         return result;
     }
+
 }
