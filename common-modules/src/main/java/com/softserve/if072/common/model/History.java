@@ -11,6 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import java.io.Serializable;
 import java.sql.Timestamp;
 
 /**
@@ -22,7 +23,7 @@ import java.sql.Timestamp;
 
 @Entity
 @Table(name = "history")
-public class History {
+public class History implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,7 +34,7 @@ public class History {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToOne (fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "product_id")
     private Product product;
 
@@ -44,6 +45,7 @@ public class History {
     private Timestamp usedDate;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "action")
     private Action action;
 
     public History() {
@@ -115,5 +117,23 @@ public class History {
                 ", usedDate: " + usedDate +
                 "; action: " + action +
                 "\n}";
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        History history = (History) o;
+
+        return id == history.id && user.equals(history.user) && product.equals(history.product);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id;
+        result = 31 * result + user.hashCode();
+        result = 31 * result + product.hashCode();
+        return result;
     }
 }

@@ -1,5 +1,6 @@
 package com.softserve.if072.common.model;
 
+import org.hibernate.annotations.Proxy;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
 
@@ -12,6 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import java.io.Serializable;
 
 /**
  * The class contains information about product's category
@@ -21,7 +23,8 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "category")
-public class Category {
+@Proxy(lazy = false)
+public class Category implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,7 +43,8 @@ public class Category {
     @Column(name = "is_enabled")
     private boolean isEnabled;
 
-    public Category() {}
+    public Category() {
+    }
 
     public Category(String name, User user, boolean isEnabled) {
         this.name = name;
@@ -90,5 +94,21 @@ public class Category {
                 '}';
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
 
+        Category category = (Category) o;
+
+        return id == category.id && name.equals(category.name) && user.equals(category.user);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id;
+        result = 31 * result + name.hashCode();
+        result = 31 * result + user.hashCode();
+        return result;
+    }
 }

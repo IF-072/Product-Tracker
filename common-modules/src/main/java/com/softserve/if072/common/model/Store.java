@@ -1,5 +1,6 @@
 package com.softserve.if072.common.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.persistence.CascadeType;
@@ -15,6 +16,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -27,7 +29,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "store")
-public class Store {
+public class Store implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -54,6 +56,7 @@ public class Store {
     @JoinTable(name="stores_products",
             joinColumns = @JoinColumn(name="store_id"),
             inverseJoinColumns = @JoinColumn(name="product_id"))
+    @JsonIgnore
     private List<Product> products;
 
     @Column(name = "latitude")

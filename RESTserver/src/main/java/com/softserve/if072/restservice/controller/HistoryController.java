@@ -44,6 +44,13 @@ public class HistoryController {
     @GetMapping()
     @ResponseStatus(HttpStatus.OK)
     public List<History> getByUserId(@PathVariable int userId) {
+//
+
+//        historyService.getPage(userId, 1).getContent();
+//       System.out.println(historyService.getPage(userId, 1).getTotalElements());
+
+//
+
         return historyService.getByUserId(userId);
     }
 
@@ -66,7 +73,7 @@ public class HistoryController {
      *
      * @param historyId - history unique identifier
      */
-//    @PreAuthorize("@historySecurityService.hasPermissionToAccess(#historyId)")
+   @PreAuthorize("@historySecurityService.hasPermissionToAccess(#historyId)")
     @DeleteMapping("/{historyId}")
     @ResponseStatus(value = HttpStatus.OK)
     public void delete(@PathVariable int historyId) {
@@ -109,4 +116,24 @@ public class HistoryController {
     public void update(@RequestBody HistoryDTO historyDTO) {
         historyService.update(historyDTO);
     }
+
+    /**
+     * Handles requests for paging history records
+     *
+     * @param userId - current user unique identifier
+//     * @param pageNumber -
+     * @return list of found cart records or empty list
+     */
+//    @PreAuthorize("#userId == authentication.user.id")
+    @GetMapping("/{pageNumber}")
+    @ResponseStatus(HttpStatus.OK)
+    public List<History> getPage (@PathVariable int userId, @PathVariable int pageNumber) {
+        System.out.println("getPage RestController before method");
+        System.out.println(userId + " --------" + pageNumber);
+         List<History> list =  historyService.getPage(userId, pageNumber).getContent();
+        System.out.println(" --------"+ list.get(1).getProduct().getName().toString());
+        return list;
+//      return   historyService.getByUserId(userId);
+    }
+
 }

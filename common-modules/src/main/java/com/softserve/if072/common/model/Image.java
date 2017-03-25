@@ -1,6 +1,5 @@
 package com.softserve.if072.common.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.Column;
@@ -10,10 +9,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "image")
-public class Image {
+public class Image implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -68,7 +68,6 @@ public class Image {
         this.contentType = contentType;
     }
 
-    @JsonIgnore
     public MultipartFile getMultipartFile() {
         return multipartFile;
     }

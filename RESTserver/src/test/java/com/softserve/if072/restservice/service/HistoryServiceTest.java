@@ -4,6 +4,7 @@ import com.softserve.if072.common.model.Action;
 import com.softserve.if072.common.model.History;
 import com.softserve.if072.common.model.dto.HistoryDTO;
 import com.softserve.if072.restservice.dao.mybatisdao.HistoryDAO;
+import com.softserve.if072.restservice.repository.HistoryRepository;
 import com.softserve.if072.restservice.test.utils.HistoryBuilder;
 import org.apache.commons.collections.CollectionUtils;
 import org.junit.Before;
@@ -43,10 +44,11 @@ public class HistoryServiceTest {
     @Mock
 
     HistoryDAO historyDAO;
+    HistoryRepository historyRepository;
 
     @Before
     public void setup() {
-        historyService = new HistoryService(historyDAO);
+        historyService = new HistoryService(historyDAO, historyRepository);
     }
 
     @Test

@@ -8,7 +8,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * The HistoryService class is used to hold business logic and to retrieve appropriate resources from a
@@ -31,6 +33,8 @@ public class HistoryService {
     private String historyRequestReceive;
     @Value("${history.successfullyOperation}")
     private String historySuccessfullyOperation;
+    @Value("${application.restHistoryPageURL}")
+    private String historyPageURL;
 
     public HistoryService(RestTemplate restTemplate, UserService userService) {
         this.restTemplate = restTemplate;
@@ -88,5 +92,50 @@ public class HistoryService {
         restTemplate.delete(restHistoryURL, userId);
         LOGGER.info(historySuccessfullyOperation, "deleting ", "all records", userId);
     }
+
+    public List<History> getHistoryPage(int pageNumber) {
+        int userId = userService.getCurrentUser().getId();
+
+        Map<String, String> param = new HashMap<>();
+        param.put("userId", Integer.toString(userId));
+        param.put("pageNumber", Integer.toString(pageNumber));
+
+        LOGGER.info("getHistoryPage MVCService before method");
+
+//        ResponseEntity <List<History>> historyResult = restTemplate.exchange(historyPageURL, HttpMethod.GET, null,
+//                new ParameterizedTypeReference<List<History>>() {
+//                }, param);
+        final String uri = restHistoryURL + "/" + pageNumber;
+        List histories = restTemplate.getForObject(uri, List.class, userId);
+        LOGGER.info("getHistoryPage MVCService after method");
+        return histories;
+    }
+
+//    /**
+//     * Make request to a REST server for retrieving  pages with history records for current user
+//     *
+//     * @return page of history records or empty page
+//     */
+//    public List getHistoryPage(int pageNumber, int pageSize) {
+//        int userId = userService.getCurrentUser().getId();
+//
+//        Map<String, Integer> param = new HashMap<>();
+//        param.put("userId", userId);
+//        param.put("pageNumber", pageNumber);
+//        param.put("pageSize", pageSize);
+//
+//        LOGGER.info(historyRequestReceive, "retrieving", "all history pages", userId);
+//
+////        Page pages = restTemplate.getForObject(historyPageURL, Page.class, param);
+//
+//        System.out.println(historyPageURL);
+//        List histories = restTemplate.getForObject(historyPageURL, List.class, param);
+//
+//        LOGGER.info(historySuccessfullyOperation, "retrieving", "all history pages", userId);
+//
+//        return histories;
+//    }
+
+
 }
 

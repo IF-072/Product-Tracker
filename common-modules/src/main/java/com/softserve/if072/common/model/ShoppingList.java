@@ -1,12 +1,14 @@
 package com.softserve.if072.common.model;
 
 
+import com.softserve.if072.common.model.id.ShoppingListId;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.IdClass;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import java.io.Serializable;
@@ -19,24 +21,17 @@ import java.io.Serializable;
  */
 
 @Entity
-@Table(name = "shopping_ list")
+@Table(name = "shopping_list")
+@IdClass(ShoppingListId.class)
 public class ShoppingList implements Serializable {
 
     @Id
-    @JoinColumns({
-            @JoinColumn(
-                    name = "user_id",
-                    referencedColumnName = "user_id"),
-            @JoinColumn(
-                    name = "product_id",
-                    referencedColumnName = "product_id")
-    })
-
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @Id
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
     private Product product;
 
@@ -83,5 +78,22 @@ public class ShoppingList implements Serializable {
                 ", product=" + product +
                 ", amount=" + amount +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        ShoppingList that = (ShoppingList) o;
+
+        return user.equals(that.user) && product.equals(that.product);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = user.hashCode();
+        result = 31 * result + product.hashCode();
+        return result;
     }
 }

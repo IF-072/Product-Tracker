@@ -1,5 +1,6 @@
 package com.softserve.if072.common.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.softserve.if072.common.model.validation.product.ValidCategory;
 import com.softserve.if072.common.model.validation.product.ValidUnit;
 import org.hibernate.validator.constraints.Length;
@@ -18,6 +19,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -28,7 +30,7 @@ import java.util.List;
  */
 @Entity
 @Table(name = "product")
-public class Product {
+public class Product implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -53,7 +55,7 @@ public class Product {
     private User user;
 
     @ValidCategory(message = "{error.productCategory.notempty}")
-    @OneToOne(fetch = FetchType.EAGER)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
     private Category category;
 
@@ -66,9 +68,10 @@ public class Product {
     private boolean isEnabled;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinTable(name="stores_products",
-            joinColumns = @JoinColumn(name="product_id"),
-            inverseJoinColumns = @JoinColumn(name="store_id"))
+    @JoinTable(name = "stores_products",
+            joinColumns = @JoinColumn(name = "product_id"),
+            inverseJoinColumns = @JoinColumn(name = "store_id"))
+    @JsonIgnore
     private List<Store> stores;
 
     public Product() {

@@ -12,7 +12,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.SessionAttributes;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -67,9 +74,14 @@ public class HistoryController {
      * @return string with appropriate view name
      */
     @GetMapping
-    public String getHistories(Model model) {
+    public String getHistories(Model model
+//            , @PathVariable int pageNumber) {
+    ){
+//       Page<History> histories = historyService.getHistoryPage(1);
         List<History> histories = historyService.getByUserId();
-
+        System.out.println("++++++++++++++++++++++==");
+        System.out.println(historyService.getHistoryPage(1).size());
+//        if (histories.getTotalElements()>0) {
         if (CollectionUtils.isNotEmpty(histories)) {
             model.addAttribute("categories", productPageService.getAllCategories(userService.getCurrentUser().getId()));
             model.addAttribute("histories", histories);
@@ -79,6 +91,21 @@ public class HistoryController {
         }
         return "emptyHistory";
     }
+
+//    @GetMapping
+//    public String getHistories(Model model) {
+//        List<History> histories = historyService.getByUserId();
+//
+//        if (CollectionUtils.isNotEmpty(histories)) {
+//            model.addAttribute("categories", productPageService.getAllCategories(userService.getCurrentUser().getId()));
+//            model.addAttribute("histories", histories);
+//            model.addAttribute("historySearchDTO", new HistorySearchDTO());
+//            model.addAttribute("historiesSession", pdfCreatorService.getHistoriesByUserId());
+//            return "history";
+//        }
+//        return "emptyHistory";
+//    }
+
 
     /**
      * Handles requests for getting all history records for current user by given search criterias
@@ -126,11 +153,10 @@ public class HistoryController {
     /**
      * Handles requests for creating PDF file with histories which are displayed on the page
      *
-     * @param request - HttpServletRequest
+     * @param request  - HttpServletRequest
      * @param response - HttpServletResponse
-     *
      */
-    @RequestMapping(value="/getpdf", method= RequestMethod.GET)
+    @RequestMapping(value = "/getpdf", method = RequestMethod.GET)
     public void getPDF(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
         HttpSession session = request.getSession();
@@ -142,11 +168,11 @@ public class HistoryController {
 
         String fileName = "History.pdf";
         response.setContentType("application/pdf");
-        response.setHeader("Content-disposition", "attachment; filename="+ fileName);
+        response.setHeader("Content-disposition", "attachment; filename=" + fileName);
 
         try {
-            pdfCreatorService.createPDF(temperotyFilePath+"\\"+fileName, histories);
-            ByteArrayOutputStream baos = pdfCreatorService.convertPDFToByteArrayOutputStream(temperotyFilePath+"\\"+fileName);
+            pdfCreatorService.createPDF(temperotyFilePath + "\\" + fileName, histories);
+            ByteArrayOutputStream baos = pdfCreatorService.convertPDFToByteArrayOutputStream(temperotyFilePath + "\\" + fileName);
             OutputStream os = response.getOutputStream();
             baos.writeTo(os);
             os.flush();
@@ -154,4 +180,18 @@ public class HistoryController {
             e1.printStackTrace();
         }
     }
+
+//    @GetMapping("/pages/{pageNumber}")
+//    public String getHistoryPage(Model model, @PathVariable int pageNumber) {
+//        Page<History> histories = historyService.getHistoryPage(pageNumber);
+//
+//        if (histories.getTotalElements() > 0) {
+//            model.addAttribute("categories", productPageService.getAllCategories(userService.getCurrentUser().getId()));
+//            model.addAttribute("histories", histories);
+//            model.addAttribute("historySearchDTO", new HistorySearchDTO());
+//            model.addAttribute("historiesSession", pdfCreatorService.getHistoriesByUserId());
+//
+//        }
+//        return "history";
+//    }
 }

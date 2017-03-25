@@ -26,6 +26,7 @@ import java.util.List;
 public class HistoryService {
     private static final Logger LOGGER = LogManager.getLogger();
     private final HistoryDAO historyDAO;
+    private final HistoryRepository historyRepository;
     @Value("${history.containsRecords}")
     private String historyContainsRecords;
     @Value("${history.notFound}")
@@ -34,21 +35,23 @@ public class HistoryService {
     private String historySuccessfullyOperation;
     @Value("${history.deleteAllSuccessfullyOperation}")
     private String deleteAllSuccessfullyOperation;
+    @Value("${history.containsPages}")
+    private String historyContainsPages;
 
     @Autowired
-    public HistoryService(HistoryDAO historyDAO) {
+    public HistoryService(HistoryDAO historyDAO, HistoryRepository historyRepository) {
         this.historyDAO = historyDAO;
+        this.historyRepository = historyRepository;
     }
 
-    private static final int PAGE_SIZE = 50;
+    public Page<History> getPage(int userId, int pageNumber) {
 
-    @Autowired
-    private HistoryRepository historyRepository;
+        Pageable request = new PageRequest(pageNumber - 1, 5);
 
-    public Page<History> getPage(Integer pageNumber) {
-        Pageable request =
-                new PageRequest(pageNumber - 1, PAGE_SIZE);
-        return historyRepository.findAll(request);
+        Page<History> page = historyRepository.findByUserId(userId, request);
+        LOGGER.info(historyContainsPages, "user", userId, page.getTotalPages());
+
+        return page;
     }
 
     /**
@@ -61,7 +64,6 @@ public class HistoryService {
         List<History> histories = historyDAO.getByUserId(userID);
         LOGGER.info(historyContainsRecords, "user", userID, histories.size());
 
-        System.out.println(getPage(1).toString());
         return histories;
     }
 
