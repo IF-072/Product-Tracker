@@ -98,6 +98,13 @@ public class HistoryService {
         LOGGER.info(historySuccessfullyOperation, "deleting ", "all records", userId);
     }
 
+    /**
+     * Make request to a REST server for retrieving page of history records for current user
+     *
+     * @param pageNumber - number of pages
+     * @param pageSize   - number of records on page
+     * @return page of history records or empty page
+     */
     public Page<History> getHistoryPage(int pageNumber, int pageSize) {
         int userId = userService.getCurrentUser().getId();
 
@@ -106,64 +113,16 @@ public class HistoryService {
         param.put("pageNumber", Integer.toString(pageNumber));
         param.put("pageSize", Integer.toString(pageSize));
 
-        LOGGER.info("getHistoryPage MVCService before method");
-        final String uri = restHistoryURL + "/pages/" + pageNumber;
         ParameterizedTypeReference<RestResponsePage<History>> responseType = new
                 ParameterizedTypeReference<RestResponsePage<History>>() {
-        };
+                };
 
         ResponseEntity<RestResponsePage<History>> historyResult = restTemplate.exchange(historyPageURL, HttpMethod.GET,
                 null, responseType, param);
 
-//        Page histories = restTemplate.getForObject(uri, Page.class, userId);
-        LOGGER.info("getHistoryPage MVCService after method");
+        LOGGER.info(historySuccessfullyOperation, "paging ", "records", userId);
         return historyResult.getBody();
     }
-
-
-//    public List<History> getHistoryPage(int pageNumber) {
-//        int userId = userService.getCurrentUser().getId();
-//
-//        Map<String, String> param = new HashMap<>();
-//        param.put("userId", Integer.toString(userId));
-//        param.put("pageNumber", Integer.toString(pageNumber));
-//
-//        LOGGER.info("getHistoryPage MVCService before method");
-//
-////        ResponseEntity <List<History>> historyResult = restTemplate.exchange(historyPageURL, HttpMethod.GET, null,
-////                new ParameterizedTypeReference<List<History>>() {
-////                }, param);
-//        final String uri = restHistoryURL + "/" + pageNumber;
-//        List histories = restTemplate.getForObject(uri, List.class, userId);
-//        LOGGER.info("getHistoryPage MVCService after method");
-//        return histories;
-//    }
-
-//    /**
-//     * Make request to a REST server for retrieving  pages with history records for current user
-//     *Page<History>
-//     * @return page of history records or empty page
-//     */
-//    public List getHistoryPage(int pageNumber, int pageSize) {
-//        int userId = userService.getCurrentUser().getId();
-//
-//        Map<String, Integer> param = new HashMap<>();
-//        param.put("userId", userId);
-//        param.put("pageNumber", pageNumber);
-//        param.put("pageSize", pageSize);
-//
-//        LOGGER.info(historyRequestReceive, "retrieving", "all history pages", userId);
-//
-////        Page pages = restTemplate.getForObject(historyPageURL, Page.class, param);
-//
-//        System.out.println(historyPageURL);
-//        List histories = restTemplate.getForObject(historyPageURL, List.class, param);
-//
-//        LOGGER.info(historySuccessfullyOperation, "retrieving", "all history pages", userId);
-//
-//        return histories;
-//    }
-
 
 }
 

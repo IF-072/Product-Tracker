@@ -6,6 +6,8 @@ import com.softserve.if072.common.model.dto.HistorySearchDTO;
 import com.softserve.if072.restservice.service.HistoryService;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -45,12 +47,6 @@ public class HistoryController {
     @GetMapping()
     @ResponseStatus(HttpStatus.OK)
     public List<History> getByUserId(@PathVariable int userId) {
-//
-
-//        historyService.getPage(userId, 1).getContent();
-//       System.out.println(historyService.getPage(userId, 1).getTotalElements());
-
-//
 
         return historyService.getByUserId(userId);
     }
@@ -58,7 +54,7 @@ public class HistoryController {
     /**
      * Handles requests for search history records by given criterias
      *
-     * @param userId - current user unique identifier
+     * @param userId     - current user unique identifier
      * @param searchData DTO that contains search params
      * @return list of found cart records or empty list
      */
@@ -74,7 +70,7 @@ public class HistoryController {
      *
      * @param historyId - history unique identifier
      */
-   @PreAuthorize("@historySecurityService.hasPermissionToAccess(#historyId)")
+    @PreAuthorize("@historySecurityService.hasPermissionToAccess(#historyId)")
     @DeleteMapping("/{historyId}")
     @ResponseStatus(value = HttpStatus.OK)
     public void delete(@PathVariable int historyId) {
@@ -121,34 +117,18 @@ public class HistoryController {
     /**
      * Handles requests for paging history records
      *
-     * @param userId - current user unique identifier
-    * @param pageNumber - number of page
-//    * @param pageSize - number of page records
-     * @return list of found cart records or empty list
+     * @param userId     - current user unique identifier
+     * @param pageNumber - number of page
+     * @param pageSize   - number of page records
+     * @return page of found history records or empty page
      */
-   @PreAuthorize("#userId == authentication.user.id")
+    @PreAuthorize("#userId == authentication.user.id")
     @GetMapping("/pages/{pageNumber}/{pageSize}")
     @ResponseStatus(HttpStatus.OK)
-    public Page<History> getPage (@PathVariable int userId, @PathVariable int pageNumber, @PathVariable int
-           pageSize) {
-        System.out.println("getPage RestController before method");
-        System.out.println(userId + " --------" + pageNumber);
-        Page<History> list =  historyService.getPage(userId, pageNumber, pageSize);
-        System.out.println(" --------"+ list.getContent().get(1).getProduct().getName());
-        return list;
-//      return   historyService.getByUserId(userId);
+    public Page<History> getPage(@PathVariable int userId, @PathVariable int pageNumber, @PathVariable int pageSize) {
+        Pageable pageable = new PageRequest(pageNumber - 1, pageSize);
+
+        return historyService.getPage(userId, pageable);
     }
-
-
-//    @GetMapping("/{pageNumber}")
-//    @ResponseStatus(HttpStatus.OK)
-//    public List<History> getPage (@PathVariable int userId, @PathVariable int pageNumber) {
-//        System.out.println("getPage RestController before method");
-//        System.out.println(userId + " --------" + pageNumber);
-//        List<History> list =  historyService.getPage(userId, pageNumber).getContent();
-//        System.out.println(" --------"+ list.get(1).getProduct().getName().toString());
-//        return list;
-////      return   historyService.getByUserId(userId);
-//    }
 
 }

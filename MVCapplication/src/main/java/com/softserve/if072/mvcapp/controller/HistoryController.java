@@ -77,14 +77,11 @@ public class HistoryController {
     @GetMapping
     public String getHistories(Model model
 //            , @PathVariable int pageNumber, @PathVariable int pageSize ) {
-    ){
-       Page<History> histories = historyService.getHistoryPage(1, 6);
+    ) {
+        Page<History> histories = historyService.getHistoryPage(1, 6);
 
-        System.out.println("++++++++++++++++++++++==");
-        System.out.println(historyService.getHistoryPage(1, 6).getTotalPages());
-        System.out.println(historyService.getHistoryPage(1, 6).getContent().get(1).getProduct().getDescription());
-        if (histories.getTotalElements()>0) {
-//        if (CollectionUtils.isNotEmpty(histories)) {
+
+        if (histories.getTotalElements() > 0) {
             model.addAttribute("categories", productPageService.getAllCategories(userService.getCurrentUser().getId()));
             model.addAttribute("histories", histories);
             model.addAttribute("historySearchDTO", new HistorySearchDTO());
@@ -94,21 +91,6 @@ public class HistoryController {
         return "emptyHistory";
     }
 
-//    @GetMapping
-//    public String getHistories(Model model) {
-//        List<History> histories = historyService.getByUserId();
-//
-//        if (CollectionUtils.isNotEmpty(histories)) {
-//            model.addAttribute("categories", productPageService.getAllCategories(userService.getCurrentUser().getId()));
-//            model.addAttribute("histories", histories);
-//            model.addAttribute("historySearchDTO", new HistorySearchDTO());
-//            model.addAttribute("historiesSession", pdfCreatorService.getHistoriesByUserId());
-//            return "history";
-//        }
-//        return "emptyHistory";
-//    }
-
-
     /**
      * Handles requests for getting all history records for current user by given search criterias
      *
@@ -116,7 +98,8 @@ public class HistoryController {
      * @return string with appropriate view name
      */
     @PostMapping
-    public String searchHistories(Model model, @ModelAttribute("historySearchDTO") HistorySearchDTO searchParams, BindingResult result) {
+    public String searchHistories(Model model, @ModelAttribute("historySearchDTO") HistorySearchDTO searchParams,
+                                  BindingResult result) {
         model.addAttribute("historySearchDTO", result.hasErrors() ? new HistorySearchDTO() : searchParams);
         model.addAttribute("categories", productPageService.getAllCategories(userService.getCurrentUser().getId()));
 
@@ -174,7 +157,8 @@ public class HistoryController {
 
         try {
             pdfCreatorService.createPDF(temperotyFilePath + "\\" + fileName, histories);
-            ByteArrayOutputStream baos = pdfCreatorService.convertPDFToByteArrayOutputStream(temperotyFilePath + "\\" + fileName);
+            ByteArrayOutputStream baos = pdfCreatorService.convertPDFToByteArrayOutputStream(temperotyFilePath + "\\"
+                    + fileName);
             OutputStream os = response.getOutputStream();
             baos.writeTo(os);
             os.flush();
@@ -183,17 +167,4 @@ public class HistoryController {
         }
     }
 
-//    @GetMapping("/pages/{pageNumber}")
-//    public String getHistoryPage(Model model, @PathVariable int pageNumber) {
-//        Page<History> histories = historyService.getHistoryPage(pageNumber);
-//
-//        if (histories.getTotalElements() > 0) {
-//            model.addAttribute("categories", productPageService.getAllCategories(userService.getCurrentUser().getId()));
-//            model.addAttribute("histories", histories);
-//            model.addAttribute("historySearchDTO", new HistorySearchDTO());
-//            model.addAttribute("historiesSession", pdfCreatorService.getHistoriesByUserId());
-//
-//        }
-//        return "history";
-//    }
 }

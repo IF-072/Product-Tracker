@@ -11,7 +11,6 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -44,11 +43,15 @@ public class HistoryService {
         this.historyRepository = historyRepository;
     }
 
-    public Page<History> getPage(int userId, int pageNumber, int pageSize) {
-
-        Pageable request = new PageRequest(pageNumber - 1, pageSize);
-
-        Page<History> page = historyRepository.findByUserId(userId, request);
+    /**
+     * Make request to a HistoryRepository for retrieving page of history records for current user
+     *
+     * @param userId   - current user unique identifier
+     * @param pageable - contains information about number and size of page
+     * @return page of history records or empty page
+     */
+    public Page<History> getPage(int userId, Pageable pageable) {
+        Page<History> page = historyRepository.findByUserId(userId, pageable);
         LOGGER.info(historyContainsPages, "user", userId, page.getTotalPages());
 
         return page;
@@ -58,7 +61,7 @@ public class HistoryService {
      * Make request to a History DAOInterfaces for retrieving all history records for current user
      *
      * @param userID - current user unique identifier
-     * @return list of cart records or empty list
+     * @return list of history records or empty list
      */
     public List<History> getByUserId(int userID) {
         List<History> histories = historyDAO.getByUserId(userID);
@@ -72,7 +75,7 @@ public class HistoryService {
      *
      * @param userID     - current user unique identifier
      * @param searchData DTO that contains search criterias
-     * @return list of cart records or empty list
+     * @return list of history records or empty list
      */
     public List<History> getByUserIdAndSearchParams(int userID, HistorySearchDTO searchData) {
         List<History> histories = historyDAO.searchAllByUserIdAndParams(userID, searchData.getName(),

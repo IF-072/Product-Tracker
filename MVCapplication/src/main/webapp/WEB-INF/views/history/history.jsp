@@ -1,8 +1,7 @@
-<%@ page import="java.text.SimpleDateFormat" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
-<%@ taglib prefix="sf" uri="http://www.springframework.org/tags/form"%>
+<%@ taglib prefix="sf" uri="http://www.springframework.org/tags/form" %>
 <!-- Header -->
 <div class="row">
     <div class="col-lg-12">
@@ -18,7 +17,8 @@
             <div class="col-lg-2 search-item">
                 <div class="form-group">
                     <spring:message code='history.filter.name' var="filterName"/>
-                    <sf:input path="name" class="form-control" id="inputWarning" type="text" placeholder="${filterName}"/>
+                    <sf:input path="name" class="form-control" id="inputWarning" type="text"
+                              placeholder="${filterName}"/>
                 </div>
             </div>
             <div class="col-lg-2 search-item">
@@ -38,14 +38,16 @@
             <div class="col-lg-2 search-item">
                 <div class="form-group has-feedback">
                     <spring:message code='history.filter.dateFrom' var="filterDateFrom"/>
-                    <sf:input path="fromDate" class="form-control" type="text" name="fromDate" placeholder="${filterDateFrom}"/>
+                    <sf:input path="fromDate" class="form-control" type="text" name="fromDate"
+                              placeholder="${filterDateFrom}"/>
                     <i class="glyphicon glyphicon-calendar form-control-feedback"></i>
                 </div>
             </div>
             <div class="col-lg-2 search-item">
                 <div class="form-group has-feedback">
                     <spring:message code='history.filter.dateTo' var="filterDateTo"/>
-                    <sf:input path="toDate" class="form-control" type="text" name="toDate" placeholder="${filterDateTo}"/>
+                    <sf:input path="toDate" class="form-control" type="text" name="toDate"
+                              placeholder="${filterDateTo}"/>
                     <i class="glyphicon glyphicon-calendar form-control-feedback"></i>
                 </div>
             </div>
@@ -139,8 +141,10 @@
                         </table>
                     </div>
                     <div class="col-md-4">
-                        <button type="button" class="btn btn-primary" id="pdfButton" href="<c:url value="/history/getpdf"/>">
-                            PDF</button>
+                        <button type="button" class="btn btn-primary" id="pdfButton"
+                                href="<c:url value="/history/getpdf"/>">
+                            PDF
+                        </button>
                     </div>
                 </div>
             </div>
