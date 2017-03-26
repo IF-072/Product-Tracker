@@ -56,6 +56,9 @@ public class ShoppingListControllerTest {
 
     @Before
     public void setup() {
+        user = new User();
+        user.setId(1);
+
         ShoppingListController shoppingListController = new ShoppingListController(shoppingListServiceMock);
         StringHttpMessageConverter stringConverter = new StringHttpMessageConverter();
 
@@ -129,7 +132,8 @@ public class ShoppingListControllerTest {
     public void editShoppingList_shouldReturnNewProductAmountWithUnits() throws Exception {
         String expectedData = String.format("%s %s", PRODUCT_AMOUNT, UNIT_NAME_1);
 
-        when(shoppingListServiceMock.editShoppingList(PRODUCT_ID, PRODUCT_EDIT_VAL))
+        when(shoppingListServiceMock.editShoppingList(
+                PRODUCT_ID, PRODUCT_EDIT_VAL))
                 .thenReturn(expectedData);
 
         mockMvc.perform(post("/shopping_list/edit")
