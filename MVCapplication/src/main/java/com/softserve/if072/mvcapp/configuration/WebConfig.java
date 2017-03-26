@@ -1,6 +1,8 @@
 package com.softserve.if072.mvcapp.configuration;
 
-import com.softserve.if072.mvcapp.interceptor.AddTokenHeaderInterceptor;
+
+
+import com.softserve.if072.mvcapp.interceptor.TokenInterceptor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
@@ -72,17 +74,17 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     }
 
     /**
-     * Instantiates new {@link AddTokenHeaderInterceptor} object
+     * Instantiates new {@link TokenInterceptor} object
      *
      * @return created interceptor instance
      */
     @Bean
-    public AddTokenHeaderInterceptor addTokenHeaderInterceptor() {
-        return new AddTokenHeaderInterceptor();
+    public TokenInterceptor addTokenHeaderInterceptor() {
+        return new TokenInterceptor();
     }
 
     /**
-     * Creates RestTemplate Bean with injected {@link AddTokenHeaderInterceptor} instance
+     * Creates RestTemplate Bean with injected {@link TokenInterceptor} instance
      *
      * @return created RestTemplate instance
      */

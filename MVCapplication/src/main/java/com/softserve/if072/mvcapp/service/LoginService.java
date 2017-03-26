@@ -13,7 +13,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
-import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpSession;
 
 /**
  * Contains methods that manage user login process
@@ -28,36 +28,36 @@ public class LoginService {
     @Value("${service.url.login}")
     private String loginUrl;
 
-    @Value("${application.authenticationCookieName}")
-    private String cookieName;
-
-    @Value("${application.authenticationCookieLifetimeInSeconds}")
-    private int cookieLifeTime;
-
-    @Autowired
     private RestTemplate restTemplate;
 
+    @Autowired
+    public LoginService(RestTemplate restTemplate) {
+        this.restTemplate = restTemplate;
+    }
+
     /**
-     * Retrieves authentication token from RESTful service. If authentication was successful, returns cookie with token string.
+     * Retrieves authentication token from RESTful service.
      *
      * @param loginForm represents user's credentials
-     * @return cookie with token string if authentication successful, null if authentication fails
+     * @return token string if authentication successful, null if authentication fails
      */
-    public Cookie performLogin(UserLoginForm loginForm){
+    public String performLogin(UserLoginForm loginForm){
         MultiValueMap<String, String> params = new LinkedMultiValueMap<String, String>();
         params.set("login", loginForm.getEmail());
         params.set("password", loginForm.getPassword());
         try {
             ResponseEntity<String> response = restTemplate.postForEntity(loginUrl, params, String.class);
             if (HttpStatus.OK.equals(response.getStatusCode()) && response.hasBody() && !response.getBody().isEmpty()) {
-                Cookie cookie = new Cookie(cookieName, response.getBody());
-                cookie.setPath("/");
-                return cookie;
+                return response.getBody();
             }
         } catch (HttpClientErrorException e) {
             LOGGER.info("User {} entered invalid credentials", loginForm.getEmail());
         }
 
         return null;
+    }
+
+    public void logout(HttpSession session) {
+         session.invalidate();
     }
 }

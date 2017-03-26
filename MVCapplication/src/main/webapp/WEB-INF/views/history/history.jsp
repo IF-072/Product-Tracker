@@ -12,7 +12,7 @@
 </div>
 
 <!-- Search form -->
-<sf:form role="form" modelAttribute="historySearchDTO" method="get" action="/history/search">
+<sf:form role="form" modelAttribute="historySearchDTO" method="post" action="/history">
     <fieldset>
         <div class="row">
             <div class="col-lg-2 search-item">
@@ -97,6 +97,7 @@
                                 <c:if test="${history.action=='USED'}">
                             <td class="text-center USED">
                                 </c:if>
+
                                     ${history.amount} ${history.product.unit.name}
                             </td>
                             <td class="text-center">

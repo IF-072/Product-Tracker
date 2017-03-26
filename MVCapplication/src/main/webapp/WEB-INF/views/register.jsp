@@ -15,7 +15,7 @@
                 <div class="panel-body">
 
 
-                    <form:form role="form" method="POST" modelAttribute="registrationForm" class="form-horizontal">
+                    <form:form role="form" method="POST" modelAttribute="registrationForm" class="form-horizontal" htmlEscape="true">
                         <fieldset>
 
                             <!-- Error messages-->
