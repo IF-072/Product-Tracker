@@ -36,10 +36,21 @@ public class UserServiceTest {
     }
 
     @Test
-    public void prolongPremium_ShouldIncreasePremiumExpiresTime(){
+    public void setPremium_ShouldIncreasePremiumExpiresTime(){
         when(restTemplate.postForEntity(nullable(String.class), nullable(User.class), any())).thenReturn(null);
         User user = new User();
         user.setRole(Role.ROLE_PREMIUM);
+        user.setPremiumExpiresTime(System.currentTimeMillis() / 1000);
+        userService.setPremium(user);
+        assertTrue(user.getPremiumExpiresTime() > System.currentTimeMillis() / 1000);
+        assertEquals(user.getRole(), Role.ROLE_PREMIUM);
+    }
+
+    @Test
+    public void setPremium_ShouldIncreasePremiumExpiresTimeWhenAccountTypeIsRegular(){
+        when(restTemplate.postForEntity(nullable(String.class), nullable(User.class), any())).thenReturn(null);
+        User user = new User();
+        user.setRole(Role.ROLE_REGULAR);
         user.setPremiumExpiresTime(0);
         userService.setPremium(user);
         assertTrue(user.getPremiumExpiresTime() > System.currentTimeMillis() / 1000);
