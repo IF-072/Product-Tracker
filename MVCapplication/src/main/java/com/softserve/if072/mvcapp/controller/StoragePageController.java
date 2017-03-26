@@ -4,8 +4,6 @@ import com.softserve.if072.common.model.dto.StorageDTO;
 import com.softserve.if072.mvcapp.service.MessageService;
 import com.softserve.if072.mvcapp.service.StoragePageService;
 import com.softserve.if072.mvcapp.service.UserService;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -31,8 +29,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 @Controller
 @RequestMapping("/storage")
 public class StoragePageController {
-
-    private static final Logger LOGGER = LogManager.getLogger(StoragePageController.class);
     private final StoragePageService storagePageService;
     private final UserService userService;
     private final MessageService messageService;
