@@ -38,17 +38,24 @@ public class ShoppingListService {
     @Value("${service.product.id}")
     private String productById;
 
+    private final RestTemplate restTemplate;
+
+    private UserService userService;
+
     @Autowired
-    private RestTemplate restTemplate;
+    public ShoppingListService(RestTemplate restTemplate, UserService userService) {
+        this.restTemplate = restTemplate;
+        this.userService = userService;
+    }
 
     /**
      * This method receives all shopping list's elements from RESTful service and returns them.
      *
-     * @param userId id of user whose shopping list must be received
      * @return all shopping list's elements for user
      */
-    public List<ShoppingList> getAllElements(int userId) {
-        List<ShoppingList> shoppingList = restTemplate.getForObject(String.format(shoppingListByUserUrl, userId), List.class);
+    public List<ShoppingList> getAllElements() {
+        List<ShoppingList> shoppingList = restTemplate.getForObject(
+                String.format(shoppingListByUserUrl, userService.getCurrentUser().getId()), List.class);
 
         if (CollectionUtils.isNotEmpty(shoppingList)) {
             LOG.info("Shopping list with {} elements has been received.", shoppingList.size());
@@ -62,14 +69,14 @@ public class ShoppingListService {
     /**
      * This method edits product amount and returns new product amount with units.
      *
-     * @param userId id of the user
      * @param prodId id of the editing product
      * @param value  product amount is changed by this value
      * @return new product amount with units
      */
-    public String editShoppingList(int userId, int prodId, int value) {
+    public String editShoppingList(int prodId, int value) {
         ShoppingList shoppingList = restTemplate.getForObject(
-                String.format(shoppingListByUserAndProductUrl, userId, prodId), ShoppingList.class);
+                String.format(shoppingListByUserAndProductUrl,
+                        userService.getCurrentUser().getId(), prodId), ShoppingList.class);
 
         HttpEntity<ShoppingList> entity = new HttpEntity<>(shoppingList);
 
@@ -98,12 +105,13 @@ public class ShoppingListService {
     /**
      * This method deletes product from the shopping list.
      *
-     * @param userId id of the user
      * @param prodId id of the deleting product
      */
-    public void deleteProductFromShoppingList(int userId, int prodId) {
+    public void deleteProductFromShoppingList(int prodId) {
         ShoppingList shoppingList = restTemplate.getForObject(
-                String.format(shoppingListByUserAndProductUrl, userId, prodId), ShoppingList.class);
+                String.format(shoppingListByUserAndProductUrl,
+                        userService.getCurrentUser().getId(), prodId), ShoppingList.class);
+
         HttpEntity<ShoppingList> entity = new HttpEntity<>(shoppingList);
 
         restTemplate.exchange(shoppingListUrl, HttpMethod.DELETE, entity, ShoppingList.class);
@@ -114,10 +122,11 @@ public class ShoppingListService {
     /**
      * This method adds product to the shopping list
      *
-     * @param user      id of the user
      * @param productId id of an added product
      */
-    public void addProductToShoppingList(User user, int productId) {
+    public void addProductToShoppingList(int productId) {
+        User user = userService.getCurrentUser();
+
         ShoppingList shoppingList = restTemplate.getForObject(
                 String.format(shoppingListByUserAndProductUrl, user.getId(), productId), ShoppingList.class);
 

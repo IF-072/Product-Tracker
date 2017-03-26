@@ -141,6 +141,6 @@ public class StoragePageControllerTest {
         mockMvc.perform(post("/storage/addToSL")
                 .param("productId", "1"))
                 .andExpect(status().isOk());
-        verify(storagePageService).addProductToShoppingList(user, 1);
+        verify(storagePageService).addProductToShoppingList(1);
     }
 }
