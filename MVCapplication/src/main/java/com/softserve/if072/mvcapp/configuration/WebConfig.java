@@ -2,11 +2,13 @@ package com.softserve.if072.mvcapp.configuration;
 
 
 import com.softserve.if072.mvcapp.interceptor.AddTokenHeaderInterceptor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -17,17 +19,15 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.i18n.CookieLocaleResolver;
-import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 
 import java.nio.charset.Charset;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
+
+import static java.util.Collections.singletonList;
 
 /**
  * Configuration class for Spring MVC framework
@@ -39,6 +39,15 @@ import java.util.Locale;
 @ComponentScan("com.softserve.if072.mvcapp")
 @PropertySource({"classpath:application.properties", "classpath:message.properties"})
 public class WebConfig extends WebMvcConfigurerAdapter {
+
+    @Value("${application.localeCookieName}")
+    private String localeCookieName;
+
+    @Value("${application.localeCookieMaxAge}")
+    private Integer localeCookieMaxAge;
+
+    @Value("${application.maxUploadSizePerFile}")
+    private Long maxUploadSizePerFile;
 
     /**
      * Configures static resources location paths
@@ -59,7 +68,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     @Bean
     public CommonsMultipartResolver multipartResolver() {
         CommonsMultipartResolver resolver = new CommonsMultipartResolver();
-        resolver.setMaxUploadSizePerFile(1048576);  //1MB
+        resolver.setMaxUploadSizePerFile(maxUploadSizePerFile);  //1MB
         return resolver;
     }
 
@@ -81,7 +90,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     @Bean
     public RestTemplate restTemplate() {
         RestTemplate template = new RestTemplate();
-        template.setInterceptors(Collections.singletonList(addTokenHeaderInterceptor()));
+        template.setInterceptors(singletonList(addTokenHeaderInterceptor()));
         return template;
     }
 
@@ -93,7 +102,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     @Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
         StringHttpMessageConverter stringConverter = new StringHttpMessageConverter();
-        stringConverter.setSupportedMediaTypes(Arrays.asList(new MediaType("text", "plain", Charset.forName("UTF-8"))));
+        stringConverter.setSupportedMediaTypes(singletonList(new MediaType("text", "plain", Charset.forName("UTF-8"))));
         converters.add(stringConverter);
     }
 
@@ -119,8 +128,8 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     public LocaleResolver localeResolver() {
         CookieLocaleResolver resolver = new CookieLocaleResolver();
         resolver.setDefaultLocale(new Locale("en"));
-        resolver.setCookieName("myLocaleCookie");
-        resolver.setCookieMaxAge(4800);
+        resolver.setCookieName(localeCookieName);
+        resolver.setCookieMaxAge(localeCookieMaxAge);
         return resolver;
     }
 
@@ -142,6 +151,16 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     @Override
     public Validator getValidator() {
         return validator();
+    }
+
+    /**
+     * Specialization of PlaceholderConfigurerSupport that resolves ${...} placeholders
+     * within bean definition property values and @Value annotations against the current
+     * Spring Environment and its set of PropertySources.
+     */
+    @Bean
+    public static PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer() {
+        return new PropertySourcesPlaceholderConfigurer();
     }
 
 }

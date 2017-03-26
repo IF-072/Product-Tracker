@@ -94,6 +94,6 @@ public class StoragePageController {
     @PostMapping("/addToSL")
     @ResponseStatus(value = HttpStatus.OK)
     public void addToShoppingList(@RequestParam("productId") final int productId) {
-        storagePageService.addProductToShoppingList(userService.getCurrentUser(), productId);
+        storagePageService.addProductToShoppingList(productId);
     }
 }
