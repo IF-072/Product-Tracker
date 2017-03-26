@@ -12,6 +12,8 @@ import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.pdf.PdfWriter;
 import com.softserve.if072.common.model.History;
 import com.softserve.if072.common.model.dto.HistorySearchDTO;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
@@ -22,12 +24,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.io.ByteArrayOutputStream;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.List;
@@ -40,7 +37,8 @@ import java.util.List;
 @Service
 public class PdfCreatorService {
 
-    private HistoryService historyService;
+    private static final Logger LOGGER = LogManager.getLogger(PdfCreatorService.class);
+
     private UserService userService;
     private RestTemplate restTemplate;
     private MessageSource messageSource;
@@ -51,15 +49,14 @@ public class PdfCreatorService {
     private String restHistorySearchURL;
 
     @Autowired
-    public PdfCreatorService(HistoryService historyService, UserService userService,
-                             RestTemplate restTemplate, MessageSource messageSource) throws IOException, DocumentException {
-        this.historyService = historyService;
+    public PdfCreatorService(UserService userService, RestTemplate restTemplate,
+                             MessageSource messageSource) throws IOException, DocumentException {
         this.userService = userService;
         this.restTemplate = restTemplate;
         this.messageSource = messageSource;
     }
 
-    private BaseFont bf = BaseFont.createFont("C:\\WINDOWS\\Fonts\\ARIAL.TTF", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+    private BaseFont bf = BaseFont.createFont("/fonts/arial.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
 
     private Font LARGE = new Font(bf, 18, Font.BOLD);
     private Font SMALL_BOLD = new Font(bf, 12, Font.BOLD);
@@ -90,11 +87,8 @@ public class PdfCreatorService {
 
             document.close();
 
-        } catch (FileNotFoundException e) {
-
-            e.printStackTrace();
         } catch (DocumentException e) {
-            e.printStackTrace();
+            LOGGER.error(e.getMessage());
         }
         return document;
 
@@ -201,16 +195,14 @@ public class PdfCreatorService {
                 baos.write(buffer, 0, bytesRead);
             }
 
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.error(e.getMessage());
         } finally {
             if (inputStream != null) {
                 try {
                     inputStream.close();
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    LOGGER.error(e.getMessage());
                 }
             }
         }
