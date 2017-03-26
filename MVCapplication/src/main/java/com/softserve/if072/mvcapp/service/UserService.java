@@ -17,10 +17,6 @@ import javax.servlet.http.HttpSession;
 public class UserService {
 
     private RestTemplate restTemplate;
-    private RegistrationService registrationService;
-
-    @Value("${application.authenticationCookieName}")
-    private String tokenHeaderName;
 
     @Value("${service.user.current}")
     private String getCurrentUserURL;
@@ -31,17 +27,9 @@ public class UserService {
     @Value("${application.premiumDurationInSeconds}")
     private long premiumDuration;
 
-
-    @Value("${application.regularRoleId}")
-    private int regularRoleId;
-
-    @Value("${application.premiumRoleId}")
-    private int premiumRoleId;
-
     @Autowired
-    public UserService(RestTemplate restTemplate, RegistrationService registrationService) {
+    public UserService(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
-        this.registrationService = registrationService;
     }
 
     /**
@@ -69,9 +57,7 @@ public class UserService {
     public void setPremium(User user) {
         if (user.getRole() != null && user.getRole().isRegular()) {
             user.setRole(Role.ROLE_PREMIUM);
-            long premiumExpiresTime = System.currentTimeMillis() / 1000L + premiumDuration;
-            user.setPremiumExpiresTime(premiumExpiresTime);
-            updateUser(user);
+            prolongPremium(user);
         }
     }
 
@@ -93,7 +79,7 @@ public class UserService {
      *
      * @param user user to be updated
      */
-    public void updateUser(User user) {
+    private void updateUser(User user) {
         restTemplate.postForEntity(String.format(updateUserURL, user.getId()), user, String.class);
     }
 }

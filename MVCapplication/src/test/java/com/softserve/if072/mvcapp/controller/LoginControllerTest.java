@@ -11,8 +11,6 @@ import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
-import javax.servlet.http.Cookie;
-
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -45,6 +43,7 @@ public class LoginControllerTest {
         userLoginForm.setEmail("test@user.com");
         userLoginForm.setPassword("testPassword");
         ReflectionTestUtils.setField(loginController, "invalidCredentialsMessage", "some error message");
+        ReflectionTestUtils.setField(loginController, "sessionAuthName", "X-Token");
     }
 
     @Test
@@ -58,16 +57,15 @@ public class LoginControllerTest {
 
     @Test
     public void postLoginPage_ShouldRedirectToHomePageWhenParamsAreValid() throws Exception {
-        when(loginService.performLogin(any())).thenReturn(new Cookie("X-Token", "TOKEN_VALUE"));
+        when(loginService.performLogin(any())).thenReturn("TOKEN_VALUE");
         mockMvc.perform(post("/login").param("email", "test@user.com").param("password", "testPassword"))
-                .andExpect(redirectedUrl("/home"))
-                .andExpect(cookie().value("X-Token", "TOKEN_VALUE"));
+                .andExpect(redirectedUrl("/home"));
         verify(loginService, times(1)).performLogin(any());
     }
 
     @Test
     public void postLoginPage_ShouldHaveErrorsWhenParamsAreInvalid() throws Exception {
-        when(loginService.performLogin(any())).thenReturn(nullable(Cookie.class));
+        when(loginService.performLogin(any())).thenReturn(nullable(String.class));
         mockMvc.perform(post("/login").param("email", "WRONG").param("password", "WRONG"))
                 .andExpect(model().attributeExists("loginError"))
                 .andExpect(view().name("login"));

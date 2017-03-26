@@ -35,7 +35,7 @@ public class LogoutControllerTest {
     }
 
     @Test
-    public void logoutAndRedirectToLogin_ShouldReturnEmptyCookie() throws Exception {
+    public void logoutAndRedirectToLogin_ShouldRedirectTpLogin() throws Exception {
         mockMvc.perform(get("/logout"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/login"))

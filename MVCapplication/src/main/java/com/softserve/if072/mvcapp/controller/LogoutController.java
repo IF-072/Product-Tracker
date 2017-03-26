@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 @Controller
@@ -25,8 +24,8 @@ public class LogoutController {
      * @return redirect to the login page
      */
     @GetMapping
-    public String logoutAndRedirectToLogin(HttpServletResponse response, HttpSession session, final RedirectAttributes redirectAttributes) {
-        loginService.performLogout(response, session);
+    public String logoutAndRedirectToLogin(HttpSession session, final RedirectAttributes redirectAttributes) {
+        loginService.logout(session);
         redirectAttributes.addFlashAttribute("successMessage", "logoutSuccessful");
         return "redirect:/login";
     }

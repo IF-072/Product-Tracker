@@ -36,12 +36,12 @@
     overflow-y: auto;
 }
 
-tr.USED {
-    color: red;
+td.USED {
+    background-color: rgba(255,0,0,0.2);
 }
 
-tr.PURCHASED {
-    color: green;
+td.PURCHASED {
+    background-color: rgba(0,255,0,0.2);
 }
 
 #btn-deleteAll {

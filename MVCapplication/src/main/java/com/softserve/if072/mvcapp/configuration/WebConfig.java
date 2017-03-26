@@ -1,7 +1,7 @@
 package com.softserve.if072.mvcapp.configuration;
 
 
-import com.softserve.if072.mvcapp.interceptor.AddTokenHeaderInterceptor;
+import com.softserve.if072.mvcapp.interceptor.TokenInterceptor;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -17,11 +17,9 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.i18n.CookieLocaleResolver;
-import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 
 import java.nio.charset.Charset;
 import java.util.Arrays;
@@ -64,17 +62,17 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     }
 
     /**
-     * Instantiates new {@link AddTokenHeaderInterceptor} object
+     * Instantiates new {@link TokenInterceptor} object
      *
      * @return created interceptor instance
      */
     @Bean
-    public AddTokenHeaderInterceptor addTokenHeaderInterceptor() {
-        return new AddTokenHeaderInterceptor();
+    public TokenInterceptor addTokenHeaderInterceptor() {
+        return new TokenInterceptor();
     }
 
     /**
-     * Creates RestTemplate Bean with injected {@link AddTokenHeaderInterceptor} instance
+     * Creates RestTemplate Bean with injected {@link TokenInterceptor} instance
      *
      * @return created RestTemplate instance
      */
