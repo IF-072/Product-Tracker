@@ -17,9 +17,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
 import javax.servlet.ServletContext;
@@ -75,17 +75,24 @@ public class HistoryController {
      * @return string with appropriate view name
      */
     @GetMapping
-    public String getHistories(Model model
-//            , @PathVariable int pageNumber, @PathVariable int pageSize ) {
+    public String getHistories(Model model,
+                               @RequestParam(value = "pageNumber", required = false, defaultValue = "1") int pageNumber
+// , @PathVariable int pageSize ) {
     ) {
-        Page<History> histories = historyService.getHistoryPage(1, 6);
+        Page<History> historiesPage = historyService.getHistoryPage(pageNumber, 6);
 
+        int current = historiesPage.getNumber() + 1;
+        int begin = 1;
+        int end = historiesPage.getTotalPages();
 
-        if (histories.getTotalElements() > 0) {
+        if (historiesPage.getTotalElements() > 0) {
             model.addAttribute("categories", productPageService.getAllCategories(userService.getCurrentUser().getId()));
-            model.addAttribute("histories", histories);
+            model.addAttribute("historiesPage", historiesPage);
             model.addAttribute("historySearchDTO", new HistorySearchDTO());
             model.addAttribute("historiesSession", pdfCreatorService.getHistoriesByUserId());
+            model.addAttribute("beginIndex", begin);
+            model.addAttribute("endIndex", end);
+            model.addAttribute("currentIndex", current);
             return "history";
         }
         return "emptyHistory";
@@ -97,7 +104,7 @@ public class HistoryController {
      * @param model - a map that will be handed off to the view for rendering the data to the client
      * @return string with appropriate view name
      */
-    @PostMapping
+    @GetMapping("/search")
     public String searchHistories(Model model, @ModelAttribute("historySearchDTO") HistorySearchDTO searchParams,
                                   BindingResult result) {
         model.addAttribute("historySearchDTO", result.hasErrors() ? new HistorySearchDTO() : searchParams);
@@ -166,5 +173,5 @@ public class HistoryController {
             e1.printStackTrace();
         }
     }
-
 }
+

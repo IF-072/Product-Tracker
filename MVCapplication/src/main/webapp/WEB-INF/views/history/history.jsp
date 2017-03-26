@@ -2,6 +2,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="sf" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="ht" uri="hashtag.tld" %>
 <!-- Header -->
 <div class="row">
     <div class="col-lg-12">
@@ -10,10 +11,9 @@
 </div>
 
 <!-- Search form -->
-<sf:form role="form" modelAttribute="historySearchDTO" method="post">
+<sf:form role="form" modelAttribute="historySearchDTO" method="get" action="/history/search">
     <fieldset>
         <div class="row">
-
             <div class="col-lg-2 search-item">
                 <div class="form-group">
                     <spring:message code='history.filter.name' var="filterName"/>
@@ -78,13 +78,13 @@
                     </thead>
                     <tbody>
 
-                    <c:if test="${empty histories.getContent()}">
+                    <c:if test="${empty historiesPage}">
                         <tr class="noitems">
                             <td colspan="7"><spring:message code="history.filter.empty"/></td>
                         </tr>
                     </c:if>
 
-                    <c:forEach items="${histories.getContent()}" var="history" varStatus="status">
+                    <c:forEach items="${historiesPage.getContent()}" var="history" varStatus="status">
                         <c:if test="${history.action=='PURCHASED'}">
                             <tr class="gradeA PURCHASED">
                         </c:if>
@@ -93,7 +93,7 @@
                         </c:if>
                         <td>${status.count}</td>
                         <td>${history.product.name}</td>
-                        <td>${history.product.description}</td>
+                        <td><ht:hashtagResolver>${history.product.description}</ht:hashtagResolver></td>
                         <td>${history.product.category.name}</td>
                         <td class="text-center">
                                 ${history.amount} ${history.product.unit.name}
@@ -145,6 +145,68 @@
                                 href="<c:url value="/history/getpdf"/>">
                             PDF
                         </button>
+                    </div>
+                </div>
+            </div>
+
+            <c:url var="firstUrl" value="/history?pageNumber=${beginIndex}"/>
+            <c:url var="lastUrl" value="/history?pageNumber=${endIndex}"/>
+            <c:url var="prevUrl" value="/history?pageNumber=${currentIndex - 1}"/>
+            <c:url var="nextUrl" value="/history?pageNumber=${currentIndex + 1}"/>
+
+
+            <div class="panel-footer text-left">
+                <div class="col-sm-6">
+                    <div class="dataTables_length" id="dataTables-example_length">
+                        <label>Show <select name="dataTables-example_length" aria-controls="dataTables-example"
+                                            class="form-control input-sm">
+                            <option value="10">10</option>
+                            <option value="25">25</option>
+                            <option value="50">50</option>
+                            <option value="100">100</option>
+                        </select> entries</label>
+
+                        <input type="hidden" name="pageSize" value=""/>
+                    </div>
+                </div>
+                <div id="historyData_paginate" class="dataTables_paginate paging_simple_numbers">
+
+                    <div class="col-sm-6">
+                        <div class="pagination">
+                            <c:choose>
+                                <c:when test="${currentIndex == 1}">
+                                    <li class="paginate_button previous disabled"><a href="#">First</a></li>
+                                    <li class="paginate_button previous disabled"><a href="#">Previous</a></li>
+                                </c:when>
+                                <c:otherwise>
+                                    <li><a class="paginate_button previous" href="${firstUrl}">First</a></li>
+                                    <li><a class="paginate_button previous" href="${prevUrl}">Previous</a></li>
+                                </c:otherwise>
+                            </c:choose>
+                            <c:forEach var="i" begin="${beginIndex}" end="${endIndex}">
+                                <c:url var="pageUrl" value="history?pageNumber=${i}"/>
+                                <c:choose>
+                                    <c:when test="${i == currentIndex}">
+                                        <li class="paginate_button active" aria-controls="dataTables-example"
+                                            tabindex="0">
+                                            <a href="${pageUrl}"><c:out value="${i}"/></a></li>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <li><a class="paginate_button" href="${pageUrl}"><c:out value="${i}"/></a></li>
+                                    </c:otherwise>
+                                </c:choose>
+                            </c:forEach>
+                            <c:choose>
+                                <c:when test="${currentIndex == historiesPage.getTotalPages()}">
+                                    <li class="paginate_button next disabled"><a href="#">Next</a></li>
+                                    <li class="paginate_button next disabled"><a href="#">Last</a></li>
+                                </c:when>
+                                <c:otherwise>
+                                    <li><a class="paginate_button next" href="${nextUrl}">Next</a></li>
+                                    <li><a class="paginate_button next" href="${lastUrl}">Last</a></li>
+                                </c:otherwise>
+                            </c:choose>
+                        </div>
                     </div>
                 </div>
             </div>

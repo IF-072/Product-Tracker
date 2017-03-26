@@ -27,6 +27,7 @@ import java.util.Map;
 import static org.hamcrest.Matchers.hasKey;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
@@ -114,10 +115,9 @@ public class GoShoppingControllerTest {
     @Test
     public void getStores_ShouldReturnNull() throws Exception {
         when(goShoppingService.getStoreByUserId(user.getId())).thenThrow(new DataNotFoundException());
-        final MvcResult result = mockMvc.perform(get("/api/goShopping/stores/{userId}", user.getId()))
+        mockMvc.perform(get("/api/goShopping/stores/{userId}", user.getId()))
                 .andExpect(status().isNotFound())
-                .andReturn();
-        assertTrue(result.getResponse().getContentAsString().isEmpty());
+                .andExpect(jsonPath("$", hasSize(0)));
         verify(goShoppingService).getStoreByUserId(user.getId());
         verifyZeroInteractions(goShoppingService);
     }
@@ -172,7 +172,7 @@ public class GoShoppingControllerTest {
                 get("/api/goShopping/{storeId}/products/{userId}", storeId, user.getId()))
                 .andExpect(status().isNotFound())
                 .andReturn();
-        assertTrue(result.getResponse().getContentAsString().isEmpty());
+        assertEquals("{}", result.getResponse().getContentAsString());
         verify(goShoppingService).getProducts(user.getId(), storeId);
         verifyZeroInteractions(goShoppingService);
     }
