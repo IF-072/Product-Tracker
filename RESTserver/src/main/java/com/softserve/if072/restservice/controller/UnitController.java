@@ -7,12 +7,10 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
@@ -33,7 +31,7 @@ public class UnitController {
     private UnitService unitService;
 
     @Autowired
-    UnitController(UnitService unitService) {
+    public UnitController(UnitService unitService) {
         this.unitService = unitService;
     }
 
@@ -42,7 +40,6 @@ public class UnitController {
 
     @GetMapping(value = "/")
     @ResponseBody
-    @ResponseStatus(value = HttpStatus.OK)
     public List<Unit> getAllUnits(HttpServletResponse response) {
         try {
             List<Unit> units = unitService.getAllUnits();
@@ -57,7 +54,6 @@ public class UnitController {
 
     @GetMapping(value = "/{id}")
     @ResponseBody
-    @ResponseStatus(value = HttpStatus.OK)
     public Unit getUnitById(@PathVariable int id, HttpServletResponse response) {
         try {
             Unit unit = unitService.getUnitById(id);

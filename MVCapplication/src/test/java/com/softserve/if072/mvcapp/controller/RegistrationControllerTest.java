@@ -8,6 +8,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
@@ -48,7 +49,7 @@ public class RegistrationControllerTest {
         userRegistrationForm.setConfirmPassword("testPassword");
         userRegistrationForm.setName("name");
 
-        when(registrationService.performRegistration(any())).thenReturn(true);
+        ReflectionTestUtils.setField(registrationController, "generalErrorMessage", "successful");
     }
 
     @Test
@@ -61,6 +62,7 @@ public class RegistrationControllerTest {
 
     @Test
     public void postRegistrationPage_ShouldRedirectToLoginWhenParamsAreValid() throws Exception {
+        when(registrationService.performRegistration(any())).thenReturn(true);
         mockMvc.perform(post("/register")
                 .param("email", "test@user.com")
                 .param("password", "testPassword")
@@ -71,7 +73,19 @@ public class RegistrationControllerTest {
     }
 
     @Test
-    public void postRegistrationPage_ShouldHaveErrorsWhenParamsAreInvalid() throws Exception {
+    public void postRegistrationPage_ShouldFailWhenRegistrationServiceCantPerformUserRegistration() throws Exception {
+        when(registrationService.performRegistration(any())).thenReturn(false);
+        mockMvc.perform(post("/register")
+                .param("email", "test@user.com")
+                .param("password", "testPassword")
+                .param("name", "Ivan")
+                .param("confirmPassword", "testPassword"))
+                .andExpect(flash().attributeExists("errorMessage"))
+                .andExpect(redirectedUrl("/register"));
+    }
+
+    @Test
+    public void postRegistrationPage_ShouldHaveValidationErrors() throws Exception {
         mockMvc.perform(post("/register"))
                 .andExpect(flash().attributeExists("validationErrors"))
                 .andExpect(redirectedUrl("/register"));
