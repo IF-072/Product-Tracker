@@ -1,3 +1,13 @@
+var key = "notif";
+var sessionUl = sessionStorage.getItem(key);
+var removeAll = $("#notification").html();
+
+var removeFunc = function () {
+    $("#notification").html(removeAll);
+    sessionStorage.setItem(key, removeAll);
+    $("#notification-li").addClass("hidden");
+};
+
 var socket = new SockJS('/tracker');
 var stompClient = Stomp.over(socket);
 if (screen.width > 1170){
@@ -8,9 +18,6 @@ if (screen.width > 1170){
     $("#container-notification").css("width", "100");
 }
 
-var key = "notif";
-var sessionUl = sessionStorage.getItem(key);
-var removeAll = $("#notification").html();
 if (sessionUl != null && sessionUl.trim() != "" && sessionUl.indexOf('<li class="divider">') != -1){
     $("#notification-li").removeClass("hidden");
     if (sessionUl.indexOf('<li class="divider">') != -1) {
@@ -22,7 +29,7 @@ if (sessionUl != null && sessionUl.trim() != "" && sessionUl.indexOf('<li class=
     $("#remove-all").on("click", removeFunc);
 }
 
-stompClient.connect({}, function (frame) {
+stompClient.connect({}, function () {
     stompClient.subscribe('/queue/notifications/' + id, function (frame) {
         var msg = JSON.parse(frame.body);
         msg.date = new Date(msg.date);
@@ -32,7 +39,7 @@ stompClient.connect({}, function (frame) {
         text += '<li class="divider"></li>';
         var hours = (msg.date.getHours() > 9 ? msg.date.getHours() : "0" + msg.date.getHours()) + ':' +
             (msg.date.getMinutes() > 9 ? msg.date.getMinutes() : "0" + msg.date.getMinutes());
-        text = text + '<li><a href="#"><div><i class="fa fa-envelope fa-fw"></i>' + msg.message +
+        text = text + '<li><a href="#"><div><i class="fa fa-envelope fa-fw"></i>' + msg.data +
             '<span class="pull-right text-muted small">' + hours +
             '</span></div></a></li>';
         ul.html(text);
@@ -43,7 +50,7 @@ stompClient.connect({}, function (frame) {
         var notif = container.html();
         container.html(notif + '<div class="alert alert-info alert-dismissable">' +
             '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>' +
-            msg.message + '<a href="#" class="alert-link pull-right">' +
+            msg.data + '<a href="#" class="alert-link pull-right">' +
             hours + '</a>.' +
             '</div>');
     });
@@ -51,13 +58,7 @@ stompClient.connect({}, function (frame) {
 
 $(document).ready(function () {
     $("#remove-all").on("click", removeFunc);
-    $("#logout a").on("click", function (event) {
+    $("#logout a").on("click", function () {
         sessionStorage.setItem(key, "");
     })
 });
-
-var removeFunc = function () {
-    $("#notification").html(removeAll);
-    sessionStorage.setItem(key, removeAll);
-    $("#notification-li").addClass("hidden");
-};

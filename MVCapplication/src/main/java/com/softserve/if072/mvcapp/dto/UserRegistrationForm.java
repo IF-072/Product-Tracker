@@ -1,6 +1,7 @@
 package com.softserve.if072.mvcapp.dto;
 
 import org.hibernate.validator.constraints.NotBlank;
+import org.springframework.web.util.HtmlUtils;
 
 import javax.validation.constraints.Size;
 
@@ -26,7 +27,7 @@ public class UserRegistrationForm extends UserLoginForm {
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.name = HtmlUtils.htmlEscape(name);
     }
 
     public String getConfirmPassword() {
@@ -34,6 +35,6 @@ public class UserRegistrationForm extends UserLoginForm {
     }
 
     public void setConfirmPassword(String confirmPassword) {
-        this.confirmPassword = confirmPassword;
+        this.confirmPassword = HtmlUtils.htmlEscape(confirmPassword);
     }
 }

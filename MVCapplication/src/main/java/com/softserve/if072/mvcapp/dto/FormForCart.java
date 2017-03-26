@@ -19,19 +19,19 @@ public class FormForCart {
     private List<Integer> checkbox;
 
     public FormForCart() {
-        carts = new ArrayList<Cart>();
-        checkbox = new ArrayList<Integer>();
+        carts = new ArrayList<>();
+        checkbox = new ArrayList<>();
     }
 
     public FormForCart(final int size) {
-        carts = new ArrayList<Cart>();
+        carts = new ArrayList<>();
         for (int i = 0; i < size; i++) {
             final Cart cart = new Cart();
             cart.setProduct(new Product());
             cart.setStore(new Store());
             carts.add(cart);
         }
-        checkbox = new ArrayList<Integer>();
+        checkbox = new ArrayList<>();
 
         for (int i = 0; i < size; i++) {
             checkbox.add(0);
@@ -75,7 +75,7 @@ public class FormForCart {
     }
 
     public void removeUncheked() {
-        final List<Cart> list = new ArrayList<Cart>();
+        final List<Cart> list = new ArrayList<>();
         for (Integer i : checkbox) {
             if (i != null) {
                 list.add(carts.get(i));

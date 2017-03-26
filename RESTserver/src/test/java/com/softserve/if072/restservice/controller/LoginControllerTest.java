@@ -54,7 +54,7 @@ public class LoginControllerTest {
     }
 
     @Test
-    public void getAuthenticationToken_ShouldFailWhenNoRequestParamethersPresent() throws Exception {
+    public void getAuthenticationToken_ShouldFailWhenNoRequestParametersPresent() throws Exception {
         mockMvc.perform(post("/login/").param("login", "test@user.com"))
                 .andExpect(status().is4xxClientError())
                 .andExpect(content().string(""));
@@ -66,6 +66,16 @@ public class LoginControllerTest {
         mockMvc.perform(post("/login/").param("login", "test@user.com").param("password", "wrong_password"))
                 .andExpect(status().is4xxClientError())
                 .andExpect(content().string("Wrong password"));
+        verify(userService).getByUsername("test@user.com");
+        verifyZeroInteractions(tokenService);
+    }
+
+    @Test
+    public void getAuthenticationToken_ShouldFailSuchUserNameDoesNotExists() throws Exception {
+        when(userService.getByUsername("test@user.com")).thenReturn(null);
+        mockMvc.perform(post("/login/").param("login", "test@user.com").param("password", "wrong_password"))
+                .andExpect(status().is4xxClientError())
+                .andExpect(content().string("Invalid login"));
         verify(userService).getByUsername("test@user.com");
         verifyZeroInteractions(tokenService);
     }

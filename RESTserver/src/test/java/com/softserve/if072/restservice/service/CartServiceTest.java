@@ -51,6 +51,8 @@ public class CartServiceTest {
     @Mock
     private HistoryService historyService;
     @Mock
+    private ForecastService forecastService;
+    @Mock
     private Storage storage;
     @Mock
     private ShoppingList shoppingList;
@@ -59,7 +61,7 @@ public class CartServiceTest {
 
     @Before
     public void setup() {
-        cartService = new CartService(cartDAO, storageService, shoppingListService, historyService);
+        cartService = new CartService(cartDAO, storageService, shoppingListService, historyService, forecastService);
         when(cartDAO.deleteByProductId(anyInt())).thenReturn(1);
         cartDTO = new CartDTO(CURRENT_USER_ID, 22, PRODUCT_ID, FIRST_CART_ITEM_AMOUNT, FIRST_CART_ITEM_INITIALAMOUNT);
     }
@@ -204,7 +206,7 @@ public class CartServiceTest {
     }
 
     @Test
-    public void insert_CartGiven_ShouldExecutCartDAOInsertExactlyOnce() throws Exception {
+    public void insert_CartGiven_ShouldExecuteCartDAOInsertExactlyOnce() throws Exception {
         Product product =new Product();
         product.setId(PRODUCT_ID);
         Cart cart = new Cart();
@@ -217,7 +219,7 @@ public class CartServiceTest {
     }
 
     @Test
-    public void update_CartGiven_ShouldExecutCartDAOUpdateExactlyOnce() throws Exception {
+    public void update_CartGiven_ShouldExecuteCartDAOUpdateExactlyOnce() throws Exception {
         Product product =new Product();
         product.setId(PRODUCT_ID);
         Cart cart = new Cart();

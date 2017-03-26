@@ -22,6 +22,7 @@ import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
@@ -84,14 +85,25 @@ public class GoShoppingServiceTest {
     }
 
     @Test
-    public void testGetStoreByUserId_ShouldReturnNull() {
+    public void testGetStoreByUserId_ShouldReturnEmptyList() {
         when(cartDAO.getByUserId(userId)).thenReturn(null);
         when(shoppingListDAO.getProductsByUserId(userId)).thenReturn(null);
 
-        assertNull(goShoppingService.getStoreByUserId(userId));
+        assertTrue(goShoppingService.getStoreByUserId(userId).isEmpty());
 
         verify(cartDAO).getByUserId(userId);
         verify(shoppingListDAO).getProductsByUserId(userId);
+        verify(storeDAO, never()).getAllByUser(userId);
+    }
+
+    @Test
+    public void testGetStoreByUserId_ShouldReturnEmptyListAndNotExecute() {
+        when(cartDAO.getByUserId(userId)).thenReturn(Arrays.asList(new Cart()));
+
+        assertTrue(goShoppingService.getStoreByUserId(userId).isEmpty());
+
+        verify(cartDAO).getByUserId(userId);
+        verify(shoppingListDAO, never()).getProductsByUserId(userId);
         verify(storeDAO, never()).getAllByUser(userId);
     }
 

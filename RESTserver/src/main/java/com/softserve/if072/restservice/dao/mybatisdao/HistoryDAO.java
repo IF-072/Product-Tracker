@@ -1,5 +1,6 @@
 package com.softserve.if072.restservice.dao.mybatisdao;
 
+import com.softserve.if072.common.model.Action;
 import com.softserve.if072.common.model.History;
 import com.softserve.if072.common.model.Product;
 import com.softserve.if072.common.model.User;
@@ -14,7 +15,6 @@ import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 import org.springframework.stereotype.Repository;
 
-import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
@@ -50,6 +50,7 @@ public interface HistoryDAO {
      * Select all records from the history table that belong to specific user
      * and specific product
      *
+     * @param userId    - unique user's identifier
      * @param productId - unique product identifier
      * @return list of all history items that belong to specific user and specific product
      */
@@ -66,6 +67,43 @@ public interface HistoryDAO {
             @Result(property = "action", column = "action")
     })
     List<History> getByProductId(@Param("userId") int userId, @Param("productId") int productId);
+
+    /**
+     * Select all records from the history table that belong to specific product
+     *
+     * @param productId - unique product identifier
+     * @return list of all history items that belong to specific user and specific product
+     */
+    @Select("SELECT id, user_id, product_id, amount, used_date, action FROM history " +
+            "WHERE product_id = #{productId}")
+    @Results(value = {
+            @Result(property = "id", column = "id"),
+            @Result(property = "userId", column = "user_id"),
+            @Result(property = "productId", column = "product_id"),
+            @Result(property = "amount", column = "amount"),
+            @Result(property = "usedDate", column = "used_date"),
+            @Result(property = "action", column = "action")
+    })
+    List<HistoryDTO> getDTOByProductId(int productId);
+
+    /**
+     * Select all records from the history table that belong to specific product
+     * and specific action
+     *
+     * @param productId - unique product identifier
+     * @return list of all history items that belong to specific user and specific product
+     */
+    @Select("SELECT id, user_id, product_id, amount, used_date, action FROM history " +
+            "WHERE product_id = #{productId} AND action = #{action}")
+    @Results(value = {
+            @Result(property = "id", column = "id"),
+            @Result(property = "userId", column = "user_id"),
+            @Result(property = "productId", column = "product_id"),
+            @Result(property = "amount", column = "amount"),
+            @Result(property = "usedDate", column = "used_date"),
+            @Result(property = "action", column = "action")
+    })
+    List<HistoryDTO> getDTOByProductIdAndAction(@Param("productId") int productId, @Param("action") Action action);
 
     /**
      * Select a record from the history table with specific id identifier
@@ -125,16 +163,15 @@ public interface HistoryDAO {
     @Delete("DELETE FROM history WHERE user_id=#{userId}")
     int deleteAll(int userId);
 
-
     /**
      * Select all records from the history table that belong to specific user and matches given search params
      *
-     * @param userId - unique user's identifier
-     * @param name product name
+     * @param userId      - unique user's identifier
+     * @param name        product name
      * @param description product's description keywords
-     * @param categoryId product's category id
-     * @param dateFrom starting date
-     * @param dateTo ending date
+     * @param categoryId  product's category id
+     * @param dateFrom    starting date
+     * @param dateTo      ending date
      * @return list of all history items that belong to specific user
      */
     @Select("SELECT h.id, h.user_id, h.product_id, h.amount, h.used_date, h.action " +
@@ -146,7 +183,7 @@ public interface HistoryDAO {
             "AND (#{categoryId} IS NULL OR #{categoryId} = 0 OR p.category_id = #{categoryId}) " +
             "AND (#{dateFrom} IS NULL OR h.used_date >= #{dateFrom}) " +
             "AND (#{dateTo} IS NULL OR h.used_date <= #{dateTo}) "
-            )
+    )
     @Results(value = {
             @Result(property = "id", column = "id"),
             @Result(property = "user", column = "user_id", javaType = User.class,
@@ -160,4 +197,13 @@ public interface HistoryDAO {
     List<History> searchAllByUserIdAndParams(@Param("userId") int userId, @Param("name") String name,
                                              @Param("description") String description, @Param("categoryId") int categoryId,
                                              @Param("dateFrom") Date dateFrom, @Param("dateTo") Date dateTo);
+
+    /**
+     * Select a product id from the history table
+     *
+     * @param historyId - unique history record identifier
+     * @return product id that belong to the given history record
+     */
+    @Select("SELECT product_id FROM history WHERE id = #{historyId}")
+    int getProductIdByHistoryId(int historyId);
 }

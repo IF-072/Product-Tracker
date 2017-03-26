@@ -5,3 +5,7 @@
     text-align: center;
     width: 100%;
 }
+
+#analyticsTableColumnValueWidth{
+    width:90px;
+}

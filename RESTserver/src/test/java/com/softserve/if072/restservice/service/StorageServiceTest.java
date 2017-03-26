@@ -38,6 +38,8 @@ public class StorageServiceTest {
     private ShoppingListService shoppingListService;
     @Mock
     private HistoryService historyService;
+    @Mock
+    ForecastService forecastService;
     @InjectMocks
     private StorageService storageService;
 
@@ -85,6 +87,12 @@ public class StorageServiceTest {
     }
 
     @Test
+    public void testInsert_ShouldNotInsert() {
+        storageService.insert(null);
+        verify(storageDAO, never()).insert(any());
+    }
+
+    @Test
     public void testInsertInParts() {
         final int productId = 2;
         final int userId = 2;
@@ -109,6 +117,19 @@ public class StorageServiceTest {
     }
 
     @Test
+    public void testUpdate_ShouldUpdateWithoutDate() {
+        storage.setAmount(7);
+        when(storageDAO.getByProductID(anyInt())).thenReturn(storageDB);
+
+        storageService.update(storage);
+
+        verify(storageDAO).getByProductID(storage.getProduct().getId());
+        verify(storageDAO).update(storage);
+        verify(historyService).insert(any());
+        verify(shoppingListService, never()).insert(any());
+    }
+
+    @Test
     public void testUpdate_ShouldNotBeExecuted() {
         storage.setAmount(-2);
 
@@ -129,6 +150,19 @@ public class StorageServiceTest {
         verify(storageDAO).updateAmount(storageDB);
         verify(historyService).insert(any());
         verify(shoppingListService).insert(any());
+    }
+
+    @Test
+    public void testUpdateWithDTO_ShouldNotInsertInShoppingList() {
+        storageDTO.setAmount(7);
+        when(storageDAO.getByProductID(anyInt())).thenReturn(storageDB);
+
+        storageService.update(storageDTO);
+
+        verify(storageDAO).getByProductID(storageDTO.getProductId());
+        verify(storageDAO).updateAmount(storageDB);
+        verify(historyService).insert(any());
+        verify(shoppingListService, never()).insert(any());
     }
 
     @Test

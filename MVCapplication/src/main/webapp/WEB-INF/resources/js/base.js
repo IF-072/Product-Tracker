@@ -12,7 +12,7 @@ function getTimeRemaining(endtime) {
     var t = endtime * 1000 - Math.floor(Date.now());
     var seconds = Math.floor((t / 1000) % 60);
     var minutes = Math.floor((t / 1000 / 60) % 60);
-    var hours = Math.floor((t / (1000 * 60 * 60)) % 24);
+    var hours = Math.floor((t / (1000 * 60 * 60)));
     var days = Math.floor(t / (1000 * 60 * 60 * 24));
     return {
         'total': t,
@@ -42,7 +42,7 @@ function initializeClock(id) {
             clearInterval(timeinterval);
             clockDiv.innerHTML = "00:00:00";
         } else {
-            clockDiv.innerHTML = ('0' + t.hours).substr(-2) + ':' + ('0' + t.minutes).substr(-2) + ':' + ('0' + t.seconds).substr(-2);
+            clockDiv.innerHTML = t.hours < 10 ? '0':'' + t.hours + ':' + ('0' + t.minutes).substr(-2) + ':' + ('0' + t.seconds).substr(-2);
         }
     }
 }

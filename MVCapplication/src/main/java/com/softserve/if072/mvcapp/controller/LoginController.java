@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 
 /**
@@ -29,6 +29,9 @@ public class LoginController {
     @Value("login.invalidCredentials")
     private String invalidCredentialsMessage;
 
+    @Value("${application.sessionAuthName}")
+    private String sessionAuthName;
+
     private LoginService loginService;
 
     @Autowired
@@ -38,9 +41,11 @@ public class LoginController {
 
     /**
      * Fills in the login page model with empty UserLoginForm instance.
+     * Destroys user's session if he has already logged in.
      */
     @GetMapping
-    public String getLoginPage(Model model) {
+    public String getLoginPage(Model model, HttpSession session) {
+        loginService.logout(session);
         model.addAttribute("loginForm", new UserLoginForm());
         return "login";
     }
@@ -50,15 +55,17 @@ public class LoginController {
      */
     @PostMapping
     public String postLoginPage(@Validated @ModelAttribute("loginForm") UserLoginForm loginForm, BindingResult result,
-                                Model model, HttpServletResponse httpServletResponse) {
+                                Model model, HttpServletRequest request, HttpSession session) {
         if (result.hasErrors()) {
             model.addAttribute("errorMessages", result.getFieldErrors());
             return "login";
         }
 
-        Cookie cookie = loginService.performLogin(loginForm);
-        if(cookie != null) {
-            httpServletResponse.addCookie(cookie);
+        String token = loginService.performLogin(loginForm);
+        if (token != null) {
+            session.invalidate();
+            HttpSession newSession = request.getSession(); // create new session
+            newSession.setAttribute(sessionAuthName, token);
             return "redirect:/home";
         } else {
             model.addAttribute("loginError", invalidCredentialsMessage);

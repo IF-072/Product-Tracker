@@ -32,11 +32,14 @@ public class StoragePageService {
 
     private final RestTemplate restTemplate;
     private final ShoppingListService shoppingListService;
+    private final AnalyticsService analyticsService;
 
     @Autowired
-    public StoragePageService(final RestTemplate restTemplate, final ShoppingListService shoppingListService) {
+    public StoragePageService(final RestTemplate restTemplate, final ShoppingListService shoppingListService,
+                              final AnalyticsService analyticsService) {
         this.restTemplate = restTemplate;
         this.shoppingListService = shoppingListService;
+        this.analyticsService=analyticsService;
     }
 
     /**
@@ -66,17 +69,17 @@ public class StoragePageService {
     public void updateAmount(final StorageDTO storageDTO) {
         final String uri = storageUrl + "dto";
         restTemplate.put(uri, storageDTO);
+        analyticsService.cleanProductStatisticsSessionObject();
     }
 
     /**
      * Inserts product in shopping list.
      *
      * @param productId - product unique identifier
-     * @param user      - current user
      */
-    public void addProductToShoppingList(final User user, final int productId) {
+    public void addProductToShoppingList(final int productId) {
         if (productId > 0) {
-            shoppingListService.addProductToShoppingList(user, productId);
+            shoppingListService.addProductToShoppingList(productId);
         }
     }
 }
