@@ -19,12 +19,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class ShoppingListController {
 
     private ShoppingListService shoppingListService;
-    private UserService userService;
 
     @Autowired
-    public ShoppingListController(ShoppingListService shoppingListService, UserService userService) {
+    public ShoppingListController(ShoppingListService shoppingListService) {
         this.shoppingListService = shoppingListService;
-        this.userService = userService;
     }
 
     /**
@@ -35,7 +33,7 @@ public class ShoppingListController {
      */
     @RequestMapping("/shopping_list")
     public String getPage(Model model) {
-        model.addAttribute("shoppingList", shoppingListService.getAllElements(userService.getCurrentUser().getId()));
+        model.addAttribute("shoppingList", shoppingListService.getAllElements());
 
         return "shopping_list";
     }
@@ -46,13 +44,13 @@ public class ShoppingListController {
      * @param prodId id of the editing product
      * @param value  if value is positive product amount is increased by val,
      *               if value is positive product amount is decreased by val.
-     * @return JSON containing new amount with units
+     * @return new amount with units
      */
     @RequestMapping(value = "/shopping_list/edit", method = RequestMethod.POST)
     @ResponseBody
     public String editShoppingList(@RequestParam("prodId") int prodId,
                                    @RequestParam("val") int value) {
-        return shoppingListService.editShoppingList(userService.getCurrentUser().getId(), prodId, value);
+        return shoppingListService.editShoppingList(prodId, value);
     }
 
     /**
@@ -63,7 +61,7 @@ public class ShoppingListController {
      */
     @RequestMapping(value = "/shopping_list/delete", method = RequestMethod.GET)
     public String deleteProductFromShoppingList(@RequestParam("prodId") int prodId) {
-        shoppingListService.deleteProductFromShoppingList(userService.getCurrentUser().getId(), prodId);
+        shoppingListService.deleteProductFromShoppingList(prodId);
 
         return "redirect:/shopping_list/";
     }
@@ -76,7 +74,7 @@ public class ShoppingListController {
      */
     @RequestMapping(value = "/shopping_list/add", method = RequestMethod.POST)
     public String addProductToShoppingList(@RequestParam("productId") int productId) {
-        shoppingListService.addProductToShoppingList(userService.getCurrentUser(), productId);
+        shoppingListService.addProductToShoppingList(productId);
 
         return "redirect:/product/";
     }

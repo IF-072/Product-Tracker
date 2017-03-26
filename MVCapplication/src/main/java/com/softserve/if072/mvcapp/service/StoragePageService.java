@@ -72,11 +72,10 @@ public class StoragePageService {
      * Inserts product in shopping list.
      *
      * @param productId - product unique identifier
-     * @param user      - current user
      */
-    public void addProductToShoppingList(final User user, final int productId) {
+    public void addProductToShoppingList(final int productId) {
         if (productId > 0) {
-            shoppingListService.addProductToShoppingList(user, productId);
+            shoppingListService.addProductToShoppingList(productId);
         }
     }
 }

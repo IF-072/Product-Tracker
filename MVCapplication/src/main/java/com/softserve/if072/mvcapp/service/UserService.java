@@ -8,15 +8,15 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+
+import javax.servlet.http.HttpSession;
 
 @Service
 public class UserService {
 
     private RestTemplate restTemplate;
-    private RegistrationService registrationService;
-
-    @Value("${application.authenticationCookieName}")
-    private String tokenHeaderName;
 
     @Value("${service.user.current}")
     private String getCurrentUserURL;
@@ -27,17 +27,9 @@ public class UserService {
     @Value("${application.premiumDurationInSeconds}")
     private long premiumDuration;
 
-
-    @Value("${application.regularRoleId}")
-    private int regularRoleId;
-
-    @Value("${application.premiumRoleId}")
-    private int premiumRoleId;
-
     @Autowired
-    public UserService(RestTemplate restTemplate, RegistrationService registrationService) {
+    public UserService(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
-        this.registrationService = registrationService;
     }
 
     /**
@@ -47,7 +39,13 @@ public class UserService {
      * @return current User instance
      */
     public User getCurrentUser() {
-        User user = restTemplate.getForObject(getCurrentUserURL, User.class);
+        ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
+        HttpSession session = attr.getRequest().getSession();
+        User user = (User) session.getAttribute("user");
+        if (user == null) {
+            user = restTemplate.getForObject(getCurrentUserURL, User.class);
+            session.setAttribute("user", user);
+        }
         return user;
     }
 
@@ -57,27 +55,13 @@ public class UserService {
      * @param user user to have role updated
      */
     public void setPremium(User user) {
-        if (user.getRole() != null
-//                && user.getRole().isRegular()
-                ) {
-            user.setRole(Role.ROLE_PREMIUM);
-            long premiumExpiresTime = System.currentTimeMillis() / 1000L + premiumDuration;
-            user.setPremiumExpiresTime(premiumExpiresTime);
-            updateUser(user);
-        }
-    }
-
-    /**
-     * Plolongs the user's 'premium' account
-     *
-     * @param user user to have premium period updated
-     */
-    public void prolongPremium(User user) {
-        if (user.getRole() != null
-//                && user.getRole().isPremium()
-                ) {
-            long premiumExpiresTime = System.currentTimeMillis() / 1000L + premiumDuration;
-            user.setPremiumExpiresTime(premiumExpiresTime);
+        if (user.getRole() != null) {
+            if (user.getRole().isRegular()) {
+                user.setRole(Role.ROLE_PREMIUM);
+                user.setPremiumExpiresTime(System.currentTimeMillis() / 1000L + premiumDuration);
+            } else {
+                user.setPremiumExpiresTime(user.getPremiumExpiresTime() + premiumDuration);
+            }
             updateUser(user);
         }
     }
@@ -87,7 +71,7 @@ public class UserService {
      *
      * @param user user to be updated
      */
-    public void updateUser(User user) {
+    private void updateUser(User user) {
         restTemplate.postForEntity(String.format(updateUserURL, user.getId()), user, String.class);
     }
 }

@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -104,9 +105,10 @@ public class HistoryController {
      * @param model - a map that will be handed off to the view for rendering the data to the client
      * @return string with appropriate view name
      */
-    @GetMapping("/search")
-    public String searchHistories(Model model, @ModelAttribute("historySearchDTO") HistorySearchDTO searchParams,
-                                  BindingResult result) {
+
+    @PostMapping
+    public String searchHistories(Model model, @ModelAttribute("historySearchDTO") HistorySearchDTO searchParams, BindingResult result) {
+
         model.addAttribute("historySearchDTO", result.hasErrors() ? new HistorySearchDTO() : searchParams);
         model.addAttribute("categories", productPageService.getAllCategories(userService.getCurrentUser().getId()));
 

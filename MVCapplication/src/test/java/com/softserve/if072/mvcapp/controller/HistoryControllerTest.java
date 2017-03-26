@@ -28,11 +28,13 @@ import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasProperty;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.forwardedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
@@ -124,6 +126,38 @@ public class HistoryControllerTest {
 
         verify(historyService).getByUserId();
         verifyZeroInteractions(historyService);
+    }
+
+    @Test
+    public void searchHistories_ShouldReturnHistoryViewName_ModelShouldHaveAppropriateAttributes() throws Exception {
+        History historyA = HistoryBuilder.getDefaultHistory(FIRST_HISTORY_ITEM_ID, CURRENT_USER_ID
+                , FIRST_HISTORY_ITEM_AMOUNT, FIRST_HISTORY_ITEM_USEDDATE, Action.PURCHASED);
+        List<History> histories = Arrays.asList(historyA);
+
+        when(historyService.getByUserIdAndSearchParams(any())).thenReturn(histories);
+
+        mockMvc.perform(post("/history"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("history"))
+                .andExpect(forwardedUrl("/WEB-INF/views/history/history.jsp"))
+                .andExpect(model().attributeExists("histories"))
+                .andExpect(model().attributeExists("categories"))
+                .andExpect(model().attributeExists("historySearchDTO"))
+                .andExpect(model().attribute("histories", hasSize(1)))
+                .andExpect(model().attribute("histories", hasItem(
+                        allOf(
+                                hasProperty("id", is(FIRST_HISTORY_ITEM_ID)),
+                                hasProperty("user", hasProperty("name"
+                                        , is(String.format("user%d", CURRENT_USER_ID)))),
+                                hasProperty("product", hasProperty("name"
+                                        , is(String.format("product%d", FIRST_HISTORY_ITEM_ID)))),
+                                hasProperty("amount", is(FIRST_HISTORY_ITEM_AMOUNT)),
+                                hasProperty("usedDate", is(FIRST_HISTORY_ITEM_USEDDATE)),
+                                hasProperty("action", is(Action.PURCHASED))
+                        ))
+                ));
+
+        verify(historyService).getByUserIdAndSearchParams(any());
     }
 
     @Test

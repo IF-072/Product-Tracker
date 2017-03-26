@@ -27,7 +27,7 @@ public class StorageService {
     private final StorageDAO storageDAO;
     private final ShoppingListService shoppingListService;
     private final HistoryService historyService;
-    private final int limit = 1;
+    private static final int LIMIT = 1;
 
     @Autowired
     public StorageService(final StorageDAO storageDAO, final ShoppingListService shoppingListService,
@@ -112,7 +112,7 @@ public class StorageService {
         } else {
             storageDAO.update(storage);
         }
-        if (storage.getAmount() <= limit) {
+        if (storage.getAmount() <= LIMIT) {
             shoppingListService.insert(new ShoppingList(storage.getUser(), storage.getProduct(), 1));
         }
     }
@@ -145,7 +145,7 @@ public class StorageService {
         storage.setAmount(storageDTO.getAmount());
         storageDAO.updateAmount(storage);
 
-        if (storage.getAmount() <= limit) {
+        if (storage.getAmount() <= LIMIT) {
             shoppingListService.insert(new ShoppingList(storage.getUser(), storage.getProduct(), 1));
         }
 

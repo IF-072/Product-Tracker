@@ -137,10 +137,9 @@ public class StoragePageControllerTest {
 
     @Test
     public void testAddToShoppingList() throws Exception {
-        when(userService.getCurrentUser()).thenReturn(user);
         mockMvc.perform(post("/storage/addToSL")
                 .param("productId", "1"))
                 .andExpect(status().isOk());
-        verify(storagePageService).addProductToShoppingList(user, 1);
+        verify(storagePageService).addProductToShoppingList(1);
     }
 }
