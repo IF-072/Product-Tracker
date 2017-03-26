@@ -31,8 +31,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 @Controller
 @RequestMapping("/storage")
 public class StoragePageController {
-
-    private static final Logger LOGGER = LogManager.getLogger(StoragePageController.class);
     private final StoragePageService storagePageService;
     private final UserService userService;
     private final MessageService messageService;

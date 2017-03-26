@@ -1,3 +1,7 @@
+var key = "notif";
+var sessionUl = sessionStorage.getItem(key);
+var removeAll = $("#notification").html();
+
 var removeFunc = function () {
     $("#notification").html(removeAll);
     sessionStorage.setItem(key, removeAll);
@@ -14,9 +18,6 @@ if (screen.width > 1170){
     $("#container-notification").css("width", "100");
 }
 
-var key = "notif";
-var sessionUl = sessionStorage.getItem(key);
-var removeAll = $("#notification").html();
 if (sessionUl != null && sessionUl.trim() != "" && sessionUl.indexOf('<li class="divider">') != -1){
     $("#notification-li").removeClass("hidden");
     if (sessionUl.indexOf('<li class="divider">') != -1) {

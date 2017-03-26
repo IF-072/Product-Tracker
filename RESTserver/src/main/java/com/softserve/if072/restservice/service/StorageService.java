@@ -27,7 +27,7 @@ public class StorageService {
     private final StorageDAO storageDAO;
     private final ShoppingListService shoppingListService;
     private final HistoryService historyService;
-    private final int limit = 1;
+    private static final int limit = 1;
 
     @Autowired
     public StorageService(final StorageDAO storageDAO, final ShoppingListService shoppingListService,

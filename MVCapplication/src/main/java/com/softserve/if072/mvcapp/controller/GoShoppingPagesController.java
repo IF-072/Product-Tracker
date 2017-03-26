@@ -28,8 +28,6 @@ import java.util.Map;
 
 @Controller
 public class GoShoppingPagesController {
-
-    private static final Logger LOGGER = LogManager.getLogger(GoShoppingPagesController.class);
     private final GoShoppingPageService goShoppingPageService;
     private final UserService userService;
     private final MessageService messageService;
