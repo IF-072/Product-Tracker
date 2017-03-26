@@ -5,8 +5,6 @@ import com.softserve.if072.mvcapp.dto.FormForCart;
 import com.softserve.if072.mvcapp.service.GoShoppingPageService;
 import com.softserve.if072.mvcapp.service.MessageService;
 import com.softserve.if072.mvcapp.service.UserService;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -28,8 +26,6 @@ import java.util.Map;
 
 @Controller
 public class GoShoppingPagesController {
-
-    private static final Logger LOGGER = LogManager.getLogger(GoShoppingPagesController.class);
     private final GoShoppingPageService goShoppingPageService;
     private final UserService userService;
     private final MessageService messageService;

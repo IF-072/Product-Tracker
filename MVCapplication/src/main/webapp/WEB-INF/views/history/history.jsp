@@ -158,7 +158,7 @@
             <div class="panel-footer text-left">
                 <div class="col-sm-6">
                     <div class="dataTables_length" id="dataTables-example_length">
-                        <label>Show <select name="dataTables-example_length" aria-controls="dataTables-example"
+                        <label>Show <select name="dataTables-example_length"
                                             class="form-control input-sm">
                             <option value="10">10</option>
                             <option value="25">25</option>
