@@ -139,6 +139,7 @@ public class HistoryController {
                        @CookieValue(value = "myLocaleCookie", required = false) final String locale) throws IOException {
 
         HttpSession session = request.getSession();
+        @SuppressWarnings("unchecked")
         List<History> histories = (List) session.getAttribute("historiesSession");
 
         final ServletContext servletContext = request.getSession().getServletContext();
