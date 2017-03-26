@@ -14,6 +14,8 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  * Contains methods that manage user login process
@@ -34,8 +36,12 @@ public class LoginService {
     @Value("${application.authenticationCookieLifetimeInSeconds}")
     private int cookieLifeTime;
 
-    @Autowired
     private RestTemplate restTemplate;
+
+    @Autowired
+    public LoginService(RestTemplate restTemplate) {
+        this.restTemplate = restTemplate;
+    }
 
     /**
      * Retrieves authentication token from RESTful service. If authentication was successful, returns cookie with token string.
@@ -59,5 +65,13 @@ public class LoginService {
         }
 
         return null;
+    }
+
+    public void performLogout(HttpServletResponse response, HttpSession session) {
+        Cookie cookie = new Cookie(cookieName, null);
+        cookie.setMaxAge(0);
+        response.addCookie(cookie);
+
+        session.invalidate();
     }
 }

@@ -7,6 +7,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
@@ -43,8 +44,7 @@ public class LoginControllerTest {
         userLoginForm = new UserLoginForm();
         userLoginForm.setEmail("test@user.com");
         userLoginForm.setPassword("testPassword");
-
-        when(loginService.performLogin(any())).thenReturn(new Cookie("X-Token", "TOKEN_VALUE"));
+        ReflectionTestUtils.setField(loginController, "invalidCredentialsMessage", "some error message");
     }
 
     @Test
@@ -58,14 +58,24 @@ public class LoginControllerTest {
 
     @Test
     public void postLoginPage_ShouldRedirectToHomePageWhenParamsAreValid() throws Exception {
+        when(loginService.performLogin(any())).thenReturn(new Cookie("X-Token", "TOKEN_VALUE"));
         mockMvc.perform(post("/login").param("email", "test@user.com").param("password", "testPassword"))
-               .andExpect(redirectedUrl("/home"))
-               .andExpect(cookie().value("X-Token", "TOKEN_VALUE"));
+                .andExpect(redirectedUrl("/home"))
+                .andExpect(cookie().value("X-Token", "TOKEN_VALUE"));
         verify(loginService, times(1)).performLogin(any());
     }
 
     @Test
     public void postLoginPage_ShouldHaveErrorsWhenParamsAreInvalid() throws Exception {
+        when(loginService.performLogin(any())).thenReturn(nullable(Cookie.class));
+        mockMvc.perform(post("/login").param("email", "WRONG").param("password", "WRONG"))
+                .andExpect(model().attributeExists("loginError"))
+                .andExpect(view().name("login"));
+        verify(loginService).performLogin(any());
+    }
+
+    @Test
+    public void postLoginPage_ShouldHaveErrorsWhenThereAreNoParams() throws Exception {
         mockMvc.perform(post("/login"))
                 .andExpect(model().attributeExists("errorMessages"))
                 .andExpect(view().name("login"));

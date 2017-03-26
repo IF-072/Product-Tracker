@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 
 /**
@@ -38,9 +39,11 @@ public class LoginController {
 
     /**
      * Fills in the login page model with empty UserLoginForm instance.
+     * Destroys user's session if he has already logged in.
      */
     @GetMapping
-    public String getLoginPage(Model model) {
+    public String getLoginPage(Model model, HttpServletResponse response, HttpSession session) {
+        loginService.performLogout(response, session);
         model.addAttribute("loginForm", new UserLoginForm());
         return "login";
     }

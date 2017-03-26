@@ -8,6 +8,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+
+import javax.servlet.http.HttpSession;
 
 @Service
 public class UserService {
@@ -47,7 +51,13 @@ public class UserService {
      * @return current User instance
      */
     public User getCurrentUser() {
-        User user = restTemplate.getForObject(getCurrentUserURL, User.class);
+        ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
+        HttpSession session = attr.getRequest().getSession();
+        User user = (User) session.getAttribute("user");
+        if(user == null) {
+            user = restTemplate.getForObject(getCurrentUserURL, User.class);
+            session.setAttribute("user", user);
+        }
         return user;
     }
 
