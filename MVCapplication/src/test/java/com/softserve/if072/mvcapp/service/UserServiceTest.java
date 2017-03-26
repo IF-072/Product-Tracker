@@ -7,7 +7,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
-import org.springframework.http.ResponseEntity;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.web.client.RestTemplate;
 
@@ -28,8 +27,6 @@ public class UserServiceTest {
     private UserService userService;
     @Mock
     private RestTemplate restTemplate;
-    @Mock
-    private ResponseEntity responseEntity;
 
     @Before
     public void setup() throws ClassNotFoundException, NoSuchMethodException {
@@ -44,7 +41,7 @@ public class UserServiceTest {
         User user = new User();
         user.setRole(Role.ROLE_PREMIUM);
         user.setPremiumExpiresTime(0);
-        userService.prolongPremium(user);
+        userService.setPremium(user);
         assertTrue(user.getPremiumExpiresTime() > System.currentTimeMillis() / 1000);
         assertEquals(user.getRole(), Role.ROLE_PREMIUM);
     }

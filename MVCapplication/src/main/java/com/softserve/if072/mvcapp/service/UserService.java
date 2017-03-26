@@ -42,7 +42,7 @@ public class UserService {
         ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
         HttpSession session = attr.getRequest().getSession();
         User user = (User) session.getAttribute("user");
-        if(user == null) {
+        if (user == null) {
             user = restTemplate.getForObject(getCurrentUserURL, User.class);
             session.setAttribute("user", user);
         }
@@ -55,21 +55,13 @@ public class UserService {
      * @param user user to have role updated
      */
     public void setPremium(User user) {
-        if (user.getRole() != null && user.getRole().isRegular()) {
-            user.setRole(Role.ROLE_PREMIUM);
-            prolongPremium(user);
-        }
-    }
-
-    /**
-     * Plolongs the user's 'premium' account
-     *
-     * @param user user to have premium period updated
-     */
-    public void prolongPremium(User user) {
-        if (user.getRole() != null && user.getRole().isPremium()) {
-            long premiumExpiresTime = System.currentTimeMillis() / 1000L + premiumDuration;
-            user.setPremiumExpiresTime(premiumExpiresTime);
+        if (user.getRole() != null) {
+            if (user.getRole().isRegular()) {
+                user.setRole(Role.ROLE_PREMIUM);
+                user.setPremiumExpiresTime(System.currentTimeMillis() / 1000L + premiumDuration);
+            } else {
+                user.setPremiumExpiresTime(user.getPremiumExpiresTime() + premiumDuration);
+            }
             updateUser(user);
         }
     }

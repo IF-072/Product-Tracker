@@ -29,12 +29,12 @@
                     <span id="premiumRemaining">${userService.getCurrentUser().getPremiumExpiresTime()}</span>
                 </div>
                 <!-- Buy premium button -->
-                <a href="<c:url value='/profile/prolongPremium'/>" class="btn btn-outline btn-default"><spring:message
+                <a href="<c:url value='/payment'/>" class="btn btn-outline btn-default"><spring:message
                         code="prolongPremium"/></a>
             </c:if>
             <c:if test="${'ROLE_REGULAR' == userService.getCurrentUser().getRole().getAuthority()}">
                 <!-- Buy premium button -->
-                <a href="<c:url value='/profile/getPremium'/>" class="btn btn-outline btn-default"><spring:message
+                <a href="<c:url value='/payment'/>" class="btn btn-outline btn-default"><spring:message
                         code="buyPremium"/></a>
             </c:if>
 
