@@ -7,6 +7,8 @@ import com.softserve.if072.mvcapp.service.PdfCreatorService;
 import com.softserve.if072.mvcapp.service.ProductPageService;
 import com.softserve.if072.mvcapp.service.UserService;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -36,6 +38,8 @@ import java.util.List;
 @RequestMapping("/history")
 @SessionAttributes("historiesSession")
 public class HistoryController {
+
+    private static final Logger LOGGER = LogManager.getLogger(HistoryController.class);
 
     private HistoryService historyService;
     private ProductPageService productPageService;
@@ -131,7 +135,8 @@ public class HistoryController {
      *
      */
     @RequestMapping(value="/getpdf", method= RequestMethod.GET)
-    public void getPDF(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public void getPDF(HttpServletRequest request, HttpServletResponse response,
+                       @CookieValue(value = "myLocaleCookie", required = false) final String locale) throws IOException {
 
         HttpSession session = request.getSession();
         List<History> histories = (List) session.getAttribute("historiesSession");
@@ -140,18 +145,20 @@ public class HistoryController {
         final File tempDirectory = (File) servletContext.getAttribute("javax.servlet.context.tempdir");
         final String temperotyFilePath = tempDirectory.getAbsolutePath();
 
-        String fileName = "History.pdf";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd");
+        String fileName = "History_" + simpleDateFormat.format(new Date()) + ".pdf";
         response.setContentType("application/pdf");
         response.setHeader("Content-disposition", "attachment; filename="+ fileName);
 
         try {
-            pdfCreatorService.createPDF(temperotyFilePath+"\\"+fileName, histories);
-            ByteArrayOutputStream baos = pdfCreatorService.convertPDFToByteArrayOutputStream(temperotyFilePath+"\\"+fileName);
-            OutputStream os = response.getOutputStream();
-            baos.writeTo(os);
-            os.flush();
-        } catch (Exception e1) {
-            e1.printStackTrace();
+            pdfCreatorService.createPDF(temperotyFilePath + "\\" + fileName, histories, locale);
+            try (ByteArrayOutputStream baos = pdfCreatorService.convertPDFToByteArrayOutputStream(temperotyFilePath + "\\" + fileName);
+                 OutputStream os = response.getOutputStream()) {
+                    baos.writeTo(os);
+                    os.flush();
+            }
+        } catch (Exception e) {
+            LOGGER.error(e.getMessage());
         }
     }
 }

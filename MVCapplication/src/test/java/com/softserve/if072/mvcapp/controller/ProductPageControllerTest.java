@@ -64,7 +64,7 @@ public class ProductPageControllerTest {
     }
 
     @Test
-    public void testGetProductPage_ShouldReturnProductViewName() throws Exception {
+    public void getProductPage_ShouldReturnProductViewName() throws Exception {
         List<Product> products = Arrays.asList(product, product);
         when(productPageService.getAllProducts(anyInt())).thenReturn(products);
         when(userService.getCurrentUser()).thenReturn(user);
@@ -79,7 +79,7 @@ public class ProductPageControllerTest {
     }
 
     @Test
-    public void testGetProductPage_ShouldReturnProductViewNameIfListIsEmpty() throws Exception {
+    public void getProductPage_ShouldReturnProductViewNameIfListIsEmpty() throws Exception {
         List<Product> products = Arrays.asList();
         when(productPageService.getAllProducts(anyInt())).thenReturn(products);
         when(userService.getCurrentUser()).thenReturn(user);
@@ -93,7 +93,7 @@ public class ProductPageControllerTest {
     }
 
     @Test
-    public void testAddProduct_ShouldReturnViewName() throws Exception {
+    public void addProduct_ShouldReturnViewName() throws Exception {
         List<Unit> units = Arrays.asList(unit);
         List<Category> categories = Arrays.asList(category);
         when(productPageService.getAllUnits()).thenReturn(units);
@@ -114,7 +114,7 @@ public class ProductPageControllerTest {
     }
 
     @Test
-    public void testAddProduct_POST_ShouldReturnViewName() throws Exception {
+    public void addProduct_POST_ShouldReturnViewName() throws Exception {
         String name = createStringField(15);
         String description = createStringField(30);
         Product product = createProduct(name, description, createUnit(1,"unitName"), createCategory(2,"categoryName"));
@@ -136,7 +136,7 @@ public class ProductPageControllerTest {
     }
 
     @Test
-    public void testAddProduct_POST_ShouldReturnValidationName() throws Exception {
+    public void addProduct_POST_ShouldReturnValidationName() throws Exception {
         String name = createStringField(1);
         String description = createStringField(30);
         Product product = createProduct(name, description, createUnit(1,"unitName"), createCategory(2,"categoryName"));
@@ -156,7 +156,7 @@ public class ProductPageControllerTest {
     }
 
     @Test
-    public void testAddProduct_POST_ShouldReturnValidationDescription() throws Exception {
+    public void addProduct_POST_ShouldReturnValidationDescription() throws Exception {
         String name = createStringField(10);
         String description = createStringField(256);
         Product product = createProduct(name, description, createUnit(1,"unitName"), createCategory(2,"categoryName"));
@@ -176,7 +176,7 @@ public class ProductPageControllerTest {
     }
 
     @Test
-    public void testAddProduct_POST_ShouldReturnValidationUnit() throws Exception {
+    public void addProduct_POST_ShouldReturnValidationUnit() throws Exception {
         String name = createStringField(10);
         String description = createStringField(30);
         Product product = createProduct(name, description, null, createCategory(2,"categoryName"));
@@ -196,7 +196,7 @@ public class ProductPageControllerTest {
     }
 
     @Test
-    public void testAddProduct_POST_ShouldReturnValidationCategory() throws Exception {
+    public void addProduct_POST_ShouldReturnValidationCategory() throws Exception {
         String name = createStringField(10);
         String description = createStringField(30);
         Product product = createProduct(name, description, createUnit(1,"unitName"), null);
@@ -216,7 +216,7 @@ public class ProductPageControllerTest {
     }
 
     @Test
-    public void testAddProduct_ShouldReturnIsAlreadyExists() throws Exception {
+    public void addProduct_ShouldReturnIsAlreadyExists() throws Exception {
         String name = createStringField(15);
         String description = createStringField(30);
         Product product = createProduct(name, description, createUnit(1,"unitName"), createCategory(2,"categoryName"));
@@ -239,7 +239,7 @@ public class ProductPageControllerTest {
     }
 
     @Test
-    public void testAddProduct_ShouldReturnIsDeleted() throws Exception {
+    public void addProduct_ShouldReturnIsDeleted() throws Exception {
         String name = createStringField(15);
         String description = createStringField(30);
         Product product = createProduct(name, description, createUnit(1,"unitName"), createCategory(2,"categoryName"));
@@ -258,7 +258,7 @@ public class ProductPageControllerTest {
     }
 
     @Test
-    public void testEditProduct_ShouldReturnViewName() throws Exception {
+    public void editProduct_ShouldReturnViewName() throws Exception {
         List<Unit> units = Arrays.asList(unit);
         List<Category> categories = Arrays.asList(category);
         when(productPageService.getAllUnits()).thenReturn(units);
@@ -282,7 +282,7 @@ public class ProductPageControllerTest {
     }
 
     @Test
-    public void testGetStoresByProductId_ShouldReturnViewName() throws Exception {
+    public void getStoresByProductId_ShouldReturnViewName() throws Exception {
         Map<Integer, String> storesId = new HashMap<>();
         storesId.put(1, "name1");
         StoresInProduct storesInProduct = new StoresInProduct();
@@ -305,7 +305,7 @@ public class ProductPageControllerTest {
     }
 
     @Test
-    public void testGetStoresByProductId_POST_ShouldReturnViewName() throws Exception {
+    public void getStoresByProductId_POST_ShouldReturnViewName() throws Exception {
         mockMvc.perform(post("/product/stores")
                 .param("productId", "1")
                 .sessionAttr("storesInProduct", new StoresInProduct())
@@ -314,6 +314,16 @@ public class ProductPageControllerTest {
                 .andExpect(view().name("redirect:/product/"));
         verify(productPageService,times(1)).updateStoresInProduct(any(StoresInProduct.class),
                 anyInt());
+    }
+
+    @Test
+    public void restoreProduct() throws Exception {
+        mockMvc.perform(post("/product/restore"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(model().attributeExists("product"))
+                .andExpect(view().name("redirect:/product/"));
+
+        verify(productPageService,times(1)).restoreProduct(product);
     }
 
     private Product createProduct(String name, String description, Unit unit, Category category) {
