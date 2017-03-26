@@ -27,14 +27,17 @@ public class StorageService {
     private final StorageDAO storageDAO;
     private final ShoppingListService shoppingListService;
     private final HistoryService historyService;
+    private final ForecastService forecastService;
     private static final int LIMIT = 1;
+
 
     @Autowired
     public StorageService(final StorageDAO storageDAO, final ShoppingListService shoppingListService,
-                          final HistoryService historyService) {
+                          final HistoryService historyService, final ForecastService forecastService) {
         this.storageDAO = storageDAO;
         this.shoppingListService = shoppingListService;
         this.historyService = historyService;
+        this.forecastService=forecastService;
     }
 
     /**
@@ -53,7 +56,7 @@ public class StorageService {
     }
 
     /**
-     * Make request to a Stroraf=ge DAO for retrieving
+     * Make request to a Storage DAO for retrieving
      * storage record for product.
      *
      * @param productId - product unique identifier
@@ -144,6 +147,7 @@ public class StorageService {
         }
         storage.setAmount(storageDTO.getAmount());
         storageDAO.updateAmount(storage);
+        forecastService.setEndDate(storage.getProduct().getId());
 
         if (storage.getAmount() <= LIMIT) {
             shoppingListService.insert(new ShoppingList(storage.getUser(), storage.getProduct(), 1));
