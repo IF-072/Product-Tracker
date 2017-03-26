@@ -18,7 +18,6 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 import java.nio.charset.Charset;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -53,19 +52,11 @@ public class ShoppingListControllerTest {
     @Mock
     private ShoppingListService shoppingListServiceMock;
 
-    @Mock
-    private UserService userServiceMock;
-
     private MockMvc mockMvc;
 
     @Before
     public void setup() {
-        user = new User();
-        user.setId(1);
-
-        when(userServiceMock.getCurrentUser()).thenReturn(user);
-
-        ShoppingListController shoppingListController = new ShoppingListController(shoppingListServiceMock, userServiceMock);
+        ShoppingListController shoppingListController = new ShoppingListController(shoppingListServiceMock);
         StringHttpMessageConverter stringConverter = new StringHttpMessageConverter();
 
         stringConverter.setSupportedMediaTypes(
@@ -106,7 +97,7 @@ public class ShoppingListControllerTest {
         shoppingList.add(shoppingList1);
         shoppingList.add(shoppingList2);
 
-        when(shoppingListServiceMock.getAllElements(userServiceMock.getCurrentUser().getId())).thenReturn(shoppingList);
+        when(shoppingListServiceMock.getAllElements()).thenReturn(shoppingList);
 
         mockMvc.perform(get("/shopping_list"))
                 .andExpect(status().isOk())
@@ -138,8 +129,7 @@ public class ShoppingListControllerTest {
     public void editShoppingList_shouldReturnNewProductAmountWithUnits() throws Exception {
         String expectedData = String.format("%s %s", PRODUCT_AMOUNT, UNIT_NAME_1);
 
-        when(shoppingListServiceMock.editShoppingList(
-                userServiceMock.getCurrentUser().getId(), PRODUCT_ID, PRODUCT_EDIT_VAL))
+        when(shoppingListServiceMock.editShoppingList(PRODUCT_ID, PRODUCT_EDIT_VAL))
                 .thenReturn(expectedData);
 
         mockMvc.perform(post("/shopping_list/edit")
