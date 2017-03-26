@@ -74,8 +74,6 @@ public class HistoryController {
     public String getHistories(Model model) {
         List<History> histories = historyService.getByUserId();
 
-        System.out.println(histories);
-
         if (CollectionUtils.isNotEmpty(histories)) {
             model.addAttribute("categories", productPageService.getAllCategories(userService.getCurrentUser().getId()));
             model.addAttribute("histories", histories);

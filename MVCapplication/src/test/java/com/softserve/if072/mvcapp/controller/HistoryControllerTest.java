@@ -35,11 +35,7 @@ import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.forwardedUrl;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup;
 
 /**
@@ -187,5 +183,12 @@ public class HistoryControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(view().name("emptyHistory"))
                 .andExpect(forwardedUrl("/WEB-INF/views/history/emptyHistory.jsp"));
+    }
+
+    @Test
+    public void getPDF_ShouldResponsePDF() throws Exception {
+        mockMvc.perform(get("/history/getpdf"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/pdf"));
     }
 }

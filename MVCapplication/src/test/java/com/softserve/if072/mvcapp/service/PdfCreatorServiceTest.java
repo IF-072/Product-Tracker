@@ -86,7 +86,7 @@ public class PdfCreatorServiceTest {
     public void convertPDFToByteArrayOutputStream_ShouldReturnByteArrayOutputStream() throws IOException {
         byte[] buffer = new byte[1024];
 
-        File file = File.createTempFile("C:\\rootFolder\\childFolder1", "some-file.txt");
+        File file = File.createTempFile("C:\\rootFolder\\childFolder1", "test-file.pdf");
 
         pdfCreatorService.convertPDFToByteArrayOutputStream(file.getPath());
         verify(inputStream, times(0)).read();

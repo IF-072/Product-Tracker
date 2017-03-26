@@ -152,7 +152,7 @@ public class PdfCreatorService {
         c1.setPaddingBottom(5);
         table.addCell(c1);
 
-        c1 = new PdfPCell(new Phrase(messageSource.getMessage("history.usedDate",
+        c1 = new PdfPCell(new Phrase(messageSource.getMessage("history.date",
                 null, new Locale(locale)), SMALL));
         c1.setHorizontalAlignment(Element.ALIGN_CENTER);
         c1.setPaddingBottom(5);
