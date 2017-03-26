@@ -12,7 +12,7 @@
 </div>
 
 <!-- Search form -->
-<sf:form role="form" modelAttribute="historySearchDTO" method="get" action="/history/search">
+<sf:form role="form" modelAttribute="historySearchDTO" method="post" action="/history">
     <fieldset>
         <div class="row">
             <div class="col-lg-2 search-item">
@@ -83,32 +83,33 @@
                     </c:if>
 
                     <c:forEach items="${histories}" var="history" varStatus="status">
-                        <c:if test="${history.action=='PURCHASED'}">
-                            <tr class="gradeA PURCHASED">
-                        </c:if>
-                        <c:if test="${history.action=='USED'}">
-                            <tr class="gradeA USED">
-                        </c:if>
-                        <td>${status.count}</td>
-                        <td>${history.product.name}</td>
-                        <td><ht:hashtagResolver>${history.product.description}</ht:hashtagResolver></td>
-                        <td>${history.product.category.name}</td>
-                        <td class="text-center">
-                                ${history.amount} ${history.product.unit.name}
-                        </td>
-                        <td class="text-center">
-                            <jsp:useBean id="dateValue" class="java.util.Date"/>
-                            <jsp:setProperty name="dateValue" property="time" value="${history.usedDate}"/>
-                            <fmt:formatDate value="${dateValue}" pattern="MM/dd/yyyy"/>
-                        </td>
-                        <td class="text-center">
-                            <div class="input-append">
-                                <a class="text-center" purpose="deleteRecord"
-                                   href="<c:url value="/history/delete/${history.id}"/>"
-                                   deleteName="${history.product.name}"><i class="fa fa-trash-o fa-fw"></i></a>
-                                <c:set var="pageName" value="history" scope="request"/>
-                            </div>
-                        </td>
+                        <tr class="gradeA">
+                            <td>${status.count}</td>
+                            <td>${history.product.name}</td>
+                            <td><ht:hashtagResolver>${history.product.description}</ht:hashtagResolver></td>
+                            <td>${history.product.category.name}</td>
+                            <c:if test="${history.action=='PURCHASED'}">
+                            <td class="text-center PURCHASED">
+                                </c:if>
+                                <c:if test="${history.action=='USED'}">
+                            <td class="text-center USED">
+                                </c:if>
+
+                                    ${history.amount} ${history.product.unit.name}
+                            </td>
+                            <td class="text-center">
+                                <jsp:useBean id="dateValue" class="java.util.Date"/>
+                                <jsp:setProperty name="dateValue" property="time" value="${history.usedDate}"/>
+                                <fmt:formatDate value="${dateValue}" pattern="MM/dd/yyyy"/>
+                            </td>
+                            <td class="text-center">
+                                <div class="input-append">
+                                    <a class="text-center" purpose="deleteRecord"
+                                       href="<c:url value="/history/delete/${history.id}"/>"
+                                       deleteName="${history.product.name}"><i class="fa fa-trash-o fa-fw"></i></a>
+                                    <c:set var="pageName" value="history" scope="request"/>
+                                </div>
+                            </td>
                         </tr>
                     </c:forEach>
                     </tbody>

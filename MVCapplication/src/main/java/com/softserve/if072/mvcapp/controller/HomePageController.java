@@ -58,7 +58,7 @@ public class HomePageController {
                 model.addAttribute("storage", 0);
             }
 
-            if (CollectionUtils.isNotEmpty(storageList)) {
+            if (CollectionUtils.isNotEmpty(shoppingListList)) {
                 model.addAttribute("shoplist", shoppingListList.size());
             } else {
                 model.addAttribute("shoplist", 0);

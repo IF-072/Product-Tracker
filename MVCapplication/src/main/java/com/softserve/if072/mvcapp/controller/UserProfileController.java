@@ -53,17 +53,4 @@ public class UserProfileController {
 
         return "redirect:/home";
     }
-
-    /**
-     * Prolongs the premium expired time of user with 'premium' account type
-     *
-     * @return redirection to homepage
-     */
-    @GetMapping("/prolongPremium")
-    public String prolongPremiumAccount(){
-        User user = userService.getCurrentUser();
-        userService.prolongPremium(user);
-
-        return "redirect:/home";
-    }
 }
