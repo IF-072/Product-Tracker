@@ -36,7 +36,7 @@ function subForm(e) {
             }
 
         },
-        error: function (jqXHR, exception) {
+        error: function () {
             $("#message").text("Something went wrong!!!");
             $("#error").modal('show');
 
@@ -65,7 +65,7 @@ function addToShoppingList() {
                 $("#success").modal('hide');
             });
         },
-        error: function (jqXHR, exception) {
+        error: function () {
             $("#error").modal('show');
 
             $(".btn-confirm").click(function () {
