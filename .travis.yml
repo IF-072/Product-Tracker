@@ -2,7 +2,7 @@ language: java
 jdk:
 - oraclejdk8
 script:
-- mvn clean install jacoco:report coveralls:report sonar:sonar
+- mvn clean install jacoco:report coveralls:report sonar:sonar -Dsonar.junit.reportsPath=target/surefire-reports -Dsonar.jacoco.reportPaths=target/coverage-reports/jacoco-unit.exec -Dsonar.coverage.exclusions=**/*.js -Dsonar.exclusions=**/bootstrap.js,**/dataTables.bootstrap.js,**/dataTables.responsive.js,**/daterangepicker.js,**/jquery-ui.js,**/jquery.cookie.js,**/jquery.dataTables.js,**/jquery.js,**/metisMenu.js,**/moment.min.js,**/morris-data.js,**/morris.js,**/raphael.js,**/sockjs.js,**/stomp.js,**/sb-admin-2.js
 - mvn sonar:sonar -Dsonar.analysis.mode=preview -Dsonar.github.repository=IF-072/Product-Tracker
 cache:
   directories:
@@ -12,7 +12,7 @@ addons:
   sonarqube:
     organization: dyndyn-github
     token:
-      secure: 9bd1d29bacc878a35f311c724f185a5a8d2c1db3
+      secure: d9YmK4QO1dPgdZy7CpNI16PdbfV16jvYF5ofmZMDC51ZhXhTIqjly0nhjHoAjuZAbxiFEKThQSwaCNm31EZqz52TbzYwgMrXTTkl4inftd7GcmEgawmdljtJfqoaqEdu9Y5lw6srXcF047bw1FLjvGbgr5xa+n2GUTaVm1Syv1zHYZG5M3W0lzoGRxiw94YgGQYpYmCX2WrstmzEngC2h+qmpFTsh8jLPLxkGBbjZe1XueoCbOezzG7JZyxRc+XpRZ9oeKOE0kjPz8vnSGAWObZW9KoyvEaY8HMcDk/aQg+wICnxWiPkA6AlSJ/WzTniJ404iSg8QkUTyIX4KslcPGpca0yXvSinTzCwwplFfdtgpP0CXw8q8V4NFDiD2vgPp/eH52ASqSK8XIjayV5fi/lg6OHXnAgG/GreiOYEYe5L45S3UA2+k3BkNHSgovzDMB/TBl+n0s93rbZoge73mKUJP+1uZ5eXv2qf8zfle0l4at+7YeBR0nEpCuL1esaXHTz/0ZohfxbbzWYhlz5fLGM7IZQLLz00Op3s0r2hRvFiFNdl2FoVMcxgzOJgz8ok5x2Zku8KprnK9/gpAMVQiIuX38TEhg5HalcgpQ7hxgNLjt6qBcYdFS7w6J6HTvmeqQmnNAZ5DQEFDkM0FyDU4P3hgYZPzmIGLIMp/scmYrA=
     github_token:
       secure: QU9yFHPnC2SkmzR/5db7HAUM9tqgpPC7XFSetBiaeOdl/o+wjm1PTL8rT7Z4s4KEWh2L+06AXC9+CCoL/js3iDFkxoqdEkEn2/aRMyFzZaEXvScqT81ZmVrpWDmmYrv0ZVU/SrW9z5mv9/zkuVVqG0igrPjo8ZD57LmCSllJV+oGuzttCHU7CHENFYJ/WZ4LHU7dcrEWOqDiUY1WoPovIqC5ho25Jl2xP6kauWwlLaCloyJ2X9YPhD6Kp8UxYiRG9ExUM4CERxBDbzuFpxf8qd7ls1YRMsb0rJ6nN5qbaV+fXXL1cI6ykhdOowhHsi8i1vimZQ6DgoAwgQTiQ99MnEU8Xg3Mf2bvM3+v3i5+brD+611RXz2v61AVUxhuEy6vmbYKwpKRRhvNaK2mchQjWIKMR3YNTZjjyKPA9jw6bPDOj5djKR43IE0srEAOtT42/dovzTnyFng0CcvOmeXwv42WRWRtgN3BjSjm8eUwQpNPTpf9Zxh0FuGyE3cRzZElPU4zkyadcd/FpmB+1L5N7yPMuz7GwzSS3g40YseoHi8rqHSmRCU+cyaJeHoWG/IRFuPOMFd6jyjok2+Y6Q2FxeQGXMswp42a+RYkOlkJB4LbPdrE3YhWx8timsgLUyfKuYEB8OwJkMd9evfj7fF4DPkOp222KNkfeBNuY3Wp2MY=
     branches:
