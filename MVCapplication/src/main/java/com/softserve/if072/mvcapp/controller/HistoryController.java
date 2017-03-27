@@ -78,9 +78,9 @@ public class HistoryController {
     @GetMapping
     public String getHistories(Model model,
                                @RequestParam(value = "pageNumber", required = false, defaultValue = "1") int pageNumber
-// , @PathVariable int pageSize ) {
-    ) {
-        Page<History> historiesPage = historyService.getHistoryPage(pageNumber, 25);
+            , @RequestParam(value = "pageSize", required = false, defaultValue = "25") int pageSize) {
+
+        Page<History> historiesPage = historyService.getHistoryPage(pageNumber, pageSize);
 
         int current = historiesPage.getNumber() + 1;
         int begin = 1;
@@ -94,6 +94,7 @@ public class HistoryController {
             model.addAttribute("beginIndex", begin);
             model.addAttribute("endIndex", end);
             model.addAttribute("currentIndex", current);
+            model.addAttribute("pageSize", pageSize);
             return "history";
         }
         return "emptyHistory";
@@ -107,7 +108,8 @@ public class HistoryController {
      */
 
     @PostMapping
-    public String searchHistories(Model model, @ModelAttribute("historySearchDTO") HistorySearchDTO searchParams, BindingResult result) {
+    public String searchHistories(Model model, @ModelAttribute("historySearchDTO") HistorySearchDTO searchParams,
+                                  BindingResult result) {
 
         model.addAttribute("historySearchDTO", result.hasErrors() ? new HistorySearchDTO() : searchParams);
         model.addAttribute("categories", productPageService.getAllCategories(userService.getCurrentUser().getId()));
