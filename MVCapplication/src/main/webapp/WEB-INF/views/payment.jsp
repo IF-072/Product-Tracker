@@ -70,6 +70,7 @@
         </div>
     </div>
 </div>
+<div class="hidden" id="userId" data="<c:out value="${userService.getCurrentUser().getId()}"/>"></div>
 <script>
     var invalidCardNumber = '<spring:message code="payment.error.card.number"/>';
     var invalidExpireDate = '<spring:message code="payment.error.expire.date"/>';
