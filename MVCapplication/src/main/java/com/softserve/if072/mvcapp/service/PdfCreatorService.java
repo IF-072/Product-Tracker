@@ -12,8 +12,11 @@ import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.pdf.PdfWriter;
 import com.softserve.if072.common.model.History;
 import com.softserve.if072.common.model.dto.HistorySearchDTO;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.MessageSource;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
@@ -21,12 +24,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.io.ByteArrayOutputStream;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.List;
@@ -39,9 +37,11 @@ import java.util.List;
 @Service
 public class PdfCreatorService {
 
-    private HistoryService historyService;
+    private static final Logger LOGGER = LogManager.getLogger(PdfCreatorService.class);
+
     private UserService userService;
     private RestTemplate restTemplate;
+    private MessageSource messageSource;
 
     @Value("${application.restHistoryURL}")
     private String restHistoryURL;
@@ -49,14 +49,14 @@ public class PdfCreatorService {
     private String restHistorySearchURL;
 
     @Autowired
-    public PdfCreatorService(HistoryService historyService, UserService userService,
-                             RestTemplate restTemplate) throws IOException, DocumentException {
-        this.historyService = historyService;
+    public PdfCreatorService(UserService userService, RestTemplate restTemplate,
+                             MessageSource messageSource) throws IOException, DocumentException {
         this.userService = userService;
         this.restTemplate = restTemplate;
+        this.messageSource = messageSource;
     }
 
-    private BaseFont bf = BaseFont.createFont("C:\\WINDOWS\\Fonts\\ARIAL.TTF", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+    private BaseFont bf = BaseFont.createFont("/fonts/arial.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
 
     private Font LARGE = new Font(bf, 18, Font.BOLD);
     private Font SMALL_BOLD = new Font(bf, 12, Font.BOLD);
@@ -68,7 +68,9 @@ public class PdfCreatorService {
      * @param file - future PDF file
      * @return document
      */
-    public Document createPDF(String file, List<History> histories) throws IOException {
+    public Document createPDF(String file, List<History> histories, String locale) throws IOException {
+
+        locale = locale == null ? "en" : locale;
 
         Document document = null;
 
@@ -79,17 +81,14 @@ public class PdfCreatorService {
 
             addMetaData(document);
 
-            addTitlePage(document);
+            addTitlePage(document, locale);
 
-            createTable(document, histories);
+            createTable(document, histories, locale);
 
             document.close();
 
-        } catch (FileNotFoundException e) {
-
-            e.printStackTrace();
         } catch (DocumentException e) {
-            e.printStackTrace();
+            LOGGER.error(e.getMessage());
         }
         return document;
 
@@ -100,17 +99,18 @@ public class PdfCreatorService {
         document.addAuthor("Product Tracker");
     }
 
-    private void addTitlePage(Document document)
+    private void addTitlePage(Document document, String locale)
             throws DocumentException, IOException {
 
         Paragraph preface = new Paragraph();
         creteEmptyLine(preface, 1);
-        preface.add(new Paragraph("The history of user: " + userService.getCurrentUser().getName(), LARGE));
+        preface.add(new Paragraph(messageSource.getMessage("history.theHistoryOfUser",
+                null, new Locale(locale)) + userService.getCurrentUser().getName(), LARGE));
 
         creteEmptyLine(preface, 1);
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yyyy");
-        preface.add(new Paragraph("History created on "
-                + simpleDateFormat.format(new Date()), SMALL_BOLD));
+        preface.add(new Paragraph(messageSource.getMessage("history.createdOn",
+                null, new Locale(locale)) + simpleDateFormat.format(new Date()), SMALL_BOLD));
         document.add(preface);
 
     }
@@ -121,33 +121,39 @@ public class PdfCreatorService {
         }
     }
 
-    private void createTable(Document document, List<History> histories) throws DocumentException {
+    private void createTable(Document document, List<History> histories, String locale) throws DocumentException {
+
         Paragraph paragraph = new Paragraph();
         creteEmptyLine(paragraph, 2);
         document.add(paragraph);
         PdfPTable table = new PdfPTable(5);
 
-        PdfPCell c1 = new PdfPCell(new Phrase("Product"));
+        PdfPCell c1 = new PdfPCell(new Phrase(messageSource.getMessage("product.product",
+                null, new Locale(locale)), SMALL));
         c1.setHorizontalAlignment(Element.ALIGN_CENTER);
         c1.setPaddingBottom(5);
         table.addCell(c1);
 
-        c1 = new PdfPCell(new Phrase("Description"));
+        c1 = new PdfPCell(new Phrase(messageSource.getMessage("product.description",
+                null, new Locale(locale)), SMALL));
         c1.setHorizontalAlignment(Element.ALIGN_CENTER);
         c1.setPaddingBottom(5);
         table.addCell(c1);
 
-        c1 = new PdfPCell(new Phrase("Category"));
+        c1 = new PdfPCell(new Phrase(messageSource.getMessage("product.category",
+                null, new Locale(locale)), SMALL));
         c1.setHorizontalAlignment(Element.ALIGN_CENTER);
         c1.setPaddingBottom(5);
         table.addCell(c1);
 
-        c1 = new PdfPCell(new Phrase("Amount"));
+        c1 = new PdfPCell(new Phrase(messageSource.getMessage("amount",
+                null, new Locale(locale)), SMALL));
         c1.setHorizontalAlignment(Element.ALIGN_CENTER);
         c1.setPaddingBottom(5);
         table.addCell(c1);
 
-        c1 = new PdfPCell(new Phrase("Used Date"));
+        c1 = new PdfPCell(new Phrase(messageSource.getMessage("history.date",
+                null, new Locale(locale)), SMALL));
         c1.setHorizontalAlignment(Element.ALIGN_CENTER);
         c1.setPaddingBottom(5);
         table.addCell(c1);
@@ -189,16 +195,14 @@ public class PdfCreatorService {
                 baos.write(buffer, 0, bytesRead);
             }
 
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.error(e.getMessage());
         } finally {
             if (inputStream != null) {
                 try {
                     inputStream.close();
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    LOGGER.error(e.getMessage());
                 }
             }
         }

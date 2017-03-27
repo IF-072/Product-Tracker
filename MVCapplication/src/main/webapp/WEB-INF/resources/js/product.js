@@ -20,7 +20,7 @@ function deleteProduct(productId) {
 };
 
 $(document).ready(function() {
-    var table = $('#productData').DataTable({
+    $('#productData').DataTable({
         "language": {
             "lengthMenu": $('#Show').text() + " _MENU_ " + $('#Products').text(),
             "zeroRecords": $('#non').text(),
