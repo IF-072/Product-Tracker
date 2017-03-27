@@ -9,12 +9,17 @@ import com.softserve.if072.restservice.exception.DataNotFoundException;
 import com.softserve.if072.restservice.repository.HistoryRepository;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.hibernate.Query;
+import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityManagerFactory;
 import java.util.List;
 
 /**
@@ -40,6 +45,9 @@ public class HistoryService {
     private String historyContainsPages;
 
     @Autowired
+    private EntityManagerFactory factory;
+
+    @Autowired
     public HistoryService(HistoryDAO historyDAO, HistoryRepository historyRepository, ForecastService forecastService) {
         this.historyDAO = historyDAO;
         this.historyRepository = historyRepository;
@@ -59,6 +67,7 @@ public class HistoryService {
 
         return page;
     }
+
 
     /**
      * Make request to a History DAOInterfaces for retrieving all history records for current user
@@ -80,12 +89,35 @@ public class HistoryService {
      * @param searchData DTO that contains search criterias
      * @return list of history records or empty list
      */
-    public List<History> getByUserIdAndSearchParams(int userID, HistorySearchDTO searchData) {
-        List<History> histories = historyDAO.searchAllByUserIdAndParams(userID, searchData.getName(),
-                searchData.getDescription(), searchData.getCategoryId(), searchData.getFromDate(), searchData
-                        .getToDate());
-        LOGGER.info(historyContainsRecords, "user", userID, histories.size());
+    public Page<History> getByUserIdAndSearchParams(int userID, HistorySearchDTO searchData, Pageable pageable) {
+        Page<History> histories = searchHistories(userID, searchData, pageable);
+        LOGGER.info(historyContainsRecords, "user", userID, histories.getTotalElements());
         return histories;
+    }
+
+
+    private Page<History> searchHistories(int userId, HistorySearchDTO searchData, Pageable pageable) {
+        Session session = factory.createEntityManager().unwrap(Session.class);
+
+        String queryString = new StringBuilder()
+                .append("from History h where h.user.id = :userId")
+                .append(" and (:name is NULL or h.product.name like :name)")
+                .append(" and (:description is NULL or h.product.description like :description)")
+                .append(" and (:categoryId is NULL or :categoryId = 0 or h.product.category.id = :categoryId)")
+                .append(" and (:fromDate is NULL or h.usedDate >= :fromDate)")
+                .append(" and (:toDate is NULL or h.usedDate <= :toDate)")
+                .toString();
+
+        Query query = session.createQuery(queryString);
+        query.setParameter("userId", userId);
+        query.setParameter("name", searchData.getName().length() > 0 ? "%" + searchData.getName()+ "%" : null);
+        query.setParameter("description", searchData.getDescription().length() > 0 ? "%" + searchData.getDescription()+ "%" : null);
+        query.setParameter("categoryId", searchData.getCategoryId());
+        query.setParameter("fromDate", searchData.getFromDate());
+        query.setParameter("toDate", searchData.getToDate());
+
+        List histories = query.list();
+        return new PageImpl<>(histories, new PageRequest(pageable.getPageNumber(), pageable.getPageSize()), histories.size());
     }
 
     /**

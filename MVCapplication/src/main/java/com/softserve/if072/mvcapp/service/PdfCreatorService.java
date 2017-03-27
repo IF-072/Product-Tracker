@@ -15,6 +15,7 @@ import com.softserve.if072.common.model.dto.HistorySearchDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -28,8 +29,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * The class contains methods to create a PDF file with information about the user's history
@@ -45,8 +48,8 @@ public class PdfCreatorService {
 
     @Value("${application.restHistoryURL}")
     private String restHistoryURL;
-    @Value("${application.restHistorySearchURL}")
-    private String restHistorySearchURL;
+    @Value("${application.restHistorySearchPageURL}")
+    private String restHistorySearchPageURL;
 
     @Autowired
     public PdfCreatorService(HistoryService historyService, UserService userService,
@@ -223,16 +226,16 @@ public class PdfCreatorService {
 
     }
 
-    public List<History> getByUserIdAndSearchParams(HistorySearchDTO searchDTO) {
+    public List<History> getByUserIdAndSearchParams(int pageNumber, int pageSize, HistorySearchDTO searchDTO) {
         HttpEntity<HistorySearchDTO> request = new HttpEntity<>(searchDTO);
         Map<String, Integer> param = new HashMap<>();
         param.put("userId", userService.getCurrentUser().getId());
 
-        ResponseEntity<List<History>> historiesResponse = restTemplate.exchange(restHistorySearchURL, HttpMethod.POST,
-                request, new ParameterizedTypeReference<List<History>>() {
+        ResponseEntity<Page<History>> historiesResponse = restTemplate.exchange(restHistorySearchPageURL, HttpMethod.POST,
+                request, new ParameterizedTypeReference<Page<History>>() {
                 }, param);
 
-        return historiesResponse.getBody();
+        return historiesResponse.getBody().getContent();
     }
 
 }

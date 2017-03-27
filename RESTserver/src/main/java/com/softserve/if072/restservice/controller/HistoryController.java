@@ -59,10 +59,12 @@ public class HistoryController {
      * @return list of found cart records or empty list
      */
     @PreAuthorize("#userId == authentication.user.id")
-    @PostMapping("/search")
+    @PostMapping("/search/{pageNumber}/{pageSize}")
     @ResponseStatus(HttpStatus.OK)
-    public List<History> postSearchForm(@PathVariable("userId") int userId, @RequestBody HistorySearchDTO searchData) {
-        return historyService.getByUserIdAndSearchParams(userId, searchData);
+    public Page<History> postSearchForm(@PathVariable int userId, @PathVariable int pageNumber,
+                                        @PathVariable int pageSize, @RequestBody HistorySearchDTO searchData) {
+        Pageable pageable = new PageRequest(pageNumber - 1, pageSize);
+        return historyService.getByUserIdAndSearchParams(userId, searchData, pageable);
     }
 
     /**

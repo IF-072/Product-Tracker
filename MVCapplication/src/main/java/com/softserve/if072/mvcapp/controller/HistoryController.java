@@ -6,7 +6,6 @@ import com.softserve.if072.mvcapp.service.HistoryService;
 import com.softserve.if072.mvcapp.service.PdfCreatorService;
 import com.softserve.if072.mvcapp.service.ProductPageService;
 import com.softserve.if072.mvcapp.service.UserService;
-import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -107,15 +106,21 @@ public class HistoryController {
      */
 
     @PostMapping
-    public String searchHistories(Model model, @ModelAttribute("historySearchDTO") HistorySearchDTO searchParams, BindingResult result) {
+    public String searchHistories(Model model,
+                                  @RequestParam(value = "pageNumber", required = false, defaultValue = "1") int pageNumber,
+                                  @ModelAttribute("historySearchDTO") HistorySearchDTO searchParams, BindingResult result) {
 
         model.addAttribute("historySearchDTO", result.hasErrors() ? new HistorySearchDTO() : searchParams);
         model.addAttribute("categories", productPageService.getAllCategories(userService.getCurrentUser().getId()));
 
-        List<History> histories = historyService.getByUserIdAndSearchParams(searchParams);
-        if (CollectionUtils.isNotEmpty(histories)) {
+        Page<History> histories = historyService.getHistorySearchPage(pageNumber, 25, searchParams);
+        if (histories.getTotalElements() > 0) {
             model.addAttribute("histories", histories);
-            model.addAttribute("historiesSession", pdfCreatorService.getByUserIdAndSearchParams(searchParams));
+            //model.addAttribute("historiesSession", pdfCreatorService.getByUserIdAndSearchParams(pageNumber, 25, searchParams));
+            model.addAttribute("historiesPage", histories);
+            model.addAttribute("beginIndex", 1);
+            model.addAttribute("endIndex", histories.getTotalPages());
+            model.addAttribute("currentIndex", histories.getNumber() + 1);
         }
 
         return "history";

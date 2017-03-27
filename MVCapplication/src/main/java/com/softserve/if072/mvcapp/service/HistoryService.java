@@ -8,6 +8,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -41,6 +42,8 @@ public class HistoryService {
     private String historySuccessfullyOperation;
     @Value("${application.restHistoryPageURL}")
     private String historyPageURL;
+    @Value("${application.restHistorySearchPageURL}")
+    private String historySearchPageURL;
 
     public HistoryService(RestTemplate restTemplate, UserService userService, AnalyticsService analyticsService) {
         this.restTemplate = restTemplate;
@@ -67,11 +70,11 @@ public class HistoryService {
      *
      * @return list of history records or empty list
      */
-    public List<History> getByUserIdAndSearchParams(HistorySearchDTO searchDTO) {
+    public Page<History> getByUserIdAndSearchParams(HistorySearchDTO searchDTO) {
         int userId = userService.getCurrentUser().getId();
 
         LOGGER.info(historyRequestReceive, "searching", "history records", userId);
-        List<History> histories = restTemplate.postForObject(restHistorySearchURL, searchDTO, List.class, userId);
+        Page<History> histories = restTemplate.postForObject(restHistorySearchURL, searchDTO, Page.class, userId);
         LOGGER.info(historySuccessfullyOperation, "retrieving", "all history records", userId);
         return histories;
     }
@@ -124,6 +127,32 @@ public class HistoryService {
                 null, responseType, param);
 
         LOGGER.info(historySuccessfullyOperation, "paging ", "records", userId);
+        return historyResult.getBody();
+    }
+
+    /**
+     * Makes request to a REST server for retrieving search results page of history records for current user
+     *
+     * @param pageNumber - number of pages
+     * @param pageSize   - number of records on page
+     * @return page of history records or empty page
+     */
+    public Page<History> getHistorySearchPage(int pageNumber, int pageSize, HistorySearchDTO searchData) {
+        int userId = userService.getCurrentUser().getId();
+
+        Map<String, String> param = new HashMap<>();
+        param.put("userId", Integer.toString(userId));
+        param.put("pageNumber", Integer.toString(pageNumber));
+        param.put("pageSize", Integer.toString(pageSize));
+
+        ParameterizedTypeReference<RestResponsePage<History>> responseType = new
+                ParameterizedTypeReference<RestResponsePage<History>>() {
+                };
+
+        ResponseEntity<RestResponsePage<History>> historyResult = restTemplate.exchange(historySearchPageURL, HttpMethod.POST,
+                new HttpEntity<>(searchData), responseType, param);
+
+        LOGGER.info(historySuccessfullyOperation, "searching", "records", userId);
         return historyResult.getBody();
     }
 
