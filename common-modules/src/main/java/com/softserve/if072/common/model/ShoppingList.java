@@ -80,20 +80,4 @@ public class ShoppingList implements Serializable {
                 '}';
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        ShoppingList that = (ShoppingList) o;
-
-        return user.equals(that.user) && product.equals(that.product);
-    }
-
-    @Override
-    public int hashCode() {
-        int result = user.hashCode();
-        result = 31 * result + product.hashCode();
-        return result;
-    }
 }

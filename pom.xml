@@ -241,6 +241,12 @@
                 <version>4.2.1.RELEASE</version>
             </dependency>
 
+            <dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-commons</artifactId>
+            <version>1.12.2.RELEASE</version>
+        </dependency>
+
             <!-- https://mvnrepository.com/artifact/commons-dbcp/commons-dbcp -->
             <!-- is used to provide a pooled data source -->
             <dependency>
