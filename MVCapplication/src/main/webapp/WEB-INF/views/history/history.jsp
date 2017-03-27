@@ -1,5 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"  %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="sf" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="ht" uri="hashtag.tld" %>
@@ -77,7 +77,7 @@
                         <th class="text-center"><spring:message code="product.description"/></th>
                         <th class="text-center"><spring:message code="product.category"/></th>
                         <th class="text-center table-toBeBought-width"><spring:message code="amount"/></th>
-                        <th class="text-center table-bought-width"><spring:message code="history.usedDate"/></th>
+                        <th class="text-center table-bought-width"><spring:message code="history.date"/></th>
                         <th class="text-center table-delete-width"><spring:message code="delete"/></th>
                     </tr>
                     </thead>
@@ -175,6 +175,7 @@
                                 </c:otherwise>
                                 </c:choose>
                         </div>
+
                     </div>
                 </div>
             </div>

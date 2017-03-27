@@ -1,5 +1,6 @@
 package com.softserve.if072.restservice.dao.mybatisdao;
 
+import com.softserve.if072.common.model.Action;
 import com.softserve.if072.common.model.History;
 import com.softserve.if072.common.model.Product;
 import com.softserve.if072.common.model.User;
@@ -49,6 +50,7 @@ public interface HistoryDAO {
      * Select all records from the history table that belong to specific user
      * and specific product
      *
+     * @param userId    - unique user's identifier
      * @param productId - unique product identifier
      * @return list of all history items that belong to specific user and specific product
      */
@@ -65,6 +67,43 @@ public interface HistoryDAO {
             @Result(property = "action", column = "action")
     })
     List<History> getByProductId(@Param("userId") int userId, @Param("productId") int productId);
+
+    /**
+     * Select all records from the history table that belong to specific product
+     *
+     * @param productId - unique product identifier
+     * @return list of all history items that belong to specific user and specific product
+     */
+    @Select("SELECT id, user_id, product_id, amount, used_date, action FROM history " +
+            "WHERE product_id = #{productId}")
+    @Results(value = {
+            @Result(property = "id", column = "id"),
+            @Result(property = "userId", column = "user_id"),
+            @Result(property = "productId", column = "product_id"),
+            @Result(property = "amount", column = "amount"),
+            @Result(property = "usedDate", column = "used_date"),
+            @Result(property = "action", column = "action")
+    })
+    List<HistoryDTO> getDTOByProductId(int productId);
+
+    /**
+     * Select all records from the history table that belong to specific product
+     * and specific action
+     *
+     * @param productId - unique product identifier
+     * @return list of all history items that belong to specific user and specific product
+     */
+    @Select("SELECT id, user_id, product_id, amount, used_date, action FROM history " +
+            "WHERE product_id = #{productId} AND action = #{action}")
+    @Results(value = {
+            @Result(property = "id", column = "id"),
+            @Result(property = "userId", column = "user_id"),
+            @Result(property = "productId", column = "product_id"),
+            @Result(property = "amount", column = "amount"),
+            @Result(property = "usedDate", column = "used_date"),
+            @Result(property = "action", column = "action")
+    })
+    List<HistoryDTO> getDTOByProductIdAndAction(@Param("productId") int productId, @Param("action") Action action);
 
     /**
      * Select a record from the history table with specific id identifier
@@ -123,7 +162,6 @@ public interface HistoryDAO {
      */
     @Delete("DELETE FROM history WHERE user_id=#{userId}")
     int deleteAll(int userId);
-
 
     /**
      * Select all records from the history table that belong to specific user and matches given search params
@@ -193,4 +231,14 @@ public interface HistoryDAO {
      */
     @Select("SELECT COUNT(id) FROM history WHERE user_id = #{userId}")
     int getNumberOfRecordsByUserId(int userId);
+
+
+    /**
+     * Select a product id from the history table
+     *
+     * @param historyId - unique history record identifier
+     * @return product id that belong to the given history record
+     */
+    @Select("SELECT product_id FROM history WHERE id = #{historyId}")
+    int getProductIdByHistoryId(int historyId);
 }

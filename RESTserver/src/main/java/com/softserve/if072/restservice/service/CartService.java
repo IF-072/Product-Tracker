@@ -30,6 +30,7 @@ public class CartService {
     private final StorageService storageService;
     private final ShoppingListService shoppingListService;
     private final HistoryService historyService;
+    private final ForecastService forecastService;
     @Value("${cart.containsProduct}")
     private String cartContainsProduct;
     @Value("${cart.deleteProduct}")
@@ -53,12 +54,13 @@ public class CartService {
     @Value("${cart.productPurchaseErrorOccur}")
     private String cartProductPurchaseErrorOccur;
 
-    public CartService(CartDAO cartDAO, StorageService storageService, ShoppingListService shoppingListService
-            , HistoryService historyService) {
+    public CartService(CartDAO cartDAO, StorageService storageService, ShoppingListService shoppingListService,
+                       HistoryService historyService, ForecastService forecastService) {
         this.cartDAO = cartDAO;
         this.storageService = storageService;
         this.shoppingListService = shoppingListService;
-        this.historyService=historyService;
+        this.historyService = historyService;
+        this.forecastService = forecastService;
     }
 
     /**
@@ -105,10 +107,12 @@ public class CartService {
             Storage storage = storageService.getByProductId(productId);
             if (storage == null) {
                 storageService.insert(userId, productId, amount);
+                forecastService.setEndDate(productId);
                 LOGGER.info(cartInsertProduct, amount, productId, userId);
             } else {
                 storage.setAmount(storage.getAmount() + amount);
                 storageService.update(storage);
+                forecastService.setEndDate(productId);
                 LOGGER.info(cartUpdateProductAmount, productId, "storage", userId);
             }
 
@@ -126,7 +130,6 @@ public class CartService {
             }
 
             addToHistory(cartDTO);
-
         } catch (Exception e) {
             LOGGER.error(cartProductPurchaseErrorOccur, e, productId);
             throw e;
@@ -148,10 +151,11 @@ public class CartService {
 
     /**
      * Make request to a Cart DTO for deleting all product from the cart of current user
+     *
      * @param userId - current user unique identifier
      */
     public void deleteAll(int userId) {
-        int count=cartDAO.deleteAll(userId);
+        int count = cartDAO.deleteAll(userId);
         LOGGER.info(deleteAllSuccessfullyOperation, count, userId);
     }
 
@@ -175,6 +179,7 @@ public class CartService {
 
     /**
      * Add a record to the history of the current user about the product that has been purchased
+     *
      * @param cartDTO - an object with required information for the product purchase
      */
     private void addToHistory(CartDTO cartDTO) {
@@ -186,7 +191,6 @@ public class CartService {
         historyDTO.setAction(Action.PURCHASED);
         historyService.insert(historyDTO);
     }
-
 }
 
 

@@ -6,6 +6,7 @@ import com.softserve.if072.common.model.Product;
 import com.softserve.if072.common.model.Store;
 import com.softserve.if072.common.model.Unit;
 import com.softserve.if072.common.model.User;
+import com.softserve.if072.common.model.dto.AnalyticsProductDTO;
 import com.softserve.if072.restservice.dao.DAO;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
@@ -26,7 +27,6 @@ import java.util.List;
  *
  * @author Vitaliy Malisevych
  */
-
 @Repository
 public interface ProductDAO extends DAO<Product> {
     @Override
@@ -156,7 +156,6 @@ public interface ProductDAO extends DAO<Product> {
     @Result(property = "isEnabled", column = "is_enabled")
     Store getStoreFromProductById(@Param("storeId") Integer storeId, @Param("productId") Integer productId);
 
-
     @Delete("DELETE FROM stores_products WHERE store_id = #{storeId} and product_id = #{productId}")
     void deleteStoreFromProductById(@Param("storeId") Integer storeId, @Param("productId") Integer productId);
 
@@ -235,4 +234,21 @@ public interface ProductDAO extends DAO<Product> {
     })
     Product getByImageId(@Param("imageId") int imageId, @Param("userId") int userId);
 
+    @Select("SELECT id, name, unit_id FROM product WHERE user_id = #{userId} and is_enabled = 1 ORDER BY name")
+    @Results(value = {
+            @Result(property = "id", column = "id"),
+            @Result(property = "name", column = "name"),
+            @Result(property = "unit", column = "unit_id", javaType = String.class,
+                    one = @One(select = "com.softserve.if072.restservice.dao.mybatisdao.UnitDAO.getNameByID"))
+    })
+    List<AnalyticsProductDTO> getAllAnalyticsProductDTOs(int userId);
+
+    @Select("SELECT id, name , unit_id FROM product WHERE id = #{productId}")
+    @Results(value = {
+            @Result(property = "id", column = "id"),
+            @Result(property = "name", column = "name"),
+            @Result(property = "unit", column = "unit_id", javaType = String.class,
+                    one = @One(select = "com.softserve.if072.restservice.dao.mybatisdao.UnitDAO.getNameByID"))
+    })
+    AnalyticsProductDTO getAnalyticsProductDTO(int productId);
 }

@@ -38,6 +38,8 @@ public class StorageServiceTest {
     private ShoppingListService shoppingListService;
     @Mock
     private HistoryService historyService;
+    @Mock
+    ForecastService forecastService;
     @InjectMocks
     private StorageService storageService;
 

@@ -46,9 +46,12 @@ public class HistoryServiceTest {
     HistoryDAO historyDAO;
     HistoryRepository historyRepository;
 
+    @Mock
+    ForecastService forecastService;
+
     @Before
     public void setup() {
-        historyService = new HistoryService(historyDAO, historyRepository);
+        historyService = new HistoryService(historyDAO, historyRepository, forecastService);
     }
 
     @Test
@@ -86,7 +89,6 @@ public class HistoryServiceTest {
         historyService.delete(HISTORY_ID);
 
         verify(historyDAO).delete(HISTORY_ID);
-        verifyZeroInteractions(historyDAO);
     }
 
     @Test
@@ -128,7 +130,7 @@ public class HistoryServiceTest {
     }
 
     @Test
-    public void insert_HistoryDTO_ShouldExecutHistoryDAOInsertExactlyOnce() throws Exception {
+    public void insert_HistoryDTO_ShouldExecuteHistoryDAOInsertExactlyOnce() throws Exception {
         HistoryDTO historyDTO = new HistoryDTO(HISTORY_ID, CURRENT_USER_ID, PRODUCT_ID, FIRST_HISTORY_ITEM_AMOUNT
                 , FIRST_HISTORY_ITEM_USEDDATE, Action.USED);
 
@@ -139,11 +141,11 @@ public class HistoryServiceTest {
     }
 
     @Test
-    public void update_HistoryDTO_ShouldExecutHistoryDAOUpdateExactlyOnce() throws Exception {
+    public void update_HistoryDTO_ShouldExecuteHistoryDAOUpdateExactlyOnce() throws Exception {
         HistoryDTO historyDTO = new HistoryDTO(HISTORY_ID, CURRENT_USER_ID, PRODUCT_ID, FIRST_HISTORY_ITEM_AMOUNT
                 , FIRST_HISTORY_ITEM_USEDDATE, Action.PURCHASED);
 
-       when(historyDAO.update(historyDTO)).thenReturn(1);
+        when(historyDAO.update(historyDTO)).thenReturn(1);
 
         historyService.update(historyDTO);
 

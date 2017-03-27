@@ -28,6 +28,7 @@ public class HistoryService {
     private static final Logger LOGGER = LogManager.getLogger();
     private final RestTemplate restTemplate;
     private final UserService userService;
+    private final AnalyticsService analyticsService;
     @Value("${application.restHistoryURL}")
     private String restHistoryURL;
     @Value("${application.restHistorySearchURL}")
@@ -41,9 +42,10 @@ public class HistoryService {
     @Value("${application.restHistoryPageURL}")
     private String historyPageURL;
 
-    public HistoryService(RestTemplate restTemplate, UserService userService) {
+    public HistoryService(RestTemplate restTemplate, UserService userService, AnalyticsService analyticsService) {
         this.restTemplate = restTemplate;
         this.userService = userService;
+        this.analyticsService=analyticsService;
     }
 
     /**
@@ -84,6 +86,7 @@ public class HistoryService {
 
         LOGGER.info(historyRequestReceive, "deleting the record with id", historyId, userId);
         restTemplate.delete(restHistoryDeleteURL, userId, historyId);
+        analyticsService.cleanProductStatisticsSessionObject();
         LOGGER.info(historySuccessfullyOperation, "deleting the record with id", historyId, userId);
     }
 

@@ -32,11 +32,14 @@ public class StoragePageService {
 
     private final RestTemplate restTemplate;
     private final ShoppingListService shoppingListService;
+    private final AnalyticsService analyticsService;
 
     @Autowired
-    public StoragePageService(final RestTemplate restTemplate, final ShoppingListService shoppingListService) {
+    public StoragePageService(final RestTemplate restTemplate, final ShoppingListService shoppingListService,
+                              final AnalyticsService analyticsService) {
         this.restTemplate = restTemplate;
         this.shoppingListService = shoppingListService;
+        this.analyticsService=analyticsService;
     }
 
     /**
@@ -66,6 +69,7 @@ public class StoragePageService {
     public void updateAmount(final StorageDTO storageDTO) {
         final String uri = storageUrl + "dto";
         restTemplate.put(uri, storageDTO);
+        analyticsService.cleanProductStatisticsSessionObject();
     }
 
     /**

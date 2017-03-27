@@ -317,6 +317,13 @@
                 <version>2.1.7</version>
             </dependency>
 
+            <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-math3 -->
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-math3</artifactId>
+                <version>3.6.1</version>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 
@@ -326,7 +333,7 @@
                 <plugin>
                     <!--Include "clean lifecycle" during the initialize phase-->
                     <!--of default lifecycle of the project.-->
-                    <!--To skeep auto-clean use key –Dclean.skip=true-->
+                    <!--To skip auto-clean use key –Dclean.skip=true-->
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-clean-plugin</artifactId>
                     <version>3.0.0</version>

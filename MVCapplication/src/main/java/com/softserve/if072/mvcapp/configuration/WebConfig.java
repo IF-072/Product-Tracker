@@ -1,6 +1,7 @@
 package com.softserve.if072.mvcapp.configuration;
 
 
+
 import com.softserve.if072.mvcapp.interceptor.TokenInterceptor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;

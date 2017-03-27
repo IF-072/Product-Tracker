@@ -83,7 +83,7 @@ public class HistoryDTO {
         return "HistoryDTO{ UserId: " + userId +
                 "; ProductId: " + productId +
                 "; amount:  " + amount +
-                "; usedDate " + usedDate +
+                "; usedDate: " + usedDate +
                 "; action: " + action +
                 "}";
     }
