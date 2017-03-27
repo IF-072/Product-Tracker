@@ -96,6 +96,17 @@ public class GoShoppingServiceTest {
         verify(storeDAO, never()).getAllByUser(userId);
     }
 
+    @Test
+    public void testGetStoreByUserId_ShouldReturnEmptyListAndNotExecute() {
+        when(cartDAO.getByUserId(userId)).thenReturn(Arrays.asList(new Cart()));
+
+        assertTrue(goShoppingService.getStoreByUserId(userId).isEmpty());
+
+        verify(cartDAO).getByUserId(userId);
+        verify(shoppingListDAO, never()).getProductsByUserId(userId);
+        verify(storeDAO, never()).getAllByUser(userId);
+    }
+
     @Test(expected = DataNotFoundException.class)
     public void testGetStoreByUserId_ShouldThrowException() {
         final int userId = 2;

@@ -35,6 +35,8 @@ public class StoragePageServiceTest {
     private RestTemplate restTemplate;
     @Mock
     private ShoppingListService shoppingListService;
+    @Mock
+    private AnalyticsService analyticsService;
     @InjectMocks
     private StoragePageService storagePageService;
     private Storage storage;
@@ -65,15 +67,15 @@ public class StoragePageServiceTest {
     public void addProductToShoppingList_ShouldInsert(){
         final User user = new User();
         final int productId = 2;
-        storagePageService.addProductToShoppingList(user, productId);
-        verify(shoppingListService).addProductToShoppingList(user, productId);
+        storagePageService.addProductToShoppingList(productId);
+        verify(shoppingListService).addProductToShoppingList(productId);
     }
 
     @Test
     public void addProductToShoppingList_ShouldNotInsert(){
         final User user = new User();
         final int productId = 0;
-        storagePageService.addProductToShoppingList(user, productId);
-        verify(shoppingListService, never()).addProductToShoppingList(user, productId);
+        storagePageService.addProductToShoppingList(productId);
+        verify(shoppingListService, never()).addProductToShoppingList(productId);
     }
 }

@@ -1,4 +1,4 @@
--- 26/02/17
+-- 26/03/17
 
 -- -----------------------------------------------------
 -- Fill in user table
@@ -159,7 +159,7 @@ INSERT INTO if072java.product (id, name, description, image_id, user_id, categor
 INSERT INTO if072java.product (id, name, description, image_id, user_id, category_id, unit_id, is_enabled) VALUES (29, 'Молоко ультрапастеризоване', 'Біла лінія tf 900г', null, 4, 26, 1, 1);
 INSERT INTO if072java.product (id, name, description, image_id, user_id, category_id, unit_id, is_enabled) VALUES (30, 'Молоко Бурьонка ультрапастеризоване', '2.6% 1500г тетрапакет Україна', null, 4, 26, 1, 1);
 INSERT INTO if072java.product (id, name, description, image_id, user_id, category_id, unit_id, is_enabled) VALUES (31, 'Шоколад чорний АВК', 'без цукру з фруктозою 90г у плитках Україна', null, 4, 28, 3, 1);
-INSERT INTO if072java.product (id, name, description, image_id, user_id, category_id, unit_id, is_enabled) VALUES (32, 'ШоколадTai Tau Meskenas', '', null, 4, 28, 3, 1);
+INSERT INTO if072java.product (id, name, description, image_id, user_id, category_id, unit_id, is_enabled) VALUES (32, 'Шоколад Tai Tau Meskenas', '', null, 4, 28, 3, 1);
 INSERT INTO if072java.product (id, name, description, image_id, user_id, category_id, unit_id, is_enabled) VALUES (33, 'Цукерки АВК', '', null, 4, 28, 2, 1);
 -- -----------------------------------------------------
 -- for user with id 5
@@ -305,13 +305,12 @@ INSERT INTO if072java.storage (user_id, product_id, amount, end_date) VALUES (2,
 -- -----------------------------------------------------
 -- for user with id 4
 -- ----------------------------------------------------
-INSERT INTO if072java.storage (user_id, product_id, amount, end_date) VALUES (4, 21, 1, null);
-INSERT INTO if072java.storage (user_id, product_id, amount, end_date) VALUES (4, 24, 4, '2017-03-22 00:00:00');
-INSERT INTO if072java.storage (user_id, product_id, amount, end_date) VALUES (4, 27, 2, '2017-03-30 00:00:00');
-INSERT INTO if072java.storage (user_id, product_id, amount, end_date) VALUES (4, 30, 1, '2017-03-10 00:00:00');
-INSERT INTO if072java.storage (user_id, product_id, amount, end_date) VALUES (4, 31, 2, '2017-03-18 00:00:00');
-INSERT INTO if072java.storage (user_id, product_id, amount, end_date) VALUES (4, 32, 1, '2017-03-19 00:00:00');
-INSERT INTO if072java.storage (user_id, product_id, amount, end_date) VALUES (4, 33, 3, null);
+INSERT INTO if072java.storage (user_id, product_id, amount, end_date) VALUES (4, 21, 0, null);
+INSERT INTO if072java.storage (user_id, product_id, amount, end_date) VALUES (4, 24, 6, '2017-04-01 12:00:00');
+INSERT INTO if072java.storage (user_id, product_id, amount, end_date) VALUES (4, 33, 6, null);
+INSERT INTO if072java.storage (user_id, product_id, amount, end_date) VALUES (4, 31, 2, null);
+INSERT INTO if072java.storage (user_id, product_id, amount, end_date) VALUES (4, 26, 2, '2017-03-20 12:00:00');
+INSERT INTO if072java.storage (user_id, product_id, amount, end_date) VALUES (4, 32, 5, null);
 
 -- -----------------------------------------------------
 -- Fill in shopping_list table
@@ -340,9 +339,7 @@ INSERT INTO if072java.shopping_list (user_id, product_id, amount) VALUES (2, 20,
 INSERT INTO if072java.shopping_list (user_id, product_id, amount) VALUES (4, 21, 2);
 INSERT INTO if072java.shopping_list (user_id, product_id, amount) VALUES (4, 24, 3);
 INSERT INTO if072java.shopping_list (user_id, product_id, amount) VALUES (4, 25, 3);
-INSERT INTO if072java.shopping_list (user_id, product_id, amount) VALUES (4, 29, 2);
-INSERT INTO if072java.shopping_list (user_id, product_id, amount) VALUES (4, 32, 2);
-INSERT INTO if072java.shopping_list (user_id, product_id, amount) VALUES (4, 33, 2);
+INSERT INTO if072java.shopping_list (user_id, product_id, amount) VALUES (4, 33, 5);
 -- -----------------------------------------------------
 -- for user with id 5
 -- ----------------------------------------------------
@@ -429,12 +426,12 @@ INSERT INTO if072java.stores_products (product_id, store_id) VALUES (62, 43);
 -- -----------------------------------------------------
 -- for user with id 4
 -- ----------------------------------------------------
-INSERT INTO cart(user_id, product_id, amount, store_id) VALUES(4, 21, 2, 22);
+INSERT INTO cart(user_id, product_id, amount, store_id) VALUES(4, 22, 2, 22);
 INSERT INTO cart(user_id, product_id, amount, store_id) VALUES(4, 24, 3, 22);
-INSERT INTO cart(user_id, product_id, amount, store_id) VALUES(4, 26, 3, 22);
-INSERT INTO cart(user_id, product_id, amount, store_id) VALUES(4, 29, 2, 22);
-INSERT INTO cart(user_id, product_id, amount, store_id) VALUES(4, 32, 2, 22);
+INSERT INTO cart(user_id, product_id, amount, store_id) VALUES(4, 25, 3, 22);
+INSERT INTO cart(user_id, product_id, amount, store_id) VALUES(4, 28, 7, 22);
 INSERT INTO cart(user_id, product_id, amount, store_id) VALUES(4, 33, 5, 22);
+INSERT INTO cart(user_id, product_id, amount, store_id) VALUES(4, 30, 2, 22);
 
 
 -- -----------------------------------------------------
@@ -443,13 +440,89 @@ INSERT INTO cart(user_id, product_id, amount, store_id) VALUES(4, 33, 5, 22);
 -- -----------------------------------------------------
 -- for user with id 4
 -- ----------------------------------------------------
-INSERT INTO history(user_id, product_id, amount, used_date, action) VALUES(4, 21, 1, '2017-01-18','PURCHASED');
+-- -----------------------------------------------------
+-- Батон Домашній
+-- -----------------------------------------------------
+INSERT INTO history(user_id, product_id, amount, used_date, action) VALUES(4, 22, 2, '2017-01-18','PURCHASED');
+INSERT INTO history(user_id, product_id, amount, used_date, action) VALUES(4, 22, 2, '2017-01-20','PURCHASED');
+INSERT INTO history(user_id, product_id, amount, used_date, action) VALUES(4, 22, 2, '2017-01-19','USED');
+INSERT INTO history(user_id, product_id, amount, used_date, action) VALUES(4, 22, 2, '2017-01-22','USED');
+-- -----------------------------------------------------
+-- Батон Київський нарізний
+-- -----------------------------------------------------
+INSERT INTO history(user_id, product_id, amount, used_date, action) VALUES(4, 21, 2, '2017-01-18','PURCHASED');
 INSERT INTO history(user_id, product_id, amount, used_date, action) VALUES(4, 21, 2, '2017-01-20','PURCHASED');
-INSERT INTO history(user_id, product_id, amount, used_date, action) VALUES(4, 23, 2, '2017-01-28','USED');
-INSERT INTO history(user_id, product_id, amount, used_date, action) VALUES(4, 24, 3, '2017-01-28','PURCHASED');
-INSERT INTO history(user_id, product_id, amount, used_date, action) VALUES(4, 27, 2, '2017-01-28','PURCHASED');
-INSERT INTO history(user_id, product_id, amount, used_date, action) VALUES(4, 30, 1, '2017-02-10', 'USED');
-INSERT INTO history(user_id, product_id, amount, used_date, action) VALUES(4, 32, 2, '2017-02-05', 'USED');
-INSERT INTO history(user_id, product_id, amount, used_date, action) VALUES(4, 32, 1, '2017-02-12', 'PURCHASED');
-INSERT INTO history(user_id, product_id, amount, used_date, action) VALUES(4, 33, 2, '2017-01-10', 'USED');
-INSERT INTO history(user_id, product_id, amount, used_date, action) VALUES(4, 33, 2, '2017-01-20', 'USED');
+INSERT INTO history(user_id, product_id, amount, used_date, action) VALUES(4, 21, 2, '2017-01-22','PURCHASED');
+INSERT INTO history(user_id, product_id, amount, used_date, action) VALUES(4, 21, 2, '2017-01-18','USED');
+INSERT INTO history(user_id, product_id, amount, used_date, action) VALUES(4, 21, 2, '2017-01-20','USED');
+INSERT INTO history(user_id, product_id, amount, used_date, action) VALUES(4, 21, 2, '2017-01-22','USED');
+-- -----------------------------------------------------
+-- Груша Аббат
+-- -----------------------------------------------------
+INSERT INTO history(user_id, product_id, amount, used_date, action) VALUES(4, 24, 4, '2017-03-17','PURCHASED');
+INSERT INTO history(user_id, product_id, amount, used_date, action) VALUES(4, 24, 4, '2017-03-19','PURCHASED');
+INSERT INTO history(user_id, product_id, amount, used_date, action) VALUES(4, 24, 2, '2017-03-21','PURCHASED');
+INSERT INTO history(user_id, product_id, amount, used_date, action) VALUES(4, 24, 4, '2017-03-23','PURCHASED');
+INSERT INTO history(user_id, product_id, amount, used_date, action) VALUES(4, 24, 2, '2017-03-18','USED');
+INSERT INTO history(user_id, product_id, amount, used_date, action) VALUES(4, 24, 2, '2017-03-20','USED');
+INSERT INTO history(user_id, product_id, amount, used_date, action) VALUES(4, 24, 2, '2017-03-22','USED');
+INSERT INTO history(user_id, product_id, amount, used_date, action) VALUES(4, 24, 2, '2017-03-24','USED');
+-- -----------------------------------------------------
+-- Ківі
+-- -----------------------------------------------------
+INSERT INTO history(user_id, product_id, amount, used_date, action) VALUES(4, 28, 4, '2017-03-01','PURCHASED');
+INSERT INTO history(user_id, product_id, amount, used_date, action) VALUES(4, 28, 6, '2017-03-07','PURCHASED');
+INSERT INTO history(user_id, product_id, amount, used_date, action) VALUES(4, 28, 1, '2017-03-12','PURCHASED');
+INSERT INTO history(user_id, product_id, amount, used_date, action) VALUES(4, 28, 5, '2017-03-17','PURCHASED');
+INSERT INTO history(user_id, product_id, amount, used_date, action) VALUES(4, 28, 3, '2017-03-20','PURCHASED');
+INSERT INTO history(user_id, product_id, amount, used_date, action) VALUES(4, 28, 2, '2017-03-02','USED');
+INSERT INTO history(user_id, product_id, amount, used_date, action) VALUES(4, 28, 1, '2017-03-03','USED');
+INSERT INTO history(user_id, product_id, amount, used_date, action) VALUES(4, 28, 1, '2017-03-05 12:20:22','USED');
+INSERT INTO history(user_id, product_id, amount, used_date, action) VALUES(4, 28, 1, '2017-03-05 18:20:30','USED');
+INSERT INTO history(user_id, product_id, amount, used_date, action) VALUES(4, 28, 1, '2017-03-08','USED');
+INSERT INTO history(user_id, product_id, amount, used_date, action) VALUES(4, 28, 3, '2017-03-13','USED');
+INSERT INTO history(user_id, product_id, amount, used_date, action) VALUES(4, 28, 2, '2017-03-17','USED');
+INSERT INTO history(user_id, product_id, amount, used_date, action) VALUES(4, 28, 1, '2017-03-20','USED');
+INSERT INTO history(user_id, product_id, amount, used_date, action) VALUES(4, 28, 5, '2017-03-21','USED');
+INSERT INTO history(user_id, product_id, amount, used_date, action) VALUES(4, 28, 2, '2017-03-24','USED');
+-- -----------------------------------------------------
+-- Цукурки АВК
+-- -----------------------------------------------------
+INSERT INTO history(user_id, product_id, amount, used_date, action) VALUES(4, 33, 1, '2017-01-03 12:00:00','USED');
+INSERT INTO history(user_id, product_id, amount, used_date, action) VALUES(4, 33, 1, '2017-01-04 12:00:00','USED');
+INSERT INTO history(user_id, product_id, amount, used_date, action) VALUES(4, 33, 1, '2017-01-07 10:00:00','USED');
+INSERT INTO history(user_id, product_id, amount, used_date, action) VALUES(4, 33, 1, '2017-01-07 21:00:00','USED');
+INSERT INTO history(user_id, product_id, amount, used_date, action) VALUES(4, 33, 2, '2017-01-11 12:00:00','USED');
+INSERT INTO history(user_id, product_id, amount, used_date, action) VALUES(4, 33, 1, '2017-01-12 12:00:00','USED');
+INSERT INTO history(user_id, product_id, amount, used_date, action) VALUES(4, 33, 8, '2017-01-13 12:00:00','USED');
+INSERT INTO history(user_id, product_id, amount, used_date, action) VALUES(4, 33, 4, '2017-01-15 12:00:00','USED');
+INSERT INTO history(user_id, product_id, amount, used_date, action) VALUES(4, 33, 2, '2017-01-16 12:00:00','USED');
+INSERT INTO history(user_id, product_id, amount, used_date, action) VALUES(4, 33, 4, '2017-01-18 12:00:00','USED');
+INSERT INTO history(user_id, product_id, amount, used_date, action) VALUES(4, 33, 5, '2017-01-21 12:00:00','USED');
+INSERT INTO history(user_id, product_id, amount, used_date, action) VALUES(4, 33, 2, '2017-01-22 12:00:00','USED');
+INSERT INTO history(user_id, product_id, amount, used_date, action) VALUES(4, 33, 6, '2017-01-24 14:48:05','USED');
+INSERT INTO history(user_id, product_id, amount, used_date, action) VALUES(4, 33, 6, '2017-01-26 12:00:00','USED');
+INSERT INTO history(user_id, product_id, amount, used_date, action) VALUES(4, 33, 4, '2017-01-28 12:00:00','USED');
+INSERT INTO history(user_id, product_id, amount, used_date, action) VALUES(4, 33, 1, '2017-01-29 12:00:00','USED');
+INSERT INTO history(user_id, product_id, amount, used_date, action) VALUES(4, 33, 6, '2017-02-02 12:00:00','USED');
+INSERT INTO history(user_id, product_id, amount, used_date, action) VALUES(4, 33, 2, '2017-02-03 12:00:00','USED');
+INSERT INTO history(user_id, product_id, amount, used_date, action) VALUES(4, 33, 2, '2017-02-05 12:00:00','USED');
+INSERT INTO history(user_id, product_id, amount, used_date, action) VALUES(4, 33, 1, '2017-02-05 21:00:00','USED');
+INSERT INTO history(user_id, product_id, amount, used_date, action) VALUES(4, 33, 12, '2017-02-07 12:00:00','USED');
+INSERT INTO history(user_id, product_id, amount, used_date, action) VALUES(4, 33, 2, '2017-02-08 12:00:00','USED');
+INSERT INTO history(user_id, product_id, amount, used_date, action) VALUES(4, 33, 5, '2017-02-11 12:00:00','USED');
+INSERT INTO history(user_id, product_id, amount, used_date, action) VALUES(4, 33, 6, '2017-02-13 12:00:00','USED');
+INSERT INTO history(user_id, product_id, amount, used_date, action) VALUES(4, 33, 2, '2017-02-14 16:15:27','USED');
+INSERT INTO history(user_id, product_id, amount, used_date, action) VALUES(4, 33, 3, '2017-02-15 12:00:00','USED');
+INSERT INTO history(user_id, product_id, amount, used_date, action) VALUES(4, 33, 4, '2017-02-17 12:00:00','USED');
+INSERT INTO history(user_id, product_id, amount, used_date, action) VALUES(4, 33, 2, '2017-02-18 12:00:00','USED');
+INSERT INTO history(user_id, product_id, amount, used_date, action) VALUES(4, 33, 5, '2017-02-22 12:00:00','USED');
+INSERT INTO history(user_id, product_id, amount, used_date, action) VALUES(4, 33, 2, '2017-02-23 12:00:00','USED');
+INSERT INTO history(user_id, product_id, amount, used_date, action) VALUES(4, 33, 1, '2017-02-25 10:30:00','USED');
+-- -----------------------------------------------------
+-- Яблуко Україна
+-- -----------------------------------------------------
+INSERT INTO history(user_id, product_id, amount, used_date, action) VALUES(4, 26, 2, '2017-03-10','USED');
+INSERT INTO history(user_id, product_id, amount, used_date, action) VALUES(4, 26, 4, '2017-03-14','USED');
+INSERT INTO history(user_id, product_id, amount, used_date, action) VALUES(4, 26, 1, '2017-03-15','USED');
+INSERT INTO history(user_id, product_id, amount, used_date, action) VALUES(4, 26, 3, '2017-03-18','USED');;

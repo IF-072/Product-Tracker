@@ -11,10 +11,14 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.http.MediaType;
+import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
+import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static org.hamcrest.Matchers.allOf;
@@ -24,9 +28,8 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.forwardedUrl;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup;
 
 /**
@@ -36,36 +39,39 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standal
  */
 @RunWith(MockitoJUnitRunner.class)
 public class ShoppingListControllerTest {
+    private static final int PRODUCT_ID = 1;
+    private static final int PRODUCT_EDIT_VAL = 1;
+    private static final String PRODUCT_AMOUNT = "3";
     private static final String PRODUCT_NAME_1 = "молоко";
     private static final String PRODUCT_NAME_2 = "цукор";
     private static final String UNIT_NAME_1 = "л";
     private static final String UNIT_NAME_2 = "кг";
 
+    private User user;
+
     @Mock
     private ShoppingListService shoppingListServiceMock;
-
-    @Mock
-    private UserService userServiceMock;
-
-    private ShoppingListController shoppingListController;
 
     private MockMvc mockMvc;
 
     @Before
     public void setup() {
-        shoppingListController = new ShoppingListController(shoppingListServiceMock, userServiceMock);
+        user = new User();
+        user.setId(1);
+
+        ShoppingListController shoppingListController = new ShoppingListController(shoppingListServiceMock);
+        StringHttpMessageConverter stringConverter = new StringHttpMessageConverter();
+
+        stringConverter.setSupportedMediaTypes(
+                Collections.singletonList(new MediaType("text", "plain", Charset.forName("UTF-8"))));
         mockMvc = standaloneSetup(shoppingListController)
+                .setMessageConverters(stringConverter)
                 .setViewResolvers(new InternalResourceViewResolver("/WEB-INF/views/", ".jsp"))
                 .build();
     }
 
     @Test
     public void getPage_shouldReturnShoppingListViewName() throws Exception {
-        User user = new User();
-        user.setId(1);
-
-        when(userServiceMock.getCurrentUser()).thenReturn(user);
-
         Unit unit1 = new Unit();
         unit1.setName(UNIT_NAME_1);
 
@@ -94,7 +100,7 @@ public class ShoppingListControllerTest {
         shoppingList.add(shoppingList1);
         shoppingList.add(shoppingList2);
 
-        when(shoppingListServiceMock.getAllElements(userServiceMock.getCurrentUser().getId())).thenReturn(shoppingList);
+        when(shoppingListServiceMock.getAllElements()).thenReturn(shoppingList);
 
         mockMvc.perform(get("/shopping_list"))
                 .andExpect(status().isOk())
@@ -120,5 +126,37 @@ public class ShoppingListControllerTest {
                         hasProperty("amount", is(5))
                 ))
         ));
+    }
+
+    @Test
+    public void editShoppingList_shouldReturnNewProductAmountWithUnits() throws Exception {
+        String expectedData = String.format("%s %s", PRODUCT_AMOUNT, UNIT_NAME_1);
+
+        when(shoppingListServiceMock.editShoppingList(
+                PRODUCT_ID, PRODUCT_EDIT_VAL))
+                .thenReturn(expectedData);
+
+        mockMvc.perform(post("/shopping_list/edit")
+                .param("prodId", String.valueOf(PRODUCT_ID))
+                .param("val", String.valueOf(PRODUCT_EDIT_VAL)))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("text/plain;charset=UTF-8"))
+                .andExpect(content().string(expectedData));
+    }
+
+    @Test
+    public void deleteProductFromShoppingList_shouldReturnRedirectToShoppingListPage() throws Exception {
+        mockMvc.perform(get("/shopping_list/delete")
+                .param("prodId", String.valueOf(PRODUCT_ID)))
+                .andExpect(status().isFound())
+                .andExpect(redirectedUrl("/shopping_list/"));
+    }
+
+    @Test
+    public void addProductToShoppingList_shouldReturnRedirectToProductPage() throws Exception {
+        mockMvc.perform(post("/shopping_list/add")
+                .param("productId", String.valueOf(PRODUCT_ID)))
+                .andExpect(status().isFound())
+                .andExpect(redirectedUrl("/product/"));
     }
 }

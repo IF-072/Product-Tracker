@@ -15,6 +15,7 @@ import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 /**
@@ -106,4 +107,12 @@ public interface StorageDAO extends DAO<Storage> {
      */
     @Delete("DELETE FROM storage WHERE user_id=#{user.id} AND product_id=#{product.id}")
     void delete(Storage storage);
+
+    /**
+     * Update end date for current product in the storage.
+     *
+     * @param productId unique product identifier
+     */
+    @Update("UPDATE storage SET end_date=#{endDate} WHERE product_id=#{productId}")
+    void updateEndDate(@Param("productId") int productId, @Param("endDate") Timestamp endDate);
 }

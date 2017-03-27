@@ -1,11 +1,12 @@
 package com.softserve.if072.mvcapp.controller;
 
 
+import com.softserve.if072.mvcapp.service.LoginService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
-import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
@@ -21,24 +22,23 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standal
 @RunWith(MockitoJUnitRunner.class)
 public class LogoutControllerTest {
 
+    @Mock
+    private LoginService loginService;
     private LogoutController logoutController;
     private MockMvc mockMvc;
 
     @Before
     public void setup() throws ClassNotFoundException, NoSuchMethodException {
-        logoutController = new LogoutController();
+        logoutController = new LogoutController(loginService);
         mockMvc = standaloneSetup(logoutController)
                 .setViewResolvers(new InternalResourceViewResolver("/WEB-INF/views/", ".jsp")).build();
-        ReflectionTestUtils.setField(logoutController, "cookieName", "X-Token");
     }
 
     @Test
-    public void logoutAndRedirectToLogin_ShouldReturnEmptyCookie() throws Exception {
+    public void logoutAndRedirectToLogin_ShouldRedirectTpLogin() throws Exception {
         mockMvc.perform(get("/logout"))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("login"))
-                .andExpect(cookie().exists("X-Token"))
-                .andExpect(cookie().maxAge("X-Token", 0))
+                .andExpect(redirectedUrl("/login"))
                 .andExpect(flash().attributeExists("successMessage"));
     }
 

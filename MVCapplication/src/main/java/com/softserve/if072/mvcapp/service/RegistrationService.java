@@ -23,8 +23,12 @@ public class RegistrationService {
     @Value("${service.url.register.alreadyExist}")
     private String registerAlreadyExistsUrl;
 
-    @Autowired
     private RestTemplate restTemplate;
+
+    @Autowired
+    public RegistrationService(RestTemplate restTemplate) {
+        this.restTemplate = restTemplate;
+    }
 
     /**
      * Performs user registration on RESTful service.

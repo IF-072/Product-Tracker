@@ -61,6 +61,20 @@
         <put-attribute name="body" value="/WEB-INF/views/home.jsp"/>
     </definition>
 
+    <definition name="payment" extends="mainLayout">
+        <put-attribute name="header" value="/WEB-INF/templates/loginHeader.jsp"/>
+        <put-attribute name="title" value="Payment is required"/>
+        <put-attribute name="body" value="/WEB-INF/views/payment.jsp"/>
+        <put-list-attribute name="stylesheets" inherit="true">
+            <add-attribute value="/css/login.css"/>
+            <add-attribute value="/css/payment.css"/>
+        </put-list-attribute>
+        <put-list-attribute name="javascripts" inherit="true">
+            <add-attribute value="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.16.0/jquery.validate.js"/>
+            <add-attribute value="/js/payment.js"/>
+        </put-list-attribute>
+    </definition>
+
     <definition name="storage" extends="mainLayout">
         <put-attribute name="title" value="Product Tracker"/>
         <put-attribute name="body" value="/WEB-INF/views/storage.jsp"/>
@@ -191,29 +205,6 @@
 
         <put-list-attribute name="javascripts" inherit="true">
             <add-attribute value="/js/category.js"/>
-        </put-list-attribute>
-    </definition>
-
-    <definition name="analytics" extends="mainLayout">
-        <put-attribute name="title" value="Product Tracker"/>
-        <put-attribute name="body" value="/WEB-INF/views/analytics.jsp"/>
-        <put-list-attribute name="stylesheets" inherit="true">
-            <add-attribute value="/css/dataTables.bootstrap.css"/>
-            <add-attribute value="/css/dataTables.responsive.css"/>
-            <add-attribute value="/css/morris.css"/>
-            <add-attribute value="/css/jquery-ui.css"/>
-            <!--<add-attribute value="/css/jquery.dataTables.css"/>-->
-            <add-attribute value="/css/analytics.css"/>
-            <add-attribute value="/css/daterangepicker.css"/>
-        </put-list-attribute>
-        <put-list-attribute name="javascripts" inherit="true">
-            <add-attribute value="/js/jquery-ui.js"/>
-            <!--<add-attribute value="/js/jquery.dataTables.js"/>-->
-            <add-attribute value="/js/moment.min.js"/>
-            <add-attribute value="/js/daterangepicker.js"/>
-            <add-attribute value="/js/raphael.js"/>
-            <add-attribute value="/js/morris.js"/>
-            <add-attribute value="/js/analytics.js"/>
         </put-list-attribute>
     </definition>
 
@@ -443,6 +434,37 @@
             <add-attribute value="/js/jquery-ui.js"/>
             <add-attribute value="/js/storeTable.js"/>
             <add-attribute value="/js/jquery.dataTables.js"/>
+        </put-list-attribute>
+    </definition>
+
+    <definition name="analytics" extends="mainLayout">
+        <put-attribute name="title" value="Product Tracker"/>
+        <put-attribute name="body" value="/WEB-INF/views/analytics/analytics.jsp"/>
+        <put-list-attribute name="stylesheets" inherit="true">
+            <add-attribute value="/css/dataTables.bootstrap.css"/>
+            <add-attribute value="/css/dataTables.responsive.css"/>
+            <add-attribute value="/css/jquery-ui.css"/>
+            <add-attribute value="/css/jquery.dataTables.css"/>
+            <add-attribute value="/css/analytics.css"/>
+        </put-list-attribute>
+        <put-list-attribute name="javascripts" inherit="true">
+            <add-attribute value="/js/jquery-ui.js"/>
+            <add-attribute value="/js/jquery.dataTables.js"/>
+            <add-attribute value="/js/analytics.js"/>
+        </put-list-attribute>
+    </definition>
+
+    <definition name="emptyAnalytics" extends="mainLayout">
+        <put-attribute name="title" value="Analytics"/>
+        <put-attribute name="body" value="/WEB-INF/views/analytics/emptyAnalytics.jsp"/>
+    </definition>
+
+    <definition name="selectProductForAnalytics" extends="mainLayout">
+        <put-attribute name="title" value="Analytics"/>
+        <put-attribute name="body" value="/WEB-INF/views/analytics/selectProductForAnalytics.jsp"/>
+
+        <put-list-attribute name="javascripts" inherit="true">
+            <add-attribute value="/js/analytics.js"/>
         </put-list-attribute>
     </definition>
 
