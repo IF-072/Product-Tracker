@@ -55,6 +55,8 @@ public class HistoryController {
      * Handles requests for search history records by given criterias
      *
      * @param userId     - current user unique identifier
+     * @param pageNumber - number of page
+     * @param pageSize   - number of records per page
      * @param searchData DTO that contains search params
      * @return list of found cart records or empty list
      */

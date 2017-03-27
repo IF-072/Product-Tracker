@@ -32,8 +32,6 @@ public class HistoryService {
     private final AnalyticsService analyticsService;
     @Value("${application.restHistoryURL}")
     private String restHistoryURL;
-    @Value("${application.restHistorySearchURL}")
-    private String restHistorySearchURL;
     @Value("${application.restHistoryDeleteURL}")
     private String restHistoryDeleteURL;
     @Value("${history.requestReceive}")
@@ -61,20 +59,6 @@ public class HistoryService {
 
         LOGGER.info(historyRequestReceive, "retrieving", "all history records", userId);
         List<History> histories = restTemplate.getForObject(restHistoryURL, List.class, userId);
-        LOGGER.info(historySuccessfullyOperation, "retrieving", "all history records", userId);
-        return histories;
-    }
-
-    /**
-     * Sends request to the REST server for retrieving all history records that match given search attributes
-     *
-     * @return list of history records or empty list
-     */
-    public Page<History> getByUserIdAndSearchParams(HistorySearchDTO searchDTO) {
-        int userId = userService.getCurrentUser().getId();
-
-        LOGGER.info(historyRequestReceive, "searching", "history records", userId);
-        Page<History> histories = restTemplate.postForObject(restHistorySearchURL, searchDTO, Page.class, userId);
         LOGGER.info(historySuccessfullyOperation, "retrieving", "all history records", userId);
         return histories;
     }
@@ -131,13 +115,13 @@ public class HistoryService {
     }
 
     /**
-     * Makes request to a REST server for retrieving search results page of history records for current user
+     * Sends request to the REST server for retrieving all history records that match given search attributes
      *
      * @param pageNumber - number of pages
      * @param pageSize   - number of records on page
      * @return page of history records or empty page
      */
-    public Page<History> getHistorySearchPage(int pageNumber, int pageSize, HistorySearchDTO searchData) {
+    public Page<History> getHistorySearchPage(HistorySearchDTO searchData, int pageNumber, int pageSize) {
         int userId = userService.getCurrentUser().getId();
 
         Map<String, String> param = new HashMap<>();

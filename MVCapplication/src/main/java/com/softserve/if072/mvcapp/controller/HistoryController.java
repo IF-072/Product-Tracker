@@ -89,7 +89,7 @@ public class HistoryController {
             model.addAttribute("categories", productPageService.getAllCategories(userService.getCurrentUser().getId()));
             model.addAttribute("historiesPage", historiesPage);
             model.addAttribute("historySearchDTO", new HistorySearchDTO());
-            model.addAttribute("historiesSession", pdfCreatorService.getHistoriesByUserId());
+            model.addAttribute("historiesSession", historiesPage.getContent());
             model.addAttribute("beginIndex", begin);
             model.addAttribute("endIndex", end);
             model.addAttribute("currentIndex", current);
@@ -113,10 +113,10 @@ public class HistoryController {
         model.addAttribute("historySearchDTO", result.hasErrors() ? new HistorySearchDTO() : searchParams);
         model.addAttribute("categories", productPageService.getAllCategories(userService.getCurrentUser().getId()));
 
-        Page<History> histories = historyService.getHistorySearchPage(pageNumber, 25, searchParams);
+        Page<History> histories = historyService.getHistorySearchPage(searchParams, pageNumber, 25);
         if (histories.getTotalElements() > 0) {
             model.addAttribute("histories", histories);
-            //model.addAttribute("historiesSession", pdfCreatorService.getByUserIdAndSearchParams(pageNumber, 25, searchParams));
+            model.addAttribute("historiesSession", histories.getContent());
             model.addAttribute("historiesPage", histories);
             model.addAttribute("beginIndex", 1);
             model.addAttribute("endIndex", histories.getTotalPages());

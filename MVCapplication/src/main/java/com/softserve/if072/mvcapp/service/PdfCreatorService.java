@@ -11,12 +11,9 @@ import com.lowagie.text.pdf.PdfPCell;
 import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.pdf.PdfWriter;
 import com.softserve.if072.common.model.History;
-import com.softserve.if072.common.model.dto.HistorySearchDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.data.domain.Page;
-import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -224,18 +221,6 @@ public class PdfCreatorService {
 
         return historiesResponse.getBody();
 
-    }
-
-    public List<History> getByUserIdAndSearchParams(int pageNumber, int pageSize, HistorySearchDTO searchDTO) {
-        HttpEntity<HistorySearchDTO> request = new HttpEntity<>(searchDTO);
-        Map<String, Integer> param = new HashMap<>();
-        param.put("userId", userService.getCurrentUser().getId());
-
-        ResponseEntity<Page<History>> historiesResponse = restTemplate.exchange(restHistorySearchPageURL, HttpMethod.POST,
-                request, new ParameterizedTypeReference<Page<History>>() {
-                }, param);
-
-        return historiesResponse.getBody().getContent();
     }
 
 }

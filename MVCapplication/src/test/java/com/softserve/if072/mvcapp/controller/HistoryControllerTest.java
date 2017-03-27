@@ -129,7 +129,7 @@ public class HistoryControllerTest {
         List<History> historiesList = Arrays.asList(historyA);
         Page<History> histories = new PageImpl<History>(historiesList, new PageRequest(0, 25), historiesList.size());
 
-        when(historyService.getByUserIdAndSearchParams(any())).thenReturn(histories);
+        when(historyService.getHistorySearchPage(any(), any(), any())).thenReturn(histories);
 
         mockMvc.perform(post("/history"))
                 .andExpect(status().isOk())
@@ -152,7 +152,7 @@ public class HistoryControllerTest {
                         ))
                 ));
 
-        verify(historyService).getByUserIdAndSearchParams(any());
+        verify(historyService).getHistorySearchPage(any(), any(), any());
     }
 
     @Test

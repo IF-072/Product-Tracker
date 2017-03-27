@@ -87,7 +87,7 @@ public class ShoppingList implements Serializable {
 
         ShoppingList that = (ShoppingList) o;
 
-        return user.equals(that.user) && product.equals(that.product);
+        return that != null && user != null && user.equals(that.user) && product != null && product.equals(that.product);
     }
 
     @Override
