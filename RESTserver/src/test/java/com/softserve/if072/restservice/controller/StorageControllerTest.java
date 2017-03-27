@@ -22,6 +22,7 @@ import java.util.Arrays;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
@@ -134,12 +135,14 @@ public class StorageControllerTest {
     @Test
     public void updateByDTO_ShouldReturnStatusOk() throws Exception {
         final ObjectMapper mapper = new ObjectMapper();
+        when(storageService.getByProductId(anyInt())).thenReturn(storage1);
         mockMvc.perform(
-                put("/api/storage/dto")
+                post("/api/storage/dto")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(mapper.writeValueAsString(new StorageDTO())))
                 .andExpect(status().isOk());
         verify(storageService).update(any(StorageDTO.class));
+        verify(storageService).getByProductId(anyInt());
         verifyZeroInteractions(storageService);
     }
 

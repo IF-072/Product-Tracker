@@ -12,10 +12,14 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.web.client.RestTemplate;
 
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.never;
@@ -37,13 +41,22 @@ public class StoragePageServiceTest {
     private ShoppingListService shoppingListService;
     @Mock
     private AnalyticsService analyticsService;
+    @Mock
+    private MessageService messageService;
     @InjectMocks
     private StoragePageService storagePageService;
     private Storage storage;
+    private final String insert = "storage.insertInList";
+    private final String update = "storage.update";
+    private final String locale = "en";
+    private StorageDTO storageDTO;
+    private Timestamp timestamp;
 
     @Before
     public void setup() {
         storage = new Storage(new User(), new Product(), 2, null);
+        storageDTO = new StorageDTO();
+        timestamp = new Timestamp(System.currentTimeMillis());
     }
 
     @Test
@@ -58,14 +71,31 @@ public class StoragePageServiceTest {
 
     @Test
     public void updateAmount(){
-        final StorageDTO storageDTO = new StorageDTO();
-        storagePageService.updateAmount(storageDTO);
-        verify(restTemplate).put(anyString(), eq(storageDTO));
+        when(restTemplate.postForObject(anyString(), eq(storageDTO), eq(Timestamp.class))).thenReturn(timestamp);
+
+        assertEquals(new SimpleDateFormat("yyyy/MM/dd").format(timestamp),
+                storagePageService.updateAmount(storageDTO, locale));
+
+        verify(restTemplate).postForObject(anyString(), eq(storageDTO), eq(Timestamp.class));
+        verify(messageService).broadcast(eq(update), eq(locale), anyInt(), any(), any());
+        verify(messageService).broadcast(eq(insert), eq(locale), anyInt(), any());
+    }
+
+    @Test
+    public void updateAmount_ShouldNotBroadcastInsert(){
+        storageDTO.setAmount(2);
+        when(restTemplate.postForObject(anyString(), eq(storageDTO), eq(Timestamp.class))).thenReturn(timestamp);
+
+        assertEquals(new SimpleDateFormat("yyyy/MM/dd").format(timestamp),
+                storagePageService.updateAmount(storageDTO, locale));
+
+        verify(restTemplate).postForObject(anyString(), eq(storageDTO), eq(Timestamp.class));
+        verify(messageService).broadcast(eq(update), eq(locale), anyInt(), any(), any());
+        verify(messageService, never()).broadcast(eq(insert), eq(locale), anyInt(), any());
     }
 
     @Test
     public void addProductToShoppingList_ShouldInsert(){
-        final User user = new User();
         final int productId = 2;
         storagePageService.addProductToShoppingList(productId);
         verify(shoppingListService).addProductToShoppingList(productId);
