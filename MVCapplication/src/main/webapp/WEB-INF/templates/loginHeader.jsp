@@ -30,3 +30,5 @@
 
     </nav>
     <div>
+        <div class="panel-body" id="container-notification">
+        </div>
