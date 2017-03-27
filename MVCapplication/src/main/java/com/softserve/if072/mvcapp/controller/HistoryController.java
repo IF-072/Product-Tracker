@@ -80,7 +80,7 @@ public class HistoryController {
                                @RequestParam(value = "pageNumber", required = false, defaultValue = "1") int pageNumber
 // , @PathVariable int pageSize ) {
     ) {
-        Page<History> historiesPage = historyService.getHistoryPage(pageNumber, 6);
+        Page<History> historiesPage = historyService.getHistoryPage(pageNumber, 25);
 
         int current = historiesPage.getNumber() + 1;
         int begin = 1;

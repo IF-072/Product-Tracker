@@ -1,6 +1,6 @@
 package com.softserve.if072.common.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.persistence.CascadeType;
@@ -52,11 +52,12 @@ public class Store implements Serializable {
     @Column(name = "is_enabled")
     private boolean isEnabled;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name="stores_products",
             joinColumns = @JoinColumn(name="store_id"),
             inverseJoinColumns = @JoinColumn(name="product_id"))
-    @JsonIgnore
+
+    @JsonIgnoreProperties("stores")
     private List<Product> products;
 
     @Column(name = "latitude")
