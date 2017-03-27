@@ -78,8 +78,7 @@ public class PdfCreatorServiceTest {
     public void createPdf_ShouldThrowNullPointerException() throws IOException {
         History history = new History();
         List<History> histories = Arrays.asList(history, history);
-        String file = null;
-        pdfCreatorService.createPDF(file, histories, "en");
+        pdfCreatorService.createPDF(null, histories, "en");
     }
 
     @Test

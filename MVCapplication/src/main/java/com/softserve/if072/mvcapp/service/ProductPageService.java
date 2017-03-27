@@ -111,9 +111,8 @@ public class ProductPageService {
         ResponseEntity<List<Unit>> unitsResponse = restTemplate.exchange(unitUri, HttpMethod.GET,
                 null, new ParameterizedTypeReference<List<Unit>>() {
                 });
-        List<Unit> units = unitsResponse.getBody();
 
-        return units;
+        return unitsResponse.getBody();
     }
 
     private Product setUnitAndCategory(Product product) {
