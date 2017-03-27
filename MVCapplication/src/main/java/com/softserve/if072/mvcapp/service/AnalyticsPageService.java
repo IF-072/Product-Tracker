@@ -11,15 +11,13 @@ import java.util.List;
 public class AnalyticsPageService {
 
     private RestTemplate restTemplate;
-    private ProductPageService productPageService;
 
     @Autowired
-    public AnalyticsPageService(RestTemplate restTemplate, ProductPageService productPageService) {
+    public AnalyticsPageService(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
-        this.productPageService = productPageService;
     }
 
     public List<Product> getAllProducts(int userID) {
-        return productPageService.getAllProducts(userID);
+        return null;
     }
 }
