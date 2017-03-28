@@ -37,11 +37,11 @@ public class HistoryServiceTest {
     @Mock
     private RestTemplate restTemplate;
     @Mock
-    UserService userService;
+    private UserService userService;
     @Mock
-    AnalyticsService analyticsService;
+    private AnalyticsService analyticsService;
     @Mock
-    User user;
+    private User user;
 
     @Before
     public void setup() {

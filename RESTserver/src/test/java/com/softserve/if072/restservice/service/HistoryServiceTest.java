@@ -39,11 +39,11 @@ public class HistoryServiceTest {
     private static final int CURRENT_USER_ID = 4;
     private static final int PRODUCT_ID = 20;
     private static final int HISTORY_ID = 32;
-    HistoryService historyService;
+    private HistoryService historyService;
     @Mock
-    HistoryDAO historyDAO;
+    private HistoryDAO historyDAO;
     @Mock
-    ForecastService forecastService;
+    private ForecastService forecastService;
 
     @Before
     public void setup() {

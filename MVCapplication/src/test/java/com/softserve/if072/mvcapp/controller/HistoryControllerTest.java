@@ -1,7 +1,6 @@
 package com.softserve.if072.mvcapp.controller;
 
 import com.softserve.if072.common.model.Action;
-import com.softserve.if072.common.model.Category;
 import com.softserve.if072.common.model.History;
 import com.softserve.if072.common.model.User;
 import com.softserve.if072.mvcapp.service.HistoryService;
@@ -74,7 +73,7 @@ public class HistoryControllerTest {
         User user = new User();
         user.setId(1);
         when(userService.getCurrentUser()).thenReturn(user);
-        when(productPageService.getAllCategories(anyInt())).thenReturn(new ArrayList<Category>());
+        when(productPageService.getAllCategories(anyInt())).thenReturn(new ArrayList<>());
     }
 
     @Test

@@ -48,7 +48,7 @@ public class CartControllerTest {
     private static final int SECOND_CART_ITEM_AMOUNT = 3;
     private static final int CURRENT_USER_ID = 4;
     private static final int PRODUCT_ID = 32;
-    public static final MediaType APPLICATION_JSON_UTF8 = new MediaType(MediaType.APPLICATION_JSON.getType()
+    private static final MediaType APPLICATION_JSON_UTF8 = new MediaType(MediaType.APPLICATION_JSON.getType()
             , MediaType.APPLICATION_JSON.getSubtype()
             , Charset.forName("utf8"));
     @Mock
