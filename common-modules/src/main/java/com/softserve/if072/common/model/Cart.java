@@ -23,6 +23,7 @@ import java.io.Serializable;
 @Table(name = "cart")
 @IdClass(CartId.class)
 public class Cart implements Serializable {
+    static final long serialVersionUID = 234582397L;
 
     @Id
     @ManyToOne(fetch = FetchType.EAGER)

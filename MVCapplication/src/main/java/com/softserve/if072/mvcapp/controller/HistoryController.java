@@ -6,12 +6,15 @@ import com.softserve.if072.mvcapp.service.HistoryService;
 import com.softserve.if072.mvcapp.service.PdfCreatorService;
 import com.softserve.if072.mvcapp.service.ProductPageService;
 import com.softserve.if072.mvcapp.service.UserService;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -45,6 +48,8 @@ import java.util.List;
 @SessionAttributes("historiesSession")
 public class HistoryController {
 
+    private static final Logger LOGGER = LogManager.getLogger(HistoryController.class);
+
     private HistoryService historyService;
     private ProductPageService productPageService;
     private UserService userService;
@@ -71,15 +76,17 @@ public class HistoryController {
     /**
      * Handles requests for getting all history records for current user
      *
-     * @param model - a map that will be handed off to the view for rendering the data to the client
+     * @param model      a map that will be handed off to the view for rendering the data to the client
+     * @param pageNumber - number of loaded page
+     * @param pageSize   - number of items on page
      * @return string with appropriate view name
      */
     @GetMapping
     public String getHistories(Model model,
-                               @RequestParam(value = "pageNumber", required = false, defaultValue = "1") int pageNumber
-// , @PathVariable int pageSize ) {
-    ) {
-        Page<History> historiesPage = historyService.getHistoryPage(pageNumber, 25);
+                               @RequestParam(value = "pageNumber", required = false, defaultValue = "1") int pageNumber,
+                               @RequestParam(value = "pageSize", required = false, defaultValue = "25") int pageSize) {
+
+        Page<History> historiesPage = historyService.getHistoryPage(pageNumber, pageSize);
 
         int current = historiesPage.getNumber() + 1;
         int begin = 1;
@@ -93,6 +100,7 @@ public class HistoryController {
             model.addAttribute("beginIndex", begin);
             model.addAttribute("endIndex", end);
             model.addAttribute("currentIndex", current);
+            model.addAttribute("pageSize", pageSize);
             return "history";
         }
         return "emptyHistory";
@@ -155,8 +163,11 @@ public class HistoryController {
      * @param request  - HttpServletRequest
      * @param response - HttpServletResponse
      */
+
     @RequestMapping(value = "/getpdf", method = RequestMethod.GET)
-    public void getPDF(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public void getPDF(HttpServletRequest request, HttpServletResponse response,
+                       @CookieValue(value = "myLocaleCookie", required = false) final String locale) throws
+            IOException {
 
         HttpSession session = request.getSession();
         List<History> histories = (List) session.getAttribute("historiesSession");
@@ -165,19 +176,21 @@ public class HistoryController {
         final File tempDirectory = (File) servletContext.getAttribute("javax.servlet.context.tempdir");
         final String temperotyFilePath = tempDirectory.getAbsolutePath();
 
-        String fileName = "History.pdf";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd");
+        String fileName = "History_" + simpleDateFormat.format(new Date()) + ".pdf";
         response.setContentType("application/pdf");
         response.setHeader("Content-disposition", "attachment; filename=" + fileName);
 
         try {
-            pdfCreatorService.createPDF(temperotyFilePath + "\\" + fileName, histories);
-            ByteArrayOutputStream baos = pdfCreatorService.convertPDFToByteArrayOutputStream(temperotyFilePath + "\\"
-                    + fileName);
-            OutputStream os = response.getOutputStream();
-            baos.writeTo(os);
-            os.flush();
-        } catch (Exception e1) {
-            e1.printStackTrace();
+            pdfCreatorService.createPDF(temperotyFilePath + "\\" + fileName, histories, locale);
+            try (ByteArrayOutputStream baos = pdfCreatorService.convertPDFToByteArrayOutputStream(temperotyFilePath +
+                    "\\" + fileName);
+                 OutputStream os = response.getOutputStream()) {
+                baos.writeTo(os);
+                os.flush();
+            }
+        } catch (Exception e) {
+            LOGGER.error(e.getMessage());
         }
     }
 }

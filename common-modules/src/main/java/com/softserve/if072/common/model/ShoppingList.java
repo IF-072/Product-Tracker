@@ -24,6 +24,7 @@ import java.io.Serializable;
 @Table(name = "shopping_list")
 @IdClass(ShoppingListId.class)
 public class ShoppingList implements Serializable {
+    static final long serialVersionUID = 567834565432L;
 
     @Id
     @ManyToOne(fetch = FetchType.EAGER)
@@ -96,4 +97,5 @@ public class ShoppingList implements Serializable {
         result = 31 * result + product.hashCode();
         return result;
     }
+
 }

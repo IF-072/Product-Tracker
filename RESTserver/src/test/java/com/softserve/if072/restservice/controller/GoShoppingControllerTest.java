@@ -113,7 +113,7 @@ public class GoShoppingControllerTest {
     }
 
     @Test
-    public void getStores_ShouldReturnNull() throws Exception {
+    public void getStores_ShouldReturnEmptyList() throws Exception {
         when(goShoppingService.getStoreByUserId(user.getId())).thenThrow(new DataNotFoundException());
         mockMvc.perform(get("/api/goShopping/stores/{userId}", user.getId()))
                 .andExpect(status().isNotFound())
@@ -165,7 +165,7 @@ public class GoShoppingControllerTest {
     }
 
     @Test
-    public void getProducts_ShouldReturnNull() throws Exception {
+    public void getProducts_ShouldReturnEmptyMap() throws Exception {
         final int storeId = 1;
         when(goShoppingService.getProducts(user.getId(), storeId)).thenThrow(new DataNotFoundException());
         final MvcResult result = mockMvc.perform(

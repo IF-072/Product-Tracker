@@ -17,12 +17,19 @@ function subForm(e) {
         data = $(this).closest('form').serialize();
     var jbtn = $(this).find('button');
     var inputNum = $(this).find(".num");
+    var date = $(this).parent().parent().find(".date")
     $.ajax({
         url: url,
         type: 'post',
         data: data,
-        success: function (data) {
-            if (data != "") {
+        dataType: 'text',
+        contentType: 'application/x-www-form-urlencoded; charset=utf-8',
+        success: function (data, textStatus, jqXHR) {
+            if (data.length == 10 && jqXHR.status == 200){
+                date.text(data);
+                jbtn.addClass("disabled");
+                inputNum.attr("init", inputNum.val());
+            } else {
                 $("#message").text(data);
                 $("#error").modal('show');
 
@@ -30,14 +37,11 @@ function subForm(e) {
 
                     $("#error").modal('hide');
                 });
-            } else {
-                jbtn.addClass("disabled");
-                inputNum.attr("init", inputNum.val());
             }
 
         },
-        error: function () {
-            $("#message").text("Something went wrong!!!");
+        error: function (data) {
+            $("#message").text(data);
             $("#error").modal('show');
 
             $(".btn-confirm").click(function () {

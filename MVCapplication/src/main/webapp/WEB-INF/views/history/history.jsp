@@ -1,5 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"  %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="sf" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="ht" uri="hashtag.tld" %>
@@ -10,10 +10,10 @@
     </div>
 </div>
 
-<c:url var="firstUrl" value="/history?pageNumber=${beginIndex}"/>
-<c:url var="lastUrl" value="/history?pageNumber=${endIndex}"/>
-<c:url var="prevUrl" value="/history?pageNumber=${currentIndex - 1}"/>
-<c:url var="nextUrl" value="/history?pageNumber=${currentIndex + 1}"/>
+<c:url var="firstUrl" value="/history?pageNumber=${beginIndex}&pageSize=${pageSize}"/>
+<c:url var="lastUrl" value="/history?pageNumber=${endIndex}&pageSize=${pageSize}"/>
+<c:url var="prevUrl" value="/history?pageNumber=${currentIndex - 1}&pageSize=${pageSize}"/>
+<c:url var="nextUrl" value="/history?pageNumber=${currentIndex + 1}&pageSize=${pageSize}"/>
 
 <!-- Search form -->
 <sf:form role="form" modelAttribute="historySearchDTO" method="post" action="/history">
@@ -123,19 +123,17 @@
 
                 <div class="panel-footer text-rigth">
                     <div class="col-sm-6">
-                        <div class="dataTables_length" id="dataTables-example_length">
-                            <label>Show
-                                <select name="pageSize"
-                                class="form-control input-sm">
-                                <option  value="25">25</option>
-                                <option  value="50">50</option>
-                                <option  value="100">100</option>
-                                </select>entries</label>
-                        </div>
+
+                        <label>Show products </label>
+                        <form action="/history?pageNumber=${beginIndex}">
+                            <select name="pageSize">
+                                <option value="25">25</option>
+                                <option value="50">50</option>
+                                <option value="100">100</option>
+                            </select>
+                            <input type="submit" value="Submit">
+                        </form>
                     </div>
-
-                    <input type="hidden" name="pageSize" value="${request.getParameterValues("pageSize")}"/>
-
 
                     <div id=" historyData_paginate" class="dataTables_paginate paging_simple_numbers">
 
@@ -143,80 +141,80 @@
                             <div class="pagination">
                                 <c:choose>
                                     <c:when test="${currentIndex == 1}">
-                                <li class="paginate_button previous disabled"><a href="#">First</a></li>
-                                <li class="paginate_button previous disabled"><a href="#">Previous</a></li>
-                                </c:when>
-                                <c:otherwise>
-                                <li><a class="paginate_button previous" href="${firstUrl}">First</a></li>
-                                <li><a class="paginate_button previous" href="${prevUrl}">Previous</a></li>
-                                </c:otherwise>
+                                        <li class="paginate_button previous disabled"><a href="#">First</a></li>
+                                        <li class="paginate_button previous disabled"><a href="#">Previous</a></li>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <li><a class="paginate_button previous" href="${firstUrl}">First</a></li>
+                                        <li><a class="paginate_button previous" href="${prevUrl}">Previous</a></li>
+                                    </c:otherwise>
                                 </c:choose>
                                 <c:forEach var="i" begin="${beginIndex}" end="${endIndex}">
-                                    <c:url var="pageUrl" value="history?pageNumber=${i}"/>
-                                <c:choose>
-                                <c:when test="${i == currentIndex}">
-                                <li class="paginate_button active">
-                                    <a href="${pageUrl}"><c:out value="${i}"/></a></li>
-                                </c:when>
-                                <c:otherwise>
-                                <li><a class="paginate_button" href="${pageUrl}"><c:out value="${i}"/></a>
-                                </li>
-                                </c:otherwise>
-                                </c:choose>
+                                    <c:url var="pageUrl" value="history?pageNumber=${i}&pageSize=${pageSize}"/>
+                                    <c:choose>
+                                        <c:when test="${i == currentIndex}">
+                                            <li class="paginate_button active">
+                                                <a href="${pageUrl}"><c:out value="${i}"/></a></li>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <li><a class="paginate_button" href="${pageUrl}"><c:out value="${i}"/></a>
+                                            </li>
+                                        </c:otherwise>
+                                    </c:choose>
                                 </c:forEach>
                                 <c:choose>
-                                <c:when test="${currentIndex == historiesPage.getTotalPages()}">
-                                <li class="paginate_button next disabled"><a href="#">Next</a></li>
-                                <li class="paginate_button next disabled"><a href="#">Last</a></li>
-                                </c:when>
-                                <c:otherwise>
-                                <li><a class="paginate_button next" href="${nextUrl}">Next</a></li>
-                                <li><a class="paginate_button next" href="${lastUrl}">Last</a></li>
-                                </c:otherwise>
+                                    <c:when test="${currentIndex == historiesPage.getTotalPages()}">
+                                        <li class="paginate_button next disabled"><a href="#">Next</a></li>
+                                        <li class="paginate_button next disabled"><a href="#">Last</a></li>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <li><a class="paginate_button next" href="${nextUrl}">Next</a></li>
+                                        <li><a class="paginate_button next" href="${lastUrl}">Last</a></li>
+                                    </c:otherwise>
                                 </c:choose>
-                        </div>
+                            </div>
 
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+
+            <div class="panel-footer text-right">
+                <div class="row">
+                    <div class="col-md-8">
+                        <table>
+                            <tbody class="text-left">
+                            <tr>
+                                <td>
+                                    <span class="square_PURCHASED"></span>
+                                <td>
+                                <td class="text-left color_PURCHASED">
+                                    <spring:message code="history.legendPurchased"/>
+                                <td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span class="square_USED"></span>
+                                <td>
+                                <td class="text-left color_USED">
+                                    <spring:message code="history.legendUsed"/>
+                                <td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-md-4">
+                        <button type="button" class="btn btn-primary" id="pdfButton"
+                                href="<c:url value="/history/getpdf"/>">
+                            PDF
+                        </button>
                     </div>
                 </div>
             </div>
 
+
         </div>
-
-
-        <div class="panel-footer text-right">
-            <div class="row">
-                <div class="col-md-8">
-                    <table>
-                        <tbody class="text-left">
-                        <tr>
-                            <td>
-                                <span class="square_PURCHASED"></span>
-                            <td>
-                            <td class="text-left color_PURCHASED">
-                                <spring:message code="history.legendPurchased"/>
-                            <td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <span class="square_USED"></span>
-                            <td>
-                            <td class="text-left color_USED">
-                                <spring:message code="history.legendUsed"/>
-                            <td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <div class="col-md-4">
-                    <button type="button" class="btn btn-primary" id="pdfButton"
-                            href="<c:url value="/history/getpdf"/>">
-                        PDF
-                    </button>
-                </div>
-            </div>
-        </div>
-
-
     </div>
-</div>
 </div>

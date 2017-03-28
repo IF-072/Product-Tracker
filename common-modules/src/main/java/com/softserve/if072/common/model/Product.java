@@ -30,7 +30,9 @@ import java.util.List;
  */
 @Entity
 @Table(name = "product")
+//@JsonDeserialize(using = ProductDeserializer.class)
 public class Product implements Serializable {
+  static final long serialVersionUID = 44346854675356782L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -73,7 +75,8 @@ public class Product implements Serializable {
             inverseJoinColumns = @JoinColumn(name = "store_id"))
 
     @JsonIgnoreProperties("products")
-    private List<Store> stores;
+/* @JsonIgnore */
+      private List<Store> stores;
 
     public Product() {
     }

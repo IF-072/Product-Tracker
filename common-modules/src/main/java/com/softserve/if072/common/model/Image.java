@@ -14,6 +14,7 @@ import java.io.Serializable;
 @Entity
 @Table(name = "image")
 public class Image implements Serializable {
+    static final long serialVersionUID = 3433867676L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

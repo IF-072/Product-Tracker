@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 /**
@@ -123,11 +124,13 @@ public class StorageController {
      * @param storage - storage that must be updated
      */
     @PreAuthorize("#storage.userId == authentication.user.id")
-    @PutMapping(value = "/dto")
+    @PostMapping(value = "/dto")
+    @ResponseBody
     @ResponseStatus(value = HttpStatus.OK)
-    public void updateByDTO(@RequestBody final StorageDTO storage) {
+    public Timestamp updateByDTO(@RequestBody final StorageDTO storage) {
         storageService.update(storage);
         LOGGER.info(String.format("Storage with user's id %d and product's id %d was updated",
                 storage.getUserId(), storage.getProductId()));
+        return storageService.getByProductId(storage.getProductId()).getEndDate();
     }
 }
