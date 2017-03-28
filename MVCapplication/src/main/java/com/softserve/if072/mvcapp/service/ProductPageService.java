@@ -27,8 +27,6 @@ import java.util.Map;
 @Service
 public class ProductPageService {
 
-    //private static final Logger LOGGER = LogManager.getLogger(ProductPageService.class);
-
     @Value("${application.restProductURL}")
     private String productUrl;
 
@@ -113,9 +111,8 @@ public class ProductPageService {
         ResponseEntity<List<Unit>> unitsResponse = restTemplate.exchange(unitUri, HttpMethod.GET,
                 null, new ParameterizedTypeReference<List<Unit>>() {
                 });
-        List<Unit> units = unitsResponse.getBody();
 
-        return units;
+        return unitsResponse.getBody();
     }
 
     private Product setUnitAndCategory(Product product) {
@@ -282,14 +279,10 @@ public class ProductPageService {
         List<Store> storesToAdd = new ArrayList<>();
         List<Store> storesToDelete = new ArrayList<>();
         if (oldStores != null) {
-            if (newStores != null) {
-                storesToAdd.addAll(newStores);
-                storesToDelete.addAll(oldStores);
-                storesToAdd.removeAll(oldStores);
-                storesToDelete.removeAll(newStores);
-            } else {
-                storesToDelete.addAll(oldStores);
-            }
+            storesToAdd.addAll(newStores);
+            storesToDelete.addAll(oldStores);
+            storesToAdd.removeAll(oldStores);
+            storesToDelete.removeAll(newStores);
         } else {
             storesToAdd.addAll(newStores);
         }
@@ -336,11 +329,7 @@ public class ProductPageService {
 
         Product existsProduct = getProductByNameAndUserId(product, user);
 
-        if (existsProduct != null && existsProduct.isEnabled()) {
-            return !(existsProduct.getId() == product.getId());
-        } else {
-            return false;
-        }
+        return existsProduct != null && existsProduct.isEnabled() && !(existsProduct.getId() == product.getId());
 
     }
 

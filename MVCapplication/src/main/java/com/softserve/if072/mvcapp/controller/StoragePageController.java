@@ -1,7 +1,6 @@
 package com.softserve.if072.mvcapp.controller;
 
 import com.softserve.if072.common.model.dto.StorageDTO;
-import com.softserve.if072.mvcapp.service.MessageService;
 import com.softserve.if072.mvcapp.service.StoragePageService;
 import com.softserve.if072.mvcapp.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +19,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import javax.servlet.http.HttpServletResponse;
+
 /**
  * The StoragePageController class handles requests for
  * "/storage" and renders appropriate view.
@@ -31,14 +32,11 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 public class StoragePageController {
     private final StoragePageService storagePageService;
     private final UserService userService;
-    private final MessageService messageService;
 
     @Autowired
-    public StoragePageController(final StoragePageService storagePageService, final UserService userService,
-                                 final MessageService messageService) {
+    public StoragePageController(final StoragePageService storagePageService, final UserService userService) {
         this.storagePageService = storagePageService;
         this.userService = userService;
-        this.messageService = messageService;
     }
 
     /**
@@ -59,7 +57,7 @@ public class StoragePageController {
      * Handles requests for updating storage record.
      *
      * @param storageDTO - storage record
-     * @param locale - locale of user
+     * @param locale     - locale of user
      * @return string with error message or empty string
      * if everything is alright
      */
@@ -67,8 +65,10 @@ public class StoragePageController {
     @ResponseStatus(value = HttpStatus.OK)
     @ResponseBody
     public String updateAmount(@Validated @ModelAttribute final StorageDTO storageDTO, final BindingResult result,
-                               @CookieValue(value = "myLocaleCookie", required = false) final String locale) {
+                               @CookieValue(value = "myLocaleCookie", required = false) final String locale,
+                               final HttpServletResponse response) {
         if (result.hasErrors()) {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             StringBuilder message = new StringBuilder();
             int i = 0;
             for (FieldError error : result.getFieldErrors()) {
@@ -80,10 +80,8 @@ public class StoragePageController {
             return message.toString();
         }
         storageDTO.setUserId(userService.getCurrentUser().getId());
-        storagePageService.updateAmount(storageDTO);
-        messageService.broadcast("storage.update", locale, storageDTO.getUserId(), storageDTO.getProductName(),
-                storageDTO.getAmount());
-        return "";
+        response.setStatus(HttpServletResponse.SC_OK);
+        return storagePageService.updateAmount(storageDTO, locale);
     }
 
     /**

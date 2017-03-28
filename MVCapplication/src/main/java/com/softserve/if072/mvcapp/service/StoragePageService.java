@@ -38,7 +38,7 @@ public class StoragePageService {
                               final AnalyticsPageService analyticsPageService) {
         this.restTemplate = restTemplate;
         this.shoppingListService = shoppingListService;
-        this.analyticsPageService = analyticsPageService;
+        this.analyticsPageService=analyticsPageService;
     }
 
     /**

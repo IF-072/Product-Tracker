@@ -91,6 +91,7 @@ public interface HistoryDAO {
      * and specific action
      *
      * @param productId - unique product identifier
+     * @param action - Action enum object with appropriate action
      * @return list of all history items that belong to specific user and specific product
      */
     @Select("SELECT id, user_id, product_id, amount, used_date, action FROM history " +

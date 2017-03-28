@@ -9,10 +9,13 @@ import com.softserve.if072.restservice.dao.mybatisdao.HistoryDAO;
 import com.softserve.if072.restservice.dao.mybatisdao.ProductDAO;
 import com.softserve.if072.restservice.dao.mybatisdao.StorageDAO;
 import com.softserve.if072.restservice.exception.NotEnoughDataException;
+import com.softserve.if072.restservice.security.authentication.AuthenticatedUserProxy;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
@@ -34,7 +37,7 @@ public class ForecastService {
     private final ProductDAO productDAO;
     private final StorageDAO storageDAO;
     private final ProductService productService;
-    private static final long MILLISECONDS_PER_DAY = 24 * 60 * 60 * 1000;
+    private static final long MILLISECONDS_PER_DAY = 24 * 60 * 60 * 1000L;
 
     public ForecastService(HistoryDAO historyDAO, ProductDAO productDAO,
                            StorageDAO storageDAO, ProductService productService) {
@@ -69,7 +72,7 @@ public class ForecastService {
     * 7. Detect the data that are less than the lower three sigma limit or more than the upper three sigma. If there are the
     * outliers in the data set we can deal with them in two ways:
     *  - if the outliers occur at the beginning of the data set or at the end of the data set we can simply remove them (trim
-    * the data set);
+    *  the data set);
     * - if the outliers occur between two certain values we can simply change them to the average of this two certain values.
     * 8. Calculate the date of the product ending using the mean from step 4 as the average speed.
     */
@@ -83,6 +86,8 @@ public class ForecastService {
      */
     public ProductStatistics getProductStatistics(int productId) throws NotEnoughDataException {
         LOGGER.trace("getProductStatistics method starts to execute");
+//todo uncomment;
+//      isAuthorize(productId);
         List<HistoryDTO> historyDTOs = historyDAO.getDTOByProductIdAndAction(productId, Action.USED);
         if (CollectionUtils.isEmpty(historyDTOs) || historyDTOs.size() < 2) {
             LOGGER.info("List of product using size is {}. NotEnoughDataException will be thrown.", historyDTOs.size());
@@ -94,7 +99,8 @@ public class ForecastService {
         }
 
         ProductStatistics productStatistics = new ProductStatistics();
-        productStatistics.setProductUsingSpeeds(getProductUsedSpeeds(historyDTOs, productStatistics));
+        setDataToArrays(historyDTOs, productStatistics, Action.USED);
+        productStatistics.setProductUsingSpeeds(getProductUsedSpeeds(productStatistics));
 
         while (true) {
             productStatistics.setHasOutliers(false);
@@ -130,30 +136,16 @@ public class ForecastService {
     /**
      * Calculate the speed of the product using per day
      *
-     * @param historyDTOs - list of historyDTO objects
      * @return array with the speed of the product using per day
      */
-    private double[] getProductUsedSpeeds(List<HistoryDTO> historyDTOs, ProductStatistics productStatistics) {
+    private double[] getProductUsedSpeeds(ProductStatistics productStatistics) {
         LOGGER.trace("getProductUsingSpeeds method starts to execute.");
-        int usedDataSetSize = historyDTOs.size();
-        Timestamp[] usingDates = new Timestamp[usedDataSetSize];
-        int[] usingAmounts = new int[usedDataSetSize];
-        int totalUsed=0;
+        Timestamp[] usingDates = productStatistics.getUsingProductDates();
+        int[] usingAmounts = productStatistics.getUsingProductAmounts();
+        int usedDateSize = usingDates.length;
+        double[] productUsedSpeeds = new double[usedDateSize - 1];
 
-        for (int i = 0; i < usedDataSetSize; i++) {
-            HistoryDTO historyDTO = historyDTOs.get(i);
-            usingDates[i] = historyDTO.getUsedDate();
-            usingAmounts[i] = historyDTO.getAmount();
-            totalUsed+=historyDTO.getAmount();
-        }
-
-        productStatistics.setUsingProductDates(usingDates);
-        productStatistics.setUsingProductAmounts(usingAmounts);
-        productStatistics.setTotalUsed(totalUsed);
-
-        double[] productUsedSpeeds = new double[usedDataSetSize - 1];
-
-        for (int i = 1; i < usedDataSetSize; i++) {
+        for (int i = 1; i < usedDateSize; i++) {
             Timestamp currentDate = usingDates[i];
             Timestamp previousDate = usingDates[i - 1];
             double daysDiff = (double) (currentDate.getTime() - previousDate.getTime()) / MILLISECONDS_PER_DAY;
@@ -311,6 +303,43 @@ public class ForecastService {
         } catch (NotEnoughDataException e) {
             LOGGER.error(e.getMessage());
             storageDAO.updateEndDate(productId, null);
+        }
+    }
+
+    /**
+     * Set appropriate data
+     *
+     * @param historyDTOs       - list of historyDTO objects
+     * @param productStatistics - object that stores statistical information about product using
+     * @param action            - Action enum object with appropriate action
+     */
+    static void setDataToArrays(List<HistoryDTO> historyDTOs, ProductStatistics productStatistics, Action action) {
+        int dataSetSize = historyDTOs.size();
+        Timestamp[] dates = new Timestamp[dataSetSize];
+        int[] amounts = new int[dataSetSize];
+        int total = 0;
+        for (int i = 0; i < dataSetSize; i++) {
+            dates[i] = historyDTOs.get(i).getUsedDate();
+            amounts[i] = historyDTOs.get(i).getAmount();
+            total += amounts[i];
+            if (action == Action.USED) {
+                productStatistics.setUsingProductDates(dates);
+                productStatistics.setUsingProductAmounts(amounts);
+                productStatistics.setTotalUsed(total);
+            } else {
+                productStatistics.setPurchasingProductDates(dates);
+                productStatistics.setPurchasingProductAmounts(amounts);
+                productStatistics.setTotalPurchased(total);
+            }
+        }
+    }
+
+    private void isAuthorize(int productId) {
+        int productOwnerId = productService.getUserIdByProductId(productId);
+        AuthenticatedUserProxy userProxy = (AuthenticatedUserProxy) SecurityContextHolder.getContext().getAuthentication();
+        int currentUserId = userProxy.getUser().getId();
+        if (productOwnerId != currentUserId) {
+            throw new AccessDeniedException(String.format("You don't have permission to access to the product with id %d.", productId));
         }
     }
 }

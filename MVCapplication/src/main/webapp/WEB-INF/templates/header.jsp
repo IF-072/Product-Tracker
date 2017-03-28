@@ -1,10 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
-<script>
-    var id = "<c:out value="${userService.getCurrentUser().getId()}"/>";
-</script>
-
 <div id="wrapper">
 
     <!-- Navigation -->
@@ -147,3 +143,4 @@
 
         <div class="panel-body" id="container-notification">
         </div>
+        <div class="hidden" id="userId" data="<c:out value="${userService.getCurrentUser().getId()}"/>"></div>

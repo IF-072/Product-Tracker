@@ -48,6 +48,7 @@ public class CartService {
         int userId = userService.getCurrentUser().getId();
 
         LOGGER.info(cartRequestReceive, "retrieving", "all cart records", userId);
+        @SuppressWarnings("unchecked")
         List<Cart> carts = restTemplate.getForObject(restCartURL, List.class, userId);
         LOGGER.info(cartSuccessfullyOperation, "retrieving", "all cart records", userId);
         return carts;
