@@ -18,12 +18,15 @@ import java.util.List;
  * REST server
  *
  * @author Igor Kryviuk
+ * @author Pavlo Bendus
  */
 @Service
-public class AnalyticsService {
+public class AnalyticsPageService {
+
     private static final Logger LOGGER = LogManager.getLogger();
     private final RestTemplate restTemplate;
     private final UserService userService;
+
     @Value("${application.restAnalyticsURL}")
     private String restAnalyticsURL;
     @Value("${application.restAnalyticsGetProductsURL}")
@@ -33,7 +36,7 @@ public class AnalyticsService {
     @Value("${analytics.successfullyOperation}")
     private String analyticsSuccessfullyOperation;
 
-    public AnalyticsService(RestTemplate restTemplate, UserService userService) {
+    public AnalyticsPageService(RestTemplate restTemplate, UserService userService) {
         this.restTemplate = restTemplate;
         this.userService = userService;
     }
@@ -72,7 +75,7 @@ public class AnalyticsService {
     /**
      * Clean ProductStatistics session object
      */
-    public void cleanProductStatisticsSessionObject( ){
+    public void cleanProductStatisticsSessionObject(){
         ServletRequestAttributes servletRequestAttributes = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
         HttpSession session = servletRequestAttributes.getRequest().getSession();
         session.setAttribute("productStatistics", null);

@@ -12,7 +12,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="/"><spring:message code="productTracker"/></a>
+            <a class="navbar-brand" href="/home"><spring:message code="productTracker"/></a>
         </div>
         <!-- /.navbar-header -->
 

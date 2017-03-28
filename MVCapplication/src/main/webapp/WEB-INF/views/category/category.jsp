@@ -20,15 +20,15 @@
         <c:if test="${empty categories}">
             <div class="panel panel-primary">
                 <div class="panel-heading">
-                    No categories found
+                    <spring:message code="category.notFound"/>
                 </div>
                 <div class="panel-body">
-                    <p>Ooops... It seems your category list is empty. You can add a new one by clicking the button above.</p>
+                    <p><spring:message code="category.listIsEmpty" /></p>
                 </div>
             </div>
         </c:if>
-<c:if test="${not empty categories}">
 
+        <c:if test="${not empty categories}">
         <div class="panel panel-default">
                 <table width="100%" class="table table-striped table-bordered table-hover">
                     <thead>

@@ -40,15 +40,15 @@ public class CartServiceTest {
     @Mock
     private RestTemplate restTemplate;
     @Mock
-    private AnalyticsService analyticsService;
+    AnalyticsPageService analyticsPageService;
     @Mock
-    private UserService userService;
+    UserService userService;
     @Mock
-    private User user;
+    User user;
 
     @Before
     public void setup() {
-        cartService = new CartService(restTemplate, userService, analyticsService);
+        cartService = new CartService(restTemplate, userService, analyticsPageService);
         when(userService.getCurrentUser()).thenReturn(user);
         when(user.getId()).thenReturn(CURRENT_USER_ID);
     }

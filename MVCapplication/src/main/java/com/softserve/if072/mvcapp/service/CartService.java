@@ -21,7 +21,7 @@ public class CartService {
     private static final Logger LOGGER = LogManager.getLogger();
     private final RestTemplate restTemplate;
     private final UserService userService;
-    private final AnalyticsService analyticsService;
+    private final AnalyticsPageService analyticsPageService;
     @Value("${application.restCartURL}")
     private String restCartURL;
     @Value("${application.restCartPurchaseURL}")
@@ -33,10 +33,10 @@ public class CartService {
     @Value("${cart.successfullyOperation}")
     private String cartSuccessfullyOperation;
 
-    public CartService(RestTemplate restTemplate, UserService userService, AnalyticsService analyticsService) {
+    public CartService(RestTemplate restTemplate, UserService userService, AnalyticsPageService analyticsPageService) {
         this.restTemplate = restTemplate;
         this.userService = userService;
-        this.analyticsService = analyticsService;
+        this.analyticsPageService = analyticsPageService;
     }
 
     /**
@@ -65,7 +65,7 @@ public class CartService {
 
         LOGGER.info(cartRequestReceive, "purchasing the product  with id", productId, userId);
         restTemplate.put(restCartPurchaseURL, cartDTO, userId, productId);
-        analyticsService.cleanProductStatisticsSessionObject();
+        analyticsPageService.cleanProductStatisticsSessionObject();
         LOGGER.info(cartSuccessfullyOperation, "purchasing the product  with id", productId, userId);
     }
 

@@ -37,15 +37,15 @@ public class HistoryServiceTest {
     @Mock
     private RestTemplate restTemplate;
     @Mock
-    private UserService userService;
+    UserService userService;
     @Mock
-    private AnalyticsService analyticsService;
+    AnalyticsPageService analyticsPageService;
     @Mock
-    private User user;
+    User user;
 
     @Before
     public void setup() {
-        historyService = new HistoryService(restTemplate, userService, analyticsService);
+        historyService = new HistoryService(restTemplate, userService, analyticsPageService);
         when(userService.getCurrentUser()).thenReturn(user);
         when(user.getId()).thenReturn(CURRENT_USER_ID);
     }

@@ -25,10 +25,10 @@
             </div>
         </c:if>
 
-        <c:if test="${not empty error}">
+        <c:if test="${error != null}">
             <div class="alert alert-danger">
                 <p><span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-                        ${error}</p>
+                        <spring:message code="error.categoryAlreadyExists"/></p>
             </div>
         </c:if>
 
