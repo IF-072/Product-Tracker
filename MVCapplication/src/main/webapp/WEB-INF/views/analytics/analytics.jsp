@@ -19,6 +19,11 @@
     <div class="row">
         <div class="col-lg-8">
             <%--todo change add charts--%>
+                <p id="productUsingSpeeds" style="display: none">${productStatistics.productUsingSpeedsForChart}</p>
+                <p id="usingProductAmounts" style="display: none">${productStatistics.usingProductAmountsForChart}</p>
+                <p id="usingProductDates" style="display: none">${productStatistics.usingProductDatesForChart}</p>
+                <p id="purchasingProductAmounts" style="display: none">${productStatistics.purchasingProductAmountsForChart}</p>
+                <p id="purchasingProductDates" style="display: none">${productStatistics.purchasingProductDatesForChart}</p>
         </div>
         <div class="col-lg-4">
             <div class="panel panel-default">
@@ -112,7 +117,7 @@
                         <tr>
                             <td><spring:message code="analytics.statTableColumnValueEndDate"/>
                             </td>
-                            <td>
+                            <td id="endDate">
                                 <c:if test="${empty productStatistics.endDate}">
                                     ----------
                                 </c:if>
