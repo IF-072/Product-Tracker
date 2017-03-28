@@ -80,7 +80,16 @@ public class StoragePageService {
             messageService.broadcast("storage.insertInList", locale, storageDTO.getUserId(),
                     storageDTO.getProductName());
         }
-        return new SimpleDateFormat("yyyy/MM/dd").format(result);
+        String endDate;
+        if (result != null) {
+            endDate = new SimpleDateFormat("yyyy/MM/dd").format(result);
+        } else {
+            endDate = "----------";
+        }
+
+        LOGGER.info("Return new end date {}", endDate);
+        return endDate;
+
     }
 
     /**
