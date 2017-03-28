@@ -6,6 +6,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.apache.commons.collections.CollectionUtils;
@@ -35,6 +37,7 @@ public class StoragePageService {
     private final ShoppingListService shoppingListService;
     private final AnalyticsService analyticsService;
     private final MessageService messageService;
+    private final String productEnding = "storage.productEnding";
 
     @Autowired
     public StoragePageService(final RestTemplate restTemplate, final ShoppingListService shoppingListService,
@@ -54,7 +57,9 @@ public class StoragePageService {
      */
     public List<Storage> getStorages(final int userId) {
         final String uri = storageUrl + userId;
-        final List<Storage> storage = restTemplate.getForObject(uri, List.class);
+        final List<Storage> storage = restTemplate.exchange(uri, HttpMethod.GET,
+                null, new ParameterizedTypeReference<List<Storage>>() {
+                }).getBody();
 
         if (CollectionUtils.isEmpty(storage)) {
             LOGGER.error("Storage' list of user with id {} is empty", userId);
@@ -72,17 +77,12 @@ public class StoragePageService {
      */
     public String updateAmount(final StorageDTO storageDTO, final String locale) {
         final String uri = storageUrl + "dto";
-        Timestamp result = restTemplate.postForObject(uri, storageDTO, Timestamp.class);
+        final Timestamp time = restTemplate.postForObject(uri, storageDTO, Timestamp.class);
         analyticsService.cleanProductStatisticsSessionObject();
-        messageService.broadcast("storage.update", locale, storageDTO.getUserId(), storageDTO.getProductName(),
-                storageDTO.getAmount());
-        if (storageDTO.getAmount() <= 1) {
-            messageService.broadcast("storage.insertInList", locale, storageDTO.getUserId(),
-                    storageDTO.getProductName());
-        }
+        sendNotification(storageDTO, locale, time);
         String endDate;
-        if (result != null) {
-            endDate = new SimpleDateFormat("yyyy/MM/dd").format(result);
+        if (time != null) {
+            endDate = new SimpleDateFormat("yyyy/MM/dd").format(time);
         } else {
             endDate = "----------";
         }
@@ -100,6 +100,28 @@ public class StoragePageService {
     public void addProductToShoppingList(final int productId) {
         if (productId > 0) {
             shoppingListService.addProductToShoppingList(productId);
+        }
+    }
+
+    public void reviewStorage(final String locale, final int userId) {
+        final List<Storage> storage = getStorages(userId);
+        storage.stream()
+                .filter(elem -> elem.getEndDate().before(new Timestamp(System.currentTimeMillis() + 86400000l)))
+                .forEach(elem -> messageService.broadcast(productEnding, locale, elem.getUser().getId(),
+                        elem.getProduct().getName()));
+    }
+
+    private void sendNotification(final StorageDTO storageDTO, final String locale, final Timestamp date) {
+        messageService.broadcast("storage.update", locale, storageDTO.getUserId(), storageDTO.getProductName(),
+                storageDTO.getAmount());
+        if (storageDTO.getAmount() <= 1 && storageDTO.getPreviousAmount() > 1) {
+            messageService.broadcast("storage.insertInList", locale, storageDTO.getUserId(),
+                    storageDTO.getProductName());
+        }
+        if (storageDTO.getPreviousAmount() - storageDTO.getAmount() > 0 &&
+                date != null && date.before(new Timestamp(System.currentTimeMillis() + 86400000l))) {
+            messageService.broadcast(productEnding, locale, storageDTO.getUserId(),
+                    storageDTO.getProductName());
         }
     }
 }

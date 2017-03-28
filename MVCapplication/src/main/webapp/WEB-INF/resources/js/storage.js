@@ -1,5 +1,5 @@
 function allowBtn() {
-    var amount = $(this).attr("init");
+    var amount = $(this).parent().find(".init").val();
     var value = $(this).val();
     var jbtn = $(this).parent().find('button.confirm');
 
@@ -16,6 +16,7 @@ function subForm(e) {
     var url = $(this).closest('form').attr('action'),
         data = $(this).closest('form').serialize();
     var jbtn = $(this).find('button');
+    var init = $(this).find(".init");
     var inputNum = $(this).find(".num");
     var date = $(this).parent().parent().find(".date")
     $.ajax({
@@ -28,7 +29,7 @@ function subForm(e) {
             if (data.length == 10 && jqXHR.status == 200){
                 date.text(data);
                 jbtn.addClass("disabled");
-                inputNum.attr("init", inputNum.val());
+                init.val(inputNum.val());
             } else {
                 $("#message").text(data);
                 $("#error").modal('show');
@@ -40,8 +41,8 @@ function subForm(e) {
             }
 
         },
-        error: function (data) {
-            $("#message").text(data);
+        error: function () {
+            $("#message").text("Something went wrong!!!");
             $("#error").modal('show');
 
             $(".btn-confirm").click(function () {
@@ -61,7 +62,6 @@ function addToShoppingList() {
             productId: productId
         },
         success: function () {
-            $("#message").text("Something went wrong!!!");
             $("#success").modal('show');
 
             $(".btn-confirm").click(function () {
@@ -70,6 +70,7 @@ function addToShoppingList() {
             });
         },
         error: function () {
+            $("#message").text("Something went wrong!!!");
             $("#error").modal('show');
 
             $(".btn-confirm").click(function () {

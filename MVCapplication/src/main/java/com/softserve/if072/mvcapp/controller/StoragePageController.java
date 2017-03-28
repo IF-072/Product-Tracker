@@ -94,4 +94,10 @@ public class StoragePageController {
     public void addToShoppingList(@RequestParam("productId") final int productId) {
         storagePageService.addProductToShoppingList(productId);
     }
+
+    @PostMapping("/review")
+    @ResponseStatus(value = HttpStatus.OK)
+    public void review(@CookieValue(value = "myLocaleCookie", required = false) final String locale) {
+        storagePageService.reviewStorage(locale, userService.getCurrentUser().getId());
+    }
 }

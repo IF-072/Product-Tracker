@@ -51,9 +51,7 @@ stompClient.connect({}, function () {
         var notif = container.html();
         container.html(notif + '<div class="alert alert-info alert-dismissable">' +
             '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>' +
-            msg.data + '<a href="#" class="alert-link pull-right">' +
-            hours + '</a>.' +
-            '</div>');
+            '<a href="#" class="alert-link pull-right">' + hours + '</a>' + msg.data + '</div>');
     });
 });
 

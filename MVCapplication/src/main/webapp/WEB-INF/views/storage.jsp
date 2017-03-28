@@ -53,22 +53,23 @@
                         <tr>
                             <td>${loop.count}</td>
                             <td>${storage.product.name}</td>
-                            <td class = "date">
+                            <td class="date">
                                 <c:if test="${empty storage.endDate}">
                                     ----------
                                 </c:if>
                                 <c:if test="${!empty storage.endDate}">
-                                <jsp:useBean id="dateValue" class="java.util.Date"/>
-                                <jsp:setProperty name="dateValue" property="time" value="${storage.endDate}"/>
-                                <fmt:formatDate value="${dateValue}" pattern="yyyy/MM/dd"/>
+                                    <jsp:useBean id="dateValue" class="java.util.Date"/>
+                                    <jsp:setProperty name="dateValue" property="time" value="${storage.endDate.getTime()}"/>
+                                    <fmt:formatDate value="${dateValue}" pattern="yyyy/MM/dd"/>
                                 </c:if>
                             </td>
                             <td>
                                 <form:form method="post" action="update" modelAttribute="storage">
                                     <form:hidden path="productId" value="${storage.product.id}"/>
                                     <form:hidden path="productName" value="${storage.product.name}"/>
+                                    <form:hidden path="previousAmount" value="${storage.amount}" class="init"/>
                                     <input type="number" path="amount" name="amount" min="0" value="${storage.amount}"
-                                           class="form-control num" init="${storage.amount}"/>
+                                           class="form-control num"/>
                                     <form:button class="btn disabled btn-default confirm">
                                         <spring:message code="storage.confirm"/></form:button>
                                 </form:form>
