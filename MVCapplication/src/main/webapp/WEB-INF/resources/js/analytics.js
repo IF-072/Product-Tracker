@@ -1,31 +1,7 @@
-new Morris.Line({
-    // ID of the element in which to draw the chart.
-    element: 'chart',
-    // Chart data records -- each entry in this array corresponds to a point on
-    // the chart.
-    data: [
-        { year: '2008', value: 20 },
-        { year: '2009', value: 10 },
-        { year: '2010', value: 5 },
-        { year: '2011', value: 5 },
-        { year: '2012', value: 20 }
-    ],
-    // The name of the data record attribute that contains x-values.
-    xkey: 'year',
-    // A list of names of data record attributes that contain y-values.
-    ykeys: ['value'],
-    // Labels for the ykeys -- will be displayed when you hover over the
-    // chart.
-    labels: ['Value']
-});
-
-/**
- *   Created by Igor Kryviuk
- */
-
 /**
  * This function is used to make request for viewing analytics for selected product
  */
+
 $("#selectProductSubmit").click(function () {
     var href = $(this).attr("href");
     var selectElement = document.getElementById("select");
@@ -41,3 +17,53 @@ $("#selectOtherProduct").click(function () {
     location.href = $(this).attr("href");
 });
 
+$(document).ready( function() {
+
+    function ProductObject(x, y) {
+        this.x = x;
+        this.y = y;
+    }
+
+    var productUsingSpeeds = $("#productUsingSpeeds").text();
+    var usingProductAmounts = $("#usingProductAmounts").text();
+    var usingProductDates = $("#usingProductDates").text();
+    console.log(usingProductDates);
+
+    var productUsingSpeedsArray = splitArray(productUsingSpeeds);
+
+    var productUsingSpeedsDataArray = [];
+
+    for(var i = 0; i < productUsingSpeedsArray.length; i++) {
+        productUsingSpeedsDataArray.push(new ProductObject((i + 1), parseFloat(productUsingSpeedsArray[i])));
+    }
+
+    var ctx = $("#chartProductUsingSpeeds");
+    var chartProductUsingSpeeds = new Chart(ctx, {
+        type: 'line',
+        data: {
+            datasets: [{
+                label: 'Using Speed By Days',
+                data: productUsingSpeedsDataArray
+            }]
+        },
+        options: {
+            scales: {
+                xAxes: [{
+                    type: 'linear',
+                    position: 'bottom'
+                }]
+            }
+        }
+    })
+});
+
+/**
+ * This function is used to replace square brackets and split string into an array
+ *
+ * @param string
+ * @returns {Array}
+ */
+function splitArray(string) {
+    var newArray = string.replace('[', '').replace(']', '');
+    return newArray.split(", ");
+}

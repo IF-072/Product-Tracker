@@ -1,7 +1,6 @@
 package com.softserve.if072.mvcapp.service;
 
 import com.softserve.if072.common.model.Storage;
-import com.softserve.if072.common.model.User;
 import com.softserve.if072.common.model.dto.StorageDTO;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -32,14 +31,14 @@ public class StoragePageService {
 
     private final RestTemplate restTemplate;
     private final ShoppingListService shoppingListService;
-    private final AnalyticsService analyticsService;
+    private final AnalyticsPageService analyticsPageService;
 
     @Autowired
     public StoragePageService(final RestTemplate restTemplate, final ShoppingListService shoppingListService,
-                              final AnalyticsService analyticsService) {
+                              final AnalyticsPageService analyticsPageService) {
         this.restTemplate = restTemplate;
         this.shoppingListService = shoppingListService;
-        this.analyticsService=analyticsService;
+        this.analyticsPageService = analyticsPageService;
     }
 
     /**
@@ -69,7 +68,7 @@ public class StoragePageService {
     public void updateAmount(final StorageDTO storageDTO) {
         final String uri = storageUrl + "dto";
         restTemplate.put(uri, storageDTO);
-        analyticsService.cleanProductStatisticsSessionObject();
+        analyticsPageService.cleanProductStatisticsSessionObject();
     }
 
     /**

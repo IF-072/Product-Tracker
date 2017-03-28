@@ -36,7 +36,7 @@ public class StoragePageServiceTest {
     @Mock
     private ShoppingListService shoppingListService;
     @Mock
-    private AnalyticsService analyticsService;
+    private AnalyticsPageService analyticsPageService;
     @InjectMocks
     private StoragePageService storagePageService;
     private Storage storage;
