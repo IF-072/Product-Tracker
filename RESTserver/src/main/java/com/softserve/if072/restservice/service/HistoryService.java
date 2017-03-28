@@ -54,7 +54,7 @@ public class HistoryService {
      * @return page of history records or empty page
      */
     public Page<History> getPage(int userId, Pageable pageable) {
-        Page<History> page = historyRepository.findByUserId(userId, pageable);
+        Page<History> page = historyRepository.findByUserIdOrderByUsedDateAsc(userId, pageable);
         LOGGER.info(historyContainsPages, "user", userId, page.getTotalPages());
 
         return page;

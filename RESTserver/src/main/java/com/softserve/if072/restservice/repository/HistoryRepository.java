@@ -19,7 +19,7 @@ public interface HistoryRepository extends JpaRepository<History, Integer> {
 
     Page<History> findAll(Pageable pageable);
 
-    Page<History> findByUserId(int userId, Pageable pageable);
+    Page<History> findByUserIdOrderByUsedDateAsc(int userId, Pageable pageable);
 
     @Query("select h from History h where h.user.id = :userId" +
             " and (:name is NULL or h.product.name like :name)" +
@@ -27,7 +27,7 @@ public interface HistoryRepository extends JpaRepository<History, Integer> {
             " and (:categoryId is NULL or :categoryId = 0 or h.product.category.id = :categoryId)" +
             " and (:fromDate is NULL or h.usedDate >= :fromDate)" +
             " and (:toDate is NULL or h.usedDate <= :toDate)" +
-            "")
+            " order by h.usedDate asc")
     Page<History> findByMultipleParams(@Param("userId") int userId, @Param("name") String name, @Param("description") String description, @Param("categoryId") int categoryId,  @Param("fromDate") Date fromDate, @Param("toDate") Date toDate, Pageable p);
 
 
