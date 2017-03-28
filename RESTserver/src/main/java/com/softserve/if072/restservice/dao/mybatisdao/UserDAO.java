@@ -13,6 +13,13 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+import static com.softserve.if072.restservice.dao.Queries.INSERT_USER;
+import static com.softserve.if072.restservice.dao.Queries.SELECT_ALL_USERS;
+import static com.softserve.if072.restservice.dao.Queries.SELECT_USER_BY_ID;
+import static com.softserve.if072.restservice.dao.Queries.UPDATE_USER;
+import static com.softserve.if072.restservice.dao.Queries.DELETE_USER;
+import static com.softserve.if072.restservice.dao.Queries.SELECT_USER_BY_USERNAME;
+
 /**
  * This class allows to get user model from a database.
  *
@@ -20,19 +27,12 @@ import java.util.List;
  */
 @Repository
 public interface UserDAO {
-    String SELECT_ALL = "SELECT id, name, email, password, role, is_enabled, premium_expires_time FROM user";
-    String SELECT_BY_ID = "SELECT id, name, email, password, role, is_enabled, premium_expires_time FROM user WHERE id = #{id}";
-    String SELECT_BY_USERNAME = "SELECT id, name, email, password, role, is_enabled, premium_expires_time FROM user WHERE email = #{username}";
-    String INSERT = "INSERT INTO user (name, email, password, role, is_enabled) VALUES (#{name}, #{email}, #{password}, #{role}, #{isEnabled})";
-    String UPDATE = "UPDATE user SET name = #{name}, email = #{email}, password = #{password}, role = #{role}, is_enabled = #{isEnabled}, premium_expires_time = #{premiumExpiresTime} WHERE id=#{id}";
-    String DELETE = "UPDATE user SET is_enabled = 0 WHERE id = #{id}";
-
     /**
      * Pulls all users from the database and returns them as list.
      *
      * @return list of all users
      */
-    @Select(SELECT_ALL)
+    @Select(SELECT_ALL_USERS)
     @Results(value = {
             @Result(property = "id", column = "id"),
             @Result(property = "name", column = "name"),
@@ -62,7 +62,7 @@ public interface UserDAO {
      * @param id unique user's id
      * @return user with a specified id
      */
-    @Select(SELECT_BY_ID)
+    @Select(SELECT_USER_BY_ID)
     @Results(value = {
             @Result(property = "id", column = "id"),
             @Result(property = "name", column = "name"),
@@ -79,7 +79,7 @@ public interface UserDAO {
      *
      * @param user model you want to put to the database
      */
-    @Insert(INSERT)
+    @Insert(INSERT_USER)
     void insert(User user);
 
     /**
@@ -87,7 +87,7 @@ public interface UserDAO {
      *
      * @param user model you want to put to the database
      */
-    @Update(UPDATE)
+    @Update(UPDATE_USER)
     void update(User user);
 
     /**
@@ -95,7 +95,7 @@ public interface UserDAO {
      *
      * @param id id of user you want to delete
      */
-    @Update(DELETE)
+    @Update(DELETE_USER)
     void deleteById(int id);
 
     /**
@@ -104,7 +104,7 @@ public interface UserDAO {
      * @param username unique user's
      * @return user with a specified username
      */
-    @Select(SELECT_BY_USERNAME)
+    @Select(SELECT_USER_BY_USERNAME)
     @Results(value = {
             @Result(property = "id", column = "id"),
             @Result(property = "name", column = "name"),
