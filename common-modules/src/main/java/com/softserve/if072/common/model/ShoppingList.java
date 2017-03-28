@@ -1,42 +1,15 @@
 package com.softserve.if072.common.model;
 
 
-import com.softserve.if072.common.model.id.ShoppingListId;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.Id;
-import javax.persistence.IdClass;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import java.io.Serializable;
-
 /**
  * The ShoppingList class stores information about products and their amount
  * that user may buy.
  *
  * @author Roman Dyndyn
  */
-
-@Entity
-@Table(name = "shopping_list")
-@IdClass(ShoppingListId.class)
-public class ShoppingList implements Serializable {
-    static final long serialVersionUID = 567834565432L;
-
-    @Id
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "user_id")
+public class ShoppingList {
     private User user;
-
-    @Id
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_id")
     private Product product;
-
-    @Column(name = "amount")
     private int amount;
 
     public ShoppingList(final User user, final Product product, final int amount) {
@@ -80,22 +53,4 @@ public class ShoppingList implements Serializable {
                 ", amount=" + amount +
                 '}';
     }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        ShoppingList that = (ShoppingList) o;
-
-        return that != null && user != null && user.equals(that.user) && product != null && product.equals(that.product);
-    }
-
-    @Override
-    public int hashCode() {
-        int result = user.hashCode();
-        result = 31 * result + product.hashCode();
-        return result;
-    }
-
 }

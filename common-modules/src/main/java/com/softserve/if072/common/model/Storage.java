@@ -1,16 +1,5 @@
 package com.softserve.if072.common.model;
 
-import com.softserve.if072.common.model.id.StorageId;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.Id;
-import javax.persistence.IdClass;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import java.io.Serializable;
 import java.sql.Timestamp;
 
 /**
@@ -19,29 +8,11 @@ import java.sql.Timestamp;
  *
  * @author Roman Dyndyn
  */
-
-@Entity
-@Table(name = "storage")
-@IdClass(StorageId.class)
-public class Storage implements Serializable {
-    static final long serialVersionUID = 987698345643L;
-
-    @Id
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "user_id")
+public class Storage {
     private User user;
-
-    @Id
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_id")
     private Product product;
-
-    @Column(name = "amount")
     private int amount;
-
-    @Column(name = "end_date")
     private Timestamp endDate;
-
 
     public Storage(final User user, final Product product, final int amount, final Timestamp endDate) {
         this.user = user;
@@ -93,22 +64,5 @@ public class Storage implements Serializable {
                 ", amount=" + amount +
                 ", endDate=" + endDate +
                 '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Storage storage = (Storage) o;
-
-        return user.equals(storage.user) && product.equals(storage.product);
-    }
-
-    @Override
-    public int hashCode() {
-        int result = user.hashCode();
-        result = 31 * result + product.hashCode();
-        return result;
     }
 }

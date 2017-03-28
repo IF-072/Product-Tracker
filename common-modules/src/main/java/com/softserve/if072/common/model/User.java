@@ -1,17 +1,12 @@
 package com.softserve.if072.common.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import java.io.Serializable;
 import java.util.List;
 
@@ -32,47 +27,29 @@ public class User implements Serializable {
     @Column(name = "id")
     private int id;
 
-    @Column(name = "name")
+    @Transient
     private String name;
-
-    @Column(name = "email")
+    @Transient
     private String email;
-
-    @Column(name = "password")
+    @Transient
     private String password;
-
-    @Column(name = "is_enabled")
+    @Transient
     private boolean isEnabled;
-
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
-    @JsonIgnore
+    @Transient
     private List<Store> stores;
-
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
-    @JsonIgnore
+    @Transient
     private List<Product> products;
-
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
-    @JsonIgnore
+    @Transient
     private List<Cart> carts;
-
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
-    @JsonIgnore
+    @Transient
     private List<Category> categories;
-
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
-    @JsonIgnore
+    @Transient
     private List<ShoppingList> shoppingLists;
-
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
-    @JsonIgnore
+    @Transient
     private List<Storage> storages;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "role")
+    @Transient
     private Role role;
-
-    @Column(name = "premium_expires_time")
+    @Transient
     private long premiumExpiresTime;
 
     public User() {
@@ -199,25 +176,5 @@ public class User implements Serializable {
                 ", role=" + role +
                 ", premiumExpiresTime=" + premiumExpiresTime +
                 '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        User user = (User) o;
-
-        if (id != user.id) return false;
-        if (!name.equals(user.name)) return false;
-        return email.equals(user.email);
-    }
-
-    @Override
-    public int hashCode() {
-        int result = id;
-        result = 31 * result + name.hashCode();
-        result = 31 * result + email.hashCode();
-        return result;
     }
 }

@@ -1,37 +1,16 @@
 package com.softserve.if072.common.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.Transient;
-import java.io.Serializable;
+public class Image {
 
-@Entity
-@Table(name = "image")
-public class Image implements Serializable {
-    static final long serialVersionUID = 3433867676L;
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
     private int id;
-
-    @Column(name = "file_name")
     private String fileName;
-
-    @Column(name = "content_type")
     private String contentType;
-
-    @Column(name = "image_data")
+    private MultipartFile multipartFile;
     private byte[] imageData;
 
-    @Transient
-    private MultipartFile multipartFile;
 
     public Image() {
 
@@ -69,6 +48,7 @@ public class Image implements Serializable {
         this.contentType = contentType;
     }
 
+    @JsonIgnore
     public MultipartFile getMultipartFile() {
         return multipartFile;
     }

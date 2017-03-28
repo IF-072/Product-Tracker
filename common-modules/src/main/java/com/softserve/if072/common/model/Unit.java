@@ -6,12 +6,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import java.io.Serializable;
 
 @Entity
 @Table(name = "unit")
-public class Unit implements Serializable {
-    static final long serialVersionUID = 3325454678785L;
+public class Unit {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

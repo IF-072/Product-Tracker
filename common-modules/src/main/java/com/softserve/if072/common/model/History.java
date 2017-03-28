@@ -120,23 +120,4 @@ public class History implements Serializable {
                 "; action: " + action +
                 "\n}";
     }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        History history = (History) o;
-
-        return id == history.id && user.equals(history.user) && product.equals(history.product);
-    }
-
-    @Override
-    public int hashCode() {
-        int result = id;
-        result = 31 * result + user.hashCode();
-        result = 31 * result + product.hashCode();
-        return result;
-    }
-
 }

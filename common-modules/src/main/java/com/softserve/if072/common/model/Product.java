@@ -1,12 +1,10 @@
 package com.softserve.if072.common.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.softserve.if072.common.model.validation.product.ValidCategory;
 import com.softserve.if072.common.model.validation.product.ValidUnit;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -14,12 +12,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import java.io.Serializable;
+import javax.persistence.Transient;
 import java.util.List;
 
 /**
@@ -30,9 +25,7 @@ import java.util.List;
  */
 @Entity
 @Table(name = "product")
-//@JsonDeserialize(using = ProductDeserializer.class)
-public class Product implements Serializable {
-  static final long serialVersionUID = 44346854675356782L;
+public class Product {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -48,8 +41,7 @@ public class Product implements Serializable {
     @Column(name = "description")
     private String description;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "image_id")
+    @Transient
     private Image image;
 
     @OneToOne(fetch = FetchType.EAGER)
@@ -62,21 +54,15 @@ public class Product implements Serializable {
     private Category category;
 
     @ValidUnit(message = "{error.productUnit.notempty}")
-    @ManyToOne(fetch = FetchType.EAGER)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "unit_id")
     private Unit unit;
 
-    @Column(name = "is_enabled")
+    @Transient
     private boolean isEnabled;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinTable(name = "stores_products",
-            joinColumns = @JoinColumn(name = "product_id"),
-            inverseJoinColumns = @JoinColumn(name = "store_id"))
-
-    @JsonIgnoreProperties("products")
-/* @JsonIgnore */
-      private List<Store> stores;
+    @Transient
+    private List<Store> stores;
 
     public Product() {
     }
@@ -164,24 +150,6 @@ public class Product implements Serializable {
 
     public void setStores(List<Store> stores) {
         this.stores = stores;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Product product = (Product) o;
-
-        return id == product.id;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = id;
-        result = 31 * result + name.hashCode();
-        result = 31 * result + (description != null ? description.hashCode() : 0);
-        return result;
     }
 
     @Override
