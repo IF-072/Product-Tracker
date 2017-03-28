@@ -24,6 +24,7 @@ import java.sql.Timestamp;
 @Table(name = "storage")
 @IdClass(StorageId.class)
 public class Storage implements Serializable {
+    static final long serialVersionUID = 987698345643L;
 
     @Id
     @ManyToOne(fetch = FetchType.EAGER)

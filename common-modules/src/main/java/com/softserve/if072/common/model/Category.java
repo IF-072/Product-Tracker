@@ -25,6 +25,7 @@ import java.io.Serializable;
 @Table(name = "category")
 @Proxy(lazy = false)
 public class Category implements Serializable {
+    static final long serialVersionUID = 42678997782L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

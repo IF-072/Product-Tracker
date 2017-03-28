@@ -24,6 +24,7 @@ import java.io.Serializable;
 @Table(name = "shopping_list")
 @IdClass(ShoppingListId.class)
 public class ShoppingList implements Serializable {
+    static final long serialVersionUID = 567834565432L;
 
     @Id
     @ManyToOne(fetch = FetchType.EAGER)
