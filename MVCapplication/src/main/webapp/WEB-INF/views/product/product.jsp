@@ -21,7 +21,7 @@
             <div class="panel-body">
                 <p>
                         <input type="button" class="btn btn-outline btn-primary"
-                               onClick="window.location.href = '/product/addProduct'"
+                               id="addNewProductButton"
                                value=<spring:message code="product.addNewProductBut"/>>
                 </p>
                     <table width="100%" class="table table-striped table-bordered table-hover" id="productData">
@@ -47,18 +47,19 @@
                                 <td>${product.unit.name}</td>
                                 <td id="image">
                                     <c:if test="${product.image.id == null}">
-                                    <p id="addImage"
-                                       onclick="document.location.href='/image/upload?productId=${product.id}'">
-                                        Add image</p>
+                                    <p id="addImage" href="<c:url value="/image/upload?productId=${product.id}"/>">
+                                        <spring:message code="product.addImage"/></p>
                                     </c:if>
                                     <c:if test="${product.image.id != null}">
                                     <img src="../image/${product.image.id}" width="50" height="50" id="editImage"
-                                    onclick="document.location.href='/image/edit?productId=${product.id}'">
+                                         class="clickable" href="<c:url value="/image/edit?productId=${product.id}"/>">
                                     </c:if>
                                 </td>
                                 <td>
-                                    <p onclick="document.location.href='/product/stores?productId=${product.id}'"
-                                       id="goStores"><spring:message code="product.stores"/></p>
+                                    <p id="goStores" class="clickable"
+                                       href="<c:url value="/product/stores?productId=${product.id}"/>">
+                                        <spring:message code="product.stores"/>
+                                    </p>
                                 </td>
                                 <td style="text-align:center; vertical-align: middle">
                                     <button type="button" class="btn btn-outline btn-primary"
@@ -69,7 +70,7 @@
                                     </button>
                                 </td>
                                 <td style="text-align:center; vertical-align: middle">
-                                    <p onclick="document.location.href='/product/editProduct?productId=${product.id}'"
+                                    <p href="<c:url value="/product/editProduct?productId=${product.id}"/>"
                                        id="edit" class="fa fa-pencil fa-lg"></p>
                                 </td>
                                 <td style="text-align:center; vertical-align: middle">

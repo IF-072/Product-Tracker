@@ -147,7 +147,7 @@
                     <div class="col-md-4">
                         <button type="button" class="btn btn-primary" id="pdfButton"
                                 href="<c:url value="/history/getpdf"/>">
-                            PDF
+                            <spring:message code="history.pdf"/>
                         </button>
                     </div>
                 </div>

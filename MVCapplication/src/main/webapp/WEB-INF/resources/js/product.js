@@ -9,15 +9,59 @@ function addProductToShoppingList(productId) {
         data : {productId: productId},
         success: function(){$("#okDialog").dialog("open");}
     });
-
-};
+}
 
 var prId;
 
 function deleteProduct(productId) {
     $("#dialog").dialog("open");
     prId = productId;
-};
+}
+
+$( "#dialog" ).dialog({
+    autoOpen: false
+});
+
+$( "#okDialog" ).dialog({
+    autoOpen: false
+});
+
+$("#yes").click(function () {
+    window.location.replace("/product/delProduct?productId=" + prId);
+    $("#dialog").dialog("close");
+});
+
+$("#no").click(function () {
+    $("#dialog").dialog("close");
+});
+
+$("#ok").click(function () {
+    $("#okDialog").dialog("close");
+});
+
+$("#addNewProductButton").click(function () {
+    location.href = '/product/addProduct';
+});
+
+$("#addImage").click(function () {
+    var href = $(this).attr("href");
+    location.href = href;
+});
+
+$("#editImage.clickable").click(function () {
+    var href = $(this).attr("href");
+    location.href = href;
+});
+
+$("#goStores.clickable").click(function () {
+    var href = $(this).attr("href");
+    location.href = href;
+});
+
+$("#edit.fa").click(function () {
+    var href = $(this).attr("href");
+    location.href = href;
+});
 
 $(document).ready(function() {
     $('#productData').DataTable({
@@ -37,25 +81,11 @@ $(document).ready(function() {
             { "orderable": false, "targets": [4, 5, 6, 7, 8] }
         ]
     });
-    $( "#dialog" ).dialog({
-        autoOpen: false
-    });
 
-    $( "#okDialog" ).dialog({
-        autoOpen: false
-    });
+    $(document).getElementById("#inputWarning").keypress(function(key) {
 
-    $("#yes").click(function () {
-        window.location.replace("/product/delProduct?productId=" + prId);
-        $("#dialog").dialog("close");
-    });
+        if(key.charCode < 48 || key.charCode > 57) return false;
 
-    $("#no").click(function () {
-        $("#dialog").dialog("close");
-    });
-
-    $("#ok").click(function () {
-        $("#okDialog").dialog("close");
     });
 
 });
