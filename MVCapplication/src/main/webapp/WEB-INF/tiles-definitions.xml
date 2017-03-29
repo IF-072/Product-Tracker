@@ -450,6 +450,7 @@
         <put-list-attribute name="javascripts" inherit="true">
             <add-attribute value="/js/jquery-ui.js"/>
             <add-attribute value="/js/jquery.dataTables.js"/>
+            <add-attribute value="/js/Chart.js"/>
             <add-attribute value="/js/analytics.js"/>
         </put-list-attribute>
     </definition>

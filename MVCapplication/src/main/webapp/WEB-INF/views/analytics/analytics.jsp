@@ -4,6 +4,7 @@
 
 <%@ page import="com.softserve.if072.common.model.ProductStatistics" %>
 <%@ page import="java.sql.Timestamp" %>
+<%@ page import="java.util.Arrays" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
@@ -14,13 +15,29 @@
         <h1 class="page-header"><spring:message code="analytics.myAnalytics"/></h1>
     </div>
 </div>
+
+<!-- Charts and table-->
 <div class="panel panel-default">
 
+        <%
+            ProductStatistics productStatistics = (ProductStatistics) request.getAttribute("productStatistics");
+            String productUsingSpeeds = Arrays.toString(productStatistics.getProductUsingSpeeds());
+
+            String usingProductAmounts = Arrays.toString(productStatistics.getUsingProductAmounts());
+            String usingProductDates = Arrays.toString(productStatistics.getUsingProductDates());
+        %>
+
+        <p id="productUsingSpeeds" style="display: none"><%=productUsingSpeeds%></p>
+        <p id="usingProductAmounts" style="display: none"><%=usingProductAmounts%></p>
+        <p id="usingProductDates" style="display: none"><%=usingProductDates%></p>
+
     <div class="row">
-        <div class="col-lg-8">
-            <%--todo change add charts--%>
+
+        <div class="col-lg-offset-1 col-lg-6">
+            <canvas id="chartProductUsingSpeeds" height="100%" width="100%"></canvas>
         </div>
-        <div class="col-lg-4">
+
+        <div class="col-lg-offset-1 col-lg-4">
             <div class="panel panel-default">
                 <div class="panel-heading text-center">
                     <spring:message code="analytics.statTableHead"/><br>
@@ -129,13 +146,18 @@
             </div>
         </div>
     </div>
+
     <div class="panel-footer text-right">
         <button type="button" class="btn btn-primary" id="selectOtherProduct"
                 href="<c:url value="/analytics/cleanSession"/>">
             <spring:message code="analytics.selectOtherProduct"/>
         </button>
     </div>
-</div>
+    </div>
+
+    <div class="row">
+
+    </div>
 
 
 
