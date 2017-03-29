@@ -11,23 +11,28 @@ import com.lowagie.text.pdf.PdfPCell;
 import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.pdf.PdfWriter;
 import com.softserve.if072.common.model.History;
-import com.softserve.if072.common.model.dto.HistorySearchDTO;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.io.*;
+import java.io.ByteArrayOutputStream;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 /**
  * The class contains methods to create a PDF file with information about the user's history
@@ -45,8 +50,8 @@ public class PdfCreatorService {
 
     @Value("${application.restHistoryURL}")
     private String restHistoryURL;
-    @Value("${application.restHistorySearchURL}")
-    private String restHistorySearchURL;
+    @Value("${application.restHistorySearchPageURL}")
+    private String restHistorySearchPageURL;
 
     @Autowired
     public PdfCreatorService(UserService userService, RestTemplate restTemplate,
@@ -207,36 +212,6 @@ public class PdfCreatorService {
             }
         }
         return baos;
-    }
-
-    /**
-     * Make request to a REST server for retrieving all history records for current user
-     *
-     * @return list of history records or empty list
-     */
-    public List<History> getHistoriesByUserId() {
-
-        Map<String, Integer> param = new HashMap<>();
-        param.put("userId", userService.getCurrentUser().getId());
-
-        ResponseEntity<List<History>> historiesResponse = restTemplate.exchange(restHistoryURL, HttpMethod.GET,
-                null, new ParameterizedTypeReference<List<History>>() {
-                }, param);
-
-        return historiesResponse.getBody();
-
-    }
-
-    public List<History> getByUserIdAndSearchParams(HistorySearchDTO searchDTO) {
-        HttpEntity<HistorySearchDTO> request = new HttpEntity<>(searchDTO);
-        Map<String, Integer> param = new HashMap<>();
-        param.put("userId", userService.getCurrentUser().getId());
-
-        ResponseEntity<List<History>> historiesResponse = restTemplate.exchange(restHistorySearchURL, HttpMethod.POST,
-                request, new ParameterizedTypeReference<List<History>>() {
-                }, param);
-
-        return historiesResponse.getBody();
     }
 
 }

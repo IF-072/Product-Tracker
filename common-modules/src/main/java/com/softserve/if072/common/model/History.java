@@ -1,5 +1,18 @@
 package com.softserve.if072.common.model;
 
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import java.io.Serializable;
 import java.sql.Timestamp;
 
 /**
@@ -8,12 +21,33 @@ import java.sql.Timestamp;
  *
  * @author Igor Kryviuk
  */
-public class History {
+
+@Entity
+@Table(name = "history")
+public class History implements Serializable {
+    static final long serialVersionUID = 234523497L;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private int id;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id")
     private User user;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "product_id")
     private Product product;
+
+    @Column(name = "amount")
     private int amount;
+
+    @Column(name = "used_date")
     private Timestamp usedDate;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "action")
     private Action action;
 
     public History() {
@@ -25,7 +59,7 @@ public class History {
         this.product = product;
         this.amount = amount;
         this.usedDate = usedDate;
-        this.action=action;
+        this.action = action;
     }
 
     public int getId() {
