@@ -181,5 +181,81 @@ public class HistoryDataFactory {
             LOGGER.trace("[ №{}; usedDate = {}; amount = {} ]", i, historyDTO.getUsedDate(), historyDTO.getAmount());
         }
     }
+
+    public static Timestamp[] getOneOrLessDatesRecordsPerDayAboutUsing() {
+        Timestamp[] dates = new Timestamp[10];
+        dates[0] = Timestamp.valueOf("2017-01-03 12:00:00");
+        dates[1] = Timestamp.valueOf("2017-01-04 12:00:00");
+        dates[2] = Timestamp.valueOf("2017-01-07 12:00:00");
+        dates[3] = Timestamp.valueOf("2017-01-08 12:00:00");
+        dates[4] = Timestamp.valueOf("2017-01-10 12:00:00");
+        dates[5] = Timestamp.valueOf("2017-01-11 12:00:00");
+        dates[6] = Timestamp.valueOf("2017-01-13 12:00:00");
+        dates[7] = Timestamp.valueOf("2017-01-15 12:00:00");
+        dates[8] = Timestamp.valueOf("2017-01-18 12:00:00");
+        dates[9] = Timestamp.valueOf("2017-01-19 12:00:00");
+
+        return dates;
+    }
+
+    public static Timestamp[] getMoreThanOneRecordsPerDayAboutUsing() {
+        Timestamp[] dates = new Timestamp[10];
+        dates[0] = Timestamp.valueOf("2017-01-03 12:00:00");
+        dates[1] = Timestamp.valueOf("2017-01-04 12:00:00");
+        dates[2] = Timestamp.valueOf("2017-01-04 22:00:00");
+        dates[3] = Timestamp.valueOf("2017-01-08 12:00:00");
+        dates[4] = Timestamp.valueOf("2017-01-10 12:00:00");
+        dates[5] = Timestamp.valueOf("2017-01-11 12:00:00");
+        dates[6] = Timestamp.valueOf("2017-01-11 14:00:30");
+        dates[7] = Timestamp.valueOf("2017-01-11 17:00:00");
+        dates[8] = Timestamp.valueOf("2017-01-18 12:00:00");
+        dates[9] = Timestamp.valueOf("2017-01-19 12:00:00");
+
+        return dates;
+    }
+
+//    public static List<HistoryDTO> getHistoryDTOListWithMoreThanOneRecordsPerDayAboutPurchasing() {
+//        Timestamp[] dates = new Timestamp[15];
+//        dates [0] =Timestamp.valueOf("2017-01-03 12:00:00");
+//        dates [1] =Timestamp.valueOf("2017-01-03 14:00:00");
+//        dates [2] =Timestamp.valueOf("2017-01-03 22:00:00");
+//        dates [3] =Timestamp.valueOf("2017-01-04 12:00:00");
+//        dates [4] =Timestamp.valueOf("2017-01-05 12:00:00");
+//        dates [5] =Timestamp.valueOf("2017-01-05 16:00:00");
+//        dates [6] =Timestamp.valueOf("2017-01-06 14:00:30");
+//        dates [7] =Timestamp.valueOf("2017-01-09 17:00:00");
+//        dates [8] =Timestamp.valueOf("2017-01-10 12:00:00");
+//        dates [9] =Timestamp.valueOf("2017-01-11 12:00:00");
+//        dates [10] =Timestamp.valueOf("2017-01-13 12:00:00");
+//        dates [11] =Timestamp.valueOf("2017-01-14 12:00:00");
+//        dates [12] =Timestamp.valueOf("2017-01-17 12:00:00");
+//        dates [13] =Timestamp.valueOf("2017-01-17 13:00:00");
+//        dates [14] =Timestamp.valueOf("2017-01-17 14:00:00");
+//
+//        return dates;
+//    }
+
+    public static List<HistoryDTO> getHistoryDTOListWithMoreThanOneRecordsPerDayAboutPurchasing() {
+        int userId = 4;
+        int productId = 20;
+        List<HistoryDTO> historyDTOs = new ArrayList<>();
+        historyDTOs.add(new HistoryDTO(0, userId, productId, 3, Timestamp.valueOf("2017-01-03 12:00:00"), Action.PURCHASED));
+        historyDTOs.add(new HistoryDTO(1, userId, productId, 4, Timestamp.valueOf("2017-01-03 12:00:00"), Action.PURCHASED));
+        historyDTOs.add(new HistoryDTO(2, userId, productId, 7, Timestamp.valueOf("2017-01-03 12:00:00"), Action.PURCHASED));
+        historyDTOs.add(new HistoryDTO(3, userId, productId, 2, Timestamp.valueOf("2017-01-04 12:00:00"), Action.PURCHASED));
+        historyDTOs.add(new HistoryDTO(4, userId, productId, 1, Timestamp.valueOf("2017-01-05 12:00:00"), Action.PURCHASED));
+        historyDTOs.add(new HistoryDTO(5, userId, productId, 2, Timestamp.valueOf("2017-01-05 12:00:00"), Action.PURCHASED));
+        historyDTOs.add(new HistoryDTO(6, userId, productId, 4, Timestamp.valueOf("2017-01-06 12:00:00"), Action.PURCHASED));
+        historyDTOs.add(new HistoryDTO(7, userId, productId, 6, Timestamp.valueOf("2017-01-09 12:00:00"), Action.PURCHASED));
+        historyDTOs.add(new HistoryDTO(8, userId, productId, 6, Timestamp.valueOf("2017-01-10 12:00:00"), Action.PURCHASED));
+        historyDTOs.add(new HistoryDTO(9, userId, productId, 3, Timestamp.valueOf("2017-01-11 12:00:00"), Action.PURCHASED));
+        historyDTOs.add(new HistoryDTO(10, userId, productId, 6, Timestamp.valueOf("2017-01-13 12:00:00"), Action.PURCHASED));
+        historyDTOs.add(new HistoryDTO(11, userId, productId, 5, Timestamp.valueOf("2017-01-14 12:00:00"), Action.PURCHASED));
+        historyDTOs.add(new HistoryDTO(12, userId, productId, 4, Timestamp.valueOf("2017-01-17 12:00:00"), Action.PURCHASED));
+        historyDTOs.add(new HistoryDTO(13, userId, productId, 3, Timestamp.valueOf("2017-01-17 12:00:00"), Action.PURCHASED));
+        historyDTOs.add(new HistoryDTO(14, userId, productId, 4, Timestamp.valueOf("2017-01-17 12:00:00"), Action.PURCHASED));
+
+        return historyDTOs;
+    }
 }
 

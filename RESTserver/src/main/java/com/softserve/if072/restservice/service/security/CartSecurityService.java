@@ -2,7 +2,6 @@ package com.softserve.if072.restservice.service.security;
 
 import com.softserve.if072.common.model.Cart;
 import com.softserve.if072.restservice.dao.mybatisdao.CartDAO;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -12,8 +11,11 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class CartSecurityService extends BaseSecurityService {
-    @Autowired
     private CartDAO cartDAO;
+
+    public CartSecurityService(CartDAO cartDAO) {
+        this.cartDAO = cartDAO;
+    }
 
     public boolean hasPermissionToAccess(int productId) {
         Cart cart = cartDAO.getByProductId(productId);
