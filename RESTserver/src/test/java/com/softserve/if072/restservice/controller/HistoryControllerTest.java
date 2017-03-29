@@ -45,7 +45,7 @@ public class HistoryControllerTest {
     private static final int CURRENT_USER_ID = 4;
     private static final int PRODUCT_ID = 20;
     private static final int HISTORY_ID = 32;
-    public static final MediaType APPLICATION_JSON_UTF8 = new MediaType(MediaType.APPLICATION_JSON.getType()
+    private static final MediaType APPLICATION_JSON_UTF8 = new MediaType(MediaType.APPLICATION_JSON.getType()
             , MediaType.APPLICATION_JSON.getSubtype()
             , Charset.forName("utf8"));
     @Mock

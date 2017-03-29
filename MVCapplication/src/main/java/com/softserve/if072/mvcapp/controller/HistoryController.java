@@ -168,6 +168,7 @@ public class HistoryController {
             IOException {
 
         HttpSession session = request.getSession();
+        @SuppressWarnings("unchecked")
         List<History> histories = (List) session.getAttribute("historiesSession");
 
         final ServletContext servletContext = request.getSession().getServletContext();

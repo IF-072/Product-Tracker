@@ -40,11 +40,11 @@ public class CartServiceTest {
     @Mock
     private RestTemplate restTemplate;
     @Mock
-    AnalyticsService analyticsService;
+    private AnalyticsService analyticsService;
     @Mock
-    UserService userService;
+    private UserService userService;
     @Mock
-    User user;
+    private User user;
 
     @Before
     public void setup() {

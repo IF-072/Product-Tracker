@@ -4,7 +4,7 @@ import java.util.Date;
 
 /**
  * The HistorySearchDTO class is used to simplify data transfer operations
- * between MVCapplication and RESTserver
+ * between MVC application and REST server
  *
  * @author Igor Parada
  */

@@ -58,6 +58,7 @@ public class HistoryService {
         int userId = userService.getCurrentUser().getId();
 
         LOGGER.info(historyRequestReceive, "retrieving", "all history records", userId);
+        @SuppressWarnings("unchecked")
         List<History> histories = restTemplate.getForObject(restHistoryURL, List.class, userId);
         LOGGER.info(historySuccessfullyOperation, "retrieving", "all history records", userId);
         return histories;

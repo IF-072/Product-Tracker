@@ -62,6 +62,7 @@ public class AnalyticsService {
     public List<AnalyticsProductDTO> getProducts() {
         int userId = userService.getCurrentUser().getId();
         LOGGER.info(analyticsRequestReceive, "all", "products", userId);
+        @SuppressWarnings("unchecked")
         List<AnalyticsProductDTO> analyticsProductDTOs = restTemplate.getForObject(restAnalyticsGetProductsURL, List.class, userId);
         LOGGER.info(analyticsSuccessfullyOperation, "all", "products", userId);
 

@@ -7,12 +7,12 @@ import com.softserve.if072.common.model.dto.HistoryDTO;
 import com.softserve.if072.restservice.dao.mybatisdao.HistoryDAO;
 import com.softserve.if072.restservice.dao.mybatisdao.ProductDAO;
 import com.softserve.if072.restservice.exception.NotEnoughDataException;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.sql.Timestamp;
 import java.util.List;
 
 /**
@@ -60,28 +60,13 @@ public class AnalyticsService {
     public ProductStatistics getProductStatistics(int productId) throws NotEnoughDataException {
         ProductStatistics productStatistics = forecastService.getProductStatistics(productId);
         List<HistoryDTO> historyDTOs = historyDAO.getDTOByProductIdAndAction(productId, Action.PURCHASED);
-
-        int purchasedDataSetSize = historyDTOs.size();
-        Timestamp[] purchasingDates = new Timestamp[purchasedDataSetSize];
-        int[] purchasingAmounts = new int[purchasedDataSetSize];
-        int totalPurchased = 0;
-
-        for (int i = 0; i < purchasedDataSetSize; i++) {
-            HistoryDTO historyDTO = historyDTOs.get(i);
-            purchasingDates[i] = historyDTO.getUsedDate();
-            purchasingAmounts[i] = historyDTO.getAmount();
-            totalPurchased += historyDTO.getAmount();
+        if (CollectionUtils.isNotEmpty(historyDTOs)) {
+            ForecastService.setDataToArrays(historyDTOs, productStatistics, Action.PURCHASED);
+            int purchasingDatesSize = productStatistics.getPurchasingProductDates().length;
+            productStatistics.setLastPurchasingDate(productStatistics.getPurchasingProductDates()[purchasingDatesSize - 1]);
         }
-
-        productStatistics.setPurchasingProductDates(purchasingDates);
-        productStatistics.setPurchasingProductAmounts(purchasingAmounts);
-        productStatistics.setTotalPurchased(totalPurchased);
-        productStatistics.setLastPurchasingDate(purchasingDates[purchasedDataSetSize - 1]);
-
-        productStatistics.setTotalPurchased(totalPurchased);
-        productStatistics.setTotalUsed(totalPurchased);
-
         LOGGER.info(successfullyOperation, productId);
+
         return productStatistics;
     }
 }
