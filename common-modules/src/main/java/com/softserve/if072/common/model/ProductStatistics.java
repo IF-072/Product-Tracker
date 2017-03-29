@@ -32,6 +32,12 @@ public class ProductStatistics {
     private Timestamp[] usingProductDates;
     private int[] usingProductAmounts;
     private boolean hasOutliers;
+    private String productUsingSpeedsForChart;
+    private String purchasingProductDatesForChart;
+    private String purchasingProductAmountsForChart;
+    private String usingProductDatesForChart;
+    private String usingProductAmountsForChart;
+
 
     public ProductStatistics() {
     }
@@ -220,6 +226,46 @@ public class ProductStatistics {
         this.hasOutliers = hasOutliers;
     }
 
+    public String getProductUsingSpeedsForChart() {
+        return productUsingSpeedsForChart;
+    }
+
+    public void setProductUsingSpeedsForChart(String productUsingSpeedsForChart) {
+        this.productUsingSpeedsForChart = productUsingSpeedsForChart;
+    }
+
+    public String getPurchasingProductDatesForChart() {
+        return purchasingProductDatesForChart;
+    }
+
+    public void setPurchasingProductDatesForChart(String purchasingProductDatesForChart) {
+        this.purchasingProductDatesForChart = purchasingProductDatesForChart;
+    }
+
+    public String getPurchasingProductAmountsForChart() {
+        return purchasingProductAmountsForChart;
+    }
+
+    public void setPurchasingProductAmountsForChart(String purchasingProductAmountsForChart) {
+        this.purchasingProductAmountsForChart = purchasingProductAmountsForChart;
+    }
+
+    public String getUsingProductDatesForChart() {
+        return usingProductDatesForChart;
+    }
+
+    public void setUsingProductDatesForChart(String usingProductDatesForChart) {
+        this.usingProductDatesForChart = usingProductDatesForChart;
+    }
+
+    public String getUsingProductAmountsForChart() {
+        return usingProductAmountsForChart;
+    }
+
+    public void setUsingProductAmountsForChart(String usingProductAmountsForChart) {
+        this.usingProductAmountsForChart = usingProductAmountsForChart;
+    }
+
     @Override
     public String toString() {
         return "ProductStatistics{" +
@@ -246,6 +292,11 @@ public class ProductStatistics {
                 ", usingProductDates=" + Arrays.toString(usingProductDates) +
                 ", usingProductAmounts=" + Arrays.toString(usingProductAmounts) +
                 ", hasOutliers=" + hasOutliers +
+                ", productUsingSpeedsForChart=" + productUsingSpeedsForChart +
+                ", purchasingProductDatesForChart=" + purchasingProductDatesForChart +
+                ", purchasingProductAmountsForChart=" + purchasingProductAmountsForChart +
+                ", usingProductDatesForChart=" + usingProductDatesForChart +
+                ", usingProductAmountsForChart=" + usingProductAmountsForChart +
                 '}';
     }
 }

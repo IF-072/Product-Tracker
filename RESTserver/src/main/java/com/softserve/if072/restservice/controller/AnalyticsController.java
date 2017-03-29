@@ -37,7 +37,7 @@ public class AnalyticsController {
     @PreAuthorize("hasRole('ROLE_PREMIUM') && #userId == authentication.user.id")
     @GetMapping("/products")
     @ResponseStatus(HttpStatus.OK)
-    public List<AnalyticsProductDTO> getByUserId(@PathVariable int userId) {
+    public List<AnalyticsProductDTO> getProductsByUserId(@PathVariable int userId) {
 
         return analyticsService.getProducts(userId);
     }
@@ -48,10 +48,10 @@ public class AnalyticsController {
      * @param productId - product unique identifier
      * @return - ProductStatistics object
      */
-    @PreAuthorize("hasRole('ROLE_PREMIUM') && #userId == authentication.user.id")
+    @PreAuthorize("hasRole('ROLE_PREMIUM') &&  @analyticsSecurityService.hasPermissionToAccess(#productId)")
     @GetMapping("/{productId}")
     @ResponseStatus(HttpStatus.OK)
-    public ProductStatistics getByUserId(@PathVariable int userId, @PathVariable int productId) throws NotEnoughDataException {
+    public ProductStatistics getStatisticsByUserId(@PathVariable int productId) throws NotEnoughDataException {
 
         return analyticsService.getProductStatistics(productId);
     }
