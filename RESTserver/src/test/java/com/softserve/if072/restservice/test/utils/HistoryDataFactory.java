@@ -18,7 +18,7 @@ import static java.lang.Math.round;
  */
 public class HistoryDataFactory {
     private static final Logger LOGGER = LogManager.getLogger();
-    private static final long MILLISECONDS_PER_DAY = 24 * 60 * 60 * 1000;
+    private static final long MILLISECONDS_PER_DAY = 24 * 60 * 60 * 1000L;
     private static final int CURRENT_USER_ID = 4;
     private static final int PRODUCT_ID = 20;
 

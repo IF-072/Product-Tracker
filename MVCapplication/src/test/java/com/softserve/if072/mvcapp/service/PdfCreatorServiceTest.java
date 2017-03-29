@@ -2,16 +2,12 @@ package com.softserve.if072.mvcapp.service;
 
 import com.softserve.if072.common.model.History;
 import com.softserve.if072.common.model.User;
-import com.softserve.if072.common.model.dto.HistorySearchDTO;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
-import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
@@ -23,11 +19,8 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyMap;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 /**
  * The PdfCreatorServiceTest class is used to test
@@ -86,51 +79,4 @@ public class PdfCreatorServiceTest {
 
     }
 
-    @Test
-    public void getHistoriesByUserId_ShouldReturnHistories() {
-
-        when(userService.getCurrentUser()).thenReturn(user);
-
-        when(restTemplate.exchange(
-                any(),
-                eq(HttpMethod.GET),
-                any(),
-                eq(new ParameterizedTypeReference<List<History>>() {}),
-                anyMap())
-        ).thenReturn(
-                historiesResponse);
-
-        assertEquals(histories, pdfCreatorService.getHistoriesByUserId());
-        verify(restTemplate, times(1)).exchange(
-                any(),
-                eq(HttpMethod.GET),
-                any(),
-                eq(new ParameterizedTypeReference<List<History>>() {}),
-                anyMap());
-    }
-
-    @Test
-    public void getByUserIdAndSearchParams_ShouldReturnHistories() {
-
-        HistorySearchDTO historySearchDTO = new HistorySearchDTO();
-
-        when(userService.getCurrentUser()).thenReturn(user);
-
-        when(restTemplate.exchange(
-                any(),
-                eq(HttpMethod.POST),
-                any(HttpEntity.class),
-                eq(new ParameterizedTypeReference<List<History>>() {}),
-                anyMap())
-        ).thenReturn(
-                historiesResponse);
-
-        assertEquals(histories, pdfCreatorService.getByUserIdAndSearchParams(historySearchDTO));
-        verify(restTemplate, times(1)).exchange(
-                any(),
-                eq(HttpMethod.POST),
-                any(HttpEntity.class),
-                eq(new ParameterizedTypeReference<List<History>>() {}),
-                anyMap());
-    }
 }

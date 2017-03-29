@@ -1,7 +1,6 @@
 package com.softserve.if072.mvcapp.service;
 
 import com.softserve.if072.common.model.Storage;
-import com.softserve.if072.common.model.User;
 import com.softserve.if072.common.model.dto.StorageDTO;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -11,6 +10,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.apache.commons.collections.CollectionUtils;
 
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 /**
@@ -33,13 +34,15 @@ public class StoragePageService {
     private final RestTemplate restTemplate;
     private final ShoppingListService shoppingListService;
     private final AnalyticsService analyticsService;
+    private final MessageService messageService;
 
     @Autowired
     public StoragePageService(final RestTemplate restTemplate, final ShoppingListService shoppingListService,
-                              final AnalyticsService analyticsService) {
+                              final AnalyticsService analyticsService, final MessageService messageService) {
         this.restTemplate = restTemplate;
         this.shoppingListService = shoppingListService;
-        this.analyticsService=analyticsService;
+        this.analyticsService = analyticsService;
+        this.messageService = messageService;
     }
 
     /**
@@ -65,11 +68,28 @@ public class StoragePageService {
      * Make request to a REST server for updating storage record.
      *
      * @param storageDTO - storage record
+     * @param locale     - locale of user
      */
-    public void updateAmount(final StorageDTO storageDTO) {
+    public String updateAmount(final StorageDTO storageDTO, final String locale) {
         final String uri = storageUrl + "dto";
-        restTemplate.put(uri, storageDTO);
+        Timestamp result = restTemplate.postForObject(uri, storageDTO, Timestamp.class);
         analyticsService.cleanProductStatisticsSessionObject();
+        messageService.broadcast("storage.update", locale, storageDTO.getUserId(), storageDTO.getProductName(),
+                storageDTO.getAmount());
+        if (storageDTO.getAmount() <= 1) {
+            messageService.broadcast("storage.insertInList", locale, storageDTO.getUserId(),
+                    storageDTO.getProductName());
+        }
+        String endDate;
+        if (result != null) {
+            endDate = new SimpleDateFormat("yyyy/MM/dd").format(result);
+        } else {
+            endDate = "----------";
+        }
+
+        LOGGER.info("Return new end date {}", endDate);
+        return endDate;
+
     }
 
     /**

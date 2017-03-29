@@ -1,14 +1,22 @@
 package com.softserve.if072.mvcapp.service;
 
 import com.softserve.if072.common.model.History;
+import com.softserve.if072.common.model.RestResponsePage;
 import com.softserve.if072.common.model.dto.HistorySearchDTO;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.data.domain.Page;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * The HistoryService class is used to hold business logic and to retrieve appropriate resources from a
@@ -24,14 +32,16 @@ public class HistoryService {
     private final AnalyticsService analyticsService;
     @Value("${application.restHistoryURL}")
     private String restHistoryURL;
-    @Value("${application.restHistorySearchURL}")
-    private String restHistorySearchURL;
     @Value("${application.restHistoryDeleteURL}")
     private String restHistoryDeleteURL;
     @Value("${history.requestReceive}")
     private String historyRequestReceive;
     @Value("${history.successfullyOperation}")
     private String historySuccessfullyOperation;
+    @Value("${application.restHistoryPageURL}")
+    private String historyPageURL;
+    @Value("${application.restHistorySearchPageURL}")
+    private String historySearchPageURL;
 
     public HistoryService(RestTemplate restTemplate, UserService userService, AnalyticsService analyticsService) {
         this.restTemplate = restTemplate;
@@ -48,21 +58,8 @@ public class HistoryService {
         int userId = userService.getCurrentUser().getId();
 
         LOGGER.info(historyRequestReceive, "retrieving", "all history records", userId);
+        @SuppressWarnings("unchecked")
         List<History> histories = restTemplate.getForObject(restHistoryURL, List.class, userId);
-        LOGGER.info(historySuccessfullyOperation, "retrieving", "all history records", userId);
-        return histories;
-    }
-
-    /**
-     * Sends request to the REST server for retrieving all history records that match given search attributes
-     *
-     * @return list of history records or empty list
-     */
-    public List<History> getByUserIdAndSearchParams(HistorySearchDTO searchDTO) {
-        int userId = userService.getCurrentUser().getId();
-
-        LOGGER.info(historyRequestReceive, "searching", "history records", userId);
-        List<History> histories = restTemplate.postForObject(restHistorySearchURL, searchDTO, List.class, userId);
         LOGGER.info(historySuccessfullyOperation, "retrieving", "all history records", userId);
         return histories;
     }
@@ -91,5 +88,32 @@ public class HistoryService {
         restTemplate.delete(restHistoryURL, userId);
         LOGGER.info(historySuccessfullyOperation, "deleting ", "all records", userId);
     }
+
+    /**
+     * Sends request to the REST server for retrieving all history records that match given search attributes
+     *
+     * @param pageNumber - number of pages
+     * @param pageSize   - number of records on page
+     * @return page of history records or empty page
+     */
+    public Page<History> getHistorySearchPage(HistorySearchDTO searchData, int pageNumber, int pageSize) {
+        int userId = userService.getCurrentUser().getId();
+
+        Map<String, String> param = new HashMap<>();
+        param.put("userId", Integer.toString(userId));
+        param.put("pageNumber", Integer.toString(pageNumber));
+        param.put("pageSize", Integer.toString(pageSize));
+
+        ParameterizedTypeReference<RestResponsePage<History>> responseType = new
+                ParameterizedTypeReference<RestResponsePage<History>>() {
+                };
+
+        ResponseEntity<RestResponsePage<History>> historyResult = restTemplate.exchange(historySearchPageURL, HttpMethod.POST,
+                new HttpEntity<>(searchData), responseType, param);
+
+        LOGGER.info(historySuccessfullyOperation, "searching", "records", userId);
+        return historyResult.getBody();
+    }
+
 }
 

@@ -1,7 +1,17 @@
 package com.softserve.if072.common.model;
 
+import org.hibernate.annotations.Proxy;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.Transient;
+import java.io.Serializable;
 
 /**
  * The class contains information about product's category
@@ -9,17 +19,30 @@ import org.hibernate.validator.constraints.NotBlank;
  * @author Pavlo Bendus
  */
 
-public class Category {
+@Entity
+@Table(name = "category")
+@Proxy(lazy = false)
+public class Category implements Serializable {
+    static final long serialVersionUID = 42678997782L;
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private int id;
 
     @NotBlank(message = "{error.categoryName.notBlank}")
     @Length(min = 3, max = 64, message = "{error.categoryName.length}")
+    @Column(name = "name")
     private String name;
+
+    @Transient
     private User user;
+
+    @Transient
     private boolean isEnabled;
 
-    public Category() {}
+    public Category() {
+    }
 
     public Category(String name, User user, boolean isEnabled) {
         this.name = name;
@@ -68,6 +91,5 @@ public class Category {
                 ", isEnabled=" + isEnabled +
                 '}';
     }
-
 
 }

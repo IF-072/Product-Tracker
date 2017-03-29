@@ -38,7 +38,7 @@ public class UserController {
      * Allows to obtain all users.
      */
     @RequestMapping(value = "/user/", method = RequestMethod.GET)
-    public ResponseEntity<List<User>> getAllUsers() throws DataNotFoundException {
+    public ResponseEntity<List<User>> getAllUsers() {
         LOG.debug("Fetching list of all users...");
         List<User> users = userService.getAll();
 
@@ -52,7 +52,7 @@ public class UserController {
      */
     @PreAuthorize("#id == authentication.user.id")
     @RequestMapping(value = "/user/{id}", method = RequestMethod.GET)
-    public ResponseEntity<User> getUserById(@PathVariable("id") int id) throws DataNotFoundException {
+    public ResponseEntity<User> getUserById(@PathVariable("id") int id) {
         LOG.debug(String.format("Fetching User with %d...", id));
         User user = userService.getById(id);
 
@@ -67,10 +67,10 @@ public class UserController {
      */
     @PreAuthorize("#userId == authentication.user.id && #user != null && #user.id == #userId")
     @RequestMapping(value = "/user/{userId}/update", method = RequestMethod.POST)
-    public ResponseEntity<?> updateUser(@PathVariable("userId") int userId, @RequestBody User user) throws DataNotFoundException {
+    public ResponseEntity updateUser(@PathVariable("userId") int userId, @RequestBody User user) {
         LOG.debug("Updating user with id = {}", userId);
         userService.update(user);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity(HttpStatus.OK);
     }
 
 
@@ -85,9 +85,10 @@ public class UserController {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth.isAuthenticated()) {
             AuthenticatedUserProxy userProxy = (AuthenticatedUserProxy) auth;
-            if (userProxy != null)
-                return userProxy.getUser();
+
+            return userProxy.getUser();
         }
+
         return null;
     }
 }

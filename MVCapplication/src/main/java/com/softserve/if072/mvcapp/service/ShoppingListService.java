@@ -25,6 +25,7 @@ import java.util.List;
 public class ShoppingListService {
     private static final Logger LOG = LogManager.getLogger(ShoppingListService.class);
     private static final String INFO_LOG_TEMPLATE = "Shopping list element (userId: %d, productId: %d) has been %s.";
+    private static final int DEFAULT_AMOUNT = 1;
 
     @Value("${service.shoppingList}")
     private String shoppingListUrl;
@@ -38,7 +39,7 @@ public class ShoppingListService {
     @Value("${service.product.id}")
     private String productById;
 
-    private final RestTemplate restTemplate;
+    private RestTemplate restTemplate;
 
     private UserService userService;
 
@@ -137,7 +138,7 @@ public class ShoppingListService {
 
             shoppingList.setUser(user);
             shoppingList.setProduct(product);
-            shoppingList.setAmount(1);
+            shoppingList.setAmount(DEFAULT_AMOUNT);
 
             HttpEntity<ShoppingList> entity = new HttpEntity<>(shoppingList);
             restTemplate.exchange(shoppingListUrl, HttpMethod.POST, entity, ShoppingList.class);

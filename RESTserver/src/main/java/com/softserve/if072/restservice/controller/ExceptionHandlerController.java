@@ -55,7 +55,8 @@ public class ExceptionHandlerController {
 
     @ExceptionHandler(NotEnoughDataException.class)
     @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
-    public @ResponseBody String notEnoughDateException(NotEnoughDataException e) {
+    @ResponseBody
+    public String notEnoughDateException(NotEnoughDataException e) {
         LOGGER.error(e.getMessage());
 
         return e.getProductName();

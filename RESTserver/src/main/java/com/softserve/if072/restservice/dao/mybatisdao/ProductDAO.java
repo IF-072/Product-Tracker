@@ -251,4 +251,7 @@ public interface ProductDAO extends DAO<Product> {
                     one = @One(select = "com.softserve.if072.restservice.dao.mybatisdao.UnitDAO.getNameByID"))
     })
     AnalyticsProductDTO getAnalyticsProductDTO(int productId);
+
+    @Select("SELECT user_id FROM product WHERE id = #{id}")
+    Integer getUserIdByProductId(int id);
 }

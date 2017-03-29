@@ -6,6 +6,16 @@ import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.web.util.HtmlUtils;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+import javax.persistence.Transient;
 import java.util.List;
 
 /**
@@ -14,23 +24,45 @@ import java.util.List;
  *
  * @author Vitaliy Malisevych
  */
-
+@Entity
+@Table(name = "product")
 public class Product {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private int id;
 
     @NotBlank(message = "{error.productName.notblank}")
     @Length(min = 3, max = 64, message = "{error.productName.length}")
+    @Column(name = "name")
     private String name;
+
     @Length(max = 255, message = "{error.productDescription.length}")
+    @Column(name = "description")
     private String description;
+
+    @Transient
     private Image image;
+
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id")
     private User user;
+
     @ValidCategory(message = "{error.productCategory.notempty}")
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id")
     private Category category;
+
     @ValidUnit(message = "{error.productUnit.notempty}")
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "unit_id")
     private Unit unit;
+
+    @Transient
     private boolean isEnabled;
+
+    @Transient
     private List<Store> stores;
 
     public Product() {

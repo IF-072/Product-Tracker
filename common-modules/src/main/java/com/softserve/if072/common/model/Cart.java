@@ -59,7 +59,7 @@ public class Cart {
         return "Cart{\nUser: " + user +
                 ";\nStore:  " + store +
                 ";\nProduct: " + product +
-                  ", amount: " + amount +
+                ", amount: " + amount +
                 "\n}";
     }
 }

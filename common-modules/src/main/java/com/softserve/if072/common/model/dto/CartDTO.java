@@ -2,7 +2,7 @@ package com.softserve.if072.common.model.dto;
 
 /**
  * The CartDTO class is used to simplify data transfer operations
- * between MVCapplication and RESTserver
+ * between MVC application and REST server
  *
  * @author Igor Kryviuk
  */

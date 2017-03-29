@@ -8,6 +8,7 @@ var removeFunc = function () {
     $("#notification-li").addClass("hidden");
 };
 
+var id = $("#userId").attr("data");
 var socket = new SockJS('/tracker');
 var stompClient = Stomp.over(socket);
 if (screen.width > 1170){

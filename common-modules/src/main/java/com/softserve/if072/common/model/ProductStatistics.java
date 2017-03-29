@@ -241,10 +241,10 @@ public class ProductStatistics {
                 ", lowerThreeSigmaLimit=" + lowerThreeSigmaLimit +
                 ", upperThreeSigmaLimit=" + upperThreeSigmaLimit +
                 ", productUsingSpeeds=" + Arrays.toString(productUsingSpeeds) +
-                ", purchasingProductDates=" + purchasingProductDates +
-                ", purchasingProductAmounts=" + purchasingProductAmounts +
-                ", usingProductDates=" + usingProductDates +
-                ", usingProductAmounts=" + usingProductAmounts +
+                ", purchasingProductDates=" + Arrays.toString(purchasingProductDates) +
+                ", purchasingProductAmounts=" + Arrays.toString(purchasingProductAmounts) +
+                ", usingProductDates=" + Arrays.toString(usingProductDates) +
+                ", usingProductAmounts=" + Arrays.toString(usingProductAmounts) +
                 ", hasOutliers=" + hasOutliers +
                 '}';
     }

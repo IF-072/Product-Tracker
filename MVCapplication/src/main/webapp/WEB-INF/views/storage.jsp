@@ -53,14 +53,14 @@
                         <tr>
                             <td>${loop.count}</td>
                             <td>${storage.product.name}</td>
-                            <td>
+                            <td class = "date">
                                 <c:if test="${empty storage.endDate}">
                                     ----------
                                 </c:if>
                                 <c:if test="${!empty storage.endDate}">
                                 <jsp:useBean id="dateValue" class="java.util.Date"/>
                                 <jsp:setProperty name="dateValue" property="time" value="${storage.endDate}"/>
-                                <fmt:formatDate value="${dateValue}" pattern="MM/dd/yyyy"/>
+                                <fmt:formatDate value="${dateValue}" pattern="yyyy/MM/dd"/>
                                 </c:if>
                             </td>
                             <td>
