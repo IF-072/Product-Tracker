@@ -71,8 +71,6 @@ public class ForecastServiceTest {
 
     @Before
     public void setup() {
-        when(userProxy.getUser()).thenReturn(user);
-        when(user.getId()).thenReturn(CURRENT_USER_ID);
         when(storageDAO.getByProductID(PRODUCT_ID)).thenReturn(storage);
         when(storage.getAmount()).thenReturn(STORAGE_PRODUCT_AMOUNT);
         when(productService.getProductById(PRODUCT_ID)).thenReturn(product);
