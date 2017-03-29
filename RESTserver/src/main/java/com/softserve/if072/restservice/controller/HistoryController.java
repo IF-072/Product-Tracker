@@ -4,9 +4,12 @@ import com.softserve.if072.common.model.History;
 import com.softserve.if072.common.model.dto.HistoryDTO;
 import com.softserve.if072.common.model.dto.HistorySearchDTO;
 import com.softserve.if072.restservice.service.HistoryService;
+
 import org.apache.commons.collections.CollectionUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,30 +38,22 @@ public class HistoryController {
     }
 
     /**
-     * Handles requests for retrieving all history records for current user
-     *
-     * @param userId - current user unique identifier
-     * @return list of cart records or empty list
-     */
-    @PreAuthorize("#userId == authentication.user.id")
-    @GetMapping()
-    @ResponseStatus(HttpStatus.OK)
-    public List<History> getByUserId(@PathVariable int userId) {
-        return historyService.getByUserId(userId);
-    }
-
-    /**
      * Handles requests for search history records by given criterias
      *
-     * @param userId - current user unique identifier
+     * @param userId     - current user unique identifier
+
+     * @param pageNumber - number of page
+     * @param pageSize   - number of records per page
      * @param searchData DTO that contains search params
      * @return list of found cart records or empty list
      */
     @PreAuthorize("#userId == authentication.user.id")
-    @PostMapping("/search")
+    @PostMapping("/search/{pageNumber}/{pageSize}")
     @ResponseStatus(HttpStatus.OK)
-    public List<History> postSearchForm(@PathVariable("userId") int userId, @RequestBody HistorySearchDTO searchData) {
-        return historyService.getByUserIdAndSearchParams(userId, searchData);
+    public Page<History> postSearchForm(@PathVariable int userId, @PathVariable int pageNumber,
+                                        @PathVariable int pageSize, @RequestBody HistorySearchDTO searchData) {
+        Pageable pageable = new PageRequest(pageNumber - 1, pageSize);
+        return historyService.getByUserIdAndSearchParams(userId, searchData, pageable);
     }
 
     /**
@@ -66,7 +61,7 @@ public class HistoryController {
      *
      * @param historyId - history unique identifier
      */
-    @PreAuthorize("@historySecurityService.hasPermissionToAccess(#historyId)")
+    @PreAuthorize("@historySecurityService.hasPermissionToDelete(#historyId)")
     @DeleteMapping("/{historyId}")
     @ResponseStatus(value = HttpStatus.OK)
     public void delete(@PathVariable int historyId) {
@@ -83,16 +78,11 @@ public class HistoryController {
         historyService.deleteAll(userId);
     }
 
-    @PostAuthorize("#history != null && #history.user != null"
-            + " && #history.user.id == authentication.user.id")
+    @PreAuthorize("@historySecurityService.hasPermissionToAccessByProductId(#productId)")
     @GetMapping("/products/{productId}")
     @ResponseStatus(HttpStatus.OK)
     public List<History> getByProductId(@PathVariable int userId, @PathVariable int productId) {
         List<History> histories = historyService.getByProductId(userId, productId);
-        History history = null;
-        if (CollectionUtils.isNotEmpty(histories)) {
-            history = histories.get(0);
-        }
         return histories;
     }
 
@@ -109,4 +99,5 @@ public class HistoryController {
     public void update(@RequestBody HistoryDTO historyDTO) {
         historyService.update(historyDTO);
     }
+
 }

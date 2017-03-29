@@ -9,13 +9,10 @@ import com.softserve.if072.restservice.dao.mybatisdao.HistoryDAO;
 import com.softserve.if072.restservice.dao.mybatisdao.ProductDAO;
 import com.softserve.if072.restservice.dao.mybatisdao.StorageDAO;
 import com.softserve.if072.restservice.exception.NotEnoughDataException;
-import com.softserve.if072.restservice.security.authentication.AuthenticatedUserProxy;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.security.access.AccessDeniedException;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
@@ -86,8 +83,6 @@ public class ForecastService {
      */
     public ProductStatistics getProductStatistics(int productId) throws NotEnoughDataException {
         LOGGER.trace("getProductStatistics method starts to execute");
-//todo uncomment;
-//      isAuthorize(productId);
         List<HistoryDTO> historyDTOs = historyDAO.getDTOByProductIdAndAction(productId, Action.USED);
         if (CollectionUtils.isEmpty(historyDTOs) || historyDTOs.size() < 2) {
             LOGGER.info("List of product using size is {}. NotEnoughDataException will be thrown.", historyDTOs.size());
@@ -331,15 +326,6 @@ public class ForecastService {
                 productStatistics.setPurchasingProductAmounts(amounts);
                 productStatistics.setTotalPurchased(total);
             }
-        }
-    }
-
-    private void isAuthorize(int productId) {
-        int productOwnerId = productService.getUserIdByProductId(productId);
-        AuthenticatedUserProxy userProxy = (AuthenticatedUserProxy) SecurityContextHolder.getContext().getAuthentication();
-        int currentUserId = userProxy.getUser().getId();
-        if (productOwnerId != currentUserId) {
-            throw new AccessDeniedException(String.format("You don't have permission to access to the product with id %d.", productId));
         }
     }
 }

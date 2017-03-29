@@ -24,6 +24,7 @@ public class HashtagResolverTag extends SimpleTagSupport {
      * @throws JspException a generic exception known to the JSP engine
      * @throws IOException general class of exceptions produced by failed or interrupted I/O operations
      */
+    @Override
     public void doTag() throws JspException, IOException {
         StringWriter sw = new StringWriter();
         getJspBody().invoke(sw);

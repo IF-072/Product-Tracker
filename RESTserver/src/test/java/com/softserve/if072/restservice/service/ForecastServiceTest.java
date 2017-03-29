@@ -4,14 +4,12 @@ import com.softserve.if072.common.model.Action;
 import com.softserve.if072.common.model.Product;
 import com.softserve.if072.common.model.ProductStatistics;
 import com.softserve.if072.common.model.Storage;
-import com.softserve.if072.common.model.User;
 import com.softserve.if072.common.model.dto.AnalyticsProductDTO;
 import com.softserve.if072.common.model.dto.HistoryDTO;
 import com.softserve.if072.restservice.dao.mybatisdao.HistoryDAO;
 import com.softserve.if072.restservice.dao.mybatisdao.ProductDAO;
 import com.softserve.if072.restservice.dao.mybatisdao.StorageDAO;
 import com.softserve.if072.restservice.exception.NotEnoughDataException;
-import com.softserve.if072.restservice.security.authentication.AuthenticatedUserProxy;
 import com.softserve.if072.restservice.test.utils.HistoryDataFactory;
 import org.junit.Before;
 import org.junit.Test;
@@ -43,7 +41,6 @@ public class ForecastServiceTest {
     private static final Timestamp START_DATE = Timestamp.valueOf("2017-01-01 12:00:00");
     private static final long MILLISECONDS_PER_DAY = 24 * 60 * 60 * 1000L;
     private static final int PRODUCT_ID = 20;
-    private static final int CURRENT_USER_ID = 4;
     private static final int STORAGE_PRODUCT_AMOUNT = 10;
     private static final int DISTRIBUTION_SIZE = 31;
     private static final String PRODUCT_NAME = "Product" + PRODUCT_ID;
@@ -62,17 +59,11 @@ public class ForecastServiceTest {
     private Product product;
     @Mock
     private AnalyticsProductDTO analyticsProductDTO;
-    @Mock
-    private AuthenticatedUserProxy userProxy;
-    @Mock
-    private User user;
     @InjectMocks
     private ForecastService forecastService;
 
     @Before
     public void setup() {
-        when(userProxy.getUser()).thenReturn(user);
-        when(user.getId()).thenReturn(CURRENT_USER_ID);
         when(storageDAO.getByProductID(PRODUCT_ID)).thenReturn(storage);
         when(storage.getAmount()).thenReturn(STORAGE_PRODUCT_AMOUNT);
         when(productService.getProductById(PRODUCT_ID)).thenReturn(product);

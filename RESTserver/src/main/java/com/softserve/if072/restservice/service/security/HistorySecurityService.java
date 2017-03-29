@@ -2,7 +2,7 @@ package com.softserve.if072.restservice.service.security;
 
 import com.softserve.if072.common.model.History;
 import com.softserve.if072.restservice.dao.mybatisdao.HistoryDAO;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.softserve.if072.restservice.service.ProductService;
 import org.springframework.stereotype.Service;
 
 /**
@@ -12,11 +12,20 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class HistorySecurityService extends BaseSecurityService {
-    @Autowired
     private HistoryDAO historyDAO;
+    private final ProductService productService;
 
-    public boolean hasPermissionToAccess(int historyId) {
+    public HistorySecurityService(HistoryDAO historyDAO, ProductService productService) {
+        this.historyDAO = historyDAO;
+        this.productService = productService;
+    }
+
+    public boolean hasPermissionToDelete(int historyId) {
         History history = historyDAO.getByHistoryId(historyId);
         return history != null && history.getUser() != null && history.getUser().getId() == getCurrentUser().getId();
+    }
+
+    public boolean hasPermissionToAccessByProductId(int productId) {
+        return productService.getUserIdByProductId(productId) == getCurrentUser().getId();
     }
 }

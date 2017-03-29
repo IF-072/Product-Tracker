@@ -196,8 +196,43 @@ public interface HistoryDAO {
             @Result(property = "action", column = "action")
     })
     List<History> searchAllByUserIdAndParams(@Param("userId") int userId, @Param("name") String name,
-                                             @Param("description") String description, @Param("categoryId") int categoryId,
+                                             @Param("description") String description, @Param("categoryId") int
+                                                     categoryId,
                                              @Param("dateFrom") Date dateFrom, @Param("dateTo") Date dateTo);
+
+    /**
+     * Select records from the history table that belong to specific user. Records are divided in pages, were number
+     * of records is equal to limit.
+     *
+     * @param userId   - unique user's identifier
+     * @param startRow - record from which begins select
+     * @param limit    - number of records
+     * @return list of history items that belong to specific user
+     */
+    @Select("SELECT id, user_id, product_id, amount, used_date, action FROM history " +
+            "WHERE user_id = #{userId} limit #{startRow}, #{limit}")
+    @Results(value = {
+            @Result(property = "id", column = "id"),
+            @Result(property = "user", column = "user_id", javaType = User.class,
+                    one = @One(select = "com.softserve.if072.restservice.dao.mybatisdao.UserDAO.getByID")),
+            @Result(property = "product", column = "product_id", javaType = Product.class,
+                    one = @One(select = "com.softserve.if072.restservice.dao.mybatisdao.ProductDAO.getByID")),
+            @Result(property = "amount", column = "amount"),
+            @Result(property = "usedDate", column = "used_date"),
+            @Result(property = "action", column = "action")
+    })
+    List<History> getByUserIdPages(@Param("userId") Integer userId, @Param("startRow") Integer startRow, @Param
+            ("limit") Integer limit);
+
+    /**
+     * Select count of records from the history table that belong to specific user.
+     *
+     * @param userId - unique user's identifier
+     * @return number of records
+     */
+    @Select("SELECT COUNT(id) FROM history WHERE user_id = #{userId}")
+    int getNumberOfRecordsByUserId(int userId);
+
 
     /**
      * Select a product id from the history table

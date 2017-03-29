@@ -1,20 +1,23 @@
 package com.softserve.if072.restservice.service;
 
-import com.softserve.if072.common.model.Action;
 import com.softserve.if072.common.model.History;
 import com.softserve.if072.common.model.dto.HistoryDTO;
 import com.softserve.if072.common.model.dto.HistorySearchDTO;
 import com.softserve.if072.restservice.dao.mybatisdao.HistoryDAO;
 import com.softserve.if072.restservice.exception.DataNotFoundException;
+import com.softserve.if072.restservice.repository.HistoryRepository;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 /**
- * The HistoryService class is used to hold business logic for working with the history DAO
+ * The HistoryService class is used to hold business logic for working with the history DAOInterfaces
  *
  * @author Igor Kryviuk
  */
@@ -22,6 +25,7 @@ import java.util.List;
 public class HistoryService {
     private static final Logger LOGGER = LogManager.getLogger();
     private final HistoryDAO historyDAO;
+    private final HistoryRepository historyRepository;
     private final ForecastService forecastService;
     @Value("${history.containsRecords}")
     private String historyContainsRecords;
@@ -31,35 +35,29 @@ public class HistoryService {
     private String historySuccessfullyOperation;
     @Value("${history.deleteAllSuccessfullyOperation}")
     private String deleteAllSuccessfullyOperation;
+    @Value("${history.containsPages}")
+    private String historyContainsPages;
 
-    public HistoryService(HistoryDAO historyDAO, ForecastService forecastService) {
+    @Autowired
+    public HistoryService(HistoryDAO historyDAO, HistoryRepository historyRepository, ForecastService forecastService) {
         this.historyDAO = historyDAO;
+        this.historyRepository = historyRepository;
         this.forecastService = forecastService;
     }
 
     /**
-     * Make request to a History DAO for retrieving all history records for current user
-     *
-     * @param userID - current user unique identifier
-     * @return list of history records or empty list
-     */
-    public List<History> getByUserId(int userID) {
-        List<History> histories = historyDAO.getByUserId(userID);
-        LOGGER.info(historyContainsRecords, "user", userID, histories.size());
-        return histories;
-    }
-
-    /**
-     * Make request to a History DAO for retrieving all history records by given search fields
+     * Make request to a History repository for retrieving all history records by given search attributes
      *
      * @param userID     - current user unique identifier
      * @param searchData DTO that contains search criterias
-     * @return list of cart records or empty list
+     * @return list of history records or empty list
      */
-    public List<History> getByUserIdAndSearchParams(int userID, HistorySearchDTO searchData) {
-        List<History> histories = historyDAO.searchAllByUserIdAndParams(userID, searchData.getName(),
-                searchData.getDescription(), searchData.getCategoryId(), searchData.getFromDate(), searchData.getToDate());
-        LOGGER.info(historyContainsRecords, "user", userID, histories.size());
+    public Page<History> getByUserIdAndSearchParams(int userID, HistorySearchDTO searchData, Pageable pageable) {
+        Page<History> histories = historyRepository.findByMultipleParams(userID,
+                searchData.getName() != null && searchData.getName().length() > 0 ? "%" + searchData.getName()+ "%" : null,
+                searchData.getDescription() != null && searchData.getDescription().length() > 0 ? "%" + searchData.getDescription()+ "%" : null,
+                searchData.getCategoryId(), searchData.getFromDate(), searchData.getToDate(), pageable);
+        LOGGER.info(historyContainsRecords, "user", userID, histories.getTotalElements());
         return histories;
     }
 
@@ -99,33 +97,6 @@ public class HistoryService {
         List<History> histories = historyDAO.getByProductId(userID, productID);
         LOGGER.info(historyContainsRecords, "product", productID, histories.size());
         return histories;
-    }
-
-    /**
-     * Make request to a History DAO for retrieving all history records
-     * with specific product id for current user
-     *
-     * @param productID - product unique identifier
-     * @return list of history DTO records or empty list
-     */
-    public List<HistoryDTO> getDTOByProductId(int productID) {
-        List<HistoryDTO> historyDTOs = historyDAO.getDTOByProductId(productID);
-        LOGGER.info(historyContainsRecords, "product", productID, historyDTOs.size());
-        return historyDTOs;
-    }
-
-    /**
-     * Make request to a History DAO for retrieving all history records
-     * with specific product id and specific action for current user
-     *
-     * @param productID - product unique identifier
-     * @param action    - specific action
-     * @return list of history DTO records or empty list
-     */
-    public List<HistoryDTO> getDTOByProductId(int productID, Action action) {
-        List<HistoryDTO> historyDTOs = historyDAO.getDTOByProductIdAndAction(productID, action);
-        LOGGER.info(historyContainsRecords, "product", productID, historyDTOs.size());
-        return historyDTOs;
     }
 
     public void insert(HistoryDTO historyDTO) {

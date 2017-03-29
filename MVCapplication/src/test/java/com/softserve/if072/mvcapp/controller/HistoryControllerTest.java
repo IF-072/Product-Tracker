@@ -2,7 +2,9 @@ package com.softserve.if072.mvcapp.controller;
 
 import com.softserve.if072.common.model.Action;
 import com.softserve.if072.common.model.History;
+import com.softserve.if072.common.model.RestResponsePage;
 import com.softserve.if072.common.model.User;
+import com.softserve.if072.common.model.dto.HistorySearchDTO;
 import com.softserve.if072.mvcapp.service.HistoryService;
 import com.softserve.if072.mvcapp.service.PdfCreatorService;
 import com.softserve.if072.mvcapp.service.ProductPageService;
@@ -13,25 +15,21 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
-import static org.hamcrest.Matchers.allOf;
-import static org.hamcrest.Matchers.hasItem;
-import static org.hamcrest.Matchers.hasProperty;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
+import static org.hamcrest.Matchers.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyZeroInteractions;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -82,19 +80,20 @@ public class HistoryControllerTest {
                 , FIRST_HISTORY_ITEM_AMOUNT, FIRST_HISTORY_ITEM_USEDDATE, Action.PURCHASED);
         History history2 = HistoryBuilder.getDefaultHistory(SECOND_HISTORY_ITEM_ID, CURRENT_USER_ID
                 , SECOND_HISTORY_ITEM_AMOUNT, SECOND_HISTORY_ITEM_USEDDATE, Action.USED);
-        List<History> histories = Arrays.asList(history1, history2);
+        List<History> historyList = Arrays.asList(history1, history2);
 
-        when(historyService.getByUserId()).thenReturn(histories);
+        PageImpl<History> historiesPage = new PageImpl<>(historyList);
+        when(historyService.getHistorySearchPage(any(), anyInt(), anyInt())).thenReturn(historiesPage);
+
 
         mockMvc.perform(get("/history"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("history"))
                 .andExpect(forwardedUrl("/WEB-INF/views/history/history.jsp"))
-                .andExpect(model().attributeExists("histories"))
+                .andExpect(model().attributeExists("historiesPage"))
                 .andExpect(model().attributeExists("categories"))
                 .andExpect(model().attributeExists("historySearchDTO"))
-                .andExpect(model().attribute("histories", hasSize(2)))
-                .andExpect(model().attribute("histories", hasItem(
+                .andExpect(model().attribute("historiesPage", hasItem(
                         allOf(
                                 hasProperty("id", is(FIRST_HISTORY_ITEM_ID)),
                                 hasProperty("user", hasProperty("name"
@@ -106,7 +105,7 @@ public class HistoryControllerTest {
                                 hasProperty("action", is(Action.PURCHASED))
                         ))
                 ))
-                .andExpect(model().attribute("histories", hasItem(
+                .andExpect(model().attribute("historiesPage", hasItem(
                         allOf(
                                 hasProperty("id", is(SECOND_HISTORY_ITEM_ID)),
                                 hasProperty("user", hasProperty("name"
@@ -119,7 +118,7 @@ public class HistoryControllerTest {
                         ))
                 ));
 
-        verify(historyService).getByUserId();
+        verify(historyService).getHistorySearchPage(any(), anyInt(), anyInt());
         verifyZeroInteractions(historyService);
     }
 
@@ -127,45 +126,29 @@ public class HistoryControllerTest {
     public void searchHistories_ShouldReturnHistoryViewName_ModelShouldHaveAppropriateAttributes() throws Exception {
         History historyA = HistoryBuilder.getDefaultHistory(FIRST_HISTORY_ITEM_ID, CURRENT_USER_ID
                 , FIRST_HISTORY_ITEM_AMOUNT, FIRST_HISTORY_ITEM_USEDDATE, Action.PURCHASED);
-        List<History> histories = Arrays.asList(historyA);
+        List<History> historiesList = Arrays.asList(historyA);
+        Page<History> histories = new PageImpl<History>(historiesList, new PageRequest(0, 25), historiesList.size());
 
-        when(historyService.getByUserIdAndSearchParams(any())).thenReturn(histories);
+        mockMvc.perform(post("/history").sessionAttr("historySearchDTO", new HistorySearchDTO()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name("redirect:/history"))
+                .andExpect(model().attributeExists("historySearchDTO"));
 
-        mockMvc.perform(post("/history"))
-                .andExpect(status().isOk())
-                .andExpect(view().name("history"))
-                .andExpect(forwardedUrl("/WEB-INF/views/history/history.jsp"))
-                .andExpect(model().attributeExists("histories"))
-                .andExpect(model().attributeExists("categories"))
-                .andExpect(model().attributeExists("historySearchDTO"))
-                .andExpect(model().attribute("histories", hasSize(1)))
-                .andExpect(model().attribute("histories", hasItem(
-                        allOf(
-                                hasProperty("id", is(FIRST_HISTORY_ITEM_ID)),
-                                hasProperty("user", hasProperty("name"
-                                        , is(String.format("user%d", CURRENT_USER_ID)))),
-                                hasProperty("product", hasProperty("name"
-                                        , is(String.format("product%d", FIRST_HISTORY_ITEM_ID)))),
-                                hasProperty("amount", is(FIRST_HISTORY_ITEM_AMOUNT)),
-                                hasProperty("usedDate", is(FIRST_HISTORY_ITEM_USEDDATE)),
-                                hasProperty("action", is(Action.PURCHASED))
-                        ))
-                ));
-
-        verify(historyService).getByUserIdAndSearchParams(any());
+        verifyZeroInteractions(historyService);
     }
 
     @Test
-    public void getHistories_ShouldReturnEmptyHistoryViewName() throws Exception {
-        when(historyService.getByUserId()).thenReturn(Collections.emptyList());
-
-        mockMvc.perform(get("/history"))
+    public void getHistories_ShouldReturnEmptyPage() throws Exception {
+        when(historyService.getHistorySearchPage(any(), anyInt(), anyInt())).thenReturn(new RestResponsePage<>());
+        mockMvc.perform(get("/history")
+                .param("pageNumber", "1")
+                .param("pageSize", "25"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("emptyHistory"))
-                .andExpect(forwardedUrl("/WEB-INF/views/history/emptyHistory.jsp"))
-                .andExpect(model().attributeDoesNotExist("histories"));
+                .andExpect(view().name("history"))
+                .andExpect(forwardedUrl("/WEB-INF/views/history/history.jsp"))
+                .andExpect(model().attributeDoesNotExist("historiesPage"));
 
-        verify(historyService).getByUserId();
+        verify(historyService).getHistorySearchPage(any(), anyInt(), anyInt());
         verifyZeroInteractions(historyService);
     }
 
