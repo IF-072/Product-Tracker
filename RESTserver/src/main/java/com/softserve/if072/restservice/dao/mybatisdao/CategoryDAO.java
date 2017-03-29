@@ -4,6 +4,7 @@ import com.softserve.if072.common.model.Category;
 import com.softserve.if072.common.model.User;
 import com.softserve.if072.restservice.dao.DAO;
 import org.apache.ibatis.annotations.*;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
@@ -12,7 +13,7 @@ import java.util.List;
  *
  * @author Pavlo Bendus
  */
-
+@Repository
 public interface CategoryDAO extends DAO<Category> {
 
     /**

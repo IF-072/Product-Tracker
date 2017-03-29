@@ -13,6 +13,8 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -65,8 +67,90 @@ public class AnalyticsService {
             int purchasingDatesSize = productStatistics.getPurchasingProductDates().length;
             productStatistics.setLastPurchasingDate(productStatistics.getPurchasingProductDates()[purchasingDatesSize - 1]);
         }
+        prepareDataForCharts(productStatistics);
         LOGGER.info(successfullyOperation, productId);
 
         return productStatistics;
     }
+
+    private static void prepareDataForCharts(ProductStatistics productStatistics) {
+        StringBuilder stringBuilder = new StringBuilder();
+
+        for (double productUsingSpeed : productStatistics.getProductUsingSpeeds()) {
+            stringBuilder.append(String.format("%.1f ", productUsingSpeed));
+        }
+        String stringData = stringBuilder.toString().trim();
+        stringData = stringData.replace(',', '.');
+        productStatistics.setProductUsingSpeedsForChart(stringData);
+        productStatistics.setProductUsingSpeeds(null);
+
+        convertAmountsAndDatesDataFromArrayToString(productStatistics, Action.USED);
+        convertAmountsAndDatesDataFromArrayToString(productStatistics, Action.PURCHASED);
+    }
+
+    private static void convertAmountsAndDatesDataFromArrayToString(ProductStatistics productStatistics, Action action) {
+        int[] amounts;
+        Timestamp[] dates;
+        StringBuilder stringBuilderAmounts = new StringBuilder();
+        StringBuilder stringBuilderDates = new StringBuilder();
+        if (action == Action.USED) {
+            amounts = productStatistics.getUsingProductAmounts();
+            dates = productStatistics.getUsingProductDates();
+        } else {
+            amounts = productStatistics.getPurchasingProductAmounts();
+            dates = productStatistics.getPurchasingProductDates();
+        }
+
+        if (amounts != null) {
+            int i;
+            for (i = 1; i < dates.length; i++) {
+                int totalAmountPerDay = amounts[i - 1];
+                if (isTheSameDay(dates[i], dates[i - 1])) {
+                    totalAmountPerDay += amounts[i];
+                    i++;
+                    while (i < dates.length) {
+                        if (!isTheSameDay(dates[i], dates[i - 1])) {
+                            break;
+                        }
+                        totalAmountPerDay += amounts[i];
+                        i++;
+                    }
+                }
+
+                stringBuilderAmounts.append(totalAmountPerDay);
+                stringBuilderAmounts.append(" ");
+                stringBuilderDates.append(dates[i - 1].toLocalDateTime().toLocalDate());
+                stringBuilderDates.append(" ");
+            }
+            if (i == dates.length) {
+                stringBuilderAmounts.append(amounts[i - 1]);
+                stringBuilderAmounts.append(" ");
+                stringBuilderDates.append(dates[i - 1].toLocalDateTime().toLocalDate());
+                stringBuilderDates.append(" ");
+            }
+        }
+
+        String stringAmounts = stringBuilderAmounts.toString().trim();
+        String stringDates = stringBuilderDates.toString().trim();
+
+        if (action == Action.USED) {
+            productStatistics.setUsingProductAmountsForChart(stringAmounts);
+            productStatistics.setUsingProductDatesForChart(stringDates);
+            productStatistics.setUsingProductAmounts(null);
+            productStatistics.setUsingProductDates(null);
+        } else {
+            productStatistics.setPurchasingProductAmountsForChart(stringAmounts);
+            productStatistics.setPurchasingProductDatesForChart(stringDates);
+            productStatistics.setPurchasingProductAmounts(null);
+            productStatistics.setPurchasingProductDates(null);
+        }
+    }
+
+    private static boolean isTheSameDay(Timestamp dateOne, Timestamp dateTwo) {
+        LocalDate localDateOne = dateOne.toLocalDateTime().toLocalDate();
+        LocalDate localDateTwo = dateTwo.toLocalDateTime().toLocalDate();
+
+        return localDateOne.equals(localDateTwo);
+    }
 }
+
