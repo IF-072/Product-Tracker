@@ -15,6 +15,7 @@ import org.apache.commons.collections.CollectionUtils;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * The StoragePageService class is used to hold business logic
@@ -104,7 +105,7 @@ public class StoragePageService {
 
     public void reviewStorage(final String locale, final int userId) {
         final List<Storage> storage = getStorages(userId);
-        storage.stream()
+        storage.stream().filter(elem -> elem.getEndDate() != null)
                 .filter(elem -> elem.getEndDate().before(new Timestamp(System.currentTimeMillis() + 86400000l)))
                 .forEach(elem -> messageService.broadcast(productEnding, locale, elem.getUser().getId(),
                         elem.getProduct().getName()));

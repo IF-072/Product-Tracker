@@ -3,7 +3,6 @@ package com.softserve.if072.mvcapp.controller;
 import com.softserve.if072.common.model.ShoppingList;
 import com.softserve.if072.mvcapp.dto.FormForCart;
 import com.softserve.if072.mvcapp.service.GoShoppingPageService;
-import com.softserve.if072.mvcapp.service.MessageService;
 import com.softserve.if072.mvcapp.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
