@@ -71,13 +71,12 @@ public class PdfCreatorService {
      * Creates PDF file
      *
      * @param file - future PDF file
-     * @return document
      */
-    public Document createPDF(String file, List<History> histories, String locale) throws IOException {
+    public void createPDF(String file, List<History> histories, String locale) throws IOException {
 
-        locale = locale == null ? "en" : locale;
+        String newLocale = locale == null ? "en" : locale;
 
-        Document document = null;
+        Document document;
 
         try {
             document = new Document();
@@ -86,16 +85,15 @@ public class PdfCreatorService {
 
             addMetaData(document);
 
-            addTitlePage(document, locale);
+            addTitlePage(document, newLocale);
 
-            createTable(document, histories, locale);
+            createTable(document, histories, newLocale);
 
             document.close();
 
         } catch (DocumentException e) {
-            LOGGER.error(e.getMessage());
+            LOGGER.error(e.getMessage(), e);
         }
-        return document;
 
     }
 
@@ -164,6 +162,8 @@ public class PdfCreatorService {
         table.addCell(c1);
         table.setHeaderRows(1);
 
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yyyy");
+
         for(History history : histories) {
             table.setWidthPercentage(100);
             table.getDefaultCell().setPaddingBottom(5);
@@ -173,7 +173,7 @@ public class PdfCreatorService {
             table.addCell(new Phrase(history.getProduct().getDescription(), SMALL));
             table.addCell(new Phrase(history.getProduct().getCategory().getName(), SMALL));
             table.addCell(new Phrase(Integer.toString(history.getAmount()),SMALL));
-            table.addCell(new Phrase(history.getUsedDate().toString(), SMALL));
+            table.addCell(new Phrase(simpleDateFormat.format(history.getUsedDate()), SMALL));
         }
 
         document.add(table);
@@ -201,13 +201,13 @@ public class PdfCreatorService {
             }
 
         } catch (IOException e) {
-            LOGGER.error(e.getMessage());
+            LOGGER.error(e.getMessage(), e);
         } finally {
             if (inputStream != null) {
                 try {
                     inputStream.close();
                 } catch (IOException e) {
-                    LOGGER.error(e.getMessage());
+                    LOGGER.error(e.getMessage(), e);
                 }
             }
         }

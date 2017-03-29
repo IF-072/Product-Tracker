@@ -21,10 +21,11 @@
             <div class="panel-body">
                 <p>
                         <input type="button" class="btn btn-outline btn-primary"
-                               onClick="window.location.href = '/product/addProduct'"
+                               id="addNewProductButton"
                                value=<spring:message code="product.addNewProductBut"/>>
                 </p>
-                    <table width="100%" class="table table-striped table-bordered table-hover" id="productData">
+                <div class="table-responsive">
+                    <table width="100%" class="table table-bordered table-hover" id="productData">
                         <thead>
                         <tr>
                             <th><spring:message code="product.name"/></th>
@@ -47,38 +48,39 @@
                                 <td>${product.unit.name}</td>
                                 <td id="image">
                                     <c:if test="${product.image.id == null}">
-                                    <p id="addImage"
-                                       onclick="document.location.href='/image/upload?productId=${product.id}'">
-                                        Add image</p>
+                                    <p id="addImage" href="<c:url value="/image/upload?productId=${product.id}"/>">
+                                        <spring:message code="product.addImage"/></p>
                                     </c:if>
                                     <c:if test="${product.image.id != null}">
                                     <img src="../image/${product.image.id}" width="50" height="50" id="editImage"
-                                    onclick="document.location.href='/image/edit?productId=${product.id}'">
+                                         class="clickable" href="<c:url value="/image/edit?productId=${product.id}"/>">
                                     </c:if>
                                 </td>
                                 <td>
-                                    <p onclick="document.location.href='/product/stores?productId=${product.id}'"
-                                       id="goStores"><spring:message code="product.stores"/></p>
+                                    <p id="goStores" class="clickable"
+                                       href="<c:url value="/product/stores?productId=${product.id}"/>">
+                                        <spring:message code="product.stores"/>
+                                    </p>
                                 </td>
                                 <td style="text-align:center; vertical-align: middle">
                                     <button type="button" class="btn btn-outline btn-primary"
-                                            onclick="addProductToShoppingList(${product.id});"
-                                            id="addToShoppingList">
+                                            id="addToShoppingList" data-id="${product.id}">
                                         <spring:message code="product.addTo"/><br/>
                                         <spring:message code="product.ShoppingList"/>
                                     </button>
                                 </td>
                                 <td style="text-align:center; vertical-align: middle">
-                                    <p onclick="document.location.href='/product/editProduct?productId=${product.id}'"
+                                    <p href="<c:url value="/product/editProduct?productId=${product.id}"/>"
                                        id="edit" class="fa fa-pencil fa-lg"></p>
                                 </td>
                                 <td style="text-align:center; vertical-align: middle">
-                                    <p onclick="deleteProduct(${product.id});" class="fa fa-times fa-lg" id="delete"></p>
+                                    <p class="fa fa-times fa-lg" id="delete" data-id="${product.id}"></p>
                                 </td>
                             </tr>
                         </c:forEach>
                         </tbody>
                     </table>
+                </div>
             </div>
         </div>
     </div>
@@ -92,7 +94,7 @@
 <div id="search" hidden><spring:message code="table.search"/></div>
 <div id="previous" hidden><spring:message code="table.previous"/></div>
 <div id="next" hidden><spring:message code="table.next"/></div>
-<div id="non" hidden><spring:message code="table.non"/></div>
+<div id="non" hidden><spring:message code="table.nonProduct"/></div>
 
 
 

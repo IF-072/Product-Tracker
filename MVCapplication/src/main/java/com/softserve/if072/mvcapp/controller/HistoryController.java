@@ -189,7 +189,7 @@ public class HistoryController {
                 os.flush();
             }
         } catch (Exception e) {
-            LOGGER.error(e.getMessage());
+            LOGGER.error(e.getMessage(), e);
         }
     }
 }
