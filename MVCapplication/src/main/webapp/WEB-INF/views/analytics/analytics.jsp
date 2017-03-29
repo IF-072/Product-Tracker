@@ -4,7 +4,6 @@
 
 <%@ page import="com.softserve.if072.common.model.ProductStatistics" %>
 <%@ page import="java.sql.Timestamp" %>
-<%@ page import="java.util.Arrays" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
@@ -16,28 +15,35 @@
     </div>
 </div>
 
-<!-- Charts and table-->
-<div class="panel panel-default">
+<!-- Main Panel -->
+<%--<div class="panel panel-default">--%>
 
-        <%
-            ProductStatistics productStatistics = (ProductStatistics) request.getAttribute("productStatistics");
-            String productUsingSpeeds = Arrays.toString(productStatistics.getProductUsingSpeeds());
+        <p id="purchasingProductDatesForChart" style="display: none">${productStatistics.purchasingProductDatesForChart}</p>
+        <p id="purchasingProductAmountsForChart" style="display: none">${productStatistics.purchasingProductAmountsForChart}</p>
+        <p id="usingProductDatesForChart" style="display: none">${productStatistics.usingProductDatesForChart}</p>
+        <p id="usingProductAmountsForChart" style="display: none">${productStatistics.usingProductAmountsForChart}</p>
 
-            String usingProductAmounts = Arrays.toString(productStatistics.getUsingProductAmounts());
-            String usingProductDates = Arrays.toString(productStatistics.getUsingProductDates());
-        %>
+    <!-- Chart row -->
+    <div class="row">
+        <div class="col-lg-12">
+        <div class="panel panel-default">
+        <%--<div class="col-lg-10">--%>
+            <div class="panel-heading text-center">
+                Text message
+            </div>
+            <div class="panel-body">
+                <canvas id="chart"></canvas>
+            </div>
+        <%--</div>--%>
+        </div>
+        </div>
+    </div>
 
-        <p id="productUsingSpeeds" style="display: none"><%=productUsingSpeeds%></p>
-        <p id="usingProductAmounts" style="display: none"><%=usingProductAmounts%></p>
-        <p id="usingProductDates" style="display: none"><%=usingProductDates%></p>
+    <br/>
+    <br/>
 
     <div class="row">
-
-        <div class="col-lg-offset-1 col-lg-6">
-            <canvas id="chartProductUsingSpeeds" height="100%" width="100%"></canvas>
-        </div>
-
-        <div class="col-lg-offset-1 col-lg-4">
+        <div class="col-lg-12">
             <div class="panel panel-default">
                 <div class="panel-heading text-center">
                     <spring:message code="analytics.statTableHead"/><br>
@@ -129,7 +135,7 @@
                         <tr>
                             <td><spring:message code="analytics.statTableColumnValueEndDate"/>
                             </td>
-                            <td>
+                            <td id="endDate">
                                 <c:if test="${empty productStatistics.endDate}">
                                     ----------
                                 </c:if>
@@ -153,11 +159,7 @@
             <spring:message code="analytics.selectOtherProduct"/>
         </button>
     </div>
-    </div>
-
-    <div class="row">
-
-    </div>
+    <%--</div>--%>
 
 
 

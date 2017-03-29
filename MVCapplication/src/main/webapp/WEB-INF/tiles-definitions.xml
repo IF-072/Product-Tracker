@@ -444,12 +444,12 @@
             <add-attribute value="/css/dataTables.bootstrap.css"/>
             <add-attribute value="/css/dataTables.responsive.css"/>
             <add-attribute value="/css/jquery-ui.css"/>
-            <add-attribute value="/css/jquery.dataTables.css"/>
+            <!--<add-attribute value="/css/jquery.dataTables.css"/>-->
             <add-attribute value="/css/analytics.css"/>
         </put-list-attribute>
         <put-list-attribute name="javascripts" inherit="true">
             <add-attribute value="/js/jquery-ui.js"/>
-            <add-attribute value="/js/jquery.dataTables.js"/>
+            <!--<add-attribute value="/js/jquery.dataTables.js"/>-->
             <add-attribute value="/js/Chart.js"/>
             <add-attribute value="/js/analytics.js"/>
         </put-list-attribute>

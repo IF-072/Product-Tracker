@@ -17,53 +17,69 @@ $("#selectOtherProduct").click(function () {
     location.href = $(this).attr("href");
 });
 
+function getAnArray(jqueryString) {
+    var string = jqueryString.text();
+    return string.split(" ");
+}
+
 $(document).ready( function() {
 
-    function ProductObject(x, y) {
-        this.x = x;
-        this.y = y;
+    var purchasingProductDatesForChart = getAnArray($("#purchasingProductDatesForChart"));
+    var purchasingProductAmountsForChart = getAnArray($("#purchasingProductAmountsForChart"));
+    var usingProductDatesForChart = getAnArray($("#usingProductDatesForChart"));
+    var usingProductAmountsForChart = getAnArray($("#usingProductAmountsForChart"));
+
+
+
+    var chartArr = [];
+
+    for (var i = 0; i < arr1.length; i++) {
+        chartArr.push(parseInt(arr2[i]));
     }
 
-    var productUsingSpeeds = $("#productUsingSpeeds").text();
-    var usingProductAmounts = $("#usingProductAmounts").text();
-    var usingProductDates = $("#usingProductDates").text();
-    console.log(usingProductDates);
+    // console.log(chartArr);
 
-    var productUsingSpeedsArray = splitArray(productUsingSpeeds);
+    var data = {
+        labels: arr1,
+        datasets: [
+            {
+                label: "Using Products",
+                // fillColor: "rgba(220,220,220,0.2)",
+                // strokeColor: "rgba(0,0,0,1)",
+                // pointColor: "rgba(220,220,220,1)",
+                // //pointStrokeColor: "#000",
+                // //pointHighlightFill: "#000",
+                // pointHighlightStroke: "rgba(220,220,220,1)",
+                borderColor: "rgba(112,190,68,0.5)",
+                backgroundColor: "rgba(173,214,138,0.3)",
+                data: chartArr
+            },
+            // {
+            //     label: "My Second dataset",
+            //     fillColor: "rgba(151,187,205,0.2)",
+            //     strokeColor: "rgba(151,187,205,1)",
+            //     pointColor: "rgba(151,187,205,1)",
+            //     pointStrokeColor: "#fff",
+            //     pointHighlightFill: "#fff",
+            //     pointHighlightStroke: "rgba(151,187,205,1)",
+            //     data: [0, 1, 1, 2, 3, 5, 8, 13, 21, 34]
+            // }
+        ]
+    };
 
-    var productUsingSpeedsDataArray = [];
-
-    for(var i = 0; i < productUsingSpeedsArray.length; i++) {
-        productUsingSpeedsDataArray.push(new ProductObject((i + 1), parseFloat(productUsingSpeedsArray[i])));
-    }
-
-    var ctx = $("#chartProductUsingSpeeds");
-    var chartProductUsingSpeeds = new Chart(ctx, {
-        type: 'line',
-        data: {
-            datasets: [{
-                label: 'Using Speed By Days',
-                data: productUsingSpeedsDataArray
-            }]
-        },
-        options: {
+    var ctx = document.getElementById("chart").getContext("2d");
+    var options = {
             scales: {
-                xAxes: [{
-                    type: 'linear',
-                    position: 'bottom'
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
                 }]
             }
-        }
-    })
+        };
+    var chart = new Chart(ctx, {
+        type: 'line',
+        data : data,
+        options: options
+    });
 });
-
-/**
- * This function is used to replace square brackets and split string into an array
- *
- * @param string
- * @returns {Array}
- */
-function splitArray(string) {
-    var newArray = string.replace('[', '').replace(']', '');
-    return newArray.split(", ");
-}
