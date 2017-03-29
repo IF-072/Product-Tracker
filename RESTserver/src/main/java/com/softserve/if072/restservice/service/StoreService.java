@@ -44,14 +44,8 @@ public class StoreService {
      */
     @Transactional
     public List<Store> getAllStores(int userId) {
-        List<Store> stores = storeDAO.getAllStoresByUser(userId);
-        if (!stores.isEmpty()) {
-            return stores;
-        } else {
-            return null;
-        }
+        return storeDAO.getAllStoresByUser(userId);
     }
-
     /**
      * Returns store from DataBase
      *
@@ -60,7 +54,7 @@ public class StoreService {
      * @throws DataNotFoundException - if the store is not found
      */
     @Transactional
-    public Store getStoreByID(int id) throws DataNotFoundException {
+    public Store getStoreByID(int id){
         Store store = storeDAO.getByID(id);
         if (store == null) {
             throw new DataNotFoundException(String.format(storeNotFound, id));
@@ -77,10 +71,11 @@ public class StoreService {
      *                                  not found
      */
     @Transactional
-    public void addStore(Store store) throws IllegalArgumentException {
+    public void addStore(Store store){
         if (store != null && !"".equals(store.getName())) {
             storeDAO.insert(store);
-        } else throw new IllegalArgumentException(String.format("Illegal arguments in store id %d", store.getId()));
+        } else throw new IllegalArgumentException(String.format("Illegal arguments in store id %d", store != null ?
+                store.getId() : 0));
     }
 
 
@@ -91,7 +86,7 @@ public class StoreService {
      * @throws IllegalArgumentException - if the passed store has empty name field or the updated store is not found
      */
     @Transactional
-    public void updateStore(Store store) throws IllegalArgumentException {
+    public void updateStore(Store store) {
         if (store.getName().isEmpty() || store.getName().equals("")) {
             throw new IllegalArgumentException(String.format("Illegal arguments in store id %d", store.getId()));
         }
@@ -105,7 +100,7 @@ public class StoreService {
      * @throws DataNotFoundException if the store is not found
      */
     @Transactional
-    public void deleteStore(int id) throws DataNotFoundException {
+    public void deleteStore(int id) {
         Store store = storeDAO.getByID(id);
         if (store != null) {
             storeDAO.deleteById(id);
@@ -123,7 +118,7 @@ public class StoreService {
      * @throws DataNotFoundException - if result set is empty
      */
     @Transactional
-    public List<Product> getProductsByStoreId(int storeId, int userId) throws DataNotFoundException {
+    public List<Product> getProductsByStoreId(int storeId, int userId){
         List<Product> products = storeDAO.getProductsByStoreId(storeId, userId);
         if (products != null) {
             return products;
@@ -140,7 +135,7 @@ public class StoreService {
      * @throws DataNotFoundException if the product is not presented in this store
      */
     @Transactional
-    public void deleteProductFromStoreById(int storeId, int productId) throws DataNotFoundException {
+    public void deleteProductFromStoreById(int storeId, int productId) {
         Product product = storeDAO.getProductFromStoreById(storeId, productId);
         if (product != null) {
             storeDAO.deleteProductFromStoreById(storeId, productId);
@@ -157,7 +152,7 @@ public class StoreService {
      * @throws DataNotFoundException - if product or store is not found
      */
     @Transactional
-    public void addProductToStore(int storeId, int productId) throws DataNotFoundException {
+    public void addProductToStore(int storeId, int productId) {
         storeDAO.addProductToStore(storeId, productId);
     }
 
@@ -170,7 +165,7 @@ public class StoreService {
      * @throws DataNotFoundException if the product in return statement is null
      */
     @Transactional
-    public Product getProductFromStoreById(int storeId, int productId) throws DataNotFoundException {
+    public Product getProductFromStoreById(int storeId, int productId){
         Product product = storeDAO.getProductFromStoreById(storeId, productId);
         if (product != null) {
             return product;
@@ -189,7 +184,7 @@ public class StoreService {
      * @throws DataNotFoundException - if result set is empty
      */
     @Transactional
-    public Set<Product> getNotMappedProducts(int storeId, int userId) throws DataNotFoundException {
+    public Set<Product> getNotMappedProducts(int storeId, int userId){
         Set<Product> storeProducts = new HashSet<>(getProductsByStoreId(storeId, userId));
         Set<Product> allProducts = new HashSet<>(productDAO.getEnabledProductsByUserId(userId));
 
@@ -210,7 +205,7 @@ public class StoreService {
      * @throws DataNotFoundException - if list of productId is empty, or store is not found
      */
     @Transactional
-    public void addProductsToStore(List<Integer> productsId, int storeId) throws DataNotFoundException {
+    public void addProductsToStore(List<Integer> productsId, int storeId) {
 
         Store store = getStoreByID(storeId);
         if (store != null && CollectionUtils.isNotEmpty(productsId)) {
@@ -225,15 +220,13 @@ public class StoreService {
     /**
      * This method returns store by name ant user id
      *
-     * @param StoreName name off store
+     * @param storeName name off store
      * @param userId    owner of store
      * @return store or null if store is not found
      */
     @Transactional
-    public Store getStoreByNameAndUser(String StoreName, String storeAddress, int userId) {
-        Store store = storeDAO.getByName(StoreName, storeAddress, userId);
-
-        return store;
+    public Store getStoreByNameAndUser(String storeName, String storeAddress, int userId) {
+        return storeDAO.getByName(storeName, storeAddress, userId);
     }
 
     /**

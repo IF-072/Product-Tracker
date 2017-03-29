@@ -26,7 +26,10 @@ $(document).ready(function () {
                 "previous": $('#previous').text()
             },
             "search": $('#search').text()
-        }
+        },
+        "columnDefs": [
+            { "orderable": false, "targets": [2, 3, 4] }
+        ]
     });
     });
 
@@ -87,7 +90,10 @@ $(document).ready(function () {
                 "previous": $('#previous').text()
             },
             "search": $('#search').text()
-        }
+        },
+        "columnDefs": [
+            { "orderable": false, "targets": [2, 3, 4, 5] }
+        ]
     });
 });
 

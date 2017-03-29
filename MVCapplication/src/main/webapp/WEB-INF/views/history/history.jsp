@@ -131,7 +131,7 @@
                 <div class="panel-footer text-rigth">
                     <div class="col-sm-6">
 
-                        <label>Show products </label>
+                        <label><spring:message code="history.show.onPage"/> </label>
                         <form action="/history?pageNumber=${beginIndex}">
                             <select name="pageSize">
 
@@ -142,7 +142,7 @@
                                     </option>
                                 </c:forEach>
                             </select>
-                            <input type="submit" value="Submit">
+                            <input type="submit" value="<spring:message code="table.show"/>">
                         </form>
                     </div>
 
@@ -152,12 +152,16 @@
                             <div class="pagination">
                                 <c:choose>
                                     <c:when test="${currentIndex == 1}">
-                                        <li class="paginate_button previous disabled"><a href="#">First</a></li>
-                                        <li class="paginate_button previous disabled"><a href="#">Previous</a></li>
+                                        <li class="paginate_button previous disabled"><a href="#"><spring:message
+                                                code="history.first"/></a></li>
+                                        <li class="paginate_button previous disabled"><a href="#"><spring:message
+                                                code="table.previous"/></a></li>
                                     </c:when>
                                     <c:otherwise>
-                                        <li><a class="paginate_button previous" href="${firstUrl}">First</a></li>
-                                        <li><a class="paginate_button previous" href="${prevUrl}">Previous</a></li>
+                                        <li><a class="paginate_button previous" href="${firstUrl}"><spring:message
+                                                code="history.first"/></a></li>
+                                        <li><a class="paginate_button previous" href="${prevUrl}"><spring:message
+                                                code="table.previous"/></a></li>
                                     </c:otherwise>
                                 </c:choose>
                                 <c:forEach var="i" begin="${beginIndex}" end="${endIndex}">
@@ -175,12 +179,16 @@
                                 </c:forEach>
                                 <c:choose>
                                     <c:when test="${currentIndex == historiesPage.getTotalPages()}">
-                                        <li class="paginate_button next disabled"><a href="#">Next</a></li>
-                                        <li class="paginate_button next disabled"><a href="#">Last</a></li>
+                                        <li class="paginate_button next disabled"><a href="#"><spring:message
+                                                code="table.next"/></a></li>
+                                        <li class="paginate_button next disabled"><a href="#"><spring:message
+                                                code="history.last"/></a></li>
                                     </c:when>
                                     <c:otherwise>
-                                        <li><a class="paginate_button next" href="${nextUrl}">Next</a></li>
-                                        <li><a class="paginate_button next" href="${lastUrl}">Last</a></li>
+                                        <li><a class="paginate_button next" href="${nextUrl}"><spring:message
+                                                code="table.next"/></a></li>
+                                        <li><a class="paginate_button next" href="${lastUrl}"><spring:message
+                                                code="history.last"/></a></li>
                                     </c:otherwise>
                                 </c:choose>
                             </div>
