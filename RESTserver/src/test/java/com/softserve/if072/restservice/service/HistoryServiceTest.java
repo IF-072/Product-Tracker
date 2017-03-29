@@ -55,34 +55,6 @@ public class HistoryServiceTest {
     }
 
     @Test
-    public void getByUserId_UserIdGiven_ShouldReturnNoEmptyList() throws Exception {
-        History history1 = HistoryBuilder.getDefaultHistory(FIRST_HISTORY_ITEM_ID, CURRENT_USER_ID);
-        History history2 = HistoryBuilder.getDefaultHistory(SECOND_HISTORY_ITEM_ID, CURRENT_USER_ID);
-        List<History> histories = Arrays.asList(history1, history2);
-
-        when(historyDAO.getByUserId(CURRENT_USER_ID)).thenReturn(histories);
-
-        List<History> actualHistories = historyService.getByUserId(CURRENT_USER_ID);
-
-        assertEquals(2, actualHistories.size());
-        assertEquals(String.format("user%d", CURRENT_USER_ID), actualHistories.get(0).getUser().getName());
-        assertEquals(String.format("product%d", SECOND_HISTORY_ITEM_ID), actualHistories.get(1).getProduct().getName());
-        verify(historyDAO).getByUserId(CURRENT_USER_ID);
-        verifyZeroInteractions(historyDAO);
-    }
-
-    @Test
-    public void getByUserId_UserIdGiven_ShouldReturnEmptyList() throws Exception {
-        when(historyDAO.getByUserId(CURRENT_USER_ID)).thenReturn(Collections.emptyList());
-
-        List<History> actualHistories = historyService.getByUserId(CURRENT_USER_ID);
-
-        assertTrue(CollectionUtils.isEmpty(actualHistories));
-        verify(historyDAO).getByUserId(CURRENT_USER_ID);
-        verifyZeroInteractions(historyDAO);
-    }
-
-    @Test
     public void delete_HistoryIdGiven_ShouldExecuteHistoryDAODeleteExactlyOnce() throws Exception {
         when(historyDAO.delete(HISTORY_ID)).thenReturn(1);
 

@@ -45,7 +45,7 @@ import java.util.List;
  */
 @Controller
 @RequestMapping("/history")
-@SessionAttributes("historiesSession")
+@SessionAttributes({"historiesSession", "historySearchDTO", "pageSize"})
 public class HistoryController {
 
     private static final Logger LOGGER = LogManager.getLogger(HistoryController.class);
@@ -82,56 +82,54 @@ public class HistoryController {
      * @return string with appropriate view name
      */
     @GetMapping
-    public String getHistories(Model model,
+    public String getHistories(Model model, HttpSession session,
                                @RequestParam(value = "pageNumber", required = false, defaultValue = "1") int pageNumber,
                                @RequestParam(value = "pageSize", required = false, defaultValue = "25") int pageSize) {
 
-        Page<History> historiesPage = historyService.getHistoryPage(pageNumber, pageSize);
-
-        int current = historiesPage.getNumber() + 1;
-        int begin = 1;
-        int end = historiesPage.getTotalPages();
-
-        if (historiesPage.getTotalElements() > 0) {
-            model.addAttribute("categories", productPageService.getAllCategories(userService.getCurrentUser().getId()));
-            model.addAttribute("historiesPage", historiesPage);
-            model.addAttribute("historySearchDTO", new HistorySearchDTO());
-            model.addAttribute("historiesSession", historiesPage.getContent());
-            model.addAttribute("beginIndex", begin);
-            model.addAttribute("endIndex", end);
-            model.addAttribute("currentIndex", current);
-            model.addAttribute("pageSize", pageSize);
-            return "history";
-        }
-        return "emptyHistory";
-    }
-
-    /**
-     * Handles requests for getting all history records for current user by given search criterias
-     *
-     * @param model - a map that will be handed off to the view for rendering the data to the client
-     * @return string with appropriate view name
-     */
-
-    @PostMapping
-    public String searchHistories(Model model,
-                                  @RequestParam(value = "pageNumber", required = false, defaultValue = "1") int pageNumber,
-                                  @ModelAttribute("historySearchDTO") HistorySearchDTO searchParams, BindingResult result) {
-
-        model.addAttribute("historySearchDTO", result.hasErrors() ? new HistorySearchDTO() : searchParams);
+        HistorySearchDTO searchParams = session.getAttribute("historySearchDTO") == null ? new HistorySearchDTO()
+                : (HistorySearchDTO) session.getAttribute("historySearchDTO");
+        model.addAttribute("historySearchDTO", searchParams);
         model.addAttribute("categories", productPageService.getAllCategories(userService.getCurrentUser().getId()));
 
-        Page<History> histories = historyService.getHistorySearchPage(searchParams, pageNumber, 25);
+        Page<History> histories = historyService.getHistorySearchPage(searchParams, pageNumber, pageSize);
         if (histories.getTotalElements() > 0) {
-            model.addAttribute("histories", histories);
             model.addAttribute("historiesSession", histories.getContent());
             model.addAttribute("historiesPage", histories);
+            model.addAttribute("pageSize", pageSize);
             model.addAttribute("beginIndex", 1);
             model.addAttribute("endIndex", histories.getTotalPages());
             model.addAttribute("currentIndex", histories.getNumber() + 1);
         }
 
         return "history";
+    }
+
+    /**
+     * Handles requests for search history records by given search criterias
+     *
+     * @param searchParams - DTO with search form values
+     * @return redirect to regular history page
+     */
+
+    @PostMapping
+    public String searchHistories(HttpSession session, @ModelAttribute("historySearchDTO") HistorySearchDTO searchParams,
+                                  BindingResult result) {
+        if (result.hasErrors()) {
+            session.setAttribute("historySearchDTO", new HistorySearchDTO());
+        }
+        return "redirect:/history";
+    }
+
+    /**
+     * Cleans up the saved search parameters and redirects user to history page
+     *
+     * @param model a model which stores search params
+     * @return redirect to history page
+     */
+    @GetMapping("/clearFilter")
+    public String clearSearchFilters(Model model) {
+        model.addAttribute("historySearchDTO", new HistorySearchDTO());
+        return "redirect:/history";
     }
 
     /**

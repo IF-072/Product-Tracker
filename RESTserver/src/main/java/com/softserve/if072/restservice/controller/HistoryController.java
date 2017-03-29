@@ -38,20 +38,6 @@ public class HistoryController {
     }
 
     /**
-     * Handles requests for retrieving all history records for current user
-     *
-     * @param userId - current user unique identifier
-     * @return list of cart records or empty list
-     */
-    @PreAuthorize("#userId == authentication.user.id")
-    @GetMapping()
-    @ResponseStatus(HttpStatus.OK)
-    public List<History> getByUserId(@PathVariable int userId) {
-
-        return historyService.getByUserId(userId);
-    }
-
-    /**
      * Handles requests for search history records by given criterias
      *
      * @param userId     - current user unique identifier
@@ -116,23 +102,6 @@ public class HistoryController {
     @ResponseStatus(value = HttpStatus.OK)
     public void update(@RequestBody HistoryDTO historyDTO) {
         historyService.update(historyDTO);
-    }
-
-    /**
-     * Handles requests for paging history records
-     *
-     * @param userId     - current user unique identifier
-     * @param pageNumber - number of page
-     * @param pageSize   - number of page records
-     * @return page of found history records or empty page
-     */
-    @PreAuthorize("#userId == authentication.user.id")
-    @GetMapping("/pages/{pageNumber}/{pageSize}")
-    @ResponseStatus(HttpStatus.OK)
-    public Page<History> getPage(@PathVariable int userId, @PathVariable int pageNumber, @PathVariable int pageSize) {
-        Pageable pageable = new PageRequest(pageNumber - 1, pageSize);
-
-        return historyService.getPage(userId, pageable);
     }
 
 }

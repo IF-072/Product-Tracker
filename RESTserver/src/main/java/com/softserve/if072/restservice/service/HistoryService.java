@@ -1,6 +1,5 @@
 package com.softserve.if072.restservice.service;
 
-import com.softserve.if072.common.model.Action;
 import com.softserve.if072.common.model.History;
 import com.softserve.if072.common.model.dto.HistoryDTO;
 import com.softserve.if072.common.model.dto.HistorySearchDTO;
@@ -47,35 +46,7 @@ public class HistoryService {
     }
 
     /**
-     * Make request to a HistoryRepository for retrieving page of history records for current user
-     *
-     * @param userId   - current user unique identifier
-     * @param pageable - contains information about number and size of page
-     * @return page of history records or empty page
-     */
-    public Page<History> getPage(int userId, Pageable pageable) {
-        Page<History> page = historyRepository.findByUserIdOrderByUsedDateAsc(userId, pageable);
-        LOGGER.info(historyContainsPages, "user", userId, page.getTotalPages());
-
-        return page;
-    }
-
-
-    /**
-     * Make request to a History DAOInterfaces for retrieving all history records for current user
-     *
-     * @param userID - current user unique identifier
-     * @return list of history records or empty list
-     */
-    public List<History> getByUserId(int userID) {
-        List<History> histories = historyDAO.getByUserId(userID);
-        LOGGER.info(historyContainsRecords, "user", userID, histories.size());
-
-        return histories;
-    }
-
-    /**
-     * Make request to a History repository for retrieving all history records by given search fields
+     * Make request to a History repository for retrieving all history records by given search attributes
      *
      * @param userID     - current user unique identifier
      * @param searchData DTO that contains search criterias
@@ -83,8 +54,8 @@ public class HistoryService {
      */
     public Page<History> getByUserIdAndSearchParams(int userID, HistorySearchDTO searchData, Pageable pageable) {
         Page<History> histories = historyRepository.findByMultipleParams(userID,
-                searchData.getName().length() > 0 ? "%" + searchData.getName()+ "%" : null,
-                searchData.getDescription().length() > 0 ? "%" + searchData.getDescription()+ "%" : null,
+                searchData.getName() != null && searchData.getName().length() > 0 ? "%" + searchData.getName()+ "%" : null,
+                searchData.getDescription() != null && searchData.getDescription().length() > 0 ? "%" + searchData.getDescription()+ "%" : null,
                 searchData.getCategoryId(), searchData.getFromDate(), searchData.getToDate(), pageable);
         LOGGER.info(historyContainsRecords, "user", userID, histories.getTotalElements());
         return histories;
@@ -128,33 +99,6 @@ public class HistoryService {
         return histories;
     }
 
-    /**
-     * Make request to a History DAO for retrieving all history records
-     * with specific product id for current user
-     *
-     * @param productID - product unique identifier
-     * @return list of history DTO records or empty list
-     */
-    public List<HistoryDTO> getDTOByProductId(int productID) {
-        List<HistoryDTO> historyDTOs = historyDAO.getDTOByProductId(productID);
-        LOGGER.info(historyContainsRecords, "product", productID, historyDTOs.size());
-        return historyDTOs;
-    }
-
-    /**
-     * Make request to a History DAO for retrieving all history records
-     * with specific product id and specific action for current user
-     *
-     * @param productID - product unique identifier
-     * @param action    - specific action
-     * @return list of history DTO records or empty list
-     */
-    public List<HistoryDTO> getDTOByProductId(int productID, Action action) {
-        List<HistoryDTO> historyDTOs = historyDAO.getDTOByProductIdAndAction(productID, action);
-        LOGGER.info(historyContainsRecords, "product", productID, historyDTOs.size());
-        return historyDTOs;
-    }
-
     public void insert(HistoryDTO historyDTO) {
         historyDAO.insert(historyDTO);
         LOGGER.info(historySuccessfullyOperation, historyDTO.getProductId(), historyDTO.getAction(), "inserted into");
@@ -165,33 +109,5 @@ public class HistoryService {
             throw new DataNotFoundException(String.format(historyNotFound, "UPDATE", historyDTO.getId()));
         }
         LOGGER.info(historySuccessfullyOperation, historyDTO.getProductId(), historyDTO.getAction(), "updated in");
-    }
-
-    /**
-     * Return records from the history table that belong to specific user. Records are divided in pages, were number
-     * of records is equal to limit.
-     *
-     * @param userId   - unique user's identifier
-     * @param startRow - record from which begins select
-     * @param limit    - number of records
-     * @return list of history items that belong to specific user
-     */
-    public List<History> getByUserIdPages(int userId, int startRow, int limit) {
-        List<History> histories = historyDAO.getByUserIdPages(userId, startRow, limit);
-        LOGGER.info(historyContainsRecords, "user", userId, histories.size());
-
-        return histories;
-    }
-
-    /**
-     * Select count of records from the history table that belong to specific user.
-     *
-     * @param userId - unique user's identifier
-     * @return number of records
-     */
-    public int getNumberOfRecordsByUserId(int userId) {
-        int recordsNumber = historyDAO.getNumberOfRecordsByUserId(userId);
-
-        return recordsNumber;
     }
 }

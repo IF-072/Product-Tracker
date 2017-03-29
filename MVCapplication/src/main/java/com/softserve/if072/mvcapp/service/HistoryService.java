@@ -89,32 +89,6 @@ public class HistoryService {
     }
 
     /**
-     * Make request to a REST server for retrieving page of history records for current user
-     *
-     * @param pageNumber - number of pages
-     * @param pageSize   - number of records on page
-     * @return page of history records or empty page
-     */
-    public Page<History> getHistoryPage(int pageNumber, int pageSize) {
-        int userId = userService.getCurrentUser().getId();
-
-        Map<String, String> param = new HashMap<>();
-        param.put("userId", Integer.toString(userId));
-        param.put("pageNumber", Integer.toString(pageNumber));
-        param.put("pageSize", Integer.toString(pageSize));
-
-        ParameterizedTypeReference<RestResponsePage<History>> responseType = new
-                ParameterizedTypeReference<RestResponsePage<History>>() {
-                };
-
-        ResponseEntity<RestResponsePage<History>> historyResult = restTemplate.exchange(historyPageURL, HttpMethod.GET,
-                null, responseType, param);
-
-        LOGGER.info(historySuccessfullyOperation, "paging ", "records", userId);
-        return historyResult.getBody();
-    }
-
-    /**
      * Sends request to the REST server for retrieving all history records that match given search attributes
      *
      * @param pageNumber - number of pages

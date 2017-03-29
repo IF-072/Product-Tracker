@@ -24,17 +24,9 @@ import java.util.List;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyZeroInteractions;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup;
 
 /**
@@ -70,48 +62,6 @@ public class HistoryControllerTest {
                 .build();
         mapper = new ObjectMapper();
         objectWriter = mapper.writer().withDefaultPrettyPrinter();
-    }
-
-    @Test
-    public void getByUserId_UserIdGiven_ShouldReturnNotEmptyUsersHistory() throws Exception {
-        History history1 = HistoryBuilder.getDefaultHistory(FIRST_HISTORY_ITEM_ID, CURRENT_USER_ID
-                , FIRST_HISTORY_ITEM_AMOUNT, FIRST_HISTORY_ITEM_USEDDATE, Action.PURCHASED);
-        History history2 = HistoryBuilder.getDefaultHistory(SECOND_HISTORY_ITEM_ID, CURRENT_USER_ID
-                , SECOND_HISTORY_ITEM_AMOUNT, SECOND_HISTORY_ITEM_USEDDATE, Action.USED);
-        List<History> histories = Arrays.asList(history1, history2);
-
-        when(historyService.getByUserId(anyInt())).thenReturn(histories);
-
-        mockMvc.perform(get("/api/users/{userId}/histories", CURRENT_USER_ID))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(APPLICATION_JSON_UTF8))
-                .andExpect(jsonPath("$", hasSize(2)))
-                .andExpect(jsonPath("$[0]['user']['name']", is(String.format("user%d", CURRENT_USER_ID))))
-                .andExpect(jsonPath("$[0]['product']['name']", is(String.format("product%d", FIRST_HISTORY_ITEM_ID))))
-                .andExpect(jsonPath("$[0]['amount']", is(FIRST_HISTORY_ITEM_AMOUNT)))
-                .andExpect(jsonPath("$[0]['usedDate']", is(FIRST_HISTORY_ITEM_USEDDATE.getTime())))
-                .andExpect(jsonPath("$[0]['action']", is("PURCHASED")))
-                .andExpect(jsonPath("$[1]['user']['name']", is(String.format("user%d", CURRENT_USER_ID))))
-                .andExpect(jsonPath("$[1]['product']['name']", is(String.format("product%d", SECOND_HISTORY_ITEM_ID))))
-                .andExpect(jsonPath("$[1]['amount']", is(SECOND_HISTORY_ITEM_AMOUNT)))
-                .andExpect(jsonPath("$[1]['usedDate']", is(SECOND_HISTORY_ITEM_USEDDATE.getTime())))
-                .andExpect(jsonPath("$[1]['action']", is("USED")));
-
-        verify(historyService).getByUserId(anyInt());
-        verifyZeroInteractions(historyService);
-    }
-
-    @Test
-    public void getByUserId_UserIdGiven_ShouldReturnEmptyUsersHistory() throws Exception {
-        when(historyService.getByUserId(anyInt())).thenReturn(Collections.emptyList());
-
-        mockMvc.perform(get("/api/users/{userId}/histories", CURRENT_USER_ID))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(APPLICATION_JSON_UTF8))
-                .andExpect(jsonPath("$", hasSize(0)));
-
-        verify(historyService).getByUserId(anyInt());
-        verifyZeroInteractions(historyService);
     }
 
     @Test

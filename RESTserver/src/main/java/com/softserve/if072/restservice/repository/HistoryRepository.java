@@ -19,8 +19,6 @@ public interface HistoryRepository extends JpaRepository<History, Integer> {
 
     Page<History> findAll(Pageable pageable);
 
-    Page<History> findByUserIdOrderByUsedDateAsc(int userId, Pageable pageable);
-
     @Query("select h from History h where h.user.id = :userId" +
             " and (:name is NULL or h.product.name like :name)" +
             " and (:description is NULL or h.product.description like :description)" +

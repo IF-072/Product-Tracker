@@ -5,6 +5,7 @@ import com.softserve.if072.common.model.Category;
 import com.softserve.if072.common.model.History;
 import com.softserve.if072.common.model.RestResponsePage;
 import com.softserve.if072.common.model.User;
+import com.softserve.if072.common.model.dto.HistorySearchDTO;
 import com.softserve.if072.mvcapp.service.HistoryService;
 import com.softserve.if072.mvcapp.service.PdfCreatorService;
 import com.softserve.if072.mvcapp.service.ProductPageService;
@@ -27,19 +28,12 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.hamcrest.Matchers.*;
-import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.forwardedUrl;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
-
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup;
 
 /**
@@ -89,10 +83,8 @@ public class HistoryControllerTest {
                 , SECOND_HISTORY_ITEM_AMOUNT, SECOND_HISTORY_ITEM_USEDDATE, Action.USED);
         List<History> historyList = Arrays.asList(history1, history2);
 
-        PageImpl<History> historiesPage = new PageImpl<History>(historyList);
-        int pageNumber = 1;
-        int pageSize = 25;
-        when(historyService.getHistoryPage(pageNumber, pageSize)).thenReturn(historiesPage);
+        PageImpl<History> historiesPage = new PageImpl<>(historyList);
+        when(historyService.getHistorySearchPage(any(), anyInt(), anyInt())).thenReturn(historiesPage);
 
 
         mockMvc.perform(get("/history"))
@@ -127,7 +119,7 @@ public class HistoryControllerTest {
                         ))
                 ));
 
-        verify(historyService).getHistoryPage(anyInt(), anyInt());
+        verify(historyService).getHistorySearchPage(any(), anyInt(), anyInt());
         verifyZeroInteractions(historyService);
     }
 
@@ -138,48 +130,26 @@ public class HistoryControllerTest {
         List<History> historiesList = Arrays.asList(historyA);
         Page<History> histories = new PageImpl<History>(historiesList, new PageRequest(0, 25), historiesList.size());
 
-        when(historyService.getHistorySearchPage(any(), any(), any())).thenReturn(histories);
+        mockMvc.perform(post("/history").sessionAttr("historySearchDTO", new HistorySearchDTO()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name("redirect:/history"))
+                .andExpect(model().attributeExists("historySearchDTO"));
 
-        mockMvc.perform(post("/history"))
-                .andExpect(status().isOk())
-                .andExpect(view().name("history"))
-                .andExpect(forwardedUrl("/WEB-INF/views/history/history.jsp"))
-                .andExpect(model().attributeExists("histories"))
-                .andExpect(model().attributeExists("categories"))
-                .andExpect(model().attributeExists("historySearchDTO"))
-                .andExpect(model().attribute("histories", hasSize(1)))
-                .andExpect(model().attribute("histories", hasItem(
-                        allOf(
-                                hasProperty("id", is(FIRST_HISTORY_ITEM_ID)),
-                                hasProperty("user", hasProperty("name"
-                                        , is(String.format("user%d", CURRENT_USER_ID)))),
-                                hasProperty("product", hasProperty("name"
-                                        , is(String.format("product%d", FIRST_HISTORY_ITEM_ID)))),
-                                hasProperty("amount", is(FIRST_HISTORY_ITEM_AMOUNT)),
-                                hasProperty("usedDate", is(FIRST_HISTORY_ITEM_USEDDATE)),
-                                hasProperty("action", is(Action.PURCHASED))
-                        ))
-                ));
-
-        verify(historyService).getHistorySearchPage(any(), any(), any());
+        verifyZeroInteractions(historyService);
     }
 
     @Test
-    public void getHistories_ShouldReturnEmptyHistoryViewName() throws Exception {
-        int pageNumber = 1;
-        int pageSize = 25;
-        when(historyService.getHistoryPage(pageNumber, pageSize)).thenReturn(new RestResponsePage<History>());
-
-
+    public void getHistories_ShouldReturnEmptyPage() throws Exception {
+        when(historyService.getHistorySearchPage(any(), anyInt(), anyInt())).thenReturn(new RestResponsePage<>());
         mockMvc.perform(get("/history")
-                .param("pageNumber", Integer.toString(pageNumber))
-                .param("pageSize", Integer.toString(pageSize)))
+                .param("pageNumber", "1")
+                .param("pageSize", "25"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("emptyHistory"))
-                .andExpect(forwardedUrl("/WEB-INF/views/history/emptyHistory.jsp"))
+                .andExpect(view().name("history"))
+                .andExpect(forwardedUrl("/WEB-INF/views/history/history.jsp"))
                 .andExpect(model().attributeDoesNotExist("historiesPage"));
 
-        verify(historyService).getHistoryPage(anyInt(), anyInt());
+        verify(historyService).getHistorySearchPage(any(), anyInt(), anyInt());
         verifyZeroInteractions(historyService);
     }
 

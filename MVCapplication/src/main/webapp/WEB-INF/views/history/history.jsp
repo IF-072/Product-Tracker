@@ -32,7 +32,7 @@
                     <sf:input path="description" class="form-control" type="text" placeholder="${filterDescription}"/>
                 </div>
             </div>
-            <div class="col-lg-3 search-item">
+            <div class="col-lg-2 search-item">
                 <div class="form-group">
                     <sf:select path="categoryId" class="form-control" placeholder="Category">
                         <option value="0" selected><spring:message code="history.filter.category"/></option>
@@ -56,9 +56,16 @@
                     <i class="glyphicon glyphicon-calendar form-control-feedback"></i>
                 </div>
             </div>
-            <div class="col-lg-1">
-                <spring:message code='history.filter.search' var="searchButtonMessage"/>
-                <input type="submit" class="btn btn-primary" value="${searchButtonMessage}"/>
+            <div class="col-lg-1 search-item">
+                <div class="form-group">
+                    <spring:message code='history.filter.search' var="searchButtonMessage"/>
+                    <input type="submit" class="btn btn-primary" value="${searchButtonMessage}"/>
+                </div>
+            </div>
+            <div class="col-lg-1 search-item">
+                <div class="form-group">
+                    <a href="/history/clearFilter" class="btn btn-danger"> <spring:message code='history.filter.clear'/></a>
+                </div>
             </div>
         </div>
     </fieldset>
@@ -127,9 +134,13 @@
                         <label>Show products </label>
                         <form action="/history?pageNumber=${beginIndex}">
                             <select name="pageSize">
-                                <option value="25">25</option>
-                                <option value="50">50</option>
-                                <option value="100">100</option>
+
+                                <c:set var="pageSizes" value="${[25, 50, 100]}"/>
+                                <c:forEach items="${pageSizes}" var="currentSize">
+                                    <option value="${currentSize}" ${currentSize == sessionScope.pageSize ? 'selected="selected"': ''}>
+                                        ${currentSize}
+                                    </option>
+                                </c:forEach>
                             </select>
                             <input type="submit" value="Submit">
                         </form>
