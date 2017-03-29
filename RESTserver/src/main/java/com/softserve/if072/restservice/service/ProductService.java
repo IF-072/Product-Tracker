@@ -171,4 +171,13 @@ public class ProductService {
             LOGGER.error("Product with id " + product.getId() + " wasn't found");
         }
     }
+
+    public int getUserIdByProductId(int id) throws DataNotFoundException {
+        Integer userId = productDAO.getUserIdByProductId(id);
+        if (userId != null) {
+            return userId;
+        } else {
+            throw new DataNotFoundException(String.format(productNotFound, id));
+        }
+    }
 }
