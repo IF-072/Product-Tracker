@@ -71,7 +71,7 @@ public class GoShoppingPageServiceTest {
     @Test
     public void addToCart() {
         final FormForCart formForCartMock = Mockito.spy(formForCart);
-        goShoppingPageService.addToCart(formForCartMock);
+        goShoppingPageService.addToCart(formForCartMock, "uk");
         verify(formForCartMock).removeUncheked();
         verify(restTemplate).postForObject(anyString(), any(), eq(Cart.class));
     }

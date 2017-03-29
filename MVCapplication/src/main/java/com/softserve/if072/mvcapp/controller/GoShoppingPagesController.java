@@ -6,6 +6,7 @@ import com.softserve.if072.mvcapp.service.GoShoppingPageService;
 import com.softserve.if072.mvcapp.service.MessageService;
 import com.softserve.if072.mvcapp.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.CookieValue;
@@ -13,7 +14,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
 
@@ -28,14 +31,12 @@ import java.util.Map;
 public class GoShoppingPagesController {
     private final GoShoppingPageService goShoppingPageService;
     private final UserService userService;
-    private final MessageService messageService;
+    private static final String LOCALE_COOKIE = "myLocaleCookie";
 
     @Autowired
-    public GoShoppingPagesController(final GoShoppingPageService goShoppingPageService, final UserService userService,
-                                     final MessageService messageService) {
+    public GoShoppingPagesController(final GoShoppingPageService goShoppingPageService, final UserService userService) {
         this.goShoppingPageService = goShoppingPageService;
         this.userService = userService;
-        this.messageService = messageService;
     }
 
     /**
@@ -81,11 +82,20 @@ public class GoShoppingPagesController {
      */
     @PostMapping("/addToCart")
     public String addToCart(@ModelAttribute("cartForm") final FormForCart form,
-                            @CookieValue(value = "myLocaleCookie", required = false) final String locale) {
+                            @CookieValue(value = LOCALE_COOKIE, required = false) final String locale) {
         form.setUser(userService.getCurrentUser());
-        goShoppingPageService.addToCart(form);
-        messageService.broadcast("goShopping.start", locale, form.getUserId(), form.getStoreName());
+        goShoppingPageService.addToCart(form, locale);
         return "redirect:/cart/";
+    }
+
+    @PostMapping("/shopping/finished")
+    @ResponseStatus(value = HttpStatus.OK)
+    public void review(@CookieValue(value = LOCALE_COOKIE, required = false) final String locale,
+                       HttpServletRequest request) {
+        final String url = request.getHeader("referer");
+        if (url != null && url.matches(".*/cart([/?].*)?")){
+            goShoppingPageService.reviewCart(locale, userService.getCurrentUser().getId());
+        }
     }
 
 }

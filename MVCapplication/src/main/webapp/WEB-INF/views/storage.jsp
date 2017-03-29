@@ -70,7 +70,7 @@
                                     <form:hidden path="previousAmount" value="${storage.amount}" class="init"/>
                                     <input type="number" path="amount" name="amount" min="0" value="${storage.amount}"
                                            class="form-control num"/>
-                                    <form:button class="btn disabled btn-default confirm">
+                                    <form:button class="btn disabled btn-default confirm" disabled="true">
                                         <spring:message code="storage.confirm"/></form:button>
                                 </form:form>
                             </td>

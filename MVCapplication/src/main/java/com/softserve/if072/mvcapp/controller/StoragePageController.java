@@ -32,6 +32,7 @@ import javax.servlet.http.HttpServletResponse;
 public class StoragePageController {
     private final StoragePageService storagePageService;
     private final UserService userService;
+    private static final String LOCALE_COOKIE = "myLocaleCookie";
 
     @Autowired
     public StoragePageController(final StoragePageService storagePageService, final UserService userService) {
@@ -65,7 +66,7 @@ public class StoragePageController {
     @ResponseStatus(value = HttpStatus.OK)
     @ResponseBody
     public String updateAmount(@Validated @ModelAttribute final StorageDTO storageDTO, final BindingResult result,
-                               @CookieValue(value = "myLocaleCookie", required = false) final String locale,
+                               @CookieValue(value = LOCALE_COOKIE, required = false) final String locale,
                                final HttpServletResponse response) {
         if (result.hasErrors()) {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
@@ -97,7 +98,7 @@ public class StoragePageController {
 
     @PostMapping("/review")
     @ResponseStatus(value = HttpStatus.OK)
-    public void review(@CookieValue(value = "myLocaleCookie", required = false) final String locale) {
+    public void review(@CookieValue(value = LOCALE_COOKIE, required = false) final String locale) {
         storagePageService.reviewStorage(locale, userService.getCurrentUser().getId());
     }
 }

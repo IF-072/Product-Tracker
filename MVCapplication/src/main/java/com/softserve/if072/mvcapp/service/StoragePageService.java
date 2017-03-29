@@ -29,7 +29,6 @@ public class StoragePageService {
 
     @Value("${application.restStorageURL}")
     private String storageUrl;
-
     @Value("${application.restShoppingListURL}")
     private String shoppingListURL;
 

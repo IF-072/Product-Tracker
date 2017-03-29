@@ -1,8 +1,8 @@
 function waitForElement(){
     if(typeof connected !== 'undefined' && connected === true){
-        if (document.referrer.match(/.*\/login[^\/]*/g)) {
+        if (document.referrer.match(/.*\/cart([\/?].*)?/g)) {
             $.ajax({
-                url: "storage/review",
+                url: "/shopping/finished",
                 method: "POST"
             });
         }
@@ -14,3 +14,4 @@ function waitForElement(){
 $(document).ready(function () {
     waitForElement();
 });
+

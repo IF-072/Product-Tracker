@@ -5,8 +5,10 @@ function allowBtn() {
 
     if (amount == value) {
         jbtn.addClass("disabled");
+        jbtn.prop("disabled", true);
     } else {
         jbtn.removeClass("disabled");
+        jbtn.prop("disabled", false);
     }
 
 }
@@ -29,6 +31,7 @@ function subForm(e) {
             if (data.length == 10 && jqXHR.status == 200){
                 date.text(data);
                 jbtn.addClass("disabled");
+                jbtn.prop("disabled", true);
                 init.val(inputNum.val());
             } else {
                 $("#message").text(data);

@@ -1,4 +1,5 @@
 var key = "notif";
+var connected = false;
 var sessionUl = sessionStorage.getItem(key);
 var removeAll = $("#notification").html();
 
@@ -53,6 +54,7 @@ stompClient.connect({}, function () {
             '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>' +
             '<a href="#" class="alert-link pull-right">' + hours + '</a>' + msg.data + '</div>');
     });
+    connected = true;
 });
 
 $(document).ready(function () {
