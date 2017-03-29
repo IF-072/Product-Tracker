@@ -24,7 +24,8 @@
                                id="addNewProductButton"
                                value=<spring:message code="product.addNewProductBut"/>>
                 </p>
-                    <table width="100%" class="table table-striped table-bordered table-hover" id="productData">
+                <div class="table-responsive">
+                    <table width="100%" class="table table-bordered table-hover" id="productData">
                         <thead>
                         <tr>
                             <th><spring:message code="product.name"/></th>
@@ -63,8 +64,7 @@
                                 </td>
                                 <td style="text-align:center; vertical-align: middle">
                                     <button type="button" class="btn btn-outline btn-primary"
-                                            onclick="addProductToShoppingList(${product.id});"
-                                            id="addToShoppingList">
+                                            id="addToShoppingList" data-id="${product.id}">
                                         <spring:message code="product.addTo"/><br/>
                                         <spring:message code="product.ShoppingList"/>
                                     </button>
@@ -74,12 +74,13 @@
                                        id="edit" class="fa fa-pencil fa-lg"></p>
                                 </td>
                                 <td style="text-align:center; vertical-align: middle">
-                                    <p onclick="deleteProduct(${product.id});" class="fa fa-times fa-lg" id="delete"></p>
+                                    <p class="fa fa-times fa-lg" id="delete" data-id="${product.id}"></p>
                                 </td>
                             </tr>
                         </c:forEach>
                         </tbody>
                     </table>
+                </div>
             </div>
         </div>
     </div>
@@ -93,7 +94,7 @@
 <div id="search" hidden><spring:message code="table.search"/></div>
 <div id="previous" hidden><spring:message code="table.previous"/></div>
 <div id="next" hidden><spring:message code="table.next"/></div>
-<div id="non" hidden><spring:message code="table.non"/></div>
+<div id="non" hidden><spring:message code="table.nonProduct"/></div>
 
 
 

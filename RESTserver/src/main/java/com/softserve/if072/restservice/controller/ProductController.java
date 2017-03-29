@@ -60,14 +60,15 @@ public class ProductController {
     @ResponseStatus(value = HttpStatus.OK)
     public List<Product> getAllProductsByUserId(@PathVariable int userId) {
 
-        try {
-            List<Product> products = productService.getAllProducts(userId);
+        List<Product> products = productService.getAllProducts(userId);
+
+        if(!products.isEmpty()) {
             LOGGER.info("All products were found");
-            return products;
-        } catch (DataNotFoundException e) {
-            LOGGER.error(e.getMessage());
-            return new ArrayList<Product>();
+        } else {
+            LOGGER.error(String.format("Products of user with ID %d were not found", userId));
         }
+
+        return products;
 
     }
 
@@ -83,7 +84,7 @@ public class ProductController {
     @GetMapping(value = "/{productId}")
     @ResponseBody
     @ResponseStatus(value = HttpStatus.OK)
-    public Product getProductById(@PathVariable int productId) throws DataNotFoundException {
+    public Product getProductById(@PathVariable int productId) {
 
         Product product = productService.getProductById(productId);
         LOGGER.info(String.format("Product with id %d was retrieved", productId));
@@ -116,7 +117,7 @@ public class ProductController {
     @PreAuthorize("#product.user != null && #product.user.id == authentication.user.id")
     @PutMapping(value = "/")
     @ResponseStatus(value = HttpStatus.OK)
-    public void update(@RequestBody Product product) throws DataNotFoundException {
+    public void update(@RequestBody Product product) {
 
         int id = product.getId();
         productService.updateProduct(product);
@@ -134,7 +135,7 @@ public class ProductController {
     @PreAuthorize("#product.user != null && #product.user.id == authentication.user.id")
     @PutMapping(value = "/image")
     @ResponseStatus(value = HttpStatus.OK)
-    public void updateByImage(@RequestBody Product product) throws DataNotFoundException {
+    public void updateByImage(@RequestBody Product product) {
 
         int id = product.getId();
         productService.updateProductByImage(product);
@@ -152,7 +153,7 @@ public class ProductController {
     @PreAuthorize("@productSecurityService.hasPermissionToAccess(#productId)")
     @DeleteMapping(value = "/{productId}")
     @ResponseStatus(value = HttpStatus.OK)
-    public void delete(@PathVariable int productId) throws DataNotFoundException {
+    public void delete(@PathVariable int productId) {
 
         productService.deleteProduct(productId);
         LOGGER.info(String.format("Product with id %d was deleted", productId));
@@ -173,14 +174,16 @@ public class ProductController {
     @ResponseBody
     @ResponseStatus(value = HttpStatus.OK)
     public List<Store> getAllStoresFromProduct(@PathVariable int productId, @PathVariable int userId) {
-        try {
-            List<Store> stores = productService.getStoresByProductId(productId, userId);
+
+        List<Store> stores = productService.getStoresByProductId(productId, userId);
+
+        if(!stores.isEmpty()) {
             LOGGER.info("All Stores were found");
-            return stores;
-        } catch (DataNotFoundException e) {
-            LOGGER.error(e.getMessage());
-            return new ArrayList<Store>();
+        } else {
+            LOGGER.error(String.format("Stores from product with ID %d were not found", productId));
         }
+
+        return stores;
 
     }
 
@@ -210,7 +213,7 @@ public class ProductController {
     @PreAuthorize("#product.user != null && #product.user.id == authentication.user.id")
     @PostMapping("/deleteStores/")
     @ResponseStatus(value = HttpStatus.OK)
-    public void deleteStoreFromProduct(@RequestBody Product product) throws DataNotFoundException {
+    public void deleteStoreFromProduct(@RequestBody Product product) {
 
         productService.deleteStoreFromProductById(product);
         LOGGER.info(String.format("Stores were deleted from product %d", product.getId()));
@@ -228,8 +231,8 @@ public class ProductController {
     @ResponseBody
     @ResponseStatus(value = HttpStatus.OK)
     public Product getProductByNameAndUserId(@PathVariable String productName, @PathVariable String userId) {
-        Product product = productService.getProductByNameAndUserId(productName, Integer.parseInt(userId));
-        return product;
+
+        return productService.getProductByNameAndUserId(productName, Integer.parseInt(userId));
 
     }
 

@@ -139,7 +139,7 @@ public class HistoryController {
                        @CookieValue(value = "myLocaleCookie", required = false) final String locale) throws IOException {
 
         HttpSession session = request.getSession();
-        List<History> histories = (List) session.getAttribute("historiesSession");
+        List<History> histories = (List<History>) session.getAttribute("historiesSession");
 
         final ServletContext servletContext = request.getSession().getServletContext();
         final File tempDirectory = (File) servletContext.getAttribute("javax.servlet.context.tempdir");
@@ -158,7 +158,7 @@ public class HistoryController {
                     os.flush();
             }
         } catch (Exception e) {
-            LOGGER.error(e.getMessage());
+            LOGGER.error(e.getMessage(), e);
         }
     }
 }

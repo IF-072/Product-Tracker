@@ -4,9 +4,7 @@ import com.softserve.if072.common.model.History;
 import com.softserve.if072.common.model.User;
 import com.softserve.if072.common.model.dto.HistorySearchDTO;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -50,9 +48,6 @@ public class PdfCreatorServiceTest {
     @InjectMocks
     private PdfCreatorService pdfCreatorService;
 
-    @Rule
-    public TemporaryFolder folder = new TemporaryFolder();
-
     private User user;
     private ResponseEntity<List<History>> historiesResponse;
     private List<History> histories;
@@ -83,12 +78,12 @@ public class PdfCreatorServiceTest {
 
     @Test
     public void convertPDFToByteArrayOutputStream_ShouldReturnByteArrayOutputStream() throws IOException {
-        byte[] buffer = new byte[1024];
 
         File file = File.createTempFile("C:\\rootFolder\\childFolder1", "test-file.pdf");
 
         pdfCreatorService.convertPDFToByteArrayOutputStream(file.getPath());
         verify(inputStream, times(0)).read();
+
     }
 
     @Test

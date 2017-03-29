@@ -1,4 +1,7 @@
 /**
+ * File contains methods that enable DataTables and methods that work out functions
+ * for deleting, editing and adding products to Shopping List
+ *
  * Created by Vitaliy Malisevych on 06.02.2017.
  */
 
@@ -44,23 +47,27 @@ $("#addNewProductButton").click(function () {
 });
 
 $("#addImage").click(function () {
-    var href = $(this).attr("href");
-    location.href = href;
+    location.href = $(this).attr("href");
 });
 
 $("#editImage.clickable").click(function () {
-    var href = $(this).attr("href");
-    location.href = href;
+    location.href = $(this).attr("href");
 });
 
 $("#goStores.clickable").click(function () {
-    var href = $(this).attr("href");
-    location.href = href;
+    location.href = $(this).attr("href");
 });
 
 $("#edit.fa").click(function () {
-    var href = $(this).attr("href");
-    location.href = href;
+    location.href = $(this).attr("href");
+});
+
+$("#delete.fa").click(function () {
+    deleteProduct($(this).attr("data-id"));
+});
+
+$("#addToShoppingList.btn").click(function () {
+    addProductToShoppingList($(this).attr("data-id"));
 });
 
 $(document).ready(function() {
@@ -69,6 +76,7 @@ $(document).ready(function() {
             "lengthMenu": $('#Show').text() + " _MENU_ " + $('#Products').text(),
             "zeroRecords": $('#non').text(),
             "info": $('#showing').text() + " _START_ " + $('#to').text() + " _END_ " + $('#of').text() + " _TOTAL_ " + $('#records').text(),
+            "infoEmpty": "",
             "paginate": {
                 "first":      "First",
                 "last":       "Last",
@@ -80,12 +88,6 @@ $(document).ready(function() {
         "columnDefs": [
             { "orderable": false, "targets": [4, 5, 6, 7, 8] }
         ]
-    });
-
-    $(document).getElementById("#inputWarning").keypress(function(key) {
-
-        if(key.charCode < 48 || key.charCode > 57) return false;
-
     });
 
 });

@@ -36,20 +36,18 @@ public class ProductService {
         this.productDAO = productDAO;
     }
 
-    public List<Product> getAllProducts(int userId) throws DataNotFoundException {
+    public List<Product> getAllProducts(int userId) {
         List<Product> getProducts = productDAO.getAllByUserId(userId);
-        List<Product> products = new ArrayList<Product>();
+        List<Product> products = new ArrayList<>();
         if (!getProducts.isEmpty()){
             for(Product getProduct : getProducts) {
                 if(getProduct.isEnabled()) {products.add(getProduct);}
             }
-            return products;
-        } else {
-            throw new DataNotFoundException("Products not found");
         }
+        return products;
     }
 
-    public Product getProductById(int id) throws DataNotFoundException {
+    public Product getProductById(int id) {
         Product product = productDAO.getByID(id);
         if (product != null){
             return product;
@@ -62,22 +60,46 @@ public class ProductService {
     public void addProduct(Product product) { productDAO.insert(product); }
 
     @Transactional
-    public void updateProduct(Product product) throws DataNotFoundException { productDAO.update(product); }
+    public void updateProduct(Product product) {
+        Product getProduct = productDAO.getByID(product.getId());
+
+        if(getProduct != null) {
+            productDAO.update(product);
+            LOGGER.info(String.format("Product with ID %d was successfully updated", product.getId()));
+        } else {
+            throw new DataNotFoundException(String.format(productNotFound, product.getId()));
+        }
+
+    }
 
     @Transactional
-    public void updateProductByImage(Product product) throws DataNotFoundException { productDAO.updateImage(product); }
+    public void updateProductByImage(Product product) {
+
+        Product getProduct = productDAO.getByID(product.getId());
+
+        if(getProduct != null) {
+            productDAO.updateImage(product);
+            LOGGER.info(String.format("Image of product with ID %d was successfully updated", product.getId()));
+        } else {
+            throw new DataNotFoundException(String.format(productNotFound, product.getId()));
+        }
+
+    }
 
     @Transactional
-    public void deleteProduct(int id) throws DataNotFoundException {
+    public void deleteProduct(int id) {
+
         Product product = productDAO.getByID(id);
+
         if (product != null){
             productDAO.deleteById(id);
+            LOGGER.info(String.format("Product with ID %d was successfully deleted", product.getId()));
         } else {
             throw new DataNotFoundException(String.format(productNotFound, id));
         }
     }
 
-    public List<Product> getProductsByStoreId(int storeId) throws DataNotFoundException {
+    public List<Product> getProductsByStoreId(int storeId) {
         List<Product> products = productDAO.getProductsByStoreId(storeId);
         if (!products.isEmpty()){
             return products;
@@ -86,24 +108,33 @@ public class ProductService {
         }
     }
 
-    public List<Store> getStoresByProductId(int productId, int userId) throws DataNotFoundException {
-        List<Store> stores = productDAO.getStoresByProductIdAndUserId(productId, userId);
-        if (CollectionUtils.isNotEmpty(stores)){
-            return stores;
+    public List<Store> getStoresByProductId(int productId, int userId) {
+
+        List<Store> storesInProduct = productDAO.getStoresByProductIdAndUserId(productId, userId);
+        List<Store> stores = new ArrayList<>();
+
+        if (!storesInProduct.isEmpty()){
+            for(Store getStore : storesInProduct) {
+                if(getStore.isEnabled()) {stores.add(getStore);}
+            }
+            LOGGER.info(String.format("Stores were found in product %d", productId));
         } else {
-            throw new DataNotFoundException("Stores not found");
+            LOGGER.error(String.format("Stores were not found in product %d", productId));
         }
+
+        return stores;
+
     }
 
     @Transactional
-    public void deleteStoreFromProductById(Product product) throws DataNotFoundException {
+    public void deleteStoreFromProductById(Product product) {
 
         for(Store s : product.getStores()) {
             Store store = productDAO.getStoreFromProductById(s.getId(), product.getId());
             if (store != null) {
                 productDAO.deleteStoreFromProductById(store.getId(), product.getId());
             } else {
-                throw new DataNotFoundException(String.format("Store %d from product %d not found", store.getId(), product.getId()));
+                throw new DataNotFoundException(String.format("Store from product %d not found", product.getId()));
             }
         }
 
