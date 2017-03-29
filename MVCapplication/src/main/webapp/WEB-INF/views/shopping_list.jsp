@@ -35,9 +35,9 @@
                                 </c:if>
                             </td>
                             <td class="align-mid"><p class="fa fa-minus-square fa-lg fa-lg edit"
-                                   prodId="${elem.product.id}" val="-1" index="${loop.count}"/></td>
+                                                     prodId="${elem.product.id}" val="-1" index="${loop.count}"/></td>
                             <td class="align-mid"><p class="fa fa-plus-square fa-lg fa-lg edit"
-                                   prodId="${elem.product.id}" val="1" index="${loop.count}"/></td>
+                                                     prodId="${elem.product.id}" val="1" index="${loop.count}"/></td>
                             <td class="align-mid"><p prodId="${elem.product.id}" class="fa fa-times fa-lg del"/></td>
                         </tr>
                     </c:forEach>

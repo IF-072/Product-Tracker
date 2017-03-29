@@ -1,12 +1,26 @@
 package com.softserve.if072.common.model;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
+@Entity
+@Table(name = "unit")
 public class Unit {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private int id;
+
+    @Column(name = "name")
     private String name;
 
-    public Unit() {}
+    public Unit() {
+    }
 
     public Unit(int id, String name) {
         this.id = id;
@@ -36,4 +50,5 @@ public class Unit {
                 ", name='" + name + '\'' +
                 '}';
     }
-}
+
+  }

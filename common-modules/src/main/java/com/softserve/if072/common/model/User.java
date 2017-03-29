@@ -1,5 +1,13 @@
 package com.softserve.if072.common.model;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.Transient;
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -8,20 +16,40 @@ import java.util.List;
  * @author Oleh Pochernin
  * @author Igor Parada
  */
-public class User {
 
+@Entity
+@Table(name = "user")
+public class User implements Serializable {
+    static final long serialVersionUID = 98786688446743962L;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private int id;
+
+    @Transient
     private String name;
+    @Transient
     private String email;
+    @Transient
     private String password;
+    @Transient
     private boolean isEnabled;
+    @Transient
     private List<Store> stores;
+    @Transient
     private List<Product> products;
+    @Transient
     private List<Cart> carts;
+    @Transient
     private List<Category> categories;
+    @Transient
     private List<ShoppingList> shoppingLists;
+    @Transient
     private List<Storage> storages;
+    @Transient
     private Role role;
+    @Transient
     private long premiumExpiresTime;
 
     public User() {
@@ -146,7 +174,7 @@ public class User {
                 ", shoppingLists=" + shoppingLists +
                 ", storages=" + storages +
                 ", role=" + role +
-                ", premiumExpiresTime="+ premiumExpiresTime +
+                ", premiumExpiresTime=" + premiumExpiresTime +
                 '}';
     }
 }
