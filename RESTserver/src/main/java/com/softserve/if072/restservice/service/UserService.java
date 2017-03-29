@@ -41,7 +41,7 @@ public class UserService {
         this.hexBinaryAdapter = hexBinaryAdapter;
     }
 
-    public List<User> getAll() throws DataNotFoundException {
+    public List<User> getAll() {
         List<User> users = userDAO.getAll();
 
         if (CollectionUtils.isNotEmpty(users)) {
@@ -52,7 +52,7 @@ public class UserService {
     }
 
 
-    public User getById(int id) throws DataNotFoundException {
+    public User getById(int id) {
         User user = userDAO.getByID(id);
 
         if (id < 1) {
