@@ -125,7 +125,7 @@ public class GoShoppingPagesControllerTest {
                 .param("carts[0].user.id", "1"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/cart/"));
-        verify(goShoppingPageService).addToCart(any());
+        verify(goShoppingPageService).addToCart(any(), any());
     }
 
     private ViewResolver viewResolver() {

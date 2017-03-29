@@ -37,7 +37,7 @@ public class StorageService {
         this.storageDAO = storageDAO;
         this.shoppingListService = shoppingListService;
         this.historyService = historyService;
-        this.forecastService=forecastService;
+        this.forecastService = forecastService;
     }
 
     /**
@@ -107,7 +107,7 @@ public class StorageService {
         final int diff = storageDB.getAmount() - storage.getAmount();
         if (diff > 0) {
             addToHistory(storage, diff, Action.USED);
-        } else {
+        } else if (diff < 0) {
             addToHistory(storage, -diff, Action.PURCHASED);
         }
         if (storage.getEndDate() == null) {
@@ -142,7 +142,7 @@ public class StorageService {
         final int diff = storage.getAmount() - storageDTO.getAmount();
         if (diff > 0) {
             addToHistory(storage, diff, Action.USED);
-        } else {
+        } else if (diff < 0) {
             addToHistory(storage, -diff, Action.PURCHASED);
         }
         storage.setAmount(storageDTO.getAmount());
