@@ -87,10 +87,15 @@ public class GoShoppingPagesController {
         return "redirect:/cart/";
     }
 
+    /**
+     * Handles requests for checking end shopping.
+     *
+     * @param locale - locale of user
+     */
     @PostMapping("/shopping/finished")
     @ResponseStatus(value = HttpStatus.OK)
     public void review(@CookieValue(value = LOCALE_COOKIE, required = false) final String locale,
-                       HttpServletRequest request) {
+                       final HttpServletRequest request) {
         final String url = request.getHeader("referer");
         if (url != null && url.matches(".*/cart([/?].*)?")){
             goShoppingPageService.reviewCart(locale, userService.getCurrentUser().getId());

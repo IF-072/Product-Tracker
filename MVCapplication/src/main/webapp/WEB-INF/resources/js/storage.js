@@ -30,7 +30,7 @@ function subForm(e) {
         dataType: 'text',
         contentType: 'application/x-www-form-urlencoded; charset=utf-8',
         success: function (data, textStatus, jqXHR) {
-            if (data.length == 10 && jqXHR.status == 200){
+            if (data.length == 10 && jqXHR.status == 200) {
                 date.text(data);
                 init.val(inputNumValue);
             } else {
@@ -61,7 +61,7 @@ function subForm(e) {
 function addToShoppingList() {
     var productId = $(this).attr("product");
     $.ajax({
-        url: "addToSL",
+        url: "/storage/addToSL",
         method: "POST",
         data: {
             productId: productId

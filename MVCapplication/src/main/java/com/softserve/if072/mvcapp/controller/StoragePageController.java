@@ -96,6 +96,11 @@ public class StoragePageController {
         storagePageService.addProductToShoppingList(productId);
     }
 
+    /**
+     * Handles requests for checking end products in storage.
+     *
+     * @param locale - locale of user
+     */
     @PostMapping("/review")
     @ResponseStatus(value = HttpStatus.OK)
     public void review(@CookieValue(value = LOCALE_COOKIE, required = false) final String locale) {
