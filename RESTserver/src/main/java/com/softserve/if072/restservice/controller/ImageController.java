@@ -48,7 +48,6 @@ public class  ImageController {
     @RequestMapping(value = "/{imageId}", method = RequestMethod.GET)
     @ResponseBody
     public Image getImageById(@PathVariable("imageId") int imageId, HttpServletResponse response) {
-
         try {
             Image image = imageService.getById(imageId);
             LOGGER.info("Image was found");
@@ -58,7 +57,6 @@ public class  ImageController {
             LOGGER.error(e.getMessage(), e);
             return null;
         }
-
     }
 
     /**
@@ -70,9 +68,14 @@ public class  ImageController {
     @PreAuthorize("#userId == authentication.user.id")
     @RequestMapping(value = "/upload/{userId}", method = RequestMethod.POST)
     @ResponseBody
-    public void uploadImageObject(@RequestBody Image image, @PathVariable int userId) {
+    public int uploadImageObject(@RequestBody Image image, @PathVariable int userId) {
         if (image != null) {
             imageService.insert(image);
+            LOGGER.info(String.format("Image %d was successfully saved to DataBase", image.getId()));
+            return image.getId();
+        } else {
+            LOGGER.error("Image is null");
+            return 0;
         }
     }
 
@@ -86,7 +89,6 @@ public class  ImageController {
     @RequestMapping(value = "/delete/{imageId}", method = RequestMethod.DELETE)
     @ResponseBody
     public void deleteImage(@PathVariable("imageId") int imageId, HttpServletResponse response) {
-
         try {
             imageService.delete(imageId);
             LOGGER.info(String.format("Image with id %d was deleted", imageId));
@@ -94,31 +96,6 @@ public class  ImageController {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             LOGGER.error(String.format(imageNotFound, imageId), e);
         }
-
-    }
-
-    /**
-     * Returns last inserted id
-     *
-     * @param userId user whose last inserted image's id will be returned
-     * @return id
-     */
-
-    @PreAuthorize("#userId == authentication.user.id")
-    @RequestMapping(value = "/getLastId/{userId}", method = RequestMethod.GET)
-    @ResponseBody
-    public int getLastInsertedId(@PathVariable("userId") int userId, HttpServletResponse response) {
-
-        try {
-            int lastInsertedId = imageService.getLasrInsertId();
-            LOGGER.info("Last inserted ID was found");
-            return lastInsertedId;
-        } catch (DataNotFoundException e) {
-            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-            LOGGER.error(e.getMessage(), e);
-            return 0;
-        }
-
     }
 
     /**

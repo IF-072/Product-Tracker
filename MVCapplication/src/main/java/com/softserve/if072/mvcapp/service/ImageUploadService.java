@@ -56,14 +56,7 @@ public class ImageUploadService {
 
         final String uri = imageUrl + "/upload/{userId}";
         param.put("userId", userId);
-        restTemplate.postForObject(uri, image, Image.class, param);
-
-        System.out.println("Image was uploaded");
-
-        final String getLastIdUri = imageUrl + "/getLastId/{userId}";
-        int imageId = restTemplate.getForObject(getLastIdUri, Integer.class, param);
-
-        System.out.println("With last updated ID " + imageId);
+        int imageId = restTemplate.postForObject(uri, image, Integer.class, param);
 
         Product product = productPageService.getProduct(productId);
 
