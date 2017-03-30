@@ -58,6 +58,9 @@ public class StoragePageControllerTest {
     private final String amountMsg = "{error.storage.amount}";
     private final String update = "/storage/update";
     private final String locale = "uk";
+    private final String cookie = "myLocaleCookie";
+    private final String amount = "amount";
+    private final String productId = "productId";
 
     @Before
     public void setup() throws ClassNotFoundException, NoSuchMethodException {
@@ -88,9 +91,9 @@ public class StoragePageControllerTest {
     public void testUpdateAmount_ShouldReturnEmptyString() throws Exception {
         when(userService.getCurrentUser()).thenReturn(user);
         final MvcResult result = mockMvc.perform(post(update)
-                .param("amount", "1")
-                .param("productId", "1")
-                .cookie(new Cookie("myLocaleCookie", locale)))
+                .param(amount, "1")
+                .param(productId, "1")
+                .cookie(new Cookie(cookie, locale)))
                 .andExpect(status().isOk())
                 .andReturn();
         assertEquals("", result.getResponse().getContentAsString());
@@ -100,9 +103,9 @@ public class StoragePageControllerTest {
     @Test
     public void testUpdateAmount_ShouldReturnValidationProductMessage() throws Exception {
         final MvcResult result = mockMvc.perform(post(update)
-                .param("amount", "1")
-                .param("productId", "0")
-                .cookie(new Cookie("myLocaleCookie", locale)))
+                .param(amount, "1")
+                .param(productId, "0")
+                .cookie(new Cookie(cookie, locale)))
                 .andExpect(status().isOk())
                 .andReturn();
         assertEquals(productMsg, result.getResponse().getContentAsString());
@@ -112,9 +115,9 @@ public class StoragePageControllerTest {
     @Test
     public void testUpdateAmount_ShouldReturnValidationAmountMessage() throws Exception {
         final MvcResult result = mockMvc.perform(post(update)
-                .param("amount", "-1")
-                .param("productId", "1")
-                .cookie(new Cookie("myLocaleCookie", locale)))
+                .param(amount, "-1")
+                .param(productId, "1")
+                .cookie(new Cookie(cookie, locale)))
                 .andExpect(status().isOk())
                 .andReturn();
         assertEquals(amountMsg, result.getResponse().getContentAsString());
@@ -124,9 +127,9 @@ public class StoragePageControllerTest {
     @Test
     public void testUpdateAmount_ShouldReturnValidationTwoMessage() throws Exception {
         final MvcResult result = mockMvc.perform(post(update)
-                .param("amount", "-1")
-                .param("productId", "0")
-                .cookie(new Cookie("myLocaleCookie", locale)))
+                .param(amount, "-1")
+                .param(productId, "0")
+                .cookie(new Cookie(cookie, locale)))
                 .andExpect(status().isOk())
                 .andReturn();
         assertTrue(result.getResponse().getContentAsString().contains(amountMsg));
@@ -137,8 +140,17 @@ public class StoragePageControllerTest {
     @Test
     public void testAddToShoppingList() throws Exception {
         mockMvc.perform(post("/storage/addToSL")
-                .param("productId", "1"))
+                .param(productId, "1"))
                 .andExpect(status().isOk());
         verify(storagePageService).addProductToShoppingList(1);
+    }
+
+    @Test
+    public void testReview() throws Exception {
+        when(userService.getCurrentUser()).thenReturn(user);
+        mockMvc.perform(post("/storage/review")
+                .cookie(new Cookie(cookie, locale)))
+                .andExpect(status().isOk());
+        verify(storagePageService).reviewStorage(eq(locale), anyInt());
     }
 }
