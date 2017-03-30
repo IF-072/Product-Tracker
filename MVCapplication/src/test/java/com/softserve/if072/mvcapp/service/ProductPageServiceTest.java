@@ -35,7 +35,7 @@ public class ProductPageServiceTest {
     @Mock
     private RestTemplate restTemplate;
     @InjectMocks
-    ProductPageService productPageService;
+    private ProductPageService productPageService;
 
     private Product product;
     private User user;

@@ -1,11 +1,6 @@
 package com.softserve.if072.mvcapp.service;
 
-import com.lowagie.text.Document;
-import com.lowagie.text.DocumentException;
-import com.lowagie.text.Element;
-import com.lowagie.text.Font;
-import com.lowagie.text.Paragraph;
-import com.lowagie.text.Phrase;
+import com.lowagie.text.*;
 import com.lowagie.text.pdf.BaseFont;
 import com.lowagie.text.pdf.PdfPCell;
 import com.lowagie.text.pdf.PdfPTable;
@@ -16,23 +11,13 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
-import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
-import java.io.ByteArrayOutputStream;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 /**
  * The class contains methods to create a PDF file with information about the user's history
@@ -45,7 +30,6 @@ public class PdfCreatorService {
     private static final Logger LOGGER = LogManager.getLogger(PdfCreatorService.class);
 
     private UserService userService;
-    private RestTemplate restTemplate;
     private MessageSource messageSource;
 
     @Value("${application.restHistoryURL}")
@@ -54,10 +38,9 @@ public class PdfCreatorService {
     private String restHistorySearchPageURL;
 
     @Autowired
-    public PdfCreatorService(UserService userService, RestTemplate restTemplate,
+    public PdfCreatorService(UserService userService,
                              MessageSource messageSource) throws IOException, DocumentException {
         this.userService = userService;
-        this.restTemplate = restTemplate;
         this.messageSource = messageSource;
     }
 

@@ -52,7 +52,7 @@ public class ProductPageService {
      * @param userId id of user whose products must be received
      * @return all user's products
      */
-    public List<Product> getAllProducts(int userId) {
+    public List getAllProducts(int userId) {
 
         final String uri = productUrl + "/user/{userId}";
         Map<String, Integer> param = new HashMap<>();
@@ -196,7 +196,7 @@ public class ProductPageService {
      * @param userId user whose stores must be received
      * @return list of stores
      */
-    public List<Store> getAllStores(int userId) {
+    List<Store> getAllStores(int userId) {
 
         final String getAllStoresUri = storeUrl + "/user/{userId}";
 
