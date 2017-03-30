@@ -20,15 +20,15 @@
         <c:if test="${empty categories}">
             <div class="panel panel-primary">
                 <div class="panel-heading">
-                    No categories found
+                    <spring:message code="category.noCategoriesFound" />
                 </div>
                 <div class="panel-body">
-                    <p>Ooops... It seems your category list is empty. You can add a new one by clicking the button above.</p>
+                    <p><spring:message code="category.listIsEmpty" /></p>
                 </div>
             </div>
         </c:if>
-<c:if test="${not empty categories}">
 
+    <c:if test="${not empty categories}">
         <div class="panel panel-default">
                 <table width="100%" class="table table-striped table-bordered table-hover">
                     <thead>
@@ -46,7 +46,7 @@
                             <td>${loop.count}</td>
                             <td>${category.name}</td>
                             <td class="text-center"><a href="#" class="categoryBtnEdit" id="${category.id}"><i class="fa fa-pencil fa-lg"></i></a></td>
-                            <td class="text-center"><a href="#" class="categoryBtnDelete" id="${category.id}"><i  class="fa fa-trash-o fa-lg"></i></a></td>
+                            <td class="text-center"><a href="#" class="categoryBtnDelete" id="${category.id}" deleteName="${category.name}"><i  class="fa fa-trash-o fa-lg"></i></a></td>
                         </tr>
                     </c:forEach>
 
@@ -57,14 +57,22 @@
     </div>
 </div>
 
-<div id="deleteForm">
-    <h2 class="text-center">Are you sure?</h2>
-    <br />
-    <br />
-    <div class="center-block text-center">
-        <%--<button onclick="acceptDeleting()" class="btn btn-success btn-reset-custom btnAcceptDeleting()">Yes</button>--%>
-        <button class="btn btn-success btn-reset-custom btnAcceptDeleting"><spring:message code="yes"/></button>
-        <%--<button onclick="cancelDeleting()" class="btn btn-default btn-reset-custom">No</button>--%>
-        <button class="btn btn-default btn-reset-custom btnCancelDeleting"><spring:message code="no"/></button>
+<!-- Modal window for category deleting-->
+<div id="categoryDeleteConfirm" class="modal fade" tabindex="-1">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header alert alert-delete" role="alert">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i  class="fa fa-times"></i></button>
+                <h4 class="modal-title"><spring:message code="category.deleteWindowHeader" /></h4>
+            </div>
+            <div class="modal-body text-center">
+                <spring:message code="category.deleteMessage"/>
+                "<b class="deleteName"></b>"
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success btn-success-custom btn-confirm"> <spring:message code="yes"/></button>
+                <button type="button" class="btn btn-default btn-reset-custom" data-dismiss="modal"> <spring:message code="no"/></button>
+            </div>
+        </div>
     </div>
 </div>

@@ -28,7 +28,7 @@
         <c:if test="${not empty error}">
             <div class="alert alert-danger">
                 <p><span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-                        ${error}</p>
+                       <spring:message code="error.categoryAlreadyExists" /></p>
             </div>
         </c:if>
 

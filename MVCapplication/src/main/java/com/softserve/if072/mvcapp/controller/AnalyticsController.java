@@ -13,11 +13,12 @@ import javax.servlet.http.HttpSession;
 import java.util.List;
 
 /**
- * The CartController class handles requests for "/analytics" and renders appropriate view
+ * The AnalyticsController class handles requests for "/analytics" and renders appropriate view
  *
  * @author Igor Kryviuk
  * @author Igor Parada
  */
+
 @Controller
 @RequestMapping("/analytics")
 public class AnalyticsController {

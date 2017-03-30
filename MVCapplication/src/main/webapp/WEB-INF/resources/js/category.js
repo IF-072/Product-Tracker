@@ -1,18 +1,19 @@
-var id;
-$("#deleteForm").dialog({autoOpen:false});
+/**
+ * Script provides adding new, editing and deleting categories functionality
+ */
 
 $(document).ready(function () {
     $(".categoryBtnDelete").click(function () {
-        id = $(this).attr("id");
-        $("#deleteForm").dialog("open");
-    });
+        var id = $(this).attr("id");
+        var name = $(this).attr("deleteName");
 
-    $(".btnAcceptDeleting").click(function () {
-        window.location.replace("category/delete?id=" + id);
-    });
+        $("#categoryDeleteConfirm").modal('show');
 
-    $(".btnCancelDeleting").click(function () {
-        $("#deleteForm").dialog("close");
+        $("b.deleteName").text(name);
+
+        $(".btn-confirm").click(function () {
+            location.href = "category/delete?id=" + id;
+        });
     });
 
     $(".categoryBtnEdit").click(function () {
