@@ -46,7 +46,7 @@ $("#addNewProductButton").click(function () {
     location.href = '/product/addProduct';
 });
 
-$("#addImage").click(function () {
+$("#addImage.reference").click(function () {
     location.href = $(this).attr("href");
 });
 

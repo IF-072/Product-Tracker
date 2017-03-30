@@ -30,7 +30,7 @@ public class ProductPageController {
     private ProductPageService productPageService;
     private UserService userService;
 
-    @Value("{product.alreadyExists}")
+    @Value("product.alreadyExists")
     private String alreadyExistMessage;
 
     @Autowired

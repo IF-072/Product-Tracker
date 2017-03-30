@@ -1,10 +1,9 @@
 package com.softserve.if072.mvcapp.service;
 
 import com.lowagie.text.*;
-import com.lowagie.text.pdf.BaseFont;
-import com.lowagie.text.pdf.PdfPCell;
-import com.lowagie.text.pdf.PdfPTable;
-import com.lowagie.text.pdf.PdfWriter;
+import com.lowagie.text.Font;
+import com.lowagie.text.pdf.*;
+import com.softserve.if072.common.model.Action;
 import com.softserve.if072.common.model.History;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -13,7 +12,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 
-import java.io.*;
+import java.awt.*;
+import java.io.ByteArrayOutputStream;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -49,6 +53,8 @@ public class PdfCreatorService {
     private Font LARGE = new Font(bf, 18, Font.BOLD);
     private Font SMALL_BOLD = new Font(bf, 12, Font.BOLD);
     private Font SMALL = new Font(bf, 12);
+    private Font SMALL_RED = new Font(bf, 12, Font.NORMAL, new Color(180, 0x00, 0x00));
+    private Font SMALL_GREEN = new Font(bf, 12, Font.NORMAL, new Color(26, 193, 25));
 
     /**
      * Creates PDF file
@@ -147,7 +153,14 @@ public class PdfCreatorService {
 
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yyyy");
 
+        Font font;
+
         for(History history : histories) {
+            if(history.getAction() == Action.PURCHASED) {
+                font = SMALL_GREEN;
+            } else {
+                font = SMALL_RED;
+            }
             table.setWidthPercentage(100);
             table.getDefaultCell().setPaddingBottom(5);
             table.getDefaultCell().setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -155,11 +168,22 @@ public class PdfCreatorService {
             table.addCell(new Phrase(history.getProduct().getName(), SMALL));
             table.addCell(new Phrase(history.getProduct().getDescription(), SMALL));
             table.addCell(new Phrase(history.getProduct().getCategory().getName(), SMALL));
-            table.addCell(new Phrase(Integer.toString(history.getAmount()),SMALL));
+            table.addCell(new Phrase(Integer.toString(history.getAmount()) + " " +
+                    history.getProduct().getUnit().getName(),font));
             table.addCell(new Phrase(simpleDateFormat.format(history.getUsedDate()), SMALL));
         }
 
         document.add(table);
+
+        creteEmptyLine(paragraph,1);
+        document.add(paragraph);
+
+        Paragraph legend = new Paragraph();
+        legend.add(new Paragraph(messageSource.getMessage("history.legendPurchased",
+                null, new Locale(locale)), SMALL_GREEN));
+        legend.add(new Paragraph(messageSource.getMessage("history.legendUsed",
+                null, new Locale(locale)), SMALL_RED));
+        document.add(legend);
     }
 
     /**
