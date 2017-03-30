@@ -14,10 +14,12 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.never;
@@ -68,6 +70,15 @@ public class StorageServiceTest {
         when(storageDAO.getByUserID(user.getId())).thenReturn(storages);
 
         assertEquals(storages, storageService.getByUserId(user.getId()));
+        verify(storageDAO).getByUserID(user.getId());
+    }
+
+    @Test
+    public void testGetByUserId_ShouldReturnEmptyList() {
+        final List<Storage> storages = new ArrayList<>();
+        when(storageDAO.getByUserID(user.getId())).thenReturn(storages);
+
+        assertTrue(storageService.getByUserId(user.getId()).isEmpty());
         verify(storageDAO).getByUserID(user.getId());
     }
 
@@ -170,6 +181,17 @@ public class StorageServiceTest {
         storageDTO.setAmount(-1);
 
         storageService.update(storageDTO);
+        verifyZeroInteractions(storageDAO);
+        verify(historyService, never()).insert(any());
+        verify(shoppingListService, never()).insert(any());
+    }
+
+    @Test
+    public void testUpdateWithDTO_ShouldNotBeExecutedStorageNull() {
+        when(storageDAO.getByProductID(storageDTO.getProductId())).thenReturn(null);
+
+        storageService.update(storageDTO);
+        verify(storageDAO).getByProductID(storageDTO.getProductId());
         verifyZeroInteractions(storageDAO);
         verify(historyService, never()).insert(any());
         verify(shoppingListService, never()).insert(any());

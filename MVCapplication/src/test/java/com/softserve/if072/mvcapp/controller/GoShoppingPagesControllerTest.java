@@ -17,6 +17,7 @@ import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
 
+import javax.servlet.http.Cookie;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -126,6 +127,18 @@ public class GoShoppingPagesControllerTest {
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/cart/"));
         verify(goShoppingPageService).addToCart(any(), any());
+    }
+
+    @Test
+    public void testReview() throws Exception {
+        final String locale = "uk";
+        final String cookie = "myLocaleCookie";
+        when(userService.getCurrentUser()).thenReturn(user);
+        mockMvc.perform(post("/shopping/finished")
+                .header("referer", "http://localhost:8080/cart")
+                .cookie(new Cookie(cookie, locale)))
+                .andExpect(status().isOk());
+        verify(goShoppingPageService).reviewCart(eq(locale), anyInt());
     }
 
     private ViewResolver viewResolver() {

@@ -92,8 +92,7 @@ public class GoShoppingService {
         store.add(storeDAO.getByID(storeId));
 
 
-        List<ShoppingList> productsToBuy = new ArrayList<>();
-        productsToBuy = shoppingLists.stream().filter(element ->
+        List<ShoppingList> productsToBuy = shoppingLists.stream().filter(element ->
                 productsFromSelectedStore.contains(element.getProduct()))
                 .map(element -> {
                     element.getProduct().setStores(store);

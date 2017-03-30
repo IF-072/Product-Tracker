@@ -4,8 +4,6 @@ import com.softserve.if072.common.model.History;
 import com.softserve.if072.common.model.dto.HistoryDTO;
 import com.softserve.if072.common.model.dto.HistorySearchDTO;
 import com.softserve.if072.restservice.service.HistoryService;
-
-import org.apache.commons.collections.CollectionUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -41,7 +39,6 @@ public class HistoryController {
      * Handles requests for search history records by given criterias
      *
      * @param userId     - current user unique identifier
-
      * @param pageNumber - number of page
      * @param pageSize   - number of records per page
      * @param searchData DTO that contains search params
@@ -82,8 +79,8 @@ public class HistoryController {
     @GetMapping("/products/{productId}")
     @ResponseStatus(HttpStatus.OK)
     public List<History> getByProductId(@PathVariable int userId, @PathVariable int productId) {
-        List<History> histories = historyService.getByProductId(userId, productId);
-        return histories;
+
+        return historyService.getByProductId(userId, productId);
     }
 
     @PreAuthorize("#history != null && #history.user != null && #history.user.id == authentication.user.id")
@@ -99,5 +96,4 @@ public class HistoryController {
     public void update(@RequestBody HistoryDTO historyDTO) {
         historyService.update(historyDTO);
     }
-
 }

@@ -34,7 +34,8 @@ public class StoragePageService {
     private final ShoppingListService shoppingListService;
     private final AnalyticsService analyticsService;
     private final MessageService messageService;
-    private final String productEnding = "storage.productEnding";
+    private static final String PRODUCT_ENDING = "storage.productEnding";
+    private static final long ONE_DAY = 86400000l;
 
     @Autowired
     public StoragePageService(final RestTemplate restTemplate, final ShoppingListService shoppingListService,
@@ -71,6 +72,7 @@ public class StoragePageService {
      *
      * @param storageDTO - storage record
      * @param locale     - locale of user
+     * @return new end date
      */
     public String updateAmount(final StorageDTO storageDTO, final String locale) {
         final String uri = storageUrl + "dto";
@@ -109,8 +111,8 @@ public class StoragePageService {
     public void reviewStorage(final String locale, final int userId) {
         final List<Storage> storage = getStorages(userId);
         storage.stream().filter(elem -> elem.getEndDate() != null)
-                .filter(elem -> elem.getEndDate().before(new Timestamp(System.currentTimeMillis() + 86400000l)))
-                .forEach(elem -> messageService.broadcast(productEnding, locale, elem.getUser().getId(),
+                .filter(elem -> elem.getEndDate().before(new Timestamp(System.currentTimeMillis() + ONE_DAY)))
+                .forEach(elem -> messageService.broadcast(PRODUCT_ENDING, locale, elem.getUser().getId(),
                         elem.getProduct().getName()));
     }
 
@@ -121,9 +123,9 @@ public class StoragePageService {
             messageService.broadcast("storage.insertInList", locale, storageDTO.getUserId(),
                     storageDTO.getProductName());
         }
-        if (storageDTO.getPreviousAmount() - storageDTO.getAmount() > 0 &&
-                date != null && date.before(new Timestamp(System.currentTimeMillis() + 86400000l))) {
-            messageService.broadcast(productEnding, locale, storageDTO.getUserId(),
+        if (storageDTO.getPreviousAmount() - storageDTO.getAmount() > 0
+                && date != null && date.before(new Timestamp(System.currentTimeMillis() + ONE_DAY))) {
+            messageService.broadcast(PRODUCT_ENDING, locale, storageDTO.getUserId(),
                     storageDTO.getProductName());
         }
     }
