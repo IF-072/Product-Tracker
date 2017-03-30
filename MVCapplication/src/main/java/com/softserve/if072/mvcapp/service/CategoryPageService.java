@@ -58,18 +58,18 @@ public class CategoryPageService {
         restTemplate.delete(restCategoryURL + id);
     }
 
-    public boolean alreadyExists(Category category, User user) {
+    public int checkIfExistsElseIsDeleted(Category category, User user) {
+        Category checkingCategory = getByNameAndUserID(category.getName(), user.getId());
 
-        Category existingCategory = getByNameAndUserID(category.getName(), user.getId());
+        if (checkingCategory != null) {
+            if (checkingCategory.isEnabled()) {
+                return 1;
+            } else {
+                return 0;
+            }
+        }
 
-        return existingCategory != null && existingCategory.isEnabled();
-    }
-
-    public boolean isDeleted(Category category, User user) {
-
-        Category deletedCategory = getByNameAndUserID(category.getName(), user.getId());
-
-        return deletedCategory != null && !deletedCategory.isEnabled();
+        return -1;
     }
 
     public Category getByNameAndUserID(String name, int userID) {

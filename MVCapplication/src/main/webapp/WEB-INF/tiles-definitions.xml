@@ -155,14 +155,12 @@
         <put-list-attribute name="stylesheets" inherit="true">
             <add-attribute value="/css/jquery-ui.css"/>
             <add-attribute value="/css/dataTables.bootstrap.css"/>
-            <add-attribute value="/css/dataTables.responsive.css"/>
             <add-attribute value="/css/jquery.dataTables.css"/>
             <add-attribute value="/css/category.css"/>
         </put-list-attribute>
 
         <put-list-attribute name="javascripts" inherit="true">
             <add-attribute value="/js/jquery-ui.js"/>
-            <add-attribute value="/js/jquery.dataTables.js"/>
             <add-attribute value="/js/dataTables.bootstrap.js"/>
             <add-attribute value="/js/dataTables.responsive.js"/>
             <add-attribute value="/js/category.js"/>
@@ -444,12 +442,10 @@
             <add-attribute value="/css/dataTables.bootstrap.css"/>
             <add-attribute value="/css/dataTables.responsive.css"/>
             <add-attribute value="/css/jquery-ui.css"/>
-            <!--<add-attribute value="/css/jquery.dataTables.css"/>-->
             <add-attribute value="/css/analytics.css"/>
         </put-list-attribute>
         <put-list-attribute name="javascripts" inherit="true">
             <add-attribute value="/js/jquery-ui.js"/>
-            <!--<add-attribute value="/js/jquery.dataTables.js"/>-->
             <add-attribute value="/js/Chart.js"/>
             <add-attribute value="/js/analytics.js"/>
         </put-list-attribute>

@@ -29,9 +29,6 @@ public class CategoryPageController {
     @Value("${application.restCategoryURL}")
     private String restCategoryURL;
 
-    @Value("${error.categoryAlreadyExists}")
-    private String categoryAlreadyExists;
-
     private UserService userService;
     private CategoryPageService categoryPageService;
 
@@ -79,19 +76,19 @@ public class CategoryPageController {
             return "addCategory";
         }
 
-        //checks if the category already exists
-        if (categoryPageService.alreadyExists(category, userService.getCurrentUser())) {
-            model.addAttribute("error", categoryAlreadyExists);
+        //checks if the category already exists or is deleted
+        int categoryResult = categoryPageService.checkIfExistsElseIsDeleted(category, userService.getCurrentUser());
+        if (categoryResult != -1) {
+            if (categoryResult == 1) {
+                model.addAttribute("error", true);
 
-            return "addCategory";
-        }
+                return "addCategory";
+            } else {
+                model.addAttribute("category",
+                        categoryPageService.getByNameAndUserID(category.getName(), userService.getCurrentUser().getId()));
 
-        //checks if the category is deleted
-        if (categoryPageService.isDeleted(category, userService.getCurrentUser())) {
-            model.addAttribute("category",
-                    categoryPageService.getByNameAndUserID(category.getName(), userService.getCurrentUser().getId()));
-
-            return "deletedCategory";
+                return "deletedCategory";
+            }
         }
 
         categoryPageService.addCategory(category, userService.getCurrentUser());

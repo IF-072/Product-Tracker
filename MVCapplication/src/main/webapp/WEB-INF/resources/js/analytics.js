@@ -17,57 +17,57 @@ $("#selectOtherProduct").click(function () {
     location.href = $(this).attr("href");
 });
 
-function getAnArray(jqueryString) {
-    var string = jqueryString.text();
-    return string.split(" ");
-}
+
+/**
+ * This block of code gets data from .jsp and displays charts of using and purchasing products
+ */
 
 $(document).ready( function() {
 
-    var purchasingProductDatesForChart = getAnArray($("#purchasingProductDatesForChart"));
-    var purchasingProductAmountsForChart = getAnArray($("#purchasingProductAmountsForChart"));
-    var usingProductDatesForChart = getAnArray($("#usingProductDatesForChart"));
-    var usingProductAmountsForChart = getAnArray($("#usingProductAmountsForChart"));
+    var purchasingProductDatesForChart = getArray($("#purchasingProductDatesForChart"));
+    var purchasingProductAmountsForChart = getArray($("#purchasingProductAmountsForChart"));
+    var usingProductDatesForChart = getArray($("#usingProductDatesForChart"));
+    var usingProductAmountsForChart = getArray($("#usingProductAmountsForChart"));
+    var endDate = $("#endDate").text().trim();
+    console.log(endDate);
 
+    var usingProductsChartArray = convertStringArrayToInteger(usingProductAmountsForChart);
+    var purchasingProductsChartArray = convertStringArrayToInteger(purchasingProductAmountsForChart);
 
-
-    var chartArr = [];
-
-    for (var i = 0; i < arr1.length; i++) {
-        chartArr.push(parseInt(arr2[i]));
+    if (endDate) {
+        usingProductDatesForChart.push(endDate);
+        usingProductsChartArray.push(0);
     }
 
-    // console.log(chartArr);
-
-    var data = {
-        labels: arr1,
+    var dataForUsingProductsChart = {
+        labels: usingProductDatesForChart,
         datasets: [
             {
-                label: "Using Products",
-                // fillColor: "rgba(220,220,220,0.2)",
-                // strokeColor: "rgba(0,0,0,1)",
-                // pointColor: "rgba(220,220,220,1)",
-                // //pointStrokeColor: "#000",
-                // //pointHighlightFill: "#000",
-                // pointHighlightStroke: "rgba(220,220,220,1)",
-                borderColor: "rgba(112,190,68,0.5)",
-                backgroundColor: "rgba(173,214,138,0.3)",
-                data: chartArr
-            },
-            // {
-            //     label: "My Second dataset",
-            //     fillColor: "rgba(151,187,205,0.2)",
-            //     strokeColor: "rgba(151,187,205,1)",
-            //     pointColor: "rgba(151,187,205,1)",
-            //     pointStrokeColor: "#fff",
-            //     pointHighlightFill: "#fff",
-            //     pointHighlightStroke: "rgba(151,187,205,1)",
-            //     data: [0, 1, 1, 2, 3, 5, 8, 13, 21, 34]
-            // }
+                label: $("#usingProducts").text(),
+                borderColor: "rgba(238,28,37,0.5)",
+                backgroundColor: "rgba(245,121,109,0.3)",
+                data: usingProductsChartArray
+            }
         ]
     };
 
-    var ctx = document.getElementById("chart").getContext("2d");
+    var purchasingProducts = $("#purchasingProducts").text();
+
+    var dataForPurchasingProductsChart = {
+        labels: purchasingProductDatesForChart,
+        datasets: [
+            {
+                label: purchasingProducts,
+                borderColor: "rgba(112,190,68,0.5)",
+                backgroundColor: "rgba(173,214,138,0.3)",
+                data: purchasingProductsChartArray
+            }
+        ]
+    };
+
+    var ctxForUsingProductsChart = $("#usingProductsChart");
+    var ctxForPurchasingProductsChart = $("#purchasingProductsChart");
+
     var options = {
             scales: {
                 yAxes: [{
@@ -77,9 +77,50 @@ $(document).ready( function() {
                 }]
             }
         };
-    var chart = new Chart(ctx, {
+
+    var usingProductsChart = new Chart(ctxForUsingProductsChart, {
         type: 'line',
-        data : data,
+        data : dataForUsingProductsChart,
         options: options
     });
+
+    if (1 < dataForPurchasingProductsChart.labels.length) {
+        var purchasingProductsChart = new Chart(ctxForPurchasingProductsChart, {
+            type: 'line',
+            data : dataForPurchasingProductsChart,
+            options: options
+        })
+     } else {
+        var message = $("#notEnoughData").text();
+        $("#noDataFound").text(message);
+    }
+
 });
+
+/**
+ * This function converts string to array
+ *
+ * @param jqueryString
+ */
+
+function getArray(jqueryString) {
+    var string = jqueryString.text();
+    return string.split(" ");
+}
+
+/**
+ * This function converts strings' array to integers' array
+ *
+ * @param array
+ * @returns {Array}
+ */
+
+function convertStringArrayToInteger(array) {
+    var arr = [];
+
+    for (var i = 0; i < array.length; i++) {
+        arr.push(parseInt(array[i]));
+    }
+
+    return arr;
+}

@@ -38,7 +38,6 @@ public class ProductStatistics {
     private String usingProductDatesForChart;
     private String usingProductAmountsForChart;
 
-
     public ProductStatistics() {
     }
 
