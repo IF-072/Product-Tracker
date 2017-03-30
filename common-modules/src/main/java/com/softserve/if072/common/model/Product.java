@@ -16,6 +16,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -26,7 +27,8 @@ import java.util.List;
  */
 @Entity
 @Table(name = "product")
-public class Product {
+public class Product implements Serializable {
+    static final long serialVersionUID = 9118331146740092L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

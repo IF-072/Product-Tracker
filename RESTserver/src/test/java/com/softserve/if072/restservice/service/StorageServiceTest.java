@@ -39,7 +39,7 @@ public class StorageServiceTest {
     @Mock
     private HistoryService historyService;
     @Mock
-    ForecastService forecastService;
+    private ForecastService forecastService;
     @InjectMocks
     private StorageService storageService;
 

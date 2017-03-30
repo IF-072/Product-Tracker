@@ -21,7 +21,6 @@ import java.util.List;
 import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
@@ -76,7 +75,7 @@ public class GoShoppingServiceTest {
         when(storeDAO.getAllByUser(userId)).thenReturn(new ArrayList<>(Arrays.asList(store1, store2)));
 
         final List<Store> result = goShoppingService.getStoreByUserId(userId);
-        assertEquals(new ArrayList<>(Arrays.asList(arr[0], arr[1])), (result.get(0).getProducts()));
+        assertEquals(new ArrayList<>(Arrays.asList(arr[0], arr[1])), result.get(0).getProducts());
         assertEquals(new ArrayList<>(Arrays.asList(arr[2])), result.get(1).getProducts());
 
         verify(cartDAO).getByUserId(userId);

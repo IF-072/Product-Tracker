@@ -1,5 +1,5 @@
 function checkBox(event) {
-    if(!$(event.target).is('input')) {
+    if (!$(event.target).is('input')) {
         var checkbox = $(this).find('.checkbox');
         checkbox.prop("checked", checkbox.prop("checked") ? 0 : 1);
     }
@@ -14,7 +14,7 @@ function prevStep() {
 }
 
 $(document).ready(function () {
-    $("form[action='../addToCart']").on("submit", function (event) {
+    $("form[action='/addToCart']").on("submit", function (event) {
         if ($('.checkbox:checked').length < 1) {
             event.preventDefault();
 

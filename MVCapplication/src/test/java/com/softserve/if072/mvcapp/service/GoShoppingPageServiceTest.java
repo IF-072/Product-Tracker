@@ -9,7 +9,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.web.client.RestTemplate;
 
@@ -22,6 +21,7 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -36,17 +36,20 @@ public class GoShoppingPageServiceTest {
 
     @Mock
     private RestTemplate restTemplate;
+    @Mock
+    private MessageService messageService;
+    @Mock
+    private CartService cartService;
     @InjectMocks
     private GoShoppingPageService goShoppingPageService;
     private List<Store> stores;
-    private FormForCart formForCart;
     private Map<String, List<ShoppingList>> map;
     private int userId;
+    private final String locale = "uk";
 
     @Before
     public void setup() {
         stores = new ArrayList<>();
-        formForCart = new FormForCart();
         map = new HashMap<>();
         userId = 2;
     }
@@ -70,9 +73,19 @@ public class GoShoppingPageServiceTest {
 
     @Test
     public void addToCart() {
-        final FormForCart formForCartMock = Mockito.spy(formForCart);
-        goShoppingPageService.addToCart(formForCartMock);
+        final FormForCart formForCartMock = mock(FormForCart.class);
+        when(formForCartMock.getUserId()).thenReturn(userId);
+        goShoppingPageService.addToCart(formForCartMock, locale);
         verify(formForCartMock).removeUncheked();
         verify(restTemplate).postForObject(anyString(), any(), eq(Cart.class));
+        verify(messageService).broadcast(eq("goShopping.start"), eq(locale), eq(userId), any());
+    }
+
+    @Test
+    public void reviewCart() {
+        goShoppingPageService.reviewCart(locale, userId);
+
+        verify(cartService).getByUserId();
+        verify(messageService).broadcast("goShopping.finish", locale, userId);
     }
 }
