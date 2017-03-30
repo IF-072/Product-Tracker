@@ -59,6 +59,9 @@
     <definition name="home" extends="mainLayout">
         <put-attribute name="title" value="Product Tracker"/>
         <put-attribute name="body" value="/WEB-INF/views/home.jsp"/>
+        <put-list-attribute name="javascripts" inherit="true">
+            <add-attribute value="/js/home.js"/>
+        </put-list-attribute>
     </definition>
 
     <definition name="payment" extends="mainLayout">
@@ -384,6 +387,10 @@
     <definition name="emptyCart" extends="mainLayout">
         <put-attribute name="title" value="Cart"/>
         <put-attribute name="body" value="/WEB-INF/views/cart/emptyCart.jsp"/>
+
+        <put-list-attribute name="javascripts" inherit="true">
+            <add-attribute value="/js/emptyCart.js"/>
+        </put-list-attribute>
     </definition>
 
     <definition name="history" extends="mainLayout">

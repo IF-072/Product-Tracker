@@ -4,6 +4,7 @@ import com.softserve.if072.common.model.validation.product.ValidCategory;
 import com.softserve.if072.common.model.validation.product.ValidUnit;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
+import org.springframework.web.util.HtmlUtils;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -15,6 +16,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -25,7 +27,8 @@ import java.util.List;
  */
 @Entity
 @Table(name = "product")
-public class Product {
+public class Product implements Serializable {
+    static final long serialVersionUID = 9118331146740092L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -93,7 +96,7 @@ public class Product {
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.name = HtmlUtils.htmlEscape(name);
     }
 
     public String getDescription() {
@@ -101,7 +104,7 @@ public class Product {
     }
 
     public void setDescription(String description) {
-        this.description = description;
+        this.description = HtmlUtils.htmlEscape(description);
     }
 
     public Image getImage() {

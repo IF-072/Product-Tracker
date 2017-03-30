@@ -3,9 +3,11 @@ package com.softserve.if072.restservice.dao.mybatisdao;
 import com.softserve.if072.common.model.Image;
 import com.softserve.if072.restservice.dao.DAO;
 import org.apache.ibatis.annotations.*;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Repository
 public interface ImageDAO extends DAO<Image> {
 
     @Override

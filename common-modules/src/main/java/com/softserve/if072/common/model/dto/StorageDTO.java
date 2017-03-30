@@ -14,6 +14,7 @@ public class StorageDTO {
     private int productId;
     @Min(value = 0, message = "{error.storage.amount}")
     private int amount;
+    private int previousAmount;
     private String productName;
 
     public StorageDTO() {
@@ -47,8 +48,16 @@ public class StorageDTO {
         return productName;
     }
 
-    public void setProductName(String productName) {
+    public void setProductName(final String productName) {
         this.productName = productName;
+    }
+
+    public int getPreviousAmount() {
+        return previousAmount;
+    }
+
+    public void setPreviousAmount(final int previousAmount) {
+        this.previousAmount = previousAmount;
     }
 
     @Override

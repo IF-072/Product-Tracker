@@ -25,13 +25,18 @@ import java.util.Map;
 public class GoShoppingPageService {
     private static final Logger LOGGER = LogManager.getLogger(GoShoppingPageService.class);
     private final RestTemplate restTemplate;
+    private final CartService cartService;
+    private final MessageService messageService;
 
     @Value("${application.restGoShoppingURL}")
     private String goShoppingURL;
 
     @Autowired
-    public GoShoppingPageService(final RestTemplate restTemplate) {
+    public GoShoppingPageService(final RestTemplate restTemplate, final CartService cartService,
+                                 final MessageService messageService) {
         this.restTemplate = restTemplate;
+        this.cartService = cartService;
+        this.messageService = messageService;
     }
 
     /**
@@ -72,9 +77,23 @@ public class GoShoppingPageService {
      *
      * @param formForCart - class containing selected products
      */
-    public void addToCart(final FormForCart formForCart) {
+    public void addToCart(final FormForCart formForCart, final String locale) {
         final String uri = goShoppingURL + "/cart";
         formForCart.removeUncheked();
         restTemplate.postForObject(uri, formForCart.getCarts(), Cart.class);
+        messageService.broadcast("goShopping.start", locale, formForCart.getUserId(), formForCart.getStoreName());
+    }
+
+    /**
+     * Check end shopping.
+     *
+     * @param locale - locale of user
+     * @param userId - current user unique identifier
+     */
+    public void reviewCart(final String locale, final int userId) {
+        final List<Cart> carts = cartService.getByUserId();
+        if (CollectionUtils.isEmpty(carts)) {
+            messageService.broadcast("goShopping.finish", locale, userId);
+        }
     }
 }

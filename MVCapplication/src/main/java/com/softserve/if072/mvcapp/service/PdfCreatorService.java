@@ -1,27 +1,18 @@
 package com.softserve.if072.mvcapp.service;
 
-import com.lowagie.text.Document;
-import com.lowagie.text.DocumentException;
-import com.lowagie.text.Element;
+import com.lowagie.text.*;
 import com.lowagie.text.Font;
-import com.lowagie.text.Paragraph;
-import com.lowagie.text.Phrase;
-import com.lowagie.text.pdf.BaseFont;
-import com.lowagie.text.pdf.PdfPCell;
-import com.lowagie.text.pdf.PdfPTable;
-import com.lowagie.text.pdf.PdfWriter;
+import com.lowagie.text.pdf.*;
+import com.softserve.if072.common.model.Action;
 import com.softserve.if072.common.model.History;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
-import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
+import java.awt.*;
 import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -29,10 +20,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 /**
  * The class contains methods to create a PDF file with information about the user's history
@@ -45,7 +34,6 @@ public class PdfCreatorService {
     private static final Logger LOGGER = LogManager.getLogger(PdfCreatorService.class);
 
     private UserService userService;
-    private RestTemplate restTemplate;
     private MessageSource messageSource;
 
     @Value("${application.restHistoryURL}")
@@ -54,10 +42,9 @@ public class PdfCreatorService {
     private String restHistorySearchPageURL;
 
     @Autowired
-    public PdfCreatorService(UserService userService, RestTemplate restTemplate,
+    public PdfCreatorService(UserService userService,
                              MessageSource messageSource) throws IOException, DocumentException {
         this.userService = userService;
-        this.restTemplate = restTemplate;
         this.messageSource = messageSource;
     }
 
@@ -66,18 +53,19 @@ public class PdfCreatorService {
     private Font LARGE = new Font(bf, 18, Font.BOLD);
     private Font SMALL_BOLD = new Font(bf, 12, Font.BOLD);
     private Font SMALL = new Font(bf, 12);
+    private Font SMALL_RED = new Font(bf, 12, Font.NORMAL, new Color(180, 0x00, 0x00));
+    private Font SMALL_GREEN = new Font(bf, 12, Font.NORMAL, new Color(26, 193, 25));
 
     /**
      * Creates PDF file
      *
      * @param file - future PDF file
-     * @return document
      */
-    public Document createPDF(String file, List<History> histories, String locale) throws IOException {
+    public void createPDF(String file, List<History> histories, String locale) throws IOException {
 
-        locale = locale == null ? "en" : locale;
+        String newLocale = locale == null ? "en" : locale;
 
-        Document document = null;
+        Document document;
 
         try {
             document = new Document();
@@ -86,16 +74,15 @@ public class PdfCreatorService {
 
             addMetaData(document);
 
-            addTitlePage(document, locale);
+            addTitlePage(document, newLocale);
 
-            createTable(document, histories, locale);
+            createTable(document, histories, newLocale);
 
             document.close();
 
         } catch (DocumentException e) {
-            LOGGER.error(e.getMessage());
+            LOGGER.error(e.getMessage(), e);
         }
-        return document;
 
     }
 
@@ -164,7 +151,16 @@ public class PdfCreatorService {
         table.addCell(c1);
         table.setHeaderRows(1);
 
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yyyy");
+
+        Font font;
+
         for(History history : histories) {
+            if(history.getAction() == Action.PURCHASED) {
+                font = SMALL_GREEN;
+            } else {
+                font = SMALL_RED;
+            }
             table.setWidthPercentage(100);
             table.getDefaultCell().setPaddingBottom(5);
             table.getDefaultCell().setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -172,11 +168,22 @@ public class PdfCreatorService {
             table.addCell(new Phrase(history.getProduct().getName(), SMALL));
             table.addCell(new Phrase(history.getProduct().getDescription(), SMALL));
             table.addCell(new Phrase(history.getProduct().getCategory().getName(), SMALL));
-            table.addCell(new Phrase(Integer.toString(history.getAmount()),SMALL));
-            table.addCell(new Phrase(history.getUsedDate().toString(), SMALL));
+            table.addCell(new Phrase(Integer.toString(history.getAmount()) + " " +
+                    history.getProduct().getUnit().getName(),font));
+            table.addCell(new Phrase(simpleDateFormat.format(history.getUsedDate()), SMALL));
         }
 
         document.add(table);
+
+        creteEmptyLine(paragraph,1);
+        document.add(paragraph);
+
+        Paragraph legend = new Paragraph();
+        legend.add(new Paragraph(messageSource.getMessage("history.legendPurchased",
+                null, new Locale(locale)), SMALL_GREEN));
+        legend.add(new Paragraph(messageSource.getMessage("history.legendUsed",
+                null, new Locale(locale)), SMALL_RED));
+        document.add(legend);
     }
 
     /**
@@ -201,13 +208,13 @@ public class PdfCreatorService {
             }
 
         } catch (IOException e) {
-            LOGGER.error(e.getMessage());
+            LOGGER.error(e.getMessage(), e);
         } finally {
             if (inputStream != null) {
                 try {
                     inputStream.close();
                 } catch (IOException e) {
-                    LOGGER.error(e.getMessage());
+                    LOGGER.error(e.getMessage(), e);
                 }
             }
         }

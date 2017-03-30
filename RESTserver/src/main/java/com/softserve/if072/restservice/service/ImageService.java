@@ -2,8 +2,8 @@ package com.softserve.if072.restservice.service;
 
 
 import com.softserve.if072.common.model.Image;
-import com.softserve.if072.restservice.dao.mybatisdao.ImageDAO;
 import com.softserve.if072.restservice.exception.DataNotFoundException;
+import com.softserve.if072.restservice.repository.ImageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -16,52 +16,41 @@ public class ImageService {
     @Value("${image.notFound}")
     private String imageNotFound;
 
+    private final ImageRepository imageRepository;
+
     @Autowired
-    private ImageDAO imageDAO;
+    public ImageService(ImageRepository imageRepository) {
+        this.imageRepository = imageRepository;
+    }
 
     public List<Image> getAll() {
-        return imageDAO.getAll();
+        return imageRepository.findAll();
     }
 
     public Image getById(int id) throws DataNotFoundException {
-
-        Image image = imageDAO.getByID(id);
+        Image image = imageRepository.findOne(id);
         if (image != null){
             return image;
         } else {
             throw new DataNotFoundException(String.format(imageNotFound, id));
-        }
-
-    }
-
-    public Image getByFileName(String fileName) throws DataNotFoundException {
-
-        Image image = imageDAO.getByFileName(fileName);
-        if (image != null){
-            return image;
-        } else {
-            throw new DataNotFoundException("Image with fileName " + fileName + " not found");
         }
     }
 
     public void insert(Image image) {
-        imageDAO.insert(image);
+        imageRepository.save(image);
     }
 
     public void update(Image image) throws DataNotFoundException {
-        imageDAO.update(image);
+        imageRepository.save(image);
     }
 
     public void delete(int id) throws DataNotFoundException {
-
-        Image image = imageDAO.getByID(id);
+        Image image = imageRepository.findOne(id);
         if (image != null){
-            imageDAO.deleteById(id);
+            imageRepository.delete(id);
         } else {
             throw new DataNotFoundException(String.format(imageNotFound, id));
         }
-
     }
 
-    public int getLasrInsertId() throws DataNotFoundException { return imageDAO.getLastInsertId(); }
 }

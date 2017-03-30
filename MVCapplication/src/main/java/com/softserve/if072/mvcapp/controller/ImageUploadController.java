@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -32,13 +31,11 @@ public class ImageUploadController {
 
     private ProductPageService productPageService;
     private ImageUploadService imageUploadService;
-    private RestTemplate restTemplate;
     private UserService userService;
 
     @Autowired
-    public ImageUploadController(RestTemplate restTemplate, UserService userService,
-                                 ProductPageService productPageService, ImageUploadService imageUploadService) {
-        this.restTemplate = restTemplate;
+    public ImageUploadController(UserService userService, ProductPageService productPageService,
+                                 ImageUploadService imageUploadService) {
         this.userService = userService;
         this.productPageService = productPageService;
         this.imageUploadService = imageUploadService;
