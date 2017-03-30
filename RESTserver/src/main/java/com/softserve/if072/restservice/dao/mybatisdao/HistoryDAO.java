@@ -95,7 +95,7 @@ public interface HistoryDAO {
      * @return list of all history items that belong to specific user and specific product
      */
     @Select("SELECT id, user_id, product_id, amount, used_date, action FROM history " +
-            "WHERE product_id = #{productId} AND action = #{action}")
+            "WHERE product_id = #{productId} AND action = #{action} ORDER BY used_date")
     @Results(value = {
             @Result(property = "id", column = "id"),
             @Result(property = "userId", column = "user_id"),

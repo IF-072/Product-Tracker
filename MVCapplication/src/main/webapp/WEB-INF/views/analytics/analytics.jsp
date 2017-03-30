@@ -18,7 +18,6 @@
 
     <div class="row">
         <div class="col-lg-8">
-            <%--todo change add charts--%>
                 <p id="productUsingSpeeds" style="display: none">${productStatistics.productUsingSpeedsForChart}</p>
                 <p id="usingProductAmounts" style="display: none">${productStatistics.usingProductAmountsForChart}</p>
                 <p id="usingProductDates" style="display: none">${productStatistics.usingProductDatesForChart}</p>
