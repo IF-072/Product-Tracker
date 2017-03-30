@@ -2,8 +2,6 @@ package com.softserve.if072.mvcapp.service;
 
 import com.softserve.if072.common.model.Image;
 import com.softserve.if072.common.model.Product;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -24,8 +22,6 @@ import java.util.Map;
  */
 @Service
 public class ImageUploadService {
-
-    private static final Logger LOGGER = LogManager.getLogger(ImageUploadService.class);
 
     private RestTemplate restTemplate;
     private ProductPageService productPageService;
@@ -62,8 +58,12 @@ public class ImageUploadService {
         param.put("userId", userId);
         restTemplate.postForObject(uri, image, Image.class, param);
 
+        System.out.println("Image was uploaded");
+
         final String getLastIdUri = imageUrl + "/getLastId/{userId}";
         int imageId = restTemplate.getForObject(getLastIdUri, Integer.class, param);
+
+        System.out.println("With last updated ID " + imageId);
 
         Product product = productPageService.getProduct(productId);
 
