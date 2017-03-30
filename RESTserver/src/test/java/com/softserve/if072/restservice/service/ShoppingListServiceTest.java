@@ -36,13 +36,12 @@ public class ShoppingListServiceTest {
     @InjectMocks
     private ShoppingListService shoppingListService;
     private Product product;
-    private User user;
     private ShoppingList shoppingList;
     private int userId;
 
     @Before
     public void setup() throws ClassNotFoundException, NoSuchMethodException {
-        user = new User();
+        User user = new User();
         user.setId(2);
         product = new Product();
         product.setUser(user);

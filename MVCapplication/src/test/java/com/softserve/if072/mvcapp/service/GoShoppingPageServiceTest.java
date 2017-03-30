@@ -43,7 +43,6 @@ public class GoShoppingPageServiceTest {
     @InjectMocks
     private GoShoppingPageService goShoppingPageService;
     private List<Store> stores;
-    private FormForCart formForCart;
     private Map<String, List<ShoppingList>> map;
     private int userId;
     private final String locale = "uk";
@@ -51,7 +50,6 @@ public class GoShoppingPageServiceTest {
     @Before
     public void setup() {
         stores = new ArrayList<>();
-        formForCart = new FormForCart();
         map = new HashMap<>();
         userId = 2;
     }

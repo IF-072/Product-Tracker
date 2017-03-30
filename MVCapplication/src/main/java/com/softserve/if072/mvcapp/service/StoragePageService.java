@@ -15,7 +15,6 @@ import org.apache.commons.collections.CollectionUtils;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * The StoragePageService class is used to hold business logic
@@ -30,8 +29,6 @@ public class StoragePageService {
 
     @Value("${application.restStorageURL}")
     private String storageUrl;
-    @Value("${application.restShoppingListURL}")
-    private String shoppingListURL;
 
     private final RestTemplate restTemplate;
     private final ShoppingListService shoppingListService;
@@ -103,6 +100,12 @@ public class StoragePageService {
         }
     }
 
+    /**
+     * Handles requests for checking end products in storage.
+     *
+     * @param locale - locale of user
+     * @param userId - current user unique identifier
+     */
     public void reviewStorage(final String locale, final int userId) {
         final List<Storage> storage = getStorages(userId);
         storage.stream().filter(elem -> elem.getEndDate() != null)

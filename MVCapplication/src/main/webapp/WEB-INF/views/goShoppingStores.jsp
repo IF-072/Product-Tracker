@@ -42,7 +42,7 @@
     <div class="panel panel-default">
         <div class="panel-body">
             <div class="table-responsive">
-                <form action="../goShoppingProducts" method="post">
+                <form action="/goShoppingProducts" method="post">
                     <table class="table table-striped table-hover">
                         <thead>
                         <tr>

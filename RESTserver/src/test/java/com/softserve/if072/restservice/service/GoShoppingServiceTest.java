@@ -75,7 +75,7 @@ public class GoShoppingServiceTest {
         when(storeDAO.getAllByUser(userId)).thenReturn(new ArrayList<>(Arrays.asList(store1, store2)));
 
         final List<Store> result = goShoppingService.getStoreByUserId(userId);
-        assertEquals(new ArrayList<>(Arrays.asList(arr[0], arr[1])), (result.get(0).getProducts()));
+        assertEquals(new ArrayList<>(Arrays.asList(arr[0], arr[1])), result.get(0).getProducts());
         assertEquals(new ArrayList<>(Arrays.asList(arr[2])), result.get(1).getProducts());
 
         verify(cartDAO).getByUserId(userId);

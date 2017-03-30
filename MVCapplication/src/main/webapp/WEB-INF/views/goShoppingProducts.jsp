@@ -1,5 +1,5 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
 <div class="row">
     <div class="col-lg-12">
@@ -9,7 +9,7 @@
 <div class="panel panel-default">
     <div class="panel-body">
         <div class="table-responsive">
-            <form:form action="../addToCart" method="post" modelAttribute="cartForm" id="addToCart">
+            <form:form action="/addToCart" method="post" modelAttribute="cartForm" id="addToCart">
                 <table class="table table-striped table-hover">
                     <thead>
                     <tr>
@@ -28,10 +28,10 @@
                                        id="checkbox${loop.index}" class="checkbox">
                                 <input type="hidden" value="${shoppingList.product.stores[0].id}"
                                        name="carts[${loop.index}].store.id">
-                                <input type="hidden"name="carts[${loop.index}].store.name"
+                                <input type="hidden" name="carts[${loop.index}].store.name"
                                        value="${shoppingList.product.stores[0].name}">
                             </td>
-                            <td><input type="hidden"name="carts[${loop.index}].product.id"
+                            <td><input type="hidden" name="carts[${loop.index}].product.id"
                                        value="${shoppingList.product.id}"> ${shoppingList.product.name}
                             </td>
                             <td><input type="number" name="carts[${loop.index}].amount" min="1"

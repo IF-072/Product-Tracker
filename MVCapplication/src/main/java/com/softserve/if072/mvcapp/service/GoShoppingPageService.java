@@ -27,7 +27,6 @@ public class GoShoppingPageService {
     private final RestTemplate restTemplate;
     private final CartService cartService;
     private final MessageService messageService;
-    private static final String LOCALE_COOKIE = "myLocaleCookie";
 
     @Value("${application.restGoShoppingURL}")
     private String goShoppingURL;
@@ -85,9 +84,15 @@ public class GoShoppingPageService {
         messageService.broadcast("goShopping.start", locale, formForCart.getUserId(), formForCart.getStoreName());
     }
 
+    /**
+     * Check end shopping.
+     *
+     * @param locale - locale of user
+     * @param userId - current user unique identifier
+     */
     public void reviewCart(final String locale, final int userId) {
-        final List<Cart> carts =  cartService.getByUserId();
-        if (CollectionUtils.isEmpty(carts)){
+        final List<Cart> carts = cartService.getByUserId();
+        if (CollectionUtils.isEmpty(carts)) {
             messageService.broadcast("goShopping.finish", locale, userId);
         }
     }
