@@ -48,7 +48,8 @@
                                 <td>${product.unit.name}</td>
                                 <td id="image">
                                     <c:if test="${product.image.id == null}">
-                                    <p id="addImage" href="<c:url value="/image/upload?productId=${product.id}"/>">
+                                    <p id="addImage" class="reference"
+                                       href="<c:url value="/image/upload?productId=${product.id}"/>">
                                         <spring:message code="product.addImage"/></p>
                                     </c:if>
                                     <c:if test="${product.image.id != null}">

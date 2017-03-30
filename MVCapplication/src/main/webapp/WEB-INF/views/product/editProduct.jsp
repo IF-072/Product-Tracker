@@ -27,7 +27,7 @@
                     <c:if test="${not empty message}">
                         <div class="alert alert-danger">
                             <span class="glyphicon glyphicon-minus-sign" aria-hidden="true"></span>
-                                ${message}
+                            <spring:message code="product.alreadyExists"/>
                         </div>
                     </c:if>
                     <c:if test="${not empty errorMessages}">

@@ -39,9 +39,11 @@ public class ProductService {
     public List<Product> getAllProducts(int userId) {
         List<Product> getProducts = productDAO.getAllByUserId(userId);
         List<Product> products = new ArrayList<>();
-        if (!getProducts.isEmpty()){
+        if (!getProducts.isEmpty()) {
             for(Product getProduct : getProducts) {
-                if(getProduct.isEnabled()) {products.add(getProduct);}
+                if(getProduct.isEnabled()) {
+                    products.add(getProduct);
+                }
             }
         }
         return products;
@@ -101,7 +103,7 @@ public class ProductService {
 
     public List<Product> getProductsByStoreId(int storeId) {
         List<Product> products = productDAO.getProductsByStoreId(storeId);
-        if (!products.isEmpty()){
+        if (!products.isEmpty()) {
             return products;
         } else {
             throw new DataNotFoundException("Products not found");
@@ -113,9 +115,11 @@ public class ProductService {
         List<Store> storesInProduct = productDAO.getStoresByProductIdAndUserId(productId, userId);
         List<Store> stores = new ArrayList<>();
 
-        if (!storesInProduct.isEmpty()){
+        if (!storesInProduct.isEmpty()) {
             for(Store getStore : storesInProduct) {
-                if(getStore.isEnabled()) {stores.add(getStore);}
+                if(getStore.isEnabled()) {
+                    stores.add(getStore);
+                }
             }
             LOGGER.info(String.format("Stores were found in product %d", productId));
         } else {
