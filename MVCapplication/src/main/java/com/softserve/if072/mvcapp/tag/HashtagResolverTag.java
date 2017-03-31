@@ -31,7 +31,7 @@ public class HashtagResolverTag extends SimpleTagSupport {
 
         String description = sw.toString();
 
-        Pattern pattern = Pattern.compile("#\\S+");
+        Pattern pattern = Pattern.compile("#[^\\s,.]+");
         Matcher matcher = pattern.matcher(description);
         String hashtag;
 
