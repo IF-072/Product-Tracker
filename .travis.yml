@@ -2,7 +2,7 @@ language: java
 jdk:
 - oraclejdk8
 script:
-- mvn clean install jacoco:report coveralls:report sonar:sonar -Dsonar.junit.reportsPath=target/surefire-reports -Dsonar.jacoco.reportPaths=target/coverage-reports/jacoco-unit.exec -Dsonar.coverage.exclusions=**/*.js -Dsonar.exclusions=**/bootstrap.js,**/dataTables.bootstrap.js,**/dataTables.responsive.js,**/daterangepicker.js,**/jquery-ui.js,**/jquery.cookie.js,**/jquery.dataTables.js,**/jquery.js,**/metisMenu.js,**/moment.min.js,**/morris-data.js,**/morris.js,**/raphael.js,**/sockjs.js,**/stomp.js,**/sb-admin-2.js
+- mvn clean install jacoco:report coveralls:report sonar:sonar -Dsonar.junit.reportsPath=target/surefire-reports -Dsonar.jacoco.reportPaths=target/coverage-reports/jacoco-unit.exec -Dsonar.coverage.exclusions=**/*.js -Dsonar.exclusions=**/bootstrap.js,**/dataTables.bootstrap.js,**/dataTables.responsive.js,**/daterangepicker.js,**/jquery-ui.js,**/jquery.cookie.js,**/jquery.dataTables.js,**/jquery.js,**/metisMenu.js,**/moment.min.js,**/morris-data.js,**/morris.js,**/raphael.js,**/sockjs.js,**/stomp.js,**/sb-admin-2.js,**/Chart.js
 cache:
   directories:
   - "$HOME/.m2/repository"
