@@ -1,7 +1,6 @@
 package com.softserve.if072.restservice.controller;
 
 import com.softserve.if072.common.model.User;
-import com.softserve.if072.restservice.exception.DataNotFoundException;
 import com.softserve.if072.restservice.security.authentication.AuthenticatedUserProxy;
 import com.softserve.if072.restservice.service.UserService;
 import org.apache.logging.log4j.LogManager;
