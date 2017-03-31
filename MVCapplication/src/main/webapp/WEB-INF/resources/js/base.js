@@ -42,7 +42,7 @@ function initializeClock(id) {
             clearInterval(timeinterval);
             clockDiv.innerHTML = "00:00:00";
         } else {
-            clockDiv.innerHTML = t.hours < 10 ? '0':'' + t.hours + ':' + ('0' + t.minutes).substr(-2) + ':' + ('0' + t.seconds).substr(-2);
+            clockDiv.innerHTML = (t.hours < 10 ? '0':'')+t.hours +':' + ('0' + t.minutes).substr(-2) + ':' + ('0' + t.seconds).substr(-2);
         }
     }
 }
