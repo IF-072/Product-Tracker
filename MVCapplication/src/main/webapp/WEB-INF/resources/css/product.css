@@ -1,5 +1,6 @@
-#image, #edit, #delete, #goStores, #addImage, #addImage, #addToShoppingList {text-align:center; cursor: pointer}
-#goStores, #addImage.reference:hover {text-decoration: underline}
+#image, #edit, #delete, P#goStores.clickable, #addImage, #addImage, #addToShoppingList {text-align:center;
+    cursor: pointer; text-decoration:none}
+P#goStores.clickable:hover, #addImage.reference:hover {text-decoration: underline}
 #image {text-align:center}
 
 #productData td {vertical-align: middle}
