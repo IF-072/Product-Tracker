@@ -274,6 +274,7 @@ public class ForecastService {
             LOGGER.info("There is 0 unit of \"{}\" with id {} in the user's storage.", productStatistics.getProductName(),
                     productStatistics.getProductId());
             productStatistics.setEndDate(null);
+            storageDAO.updateEndDate(productStatistics.getProductId(), null);
 
             return;
         }
