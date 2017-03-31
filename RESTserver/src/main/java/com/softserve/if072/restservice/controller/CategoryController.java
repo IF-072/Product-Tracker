@@ -96,6 +96,7 @@ public class CategoryController {
         LOGGER.info(String.format("Category with id %d was updated", category.getId()));
     }
 
+    @PreAuthorize("#category != null && #category.user != null && #category.user.id == authentication.user.id")
     @PutMapping(value="/restore")
     @ResponseStatus(value = HttpStatus.OK)
     public void restore(@RequestBody Category category) {
