@@ -6,42 +6,86 @@ package com.softserve.if072.restservice.integration;
 
 import static org.junit.Assert.assertEquals;
 
-import com.softserve.if072.restservice.configuration.DataSourceConfig;
+import com.softserve.if072.common.model.User;
+import com.softserve.if072.restservice.configuration.DataSourceConfigIT;
+import com.softserve.if072.restservice.dao.mybatisdao.UserDAO;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
-import org.springframework.test.context.jdbc.Sql.ExecutionPhase;
 import org.springframework.test.context.jdbc.SqlGroup;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.util.List;
+
+/**
+ * The UserIT class is used to test
+ * UserDAO class methods
+ *
+ * @author Roman Dyndyn
+ */
+
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = DataSourceConfig.class)
+@ContextConfiguration(classes = DataSourceConfigIT.class)
 @SqlGroup({
-        @Sql(executionPhase = ExecutionPhase.BEFORE_TEST_METHOD,
+        @Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD,
                 scripts = "classpath:beforeScripts.sql"),
-        @Sql(executionPhase = ExecutionPhase.AFTER_TEST_METHOD,
+        @Sql(executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD,
                 scripts = "classpath:afterScripts.sql") })
-public class StorageIT {
+public class UserIT {
+    private static final Logger LOGGER = LogManager.getLogger(UserIT.class);
 
     @Autowired
-    private PersonDAO personDAO;
+    private UserDAO userDAO;
 
     @Test
-    public void should_update_password(){
+    public void shouldGetUserByID(){
+        User user = userDAO.getByID(2);
+        LOGGER.info(user);
+        assertEquals("Roman Dyndyn", user.getName());
+    }
 
-        Person person = new Person();
-        person.setPersonId(1);
-        person.setPassword("wilma");
+    @Test
+    public void shouldGetUserByUsername(){
+        String username = "romanDyndyn@gmail.com";
+        int userId = 2;
+        User user = userDAO.getByUsername(username);
+        LOGGER.info(user);
+        assertEquals(userId, user.getId());
+    }
 
-        personDAO.updatePassword(person);
+    @Test
+    public void shouldUpdate(){
+        int userId = 2;
+        User user = userDAO.getByID(userId);
+        LOGGER.info(user);
+        String email = "testIT@gmail.com";
+        String name = "test";
+        user.setEmail(email);
+        user.setName(name);
+        userDAO.update(user);
 
-        //validate update occurred
-        Person updatedPerson = personDAO.getPerson(1);
-        assertEquals("wilma", updatedPerson.getPassword());
+        user = userDAO.getByID(userId);
+        assertEquals(email, user.getEmail());
+        assertEquals(name, user.getName());
+    }
 
+    @Test(expected = org.springframework.dao.DuplicateKeyException.class)
+    public void ShouldThrowException(){
+        int userId = 2;
+        User user = userDAO.getByID(userId);
+        String email = "test@gmail.com";
+        String name = "test";
+        user.setEmail(email);
+        user.setName(name);
+        userDAO.update(user);
 
+        user = userDAO.getByID(userId);
+        assertEquals(email, user.getEmail());
+        assertEquals(name, user.getName());
     }
 
 }
